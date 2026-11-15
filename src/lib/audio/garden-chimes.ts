@@ -8,20 +8,20 @@
  * Includes graceful no-op fallbacks for Node.js test runners and non-audio environments.
  */
 
-import { getAudioContext } from './audio-bus.ts'
+import { getAudioContext } from "./audio-bus.ts"
 
 // Pentatonic Garden Chime frequencies for growth nodes 1 through 10 (C4 to C6)
 export const CHIME_FREQUENCIES: readonly number[] = [
   261.63, // Node 1:  C4
   293.66, // Node 2:  D4
   329.63, // Node 3:  E4
-  392.00, // Node 4:  G4
-  440.00, // Node 5:  A4
+  392.0, // Node 4:  G4
+  440.0, // Node 5:  A4
   523.25, // Node 6:  C5
   587.33, // Node 7:  D5
   659.25, // Node 8:  E5
   783.99, // Node 9:  G5
-  1046.50, // Node 10: C6 (Top Blossom)
+  1046.5, // Node 10: C6 (Top Blossom)
 ]
 
 /**
@@ -55,8 +55,8 @@ export function playPluck(nodeIndex: number, pitchOffset: number = 0): void {
     const osc2 = ctx.createOscillator()
     const gain = ctx.createGain()
 
-    osc1.type = 'sine'
-    osc2.type = 'triangle'
+    osc1.type = "sine"
+    osc2.type = "triangle"
 
     osc1.frequency.setValueAtTime(freq, now)
     osc2.frequency.setValueAtTime(freq * 2.01, now)
@@ -88,7 +88,7 @@ export function playCelebrationChimes(): void {
     if (!ctx) return
 
     // Celebratory pentatonic chord: C5, E5, G5, C6
-    const chord = [523.25, 659.25, 783.99, 1046.50]
+    const chord = [523.25, 659.25, 783.99, 1046.5]
 
     chord.forEach((freq, idx) => {
       setTimeout(() => {
@@ -100,7 +100,7 @@ export function playCelebrationChimes(): void {
           const osc = currentCtx.createOscillator()
           const gain = currentCtx.createGain()
 
-          osc.type = 'sine'
+          osc.type = "sine"
           osc.frequency.setValueAtTime(freq, now)
 
           gain.gain.setValueAtTime(0.2, now)

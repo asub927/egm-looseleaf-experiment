@@ -1,9 +1,11 @@
 # Looseleaf Chart Engine
 
 ## Overview
+
 Chart layout calculation, data scaling, downsampling (LTTB), and mathematical layout engines for hand-drawn XY charts, polar charts, sparklines, tallies, and heatmaps.
 
 ## Interface
+
 - [chart-build.ts:buildXY]
 - [chart-build.ts:buildXYRows]
 - [chart-build.ts:capRows]
@@ -37,11 +39,14 @@ Chart layout calculation, data scaling, downsampling (LTTB), and mathematical la
 - [chart-xy.ts:layoutXY]
 
 ## Invariants
+
 - Chart series inputs are automatically capped at MAX_BARS (240) and MAX_POINTS (1500) to ensure rendering performance [chart-build.ts:MAX_BARS]
 - Largest-Triangle-Three-Buckets (LTTB) algorithm guarantees retention of boundary points and extrema [chart-scale.ts:lttb]
 
 ## Side Effects
+
 - None
 
 ## Verification
+
 - Run: npm run build

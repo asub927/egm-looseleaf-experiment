@@ -12,10 +12,17 @@ import { useMergedRef } from "@/lib/ink/react"
 import { envelopeBackRecipe, envelopeFrontRecipe } from "@/lib/ink/recipes/envelope-ink"
 import { cn } from "@/lib/utils"
 
-type EnvelopeContextValue = { stock: StockName; stamp: Accent | "none"; postmark: boolean; airmail: boolean; seed: string }
+type EnvelopeContextValue = {
+  stock: StockName
+  stamp: Accent | "none"
+  postmark: boolean
+  airmail: boolean
+  seed: string
+}
 const EnvelopeContext = React.createContext<EnvelopeContextValue | null>(null)
 
-const FRONT_TILT = "[&>svg]:[rotate:clamp(calc(var(--ll-tilt-max)*-1),var(--ll-tilt,0deg),var(--ll-tilt-max))]"
+const FRONT_TILT =
+  "[&>svg]:[rotate:clamp(calc(var(--ll-tilt-max)*-1),var(--ll-tilt,0deg),var(--ll-tilt-max))]"
 
 type EnvelopeProps = Omit<React.ComponentProps<"div">, "onChange"> & {
   stock?: StockName
@@ -64,13 +71,33 @@ function Envelope({
     [controlled, onOpenChange],
   )
   const hoverOpened = React.useRef(false)
-  const o = useShapedSheet({ recipe: envelopeBackRecipe, params: { stock }, seed, tilt, tiltMax: 1.1, size })
-  const ctx = React.useMemo<EnvelopeContextValue>(() => ({ stock, stamp: stamp || "none", postmark: postmark && !!stamp, airmail, seed: o.seed }), [stock, stamp, postmark, airmail, o.seed])
+  const o = useShapedSheet({
+    recipe: envelopeBackRecipe,
+    params: { stock },
+    seed,
+    tilt,
+    tiltMax: 1.1,
+    size,
+  })
+  const ctx = React.useMemo<EnvelopeContextValue>(
+    () => ({ stock, stamp: stamp || "none", postmark: postmark && !!stamp, airmail, seed: o.seed }),
+    [stock, stamp, postmark, airmail, o.seed],
+  )
   const state = open ? "open" : "closed"
   return (
     <EnvelopeContext.Provider value={ctx}>
-      <div data-slot="envelope" data-state={state} ref={ref} className={cn("group/env @container w-full max-w-sm", className)} style={style} {...props}>
-        <div aria-hidden="true" className="h-0 transition-[height] duration-(--ll-dur-sheet) ease-(--ll-ease-settle) group-data-[state=open]/env:h-[31cqw]" />
+      <div
+        data-slot="envelope"
+        data-state={state}
+        ref={ref}
+        className={cn("group/env @container w-full max-w-sm", className)}
+        style={style}
+        {...props}
+      >
+        <div
+          aria-hidden="true"
+          className="h-0 transition-[height] duration-(--ll-dur-sheet) ease-(--ll-ease-settle) group-data-[state=open]/env:h-[31cqw]"
+        />
         <CollapsiblePrimitive.Root
           open={open}
           disabled={disabled}
@@ -98,11 +125,19 @@ function Envelope({
               onPointerLeave?.(e as never)
               if (openOnHover && e.pointerType === "mouse" && hoverOpened.current) {
                 hoverOpened.current = false
-                if (e.currentTarget.querySelector('[data-slot="envelope-letter"]')?.contains(document.activeElement)) return
+                if (
+                  e.currentTarget
+                    .querySelector('[data-slot="envelope-letter"]')
+                    ?.contains(document.activeElement)
+                )
+                  return
                 setOpen(false)
               }
             }}
-            className={cn("relative isolate aspect-[8/5] w-full", !o.ready && "bg-card shadow-card")}
+            className={cn(
+              "relative isolate aspect-[8/5] w-full",
+              !o.ready && "bg-card shadow-card",
+            )}
             style={o.root.style}
           >
             {o.node}
@@ -139,7 +174,12 @@ function EnvelopeFront({ className, children, ref, ...props }: React.ComponentPr
   const ctx = React.useContext(EnvelopeContext)
   const { hostRef, hostProps, node } = useInkFaces({
     recipe: envelopeFrontRecipe,
-    params: { stock: ctx?.stock ?? "paper", stamp: ctx?.stamp ?? "none", postmark: ctx?.postmark ?? false, airmail: ctx?.airmail ?? false },
+    params: {
+      stock: ctx?.stock ?? "paper",
+      stamp: ctx?.stamp ?? "none",
+      postmark: ctx?.postmark ?? false,
+      airmail: ctx?.airmail ?? false,
+    },
     kind: "envelope",
     seed: `${ctx?.seed ?? "envelope"}|front`,
     still: true,
@@ -150,7 +190,11 @@ function EnvelopeFront({ className, children, ref, ...props }: React.ComponentPr
       data-slot="envelope-front"
       ref={merged}
       {...(node ? hostProps : {})}
-      className={cn("absolute inset-0 z-20 isolate flex flex-col justify-end ps-[13%] pe-[8%] pb-[8%] text-ink", FRONT_TILT, className)}
+      className={cn(
+        "absolute inset-0 z-20 isolate flex flex-col justify-end ps-[13%] pe-[8%] pb-[8%] text-ink",
+        FRONT_TILT,
+        className,
+      )}
       {...props}
     >
       {node}
@@ -159,9 +203,17 @@ function EnvelopeFront({ className, children, ref, ...props }: React.ComponentPr
   )
 }
 
-function EnvelopeTrigger({ className, children, ...props }: React.ComponentProps<typeof CollapsiblePrimitive.Trigger>) {
+function EnvelopeTrigger({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof CollapsiblePrimitive.Trigger>) {
   return (
-    <CollapsiblePrimitive.Trigger data-slot="envelope-trigger" className={cn("absolute inset-0 z-10 cursor-pointer disabled:cursor-not-allowed", className)} {...props}>
+    <CollapsiblePrimitive.Trigger
+      data-slot="envelope-trigger"
+      className={cn("absolute inset-0 z-10 cursor-pointer disabled:cursor-not-allowed", className)}
+      {...props}
+    >
       <span className="sr-only">{children ?? "Open the letter"}</span>
     </CollapsiblePrimitive.Trigger>
   )
@@ -181,7 +233,16 @@ function EnvelopeAddress({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function EnvelopeSender({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="envelope-sender" className={cn("absolute start-[5%] top-[7%] max-w-[40%] text-xs leading-tight break-words text-ink-soft", className)} {...props} />
+  return (
+    <div
+      data-slot="envelope-sender"
+      className={cn(
+        "absolute start-[5%] top-[7%] max-w-[40%] text-xs leading-tight break-words text-ink-soft",
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 export { Envelope, EnvelopeLetter, EnvelopeFront, EnvelopeTrigger, EnvelopeAddress, EnvelopeSender }

@@ -4,7 +4,12 @@ import * as React from "react"
 
 import { MARK_REVEAL, useMarkPhase } from "@/hooks/use-mark-ink"
 import { useInk, useMergedRef } from "@/lib/ink/react"
-import { arrowRecipe, type ArrowCurve, type ArrowDirection, type ArrowHead } from "@/lib/ink/recipes/arrow-ink"
+import {
+  arrowRecipe,
+  type ArrowCurve,
+  type ArrowDirection,
+  type ArrowHead,
+} from "@/lib/ink/recipes/arrow-ink"
 import type { MarkPen, MarkWeight } from "@/lib/ink/recipes/text-marks-ink"
 import { cn } from "@/lib/utils"
 
@@ -31,15 +36,21 @@ function resolveTarget(t: Target): Element | null {
 function vectorTo(host: Element, target: Element, gap: number): { dx: number; dy: number } | null {
   const a = host.getBoundingClientRect()
   const b = target.getBoundingClientRect()
-  const cx = a.left + a.width / 2, cy = a.top + a.height / 2
-  const vx = b.left + b.width / 2 - cx, vy = b.top + b.height / 2 - cy
+  const cx = a.left + a.width / 2,
+    cy = a.top + a.height / 2
+  const vx = b.left + b.width / 2 - cx,
+    vy = b.top + b.height / 2 - cy
   const len = Math.hypot(vx, vy)
   if (len < 1) return null
-  const enter = (lo: number, hi: number, o: number, v: number) => (v === 0 ? (o >= lo && o <= hi ? -Infinity : Infinity) : Math.min((lo - o) / v, (hi - o) / v))
+  const enter = (lo: number, hi: number, o: number, v: number) =>
+    v === 0 ? (o >= lo && o <= hi ? -Infinity : Infinity) : Math.min((lo - o) / v, (hi - o) / v)
   const t = Math.max(enter(b.left, b.right, cx, vx), enter(b.top, b.bottom, cy, vy))
   if (!(t >= 0 && t <= 1)) return null
   const reach = Math.max(0, len * t - gap)
-  return { dx: Math.round(((vx / len) * reach) / 2) * 2, dy: Math.round(((vy / len) * reach) / 2) * 2 }
+  return {
+    dx: Math.round(((vx / len) * reach) / 2) * 2,
+    dy: Math.round(((vy / len) * reach) / 2) * 2,
+  }
 }
 
 function Arrow({
@@ -103,7 +114,17 @@ function Arrow({
     return () => stops.forEach((s) => s())
   }, [aimed, host, pointAt, gap])
 
-  const params = { direction, curve, head, tone, weight, bend, mirror, animate, ...(aimed && vec ? { dx: vec.dx, dy: vec.dy } : {}) }
+  const params = {
+    direction,
+    curve,
+    head,
+    tone,
+    weight,
+    bend,
+    mirror,
+    animate,
+    ...(aimed && vec ? { dx: vec.dx, dy: vec.dy } : {}),
+  }
   const { hostRef, hostProps, node } = useInk({ recipe: arrowRecipe, params, kind: "arrow", seed })
   const { phaseRef, phaseProps } = useMarkPhase({ animate, show })
   const ready = !!node && show && !(aimed && !vec)
@@ -111,18 +132,37 @@ function Arrow({
     <span
       data-slot="arrow"
       data-direction={aimed ? undefined : direction}
-      ref={useMergedRef<HTMLElement>(hostRef, phaseRef, ref as React.Ref<HTMLElement> | undefined, setHost)}
+      ref={useMergedRef<HTMLElement>(
+        hostRef,
+        phaseRef,
+        ref as React.Ref<HTMLElement> | undefined,
+        setHost,
+      )}
       {...(ready ? hostProps : {})}
       {...phaseProps}
-      style={{ ...(animate ? ({ "--ll-draw-delay": `${delay ?? 0}ms` } as React.CSSProperties) : undefined), ...style }}
-      className={cn("relative isolate inline-block shrink-0 align-middle outline-none", aimed ? "size-6" : "h-10 w-20", animate && MARK_REVEAL, className)}
+      style={{
+        ...(animate
+          ? ({ "--ll-draw-delay": `${delay ?? 0}ms` } as React.CSSProperties)
+          : undefined),
+        ...style,
+      }}
+      className={cn(
+        "relative isolate inline-block shrink-0 align-middle outline-none",
+        aimed ? "size-6" : "h-10 w-20",
+        animate && MARK_REVEAL,
+        className,
+      )}
       {...props}
     >
       {ready ? node : null}
       {children ? (
         <span
           data-slot="arrow-label"
-          className={cn("absolute font-script text-xl leading-none whitespace-nowrap text-ink-you", !aimed && LABEL_SIDE[direction], aimed && "start-full top-1/2 ms-2 -translate-y-1/2")}
+          className={cn(
+            "absolute font-script text-xl leading-none whitespace-nowrap text-ink-you",
+            !aimed && LABEL_SIDE[direction],
+            aimed && "start-full top-1/2 ms-2 -translate-y-1/2",
+          )}
         >
           {children}
         </span>

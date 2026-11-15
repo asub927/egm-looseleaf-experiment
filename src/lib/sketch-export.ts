@@ -1,4 +1,9 @@
-export function svgToPngDataUrl(svgDataUrl: string, width: number, height: number, scale = 2): Promise<string | null> {
+export function svgToPngDataUrl(
+  svgDataUrl: string,
+  width: number,
+  height: number,
+  scale = 2,
+): Promise<string | null> {
   return new Promise((done) => {
     if (typeof document === "undefined" || typeof Image === "undefined") return done(null)
     const img = new Image()

@@ -15,8 +15,18 @@ function Rule({
   children,
   ref,
   ...props
-}: React.ComponentProps<"div"> & { variant: SeparatorVariant; orientation: Orientation; seed?: string | number }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: separatorRecipe, params: { variant, orientation }, kind: "rule", seed, still: true })
+}: React.ComponentProps<"div"> & {
+  variant: SeparatorVariant
+  orientation: Orientation
+  seed?: string | number
+}) {
+  const { hostRef, hostProps, node } = useInk({
+    recipe: separatorRecipe,
+    params: { variant, orientation },
+    kind: "rule",
+    seed,
+    still: true,
+  })
   return (
     <div
       ref={useMergedRef<HTMLDivElement>(hostRef, ref)}
@@ -24,7 +34,7 @@ function Rule({
       data-variant={variant}
       className={cn(
         "relative isolate shrink-0 bg-pencil-mark/60 outline-hidden data-ink-ready:bg-transparent data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=horizontal]:overflow-x-clip data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px data-[orientation=vertical]:overflow-y-clip",
-        className
+        className,
       )}
       {...props}
     >
@@ -48,7 +58,13 @@ function Separator({
 }) {
   if (children === undefined || children === null || children === false) {
     return (
-      <SeparatorPrimitive.Root data-slot="separator" asChild decorative={decorative} orientation={orientation} {...props}>
+      <SeparatorPrimitive.Root
+        data-slot="separator"
+        asChild
+        decorative={decorative}
+        orientation={orientation}
+        {...props}
+      >
         <Rule variant={variant} orientation={orientation} seed={seed} className={className} />
       </SeparatorPrimitive.Root>
     )
@@ -60,14 +76,42 @@ function Separator({
       data-variant={variant}
       decorative={decorative}
       orientation={orientation}
-      className={cn("flex shrink-0 items-center gap-3 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:flex-col", className)}
+      className={cn(
+        "flex shrink-0 items-center gap-3 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:flex-col",
+        className,
+      )}
       {...props}
     >
-      <Rule variant={variant} orientation={orientation} seed={seed === undefined ? undefined : `${seed}:a`} data-orientation={orientation} data-slot="separator-line" className={vertical ? "data-[orientation=vertical]:h-auto flex-1" : "data-[orientation=horizontal]:w-auto flex-1"} />
-      <span data-slot="separator-label" className="shrink-0 font-hand text-sm leading-none font-bold text-muted-foreground select-none">
+      <Rule
+        variant={variant}
+        orientation={orientation}
+        seed={seed === undefined ? undefined : `${seed}:a`}
+        data-orientation={orientation}
+        data-slot="separator-line"
+        className={
+          vertical
+            ? "data-[orientation=vertical]:h-auto flex-1"
+            : "data-[orientation=horizontal]:w-auto flex-1"
+        }
+      />
+      <span
+        data-slot="separator-label"
+        className="shrink-0 font-hand text-sm leading-none font-bold text-muted-foreground select-none"
+      >
         {children}
       </span>
-      <Rule variant={variant} orientation={orientation} seed={seed === undefined ? undefined : `${seed}:b`} data-orientation={orientation} data-slot="separator-line" className={vertical ? "data-[orientation=vertical]:h-auto flex-1" : "data-[orientation=horizontal]:w-auto flex-1"} />
+      <Rule
+        variant={variant}
+        orientation={orientation}
+        seed={seed === undefined ? undefined : `${seed}:b`}
+        data-orientation={orientation}
+        data-slot="separator-line"
+        className={
+          vertical
+            ? "data-[orientation=vertical]:h-auto flex-1"
+            : "data-[orientation=horizontal]:w-auto flex-1"
+        }
+      />
     </SeparatorPrimitive.Root>
   )
 }

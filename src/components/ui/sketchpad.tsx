@@ -47,10 +47,35 @@ interface ExportOptions {
   title?: string
 }
 
-const TOOL_LABEL: Record<SketchTool, string> = { felt: "Felt", brush: "Brush", pencil: "Pencil", marker: "Marker", highlighter: "Highlighter", eraser: "Eraser" }
-const COLOR_LABEL: Record<SketchColor, string> = { ink: "Ink", "ink-you": "Blue", red: "Red", green: "Green", marker: "Terracotta", tangerine: "Orange", hi: "Yellow", teal: "Teal", grape: "Purple", bubblegum: "Pink" }
+const TOOL_LABEL: Record<SketchTool, string> = {
+  felt: "Felt",
+  brush: "Brush",
+  pencil: "Pencil",
+  marker: "Marker",
+  highlighter: "Highlighter",
+  eraser: "Eraser",
+}
+const COLOR_LABEL: Record<SketchColor, string> = {
+  ink: "Ink",
+  "ink-you": "Blue",
+  red: "Red",
+  green: "Green",
+  marker: "Terracotta",
+  tangerine: "Orange",
+  hi: "Yellow",
+  teal: "Teal",
+  grape: "Purple",
+  bubblegum: "Pink",
+}
 const SIZE_LABEL: Record<SketchSizeName, string> = { fine: "Fine", medium: "Medium", bold: "Bold" }
-const KEY_TOOL: Record<string, SketchTool> = { f: "felt", b: "brush", p: "pencil", m: "marker", h: "highlighter", e: "eraser" }
+const KEY_TOOL: Record<string, SketchTool> = {
+  f: "felt",
+  b: "brush",
+  p: "pencil",
+  m: "marker",
+  h: "highlighter",
+  e: "eraser",
+}
 const SIZE_STEPS = [SKETCH_SIZES.fine, SKETCH_SIZES.medium, SKETCH_SIZES.bold]
 const DEFAULT_TOOLS: readonly SketchTool[] = ["felt", "pencil", "marker", "highlighter", "eraser"]
 const HISTORY = 100
@@ -58,9 +83,16 @@ const NO_IDS: ReadonlySet<string> = new Set()
 
 const round1 = (v: number) => Math.round(v * 10) / 10
 const isDrawTool = (t: SketchTool): t is DrawTool => (DRAW_TOOLS as readonly string[]).includes(t)
-const sizeName = (size: number): SketchSizeName | undefined => (Object.keys(SKETCH_SIZES) as SketchSizeName[]).find((k) => Math.abs(SKETCH_SIZES[k] - size) < 0.05)
+const sizeName = (size: number): SketchSizeName | undefined =>
+  (Object.keys(SKETCH_SIZES) as SketchSizeName[]).find(
+    (k) => Math.abs(SKETCH_SIZES[k] - size) < 0.05,
+  )
 
-function useControllable<T>(value: T | undefined, defaultValue: T, onChange?: (v: T) => void): [T, (v: T) => void, boolean] {
+function useControllable<T>(
+  value: T | undefined,
+  defaultValue: T,
+  onChange?: (v: T) => void,
+): [T, (v: T) => void, boolean] {
   const [inner, setInner] = React.useState(defaultValue)
   const controlled = value !== undefined
   const set = React.useCallback(
@@ -74,7 +106,9 @@ function useControllable<T>(value: T | undefined, defaultValue: T, onChange?: (v
 }
 
 function withIds(strokes: readonly StrokeInput[]): SketchStroke[] {
-  return strokes.every((s) => s.id) ? (strokes as SketchStroke[]) : strokes.map((s, i) => (s.id ? (s as SketchStroke) : { ...s, id: `i${i}` }))
+  return strokes.every((s) => s.id)
+    ? (strokes as SketchStroke[])
+    : strokes.map((s, i) => (s.id ? (s as SketchStroke) : { ...s, id: `i${i}` }))
 }
 
 interface SketchpadContextValue {
@@ -172,7 +206,11 @@ function Sketchpad({
   const canvasRef = React.useRef<HTMLDivElement | null>(null)
   const lastButton = React.useRef<HTMLButtonElement | null>(null)
   const idBase = React.useId()
-  const [strokesRaw, setStrokes, strokesControlled] = useControllable<readonly StrokeInput[]>(value, defaultValue ?? [], onValueChange as ((v: readonly StrokeInput[]) => void) | undefined)
+  const [strokesRaw, setStrokes, strokesControlled] = useControllable<readonly StrokeInput[]>(
+    value,
+    defaultValue ?? [],
+    onValueChange as ((v: readonly StrokeInput[]) => void) | undefined,
+  )
   const strokes = React.useMemo(() => withIds(strokesRaw), [strokesRaw])
   const [tool, setToolRaw] = useControllable<SketchTool>(toolProp, defaultTool, onToolChange)
   const [color, setColor] = useControllable<SketchColor>(colorProp, defaultColor, onColorChange)
@@ -182,12 +220,20 @@ function Sketchpad({
 
   const latest = React.useRef({ strokes, color, tool })
   latest.current = { strokes, color, tool }
-  const hist = React.useRef<{ past: SketchStroke[][]; future: SketchStroke[][]; last: readonly StrokeInput[] | null }>({ past: [], future: [], last: null })
+  const hist = React.useRef<{
+    past: SketchStroke[][]
+    future: SketchStroke[][]
+    last: readonly StrokeInput[] | null
+  }>({ past: [], future: [], last: null })
   const [, force] = React.useReducer((x: number) => x + 1, 0)
   const counter = React.useRef(0)
 
   React.useEffect(() => {
-    if (strokesControlled && value !== hist.current.last && (hist.current.past.length || hist.current.future.length)) {
+    if (
+      strokesControlled &&
+      value !== hist.current.last &&
+      (hist.current.past.length || hist.current.future.length)
+    ) {
       hist.current.past = []
       hist.current.future = []
       force()
@@ -272,7 +318,8 @@ function Sketchpad({
         resolve,
         margin: o.margin,
         title: o.title,
-        background: o.background === false ? undefined : (resolve("--ll-paper") ?? "var(--ll-paper)"),
+        background:
+          o.background === false ? undefined : (resolve("--ll-paper") ?? "var(--ll-paper)"),
       }),
     [width, height, resolve],
   )
@@ -315,7 +362,8 @@ function Sketchpad({
     const root = rootRef.current
     const now = document.activeElement
     const was = lastButton.current
-    const stranded = now instanceof HTMLButtonElement ? now : now === document.body || !now ? was : null
+    const stranded =
+      now instanceof HTMLButtonElement ? now : now === document.body || !now ? was : null
     if (stranded?.disabled && root?.contains(stranded)) {
       lastButton.current = null
       canvasRef.current?.focus({ preventScroll: true })
@@ -356,7 +404,14 @@ function Sketchpad({
 
   return (
     <SketchpadContext.Provider value={ctx}>
-      <div data-slot="sketchpad" data-disabled={disabled ? "" : undefined} data-readonly={readOnly ? "" : undefined} ref={useMergedRef(rootRef, ref)} className={cn("flex w-full flex-col gap-3", className)} {...props}>
+      <div
+        data-slot="sketchpad"
+        data-disabled={disabled ? "" : undefined}
+        data-readonly={readOnly ? "" : undefined}
+        ref={useMergedRef(rootRef, ref)}
+        className={cn("flex w-full flex-col gap-3", className)}
+        {...props}
+      >
         {children ?? (
           <>
             {readOnly ? null : (
@@ -381,7 +436,11 @@ function Sketchpad({
   )
 }
 
-function SketchpadToolbar({ className, children, ...props }: Omit<PaperProps, "stock" | "edge" | "tilt">) {
+function SketchpadToolbar({
+  className,
+  children,
+  ...props
+}: Omit<PaperProps, "stock" | "edge" | "tilt">) {
   return (
     <Paper
       data-slot="sketchpad-toolbar"
@@ -399,9 +458,17 @@ function SketchpadToolbar({ className, children, ...props }: Omit<PaperProps, "s
   )
 }
 
-type GroupProps = Omit<React.ComponentProps<typeof RadioGroupPrimitive.Root>, "value" | "defaultValue" | "onValueChange" | "orientation">
+type GroupProps = Omit<
+  React.ComponentProps<typeof RadioGroupPrimitive.Root>,
+  "value" | "defaultValue" | "onValueChange" | "orientation"
+>
 
-function SketchpadTools({ className, children, tools: toolsProp, ...props }: GroupProps & { tools?: readonly SketchTool[] }) {
+function SketchpadTools({
+  className,
+  children,
+  tools: toolsProp,
+  ...props
+}: GroupProps & { tools?: readonly SketchTool[] }) {
   const ctx = useSketchpad()
   const tools = toolsProp ?? ctx.tools
   return (
@@ -420,11 +487,25 @@ function SketchpadTools({ className, children, tools: toolsProp, ...props }: Gro
   )
 }
 
-type ItemProps = Omit<React.ComponentProps<typeof RadioGroupPrimitive.Item>, "value"> & { seed?: string | number }
+type ItemProps = Omit<React.ComponentProps<typeof RadioGroupPrimitive.Item>, "value"> & {
+  seed?: string | number
+}
 
-function SketchpadTool({ value, className, children, seed, ref, ...props }: ItemProps & { value: SketchTool }) {
+function SketchpadTool({
+  value,
+  className,
+  children,
+  seed,
+  ref,
+  ...props
+}: ItemProps & { value: SketchTool }) {
   const ctx = useSketchpad()
-  const { hostRef, hostProps, node } = useInk({ recipe: sketchToolRecipe, params: { tool: value, color: ctx.color }, kind: "sketchpad-tool", seed })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: sketchToolRecipe,
+    params: { tool: value, color: ctx.color },
+    kind: "sketchpad-tool",
+    seed,
+  })
   return (
     <RadioGroupPrimitive.Item
       data-slot="sketchpad-tool"
@@ -445,7 +526,12 @@ function SketchpadTool({ value, className, children, seed, ref, ...props }: Item
   )
 }
 
-function SketchpadColors({ className, children, colors = SKETCH_COLORS, ...props }: GroupProps & { colors?: readonly SketchColor[] }) {
+function SketchpadColors({
+  className,
+  children,
+  colors = SKETCH_COLORS,
+  ...props
+}: GroupProps & { colors?: readonly SketchColor[] }) {
   const ctx = useSketchpad()
   return (
     <RadioGroupPrimitive.Root
@@ -463,8 +549,21 @@ function SketchpadColors({ className, children, colors = SKETCH_COLORS, ...props
   )
 }
 
-function SketchpadColor({ value, className, seed, ref, style, "aria-label": label, ...props }: ItemProps & { value: SketchColor }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: sketchSwatchRecipe, params: { color: value }, kind: "sketchpad-swatch", seed })
+function SketchpadColor({
+  value,
+  className,
+  seed,
+  ref,
+  style,
+  "aria-label": label,
+  ...props
+}: ItemProps & { value: SketchColor }) {
+  const { hostRef, hostProps, node } = useInk({
+    recipe: sketchSwatchRecipe,
+    params: { color: value },
+    kind: "sketchpad-swatch",
+    seed,
+  })
   return (
     <RadioGroupPrimitive.Item
       data-slot="sketchpad-color"
@@ -474,7 +573,10 @@ function SketchpadColor({ value, className, seed, ref, style, "aria-label": labe
       ref={useMergedRef<HTMLButtonElement>(hostRef, ref)}
       {...hostProps}
       style={{ "--sw": `var(--ll-${value})`, ...style } as React.CSSProperties}
-      className={cn("relative isolate inline-flex size-7 cursor-pointer items-center justify-center after:absolute after:-inset-px disabled:pointer-events-none disabled:opacity-60 forced-colors:[forced-color-adjust:none] forced-colors:bg-(--sw) forced-colors:data-[state=checked]:[outline:3px_solid_Highlight]!", className)}
+      className={cn(
+        "relative isolate inline-flex size-7 cursor-pointer items-center justify-center after:absolute after:-inset-px disabled:pointer-events-none disabled:opacity-60 forced-colors:[forced-color-adjust:none] forced-colors:bg-(--sw) forced-colors:data-[state=checked]:[outline:3px_solid_Highlight]!",
+        className,
+      )}
       {...props}
     >
       {node}
@@ -495,13 +597,28 @@ function SketchpadSizes({ className, children, ...props }: GroupProps) {
       className={cn("flex items-center", className)}
       {...props}
     >
-      {children ?? (Object.keys(SKETCH_SIZES) as SketchSizeName[]).map((s) => <SketchpadSize key={s} value={s} />)}
+      {children ??
+        (Object.keys(SKETCH_SIZES) as SketchSizeName[]).map((s) => (
+          <SketchpadSize key={s} value={s} />
+        ))}
     </RadioGroupPrimitive.Root>
   )
 }
 
-function SketchpadSize({ value, className, seed, ref, "aria-label": label, ...props }: ItemProps & { value: SketchSizeName }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: sketchSizeRecipe, params: { size: value }, kind: "sketchpad-size", seed })
+function SketchpadSize({
+  value,
+  className,
+  seed,
+  ref,
+  "aria-label": label,
+  ...props
+}: ItemProps & { value: SketchSizeName }) {
+  const { hostRef, hostProps, node } = useInk({
+    recipe: sketchSizeRecipe,
+    params: { size: value },
+    kind: "sketchpad-size",
+    seed,
+  })
   return (
     <RadioGroupPrimitive.Item
       data-slot="sketchpad-size"
@@ -510,7 +627,10 @@ function SketchpadSize({ value, className, seed, ref, "aria-label": label, ...pr
       aria-label={label ?? `${SIZE_LABEL[value]} line`}
       ref={useMergedRef<HTMLButtonElement>(hostRef, ref)}
       {...hostProps}
-      className={cn("relative isolate inline-flex size-7 cursor-pointer items-center justify-center disabled:pointer-events-none disabled:opacity-60 forced-colors:after:absolute forced-colors:after:top-1/2 forced-colors:after:left-1/2 forced-colors:after:size-2 forced-colors:after:-translate-1/2 forced-colors:after:rounded-full forced-colors:after:bg-[CanvasText] forced-colors:data-[state=checked]:[outline:3px_solid_Highlight]!", className)}
+      className={cn(
+        "relative isolate inline-flex size-7 cursor-pointer items-center justify-center disabled:pointer-events-none disabled:opacity-60 forced-colors:after:absolute forced-colors:after:top-1/2 forced-colors:after:left-1/2 forced-colors:after:size-2 forced-colors:after:-translate-1/2 forced-colors:after:rounded-full forced-colors:after:bg-[CanvasText] forced-colors:data-[state=checked]:[outline:3px_solid_Highlight]!",
+        className,
+      )}
       {...props}
     >
       {node}
@@ -585,15 +705,37 @@ interface ReplayTiming {
   dur: number
 }
 
-const StrokeShape = React.memo(function StrokeShape({ stroke, dim, replay, maskId, width, height }: { stroke: SketchStroke; dim: boolean; replay: ReplayTiming | null; maskId: string; width: number; height: number }) {
+const StrokeShape = React.memo(function StrokeShape({
+  stroke,
+  dim,
+  replay,
+  maskId,
+  width,
+  height,
+}: {
+  stroke: SketchStroke
+  dim: boolean
+  replay: ReplayTiming | null
+  maskId: string
+  width: number
+  height: number
+}) {
   const tier = useInkTier()
   const m = strokeMarkup(stroke, { tier })
   const style = dim ? { opacity: 0.22 } : undefined
-  if (!replay) return <g data-stroke={stroke.id} style={style} dangerouslySetInnerHTML={{ __html: m.svg }} />
+  if (!replay)
+    return <g data-stroke={stroke.id} style={style} dangerouslySetInnerHTML={{ __html: m.svg }} />
   const w = Math.max(8, strokeWidthOf(stroke) * 1.6 + 6)
   return (
     <g data-stroke={stroke.id} mask={`url(#${maskId})`} style={style}>
-      <mask id={maskId} maskUnits="userSpaceOnUse" x={-20} y={-20} width={width + 40} height={height + 40}>
+      <mask
+        id={maskId}
+        maskUnits="userSpaceOnUse"
+        x={-20}
+        y={-20}
+        width={width + 40}
+        height={height + 40}
+      >
         <path
           d={m.centre}
           pathLength={1}
@@ -603,7 +745,13 @@ const StrokeShape = React.memo(function StrokeShape({ stroke, dim, replay, maskI
           strokeLinecap="round"
           strokeLinejoin="round"
           className="ll-draw"
-          style={{ "--ll-draw-delay": `${replay.delay.toFixed(2)}s`, animationDuration: `${replay.dur.toFixed(2)}s`, animationTimingFunction: "linear" } as React.CSSProperties}
+          style={
+            {
+              "--ll-draw-delay": `${replay.delay.toFixed(2)}s`,
+              animationDuration: `${replay.dur.toFixed(2)}s`,
+              animationTimingFunction: "linear",
+            } as React.CSSProperties
+          }
         />
       </mask>
       <g dangerouslySetInnerHTML={{ __html: m.svg }} />
@@ -611,7 +759,8 @@ const StrokeShape = React.memo(function StrokeShape({ stroke, dim, replay, maskI
   )
 })
 
-const strokeWidthOf = (s: SketchStroke): number => (s.tool === "highlighter" ? 14 : s.tool === "marker" ? 8 : 3.4) * s.size
+const strokeWidthOf = (s: SketchStroke): number =>
+  (s.tool === "highlighter" ? 14 : s.tool === "marker" ? 8 : 3.4) * s.size
 
 interface Gesture {
   pointer: number | "key"
@@ -650,7 +799,10 @@ function thin(pts: SketchPoint[]): SketchPoint[] {
   return out
 }
 
-const PAPERS: Record<NonNullable<SketchpadCanvasProps["paper"]>, Pick<PaperProps, "stock" | "rules">> = {
+const PAPERS: Record<
+  NonNullable<SketchpadCanvasProps["paper"]>,
+  Pick<PaperProps, "stock" | "rules">
+> = {
   plain: { stock: "paper", rules: "none" },
   ruled: { stock: "paper", rules: "ruled" },
   graph: { stock: "graph" },
@@ -666,10 +818,32 @@ type SketchpadCanvasProps = Omit<React.ComponentProps<"div">, "children"> & {
   seed?: string | number
 }
 
-function SketchpadCanvas({ className, children, paper = "plain", paperProps, label = "Drawing", seed, ref, onKeyDown, onPointerDown, onPointerMove, onPointerUp, onPointerCancel, onLostPointerCapture, onBlur, ...props }: SketchpadCanvasProps) {
+function SketchpadCanvas({
+  className,
+  children,
+  paper = "plain",
+  paperProps,
+  label = "Drawing",
+  seed,
+  ref,
+  onKeyDown,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp,
+  onPointerCancel,
+  onLostPointerCapture,
+  onBlur,
+  ...props
+}: SketchpadCanvasProps) {
   const ctx = useSketchpad()
   const tier = useInkTier()
-  const { hostRef, hostProps, node } = useInk({ recipe: canvasFrameRecipe, params: {}, kind: "sketchpad-canvas", size: [ctx.width, ctx.height], seed })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: canvasFrameRecipe,
+    params: {},
+    kind: "sketchpad-canvas",
+    size: [ctx.width, ctx.height],
+    seed,
+  })
   const help = React.useId()
   const uid = ctx.seed.replace(/[^a-zA-Z0-9]/g, "")
   const surface = React.useRef<SVGSVGElement | null>(null)
@@ -684,7 +858,8 @@ function SketchpadCanvas({ className, children, paper = "plain", paperProps, lab
 
   React.useEffect(
     () => () => {
-      if (frame.current && typeof cancelAnimationFrame !== "undefined") cancelAnimationFrame(frame.current)
+      if (frame.current && typeof cancelAnimationFrame !== "undefined")
+        cancelAnimationFrame(frame.current)
     },
     [],
   )
@@ -693,10 +868,19 @@ function SketchpadCanvas({ className, children, paper = "plain", paperProps, lab
     const r = surface.current?.getBoundingClientRect()
     const sx = r && r.width ? W / r.width : 1
     const sy = r && r.height ? H / r.height : 1
-    return [round1(Math.min(W, Math.max(0, ((clientX ?? 0) - (r?.left ?? 0)) * sx))), round1(Math.min(H, Math.max(0, ((clientY ?? 0) - (r?.top ?? 0)) * sy)))]
+    return [
+      round1(Math.min(W, Math.max(0, ((clientX ?? 0) - (r?.left ?? 0)) * sx))),
+      round1(Math.min(H, Math.max(0, ((clientY ?? 0) - (r?.top ?? 0)) * sy))),
+    ]
   }
 
-  const liveOf = (g: Gesture): SketchStroke => ({ id: "live", tool: g.tool as DrawTool, color: g.color, size: g.size, pts: preview(g.pts) })
+  const liveOf = (g: Gesture): SketchStroke => ({
+    id: "live",
+    tool: g.tool as DrawTool,
+    color: g.color,
+    size: g.size,
+    pts: preview(g.pts),
+  })
   const flush = () => {
     const g = gesture.current
     if (g && g.tool !== "eraser") setLive(liveOf(g))
@@ -722,7 +906,16 @@ function SketchpadCanvas({ className, children, paper = "plain", paperProps, lab
   }
   const begin = (pointer: Gesture["pointer"], kind: string, pt: SketchPoint, eraser: boolean) => {
     const tool: SketchTool = eraser ? "eraser" : ctx.tool
-    const g: Gesture = { pointer, kind, tool, color: ctx.color, size: ctx.size, pts: [pt], tail: null, erase: tool === "eraser" ? new Set() : null }
+    const g: Gesture = {
+      pointer,
+      kind,
+      tool,
+      color: ctx.color,
+      size: ctx.size,
+      pts: [pt],
+      tail: null,
+      erase: tool === "eraser" ? new Set() : null,
+    }
     gesture.current = g
     if (g.erase) eraseAt(g, pt[0], pt[1])
     else setLive(liveOf(g))
@@ -744,23 +937,35 @@ function SketchpadCanvas({ className, children, paper = "plain", paperProps, lab
     const g = gesture.current
     if (!g) return
     gesture.current = null
-    if (frame.current && typeof cancelAnimationFrame !== "undefined") cancelAnimationFrame(frame.current)
+    if (frame.current && typeof cancelAnimationFrame !== "undefined")
+      cancelAnimationFrame(frame.current)
     frame.current = 0
     setLive(null)
     if (g.erase) {
       setErasing(NO_IDS)
       if (!cancel && g.erase.size) {
         const gone = g.erase
-        ctx.commit(ctx.strokes.filter((s) => !gone.has(s.id)), `Erased ${count(gone.size)}.`)
+        ctx.commit(
+          ctx.strokes.filter((s) => !gone.has(s.id)),
+          `Erased ${count(gone.size)}.`,
+        )
       }
       return
     }
     if (cancel || !isDrawTool(g.tool)) return
     if (g.tail) {
       const held = g.pts[g.pts.length - 1][2]
-      g.pts.push(held !== undefined && g.tail[2] === undefined ? [g.tail[0], g.tail[1], held] : g.tail)
+      g.pts.push(
+        held !== undefined && g.tail[2] === undefined ? [g.tail[0], g.tail[1], held] : g.tail,
+      )
     }
-    ctx.commit([...ctx.strokes, { id: ctx.nextId(), tool: g.tool, color: g.color, size: g.size, pts: thin(g.pts) }], "Stroke added.")
+    ctx.commit(
+      [
+        ...ctx.strokes,
+        { id: ctx.nextId(), tool: g.tool, color: g.color, size: g.size, pts: thin(g.pts) },
+      ],
+      "Stroke added.",
+    )
   }
 
   React.useEffect(() => {
@@ -780,8 +985,7 @@ function SketchpadCanvas({ className, children, paper = "plain", paperProps, lab
     e.currentTarget.focus({ preventScroll: true })
     try {
       e.currentTarget.setPointerCapture(e.pointerId)
-    } catch {
-    }
+    } catch {}
     setCursor(null)
     const p = project(e.clientX, e.clientY)
     if (type === "pen" && e.pressure > 0) p[2] = Math.round(e.pressure * 100) / 100
@@ -793,7 +997,10 @@ function SketchpadCanvas({ className, children, paper = "plain", paperProps, lab
     if (e.pointerType === "pen") penSeen.current = e.timeStamp
     const g = gesture.current
     if (!g || g.pointer !== e.pointerId) return
-    const list = typeof e.nativeEvent.getCoalescedEvents === "function" ? e.nativeEvent.getCoalescedEvents() : []
+    const list =
+      typeof e.nativeEvent.getCoalescedEvents === "function"
+        ? e.nativeEvent.getCoalescedEvents()
+        : []
     for (const c of list.length ? list : [e.nativeEvent]) {
       const p = project(c.clientX, c.clientY)
       if (e.pointerType === "pen" && c.pressure > 0) p[2] = Math.round(c.pressure * 100) / 100
@@ -835,7 +1042,8 @@ function SketchpadCanvas({ className, children, paper = "plain", paperProps, lab
       ctx.redo()
       return
     }
-    if (!interactive || mod || e.altKey && !k.startsWith("Arrow") || e.target !== e.currentTarget) return
+    if (!interactive || mod || (e.altKey && !k.startsWith("Arrow")) || e.target !== e.currentTarget)
+      return
     const tool = KEY_TOOL[k.toLowerCase()]
     if (tool && k.length === 1) {
       if (ctx.tools.includes(tool)) {
@@ -847,8 +1055,12 @@ function SketchpadCanvas({ className, children, paper = "plain", paperProps, lab
     }
     if (k === "[" || k === "]") {
       e.preventDefault()
-      const i = SIZE_STEPS.reduce((best, v, j) => (Math.abs(v - ctx.size) < Math.abs(SIZE_STEPS[best] - ctx.size) ? j : best), 0)
-      const next = SIZE_STEPS[Math.min(SIZE_STEPS.length - 1, Math.max(0, i + (k === "]" ? 1 : -1)))]
+      const i = SIZE_STEPS.reduce(
+        (best, v, j) => (Math.abs(v - ctx.size) < Math.abs(SIZE_STEPS[best] - ctx.size) ? j : best),
+        0,
+      )
+      const next =
+        SIZE_STEPS[Math.min(SIZE_STEPS.length - 1, Math.max(0, i + (k === "]" ? 1 : -1)))]
       ctx.setSize(next)
       ctx.say(`${SIZE_LABEL[sizeName(next) ?? "medium"]} line.`)
       return
@@ -857,8 +1069,12 @@ function SketchpadCanvas({ className, children, paper = "plain", paperProps, lab
       e.preventDefault()
       const d = e.shiftKey ? 32 : e.altKey ? 2 : 8
       const [x, y] = cursor ?? [W / 2, H / 2]
-      const nx = round1(Math.min(W, Math.max(0, x + (k === "ArrowRight" ? d : k === "ArrowLeft" ? -d : 0))))
-      const ny = round1(Math.min(H, Math.max(0, y + (k === "ArrowDown" ? d : k === "ArrowUp" ? -d : 0))))
+      const nx = round1(
+        Math.min(W, Math.max(0, x + (k === "ArrowRight" ? d : k === "ArrowLeft" ? -d : 0))),
+      )
+      const ny = round1(
+        Math.min(H, Math.max(0, y + (k === "ArrowDown" ? d : k === "ArrowUp" ? -d : 0))),
+      )
       setCursor([nx, ny])
       if (gesture.current?.pointer === "key") extend([nx, ny])
       return
@@ -893,18 +1109,34 @@ function SketchpadCanvas({ className, children, paper = "plain", paperProps, lab
     if (!ctx.replaying) return null
     let t = 0.2
     return ctx.strokes.map((s) => {
-      const dur = Math.min(2.4, Math.max(0.14, strokeMarkup(s, { tier }).length / (420 * ctx.replaySpeed)))
+      const dur = Math.min(
+        2.4,
+        Math.max(0.14, strokeMarkup(s, { tier }).length / (420 * ctx.replaySpeed)),
+      )
       const r = { delay: t, dur }
       t += dur + 0.08
       return r
     })
   }, [ctx.replaying, ctx.strokes, ctx.replaySpeed, tier])
-  const liveMarkup = React.useMemo(() => (live ? strokeMarkup(live, { tier, live: true }).svg : ""), [live, tier])
+  const liveMarkup = React.useMemo(
+    () => (live ? strokeMarkup(live, { tier, live: true }).svg : ""),
+    [live, tier],
+  )
   const cursorSvg = React.useMemo(() => cursorMarkup(uid), [uid])
 
   const a11y = interactive
-    ? ({ role: "application", "aria-roledescription": "drawing canvas", "aria-label": label, "aria-describedby": help, tabIndex: 0 } as const)
-    : ({ role: "img", "aria-label": `${label}, ${count(ctx.strokes.length)}`, "aria-disabled": ctx.disabled || undefined } as const)
+    ? ({
+        role: "application",
+        "aria-roledescription": "drawing canvas",
+        "aria-label": label,
+        "aria-describedby": help,
+        tabIndex: 0,
+      } as const)
+    : ({
+        role: "img",
+        "aria-label": `${label}, ${count(ctx.strokes.length)}`,
+        "aria-disabled": ctx.disabled || undefined,
+      } as const)
 
   return (
     <div
@@ -921,7 +1153,15 @@ function SketchpadCanvas({ className, children, paper = "plain", paperProps, lab
       onLostPointerCapture={onLost}
       onKeyDown={onKey}
       onBlur={dropKeyboard}
-      className={cn("relative isolate touch-none select-none", interactive ? (ctx.tool === "eraser" ? "cursor-cell" : "cursor-crosshair") : "cursor-default", className)}
+      className={cn(
+        "relative isolate touch-none select-none",
+        interactive
+          ? ctx.tool === "eraser"
+            ? "cursor-cell"
+            : "cursor-crosshair"
+          : "cursor-default",
+        className,
+      )}
       {...props}
     >
       {node}
@@ -946,15 +1186,33 @@ function SketchpadCanvas({ className, children, paper = "plain", paperProps, lab
         >
           <g data-slot="sketchpad-strokes" key={ctx.replayKey}>
             {ctx.strokes.map((s, i) => (
-              <StrokeShape key={s.id} stroke={s} dim={erasing.has(s.id)} replay={timing?.[i] ?? null} maskId={`ll-replay-${uid}-${i}`} width={W} height={H} />
+              <StrokeShape
+                key={s.id}
+                stroke={s}
+                dim={erasing.has(s.id)}
+                replay={timing?.[i] ?? null}
+                maskId={`ll-replay-${uid}-${i}`}
+                width={W}
+                height={H}
+              />
             ))}
           </g>
-          {live ? <g data-slot="sketchpad-live" dangerouslySetInnerHTML={{ __html: liveMarkup }} /> : null}
-          {cursor ? <g data-slot="sketchpad-cursor" transform={`translate(${cursor[0]} ${cursor[1]})`} dangerouslySetInnerHTML={{ __html: cursorSvg }} /> : null}
+          {live ? (
+            <g data-slot="sketchpad-live" dangerouslySetInnerHTML={{ __html: liveMarkup }} />
+          ) : null}
+          {cursor ? (
+            <g
+              data-slot="sketchpad-cursor"
+              transform={`translate(${cursor[0]} ${cursor[1]})`}
+              dangerouslySetInnerHTML={{ __html: cursorSvg }}
+            />
+          ) : null}
         </svg>
       </Paper>
       <span id={help} className="sr-only">
-        Draw with a pointer, or use the arrow keys to move a cursor and Space to put the pen down and lift it. F, B, P, M, H and E pick a tool, the bracket keys change the width, Control Z undoes.
+        Draw with a pointer, or use the arrow keys to move a cursor and Space to put the pen down
+        and lift it. F, B, P, M, H and E pick a tool, the bracket keys change the width, Control Z
+        undoes.
       </span>
       <span role="status" className="sr-only">
         {ctx.announce}
@@ -978,4 +1236,13 @@ export {
   SketchpadCanvas,
   useSketchpad,
 }
-export type { SketchpadProps, SketchpadCanvasProps, SketchpadHandle, SketchStroke, SketchTool, SketchColor, SketchPoint, ExportOptions as SketchpadExportOptions }
+export type {
+  SketchpadProps,
+  SketchpadCanvasProps,
+  SketchpadHandle,
+  SketchStroke,
+  SketchTool,
+  SketchColor,
+  SketchPoint,
+  ExportOptions as SketchpadExportOptions,
+}

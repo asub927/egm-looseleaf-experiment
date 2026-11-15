@@ -30,7 +30,9 @@ function Doodle({
   const def = (doodles as Record<string, ArtDef>)[name]
   if (!def) return null
   const px = Math.max(24, Math.round(size))
-  const res = memo(`doodle|${name}|${px}|${accent ?? ""}|${seed ?? ""}`, () => drawSkeleton(def, px, seed ?? name, { tone: "doodle", accent, kind: "doodle" }))
+  const res = memo(`doodle|${name}|${px}|${accent ?? ""}|${seed ?? ""}`, () =>
+    drawSkeleton(def, px, seed ?? name, { tone: "doodle", accent, kind: "doodle" }),
+  )
   return (
     <svg
       data-slot="doodle"
@@ -44,7 +46,11 @@ function Doodle({
       width={px}
       height={px}
       style={rotate ? { rotate: `${rotate}deg`, ...style } : style}
-      className={cn("pointer-events-none shrink-0 overflow-visible", flip && "-scale-x-100", className)}
+      className={cn(
+        "pointer-events-none shrink-0 overflow-visible",
+        flip && "-scale-x-100",
+        className,
+      )}
       dangerouslySetInnerHTML={{ __html: res.svg }}
       {...props}
     />

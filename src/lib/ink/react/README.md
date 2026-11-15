@@ -1,9 +1,11 @@
 # Looseleaf React Bindings
 
 ## Overview
+
 React integration for the looseleaf ink engine, providing context providers, layout hooks, canvas/SVG rendering primitives, and an in-memory frame cache.
 
 ## Interface
+
 - [cache.ts:bucketBox]
 - [cache.ts:frameKey]
 - [cache.ts:frameSvg]
@@ -35,12 +37,15 @@ React integration for the looseleaf ink engine, providing context providers, lay
 - [svg.tsx:InkSvg]
 
 ## Invariants
+
 - Rendered SVG frames are cached by deterministic input keys using bucketed box dimensions [cache.ts:inkCache]
 - Hooks fall back to default context values when invoked outside an InkProvider hierarchy [hooks.ts:DEFAULT_INK_CONTEXT]
 
 ## Side Effects
+
 - Injects global SVG definition elements into document body when defs are required [defs.tsx:ensureInkDefs]
 - Injects external font stylesheet link into document head [defs.tsx:ensureInkFonts]
 
 ## Verification
+
 - Run: npm run build

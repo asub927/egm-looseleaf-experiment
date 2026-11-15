@@ -9,7 +9,8 @@ import { useInk, useMergedRef } from "@/lib/ink/react"
 import { dropzoneItemRecipe, dropzoneRecipe } from "@/lib/ink/recipes/dropzone-ink"
 import { cn } from "@/lib/utils"
 
-type ErrorCode = "file-invalid-type" | "file-too-large" | "file-too-small" | "too-many-files" | "validator"
+type ErrorCode =
+  "file-invalid-type" | "file-too-large" | "file-too-small" | "too-many-files" | "validator"
 
 interface FileError {
   code: ErrorCode
@@ -35,21 +36,38 @@ function formatBytes(bytes: number): string {
 }
 
 const tokensOf = (accept?: string | readonly string[]): string[] =>
-  (typeof accept === "string" ? accept.split(",") : accept ? [...accept] : []).map((t) => t.trim()).filter(Boolean)
+  (typeof accept === "string" ? accept.split(",") : accept ? [...accept] : [])
+    .map((t) => t.trim())
+    .filter(Boolean)
 
-function matchesAccept(file: Pick<File, "name" | "type">, accept?: string | readonly string[]): boolean {
+function matchesAccept(
+  file: Pick<File, "name" | "type">,
+  accept?: string | readonly string[],
+): boolean {
   const tokens = tokensOf(accept).map((t) => t.toLowerCase())
   if (tokens.length === 0) return true
   const name = file.name.toLowerCase()
   const type = (file.type || "").toLowerCase()
-  return tokens.some((t) => (t.startsWith(".") ? name.endsWith(t) : t.endsWith("/*") ? type.startsWith(t.slice(0, -1)) : type === t))
+  return tokens.some((t) =>
+    t.startsWith(".")
+      ? name.endsWith(t)
+      : t.endsWith("/*")
+        ? type.startsWith(t.slice(0, -1))
+        : type === t,
+  )
 }
 
-const sameFile = (a: File, b: File): boolean => a.name === b.name && a.size === b.size && a.lastModified === b.lastModified
+const sameFile = (a: File, b: File): boolean =>
+  a.name === b.name && a.size === b.size && a.lastModified === b.lastModified
 
 type Messages = Partial<Record<ErrorCode, string | ((file: File) => string)>>
 
-function describeLimits(o: { accept?: string | readonly string[]; maxSize?: number; maxFiles?: number; multiple?: boolean }): string {
+function describeLimits(o: {
+  accept?: string | readonly string[]
+  maxSize?: number
+  maxFiles?: number
+  multiple?: boolean
+}): string {
   const tokens = tokensOf(o.accept)
   const kinds = tokens.map((t) => {
     if (t.startsWith(".")) return t.slice(1).toUpperCase()
@@ -62,8 +80,14 @@ function describeLimits(o: { accept?: string | readonly string[]; maxSize?: numb
   })
   const parts: string[] = []
   if (kinds.length) parts.push(kinds.join(", "))
-  if (o.maxSize) parts.push(`${parts.length ? "up to" : "Up to"} ${formatBytes(o.maxSize)}${o.multiple === false ? "" : " each"}`)
-  if (o.maxFiles && o.multiple !== false) parts.push(`${parts.length ? "at most" : "At most"} ${o.maxFiles} file${o.maxFiles === 1 ? "" : "s"}`)
+  if (o.maxSize)
+    parts.push(
+      `${parts.length ? "up to" : "Up to"} ${formatBytes(o.maxSize)}${o.multiple === false ? "" : " each"}`,
+    )
+  if (o.maxFiles && o.multiple !== false)
+    parts.push(
+      `${parts.length ? "at most" : "At most"} ${o.maxFiles} file${o.maxFiles === 1 ? "" : "s"}`,
+    )
   return parts.join(" ")
 }
 
@@ -97,7 +121,10 @@ function useDropzone(): DropzoneContextValue {
   return ctx
 }
 
-interface DropzoneProps extends Omit<React.ComponentProps<"div">, "onDrop" | "defaultValue" | "children"> {
+interface DropzoneProps extends Omit<
+  React.ComponentProps<"div">,
+  "onDrop" | "defaultValue" | "children"
+> {
   files?: File[]
   defaultFiles?: File[]
   onFilesChange?: (files: File[]) => void
@@ -157,7 +184,7 @@ function Dropzone(props: DropzoneProps) {
       if (!controlled) setInner(next)
       onFilesChange?.(next)
     },
-    [controlled, onFilesChange]
+    [controlled, onFilesChange],
   )
   const say = (code: ErrorCode, file: File, fallback: string): FileError => {
     const m = messages?.[code]
@@ -169,20 +196,45 @@ function Dropzone(props: DropzoneProps) {
     if (incoming.length === 0) return
     const accepted: File[] = []
     const rejected: FileRejection[] = []
-    const room = multiple ? (maxFiles === undefined ? Infinity : Math.max(0, maxFiles - latest.current.length)) : 1
+    const room = multiple
+      ? maxFiles === undefined
+        ? Infinity
+        : Math.max(0, maxFiles - latest.current.length)
+      : 1
     for (const file of incoming) {
       const errors: FileError[] = []
-      if (!matchesAccept(file, accept)) errors.push(say("file-invalid-type", file, `${file.name} is not a file type we take.`))
-      if (maxSize !== undefined && file.size > maxSize) errors.push(say("file-too-large", file, `${file.name} is larger than ${formatBytes(maxSize)}.`))
-      if (minSize !== undefined && file.size < minSize) errors.push(say("file-too-small", file, `${file.name} is smaller than ${formatBytes(minSize)}.`))
+      if (!matchesAccept(file, accept))
+        errors.push(say("file-invalid-type", file, `${file.name} is not a file type we take.`))
+      if (maxSize !== undefined && file.size > maxSize)
+        errors.push(
+          say("file-too-large", file, `${file.name} is larger than ${formatBytes(maxSize)}.`),
+        )
+      if (minSize !== undefined && file.size < minSize)
+        errors.push(
+          say("file-too-small", file, `${file.name} is smaller than ${formatBytes(minSize)}.`),
+        )
       const custom = errors.length === 0 ? validator?.(file) : null
       if (custom) errors.push(custom)
-      if (errors.length === 0 && accepted.length >= room) errors.push(say("too-many-files", file, multiple ? `Only ${maxFiles} file${maxFiles === 1 ? "" : "s"} at a time.` : "One file at a time."))
+      if (errors.length === 0 && accepted.length >= room)
+        errors.push(
+          say(
+            "too-many-files",
+            file,
+            multiple
+              ? `Only ${maxFiles} file${maxFiles === 1 ? "" : "s"} at a time.`
+              : "One file at a time.",
+          ),
+        )
       if (errors.length) rejected.push({ file, errors })
       else accepted.push(file)
     }
     setRejections(rejected)
-    if (accepted.length) setFiles(multiple ? [...latest.current.filter((f) => !accepted.some((a) => sameFile(a, f))), ...accepted] : [accepted[0]])
+    if (accepted.length)
+      setFiles(
+        multiple
+          ? [...latest.current.filter((f) => !accepted.some((a) => sameFile(a, f))), ...accepted]
+          : [accepted[0]],
+      )
     onDrop?.(accepted, rejected)
     if (rejected.length) onReject?.(rejected)
   }
@@ -205,7 +257,7 @@ function Dropzone(props: DropzoneProps) {
     () => {
       if (!controlled) setInner(defaultFiles ?? [])
       setRejections([])
-    }
+    },
   )
 
   React.useEffect(() => {
@@ -215,19 +267,41 @@ function Dropzone(props: DropzoneProps) {
       const dt = new DataTransfer()
       for (const f of files) dt.items.add(f)
       input.files = dt.files
-    } catch {
-    }
+    } catch {}
   }, [files])
 
   const ctx: DropzoneContextValue = {
-    files, rejections, isDragOver, setDragOver, disabled, invalid, multiple, accept, maxSize, maxFiles, name, inputId: id, required, add, remove, clear, clearRejections, open, inputRef,
+    files,
+    rejections,
+    isDragOver,
+    setDragOver,
+    disabled,
+    invalid,
+    multiple,
+    accept,
+    maxSize,
+    maxFiles,
+    name,
+    inputId: id,
+    required,
+    add,
+    remove,
+    clear,
+    clearRejections,
+    open,
+    inputRef,
   }
   return (
     <DropzoneContext.Provider value={ctx}>
       <style href="ll-dropzone" precedence="low">
         {DROPZONE_CSS}
       </style>
-      <div data-slot="dropzone" data-disabled={disabled ? "" : undefined} className={cn("flex w-full flex-col gap-3", className)} {...rest}>
+      <div
+        data-slot="dropzone"
+        data-disabled={disabled ? "" : undefined}
+        className={cn("flex w-full flex-col gap-3", className)}
+        {...rest}
+      >
         {children ?? (
           <>
             <DropzoneArea>
@@ -261,17 +335,26 @@ function DropzoneArea({
   onDragLeave,
   onDrop,
   ...props
-}: Omit<React.ComponentProps<"label">, "children"> & { children?: React.ReactNode; seed?: string | number; inputProps?: Omit<React.ComponentProps<"input">, "type" | "ref"> }) {
+}: Omit<React.ComponentProps<"label">, "children"> & {
+  children?: React.ReactNode
+  seed?: string | number
+  inputProps?: Omit<React.ComponentProps<"input">, "type" | "ref">
+}) {
   const ctx = useDropzone()
   const depth = React.useRef(0)
   const { hostRef, hostProps, node } = useInk({
     recipe: dropzoneRecipe,
-    params: { over: ctx.isDragOver && !ctx.disabled, invalid: ctx.invalid && !ctx.disabled, disabled: ctx.disabled },
+    params: {
+      over: ctx.isDragOver && !ctx.disabled,
+      invalid: ctx.invalid && !ctx.disabled,
+      disabled: ctx.disabled,
+    },
     kind: "field",
     seed,
     still: true,
   })
-  const hasFiles = (e: React.DragEvent): boolean => Array.from(e.dataTransfer?.types ?? []).includes("Files")
+  const hasFiles = (e: React.DragEvent): boolean =>
+    Array.from(e.dataTransfer?.types ?? []).includes("Files")
   return (
     <label
       data-slot="dropzone-area"
@@ -311,7 +394,7 @@ function DropzoneArea({
       className={cn(
         "group/dz relative isolate flex min-h-40 w-full cursor-pointer flex-col items-center justify-center gap-1.5 p-6 text-center font-hand text-base text-foreground has-disabled:cursor-not-allowed has-disabled:text-pencil-text compact:min-h-32 compact:p-5 calm:min-h-24 calm:p-3",
         "forced-colors:border forced-colors:border-dashed forced-colors:data-drag-over:border-solid",
-        className
+        className,
       )}
       {...props}
     >
@@ -342,8 +425,21 @@ function DropzoneArea({
 function DropzoneIcon({ className, children, ...props }: React.ComponentProps<"span">) {
   const ctx = useDropzone()
   return (
-    <span data-slot="dropzone-icon" aria-hidden="true" className={cn("grid size-16 place-items-center text-ink-soft group-has-disabled/dz:text-pencil-text", className)} {...props}>
-      {children ?? (ctx.isDragOver && !ctx.disabled ? <Mascot pose="carry" size={64} /> : <Icon name="upload" size={32} weight={1.2} />)}
+    <span
+      data-slot="dropzone-icon"
+      aria-hidden="true"
+      className={cn(
+        "grid size-16 place-items-center text-ink-soft group-has-disabled/dz:text-pencil-text",
+        className,
+      )}
+      {...props}
+    >
+      {children ??
+        (ctx.isDragOver && !ctx.disabled ? (
+          <Mascot pose="carry" size={64} />
+        ) : (
+          <Icon name="upload" size={32} weight={1.2} />
+        ))}
     </span>
   )
 }
@@ -351,11 +447,17 @@ function DropzoneIcon({ className, children, ...props }: React.ComponentProps<"s
 function DropzoneTitle({ className, children, ...props }: React.ComponentProps<"span">) {
   const ctx = useDropzone()
   return (
-    <span data-slot="dropzone-title" className={cn("font-script text-[1.45rem] leading-tight font-semibold", className)} {...props}>
+    <span
+      data-slot="dropzone-title"
+      className={cn("font-script text-[1.45rem] leading-tight font-semibold", className)}
+      {...props}
+    >
       {children ?? (
         <>
           {ctx.multiple ? "Drop files here or " : "Drop a file here or "}
-          <span className="text-ink-you underline decoration-wavy decoration-1 underline-offset-4">browse</span>
+          <span className="text-ink-you underline decoration-wavy decoration-1 underline-offset-4">
+            browse
+          </span>
         </>
       )}
     </span>
@@ -364,10 +466,21 @@ function DropzoneTitle({ className, children, ...props }: React.ComponentProps<"
 
 function DropzoneDescription({ className, children, ...props }: React.ComponentProps<"span">) {
   const ctx = useDropzone()
-  const text = children ?? describeLimits({ accept: ctx.accept, maxSize: ctx.maxSize, maxFiles: ctx.maxFiles, multiple: ctx.multiple })
+  const text =
+    children ??
+    describeLimits({
+      accept: ctx.accept,
+      maxSize: ctx.maxSize,
+      maxFiles: ctx.maxFiles,
+      multiple: ctx.multiple,
+    })
   if (!text) return null
   return (
-    <span data-slot="dropzone-description" className={cn("text-sm text-muted-foreground", className)} {...props}>
+    <span
+      data-slot="dropzone-description"
+      className={cn("text-sm text-muted-foreground", className)}
+      {...props}
+    >
       {text}
     </span>
   )
@@ -377,7 +490,12 @@ function DropzoneRejections({ className, ...props }: React.ComponentProps<"div">
   const ctx = useDropzone()
   if (ctx.rejections.length === 0) return null
   return (
-    <div data-slot="dropzone-rejections" role="alert" className={cn("font-hand text-sm text-red", className)} {...props}>
+    <div
+      data-slot="dropzone-rejections"
+      role="alert"
+      className={cn("font-hand text-sm text-red", className)}
+      {...props}
+    >
       <ul className="grid gap-1">
         {ctx.rejections.map((r, i) => (
           <li key={`${r.file.name}-${i}`} className="flex items-start gap-1.5">
@@ -390,17 +508,43 @@ function DropzoneRejections({ className, ...props }: React.ComponentProps<"div">
   )
 }
 
-function DropzoneList({ className, children, ...props }: Omit<React.ComponentProps<"ul">, "children"> & { children?: (file: File, index: number) => React.ReactNode }) {
+function DropzoneList({
+  className,
+  children,
+  ...props
+}: Omit<React.ComponentProps<"ul">, "children"> & {
+  children?: (file: File, index: number) => React.ReactNode
+}) {
   const ctx = useDropzone()
   if (ctx.files.length === 0) return null
   return (
-    <ul data-slot="dropzone-list" aria-label="Selected files" className={cn("grid", className)} {...props}>
-      {ctx.files.map((f, i) => (children ? <React.Fragment key={`${f.name}-${f.size}-${f.lastModified}-${i}`}>{children(f, i)}</React.Fragment> : <DropzoneItem key={`${f.name}-${f.size}-${f.lastModified}-${i}`} file={f} />))}
+    <ul
+      data-slot="dropzone-list"
+      aria-label="Selected files"
+      className={cn("grid", className)}
+      {...props}
+    >
+      {ctx.files.map((f, i) =>
+        children ? (
+          <React.Fragment key={`${f.name}-${f.size}-${f.lastModified}-${i}`}>
+            {children(f, i)}
+          </React.Fragment>
+        ) : (
+          <DropzoneItem key={`${f.name}-${f.size}-${f.lastModified}-${i}`} file={f} />
+        ),
+      )}
     </ul>
   )
 }
 
-const iconFor = (file: File): string => (file.type.startsWith("image/") ? "image" : /pdf|text|word|document/.test(file.type) ? "file-text" : /zip|compressed|tar/.test(file.type) ? "archive" : "file")
+const iconFor = (file: File): string =>
+  file.type.startsWith("image/")
+    ? "image"
+    : /pdf|text|word|document/.test(file.type)
+      ? "file-text"
+      : /zip|compressed|tar/.test(file.type)
+        ? "archive"
+        : "file"
 
 function DropzoneItem({
   file,
@@ -424,10 +568,22 @@ function DropzoneItem({
   seed?: string | number
 }) {
   const ctx = useDropzone()
-  const { hostRef, hostProps, node } = useInk({ recipe: dropzoneItemRecipe, params: { status: status === "error" ? "error" : status === "done" ? "done" : "idle" }, kind: "rule", seed, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: dropzoneItemRecipe,
+    params: { status: status === "error" ? "error" : status === "done" ? "done" : "idle" },
+    kind: "rule",
+    seed,
+    still: true,
+  })
   const [preview, setPreview] = React.useState<string | null>(null)
   React.useEffect(() => {
-    if (!thumbnail || !file.type.startsWith("image/") || typeof URL === "undefined" || typeof URL.createObjectURL !== "function") return
+    if (
+      !thumbnail ||
+      !file.type.startsWith("image/") ||
+      typeof URL === "undefined" ||
+      typeof URL.createObjectURL !== "function"
+    )
+      return
     let url: string
     try {
       url = URL.createObjectURL(file)
@@ -446,7 +602,10 @@ function DropzoneItem({
       data-status={status}
       ref={hostRef}
       {...hostProps}
-      className={cn("relative isolate flex items-center gap-3 px-1 py-2.5 font-hand text-base", className)}
+      className={cn(
+        "relative isolate flex items-center gap-3 px-1 py-2.5 font-hand text-base",
+        className,
+      )}
       {...props}
     >
       {node}
@@ -455,19 +614,52 @@ function DropzoneItem({
         aria-hidden="true"
         className={cn(
           "grid size-10 shrink-0 place-items-center overflow-hidden text-ink-soft",
-          preview ? "rotate-[-2deg] border-2 border-photo bg-photo shadow-[0_1px_2px_rgb(var(--ll-shade)/.35)]" : ""
+          preview
+            ? "rotate-[-2deg] border-2 border-photo bg-photo shadow-[0_1px_2px_rgb(var(--ll-shade)/.35)]"
+            : "",
         )}
       >
-        {preview ? <img src={preview} alt="" decoding="async" loading="lazy" className="size-full object-cover" /> : <Icon name={iconFor(file)} size={24} />}
+        {preview ? (
+          <img
+            src={preview}
+            alt=""
+            decoding="async"
+            loading="lazy"
+            className="size-full object-cover"
+          />
+        ) : (
+          <Icon name={iconFor(file)} size={24} />
+        )}
       </span>
       <span className="grid min-w-0 flex-1 gap-0.5">
         <span className="truncate font-bold">{file.name}</span>
-        <span className={cn("truncate text-sm", status === "error" ? "text-red" : "text-muted-foreground")}>
-          {status === "error" && error ? error : status === "done" ? `${formatBytes(file.size)}, done` : status === "uploading" && progress !== undefined ? `${formatBytes(file.size)}, ${Math.round(progress)}%` : formatBytes(file.size)}
+        <span
+          className={cn(
+            "truncate text-sm",
+            status === "error" ? "text-red" : "text-muted-foreground",
+          )}
+        >
+          {status === "error" && error
+            ? error
+            : status === "done"
+              ? `${formatBytes(file.size)}, done`
+              : status === "uploading" && progress !== undefined
+                ? `${formatBytes(file.size)}, ${Math.round(progress)}%`
+                : formatBytes(file.size)}
         </span>
         {status === "uploading" && progress !== undefined && (
-          <span role="progressbar" aria-label={`Uploading ${file.name}`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress)} className="mt-0.5 block h-1.5 w-full bg-pencil-mark/25">
-            <span className="ll-swipe block h-full" style={{ width: `${Math.max(0, Math.min(100, progress))}%` }} />
+          <span
+            role="progressbar"
+            aria-label={`Uploading ${file.name}`}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(progress)}
+            className="mt-0.5 block h-1.5 w-full bg-pencil-mark/25"
+          >
+            <span
+              className="ll-swipe block h-full"
+              style={{ width: `${Math.max(0, Math.min(100, progress))}%` }}
+            />
           </span>
         )}
       </span>
@@ -491,5 +683,17 @@ function DropzoneItem({
   )
 }
 
-export { Dropzone, DropzoneArea, DropzoneIcon, DropzoneTitle, DropzoneDescription, DropzoneRejections, DropzoneList, DropzoneItem, useDropzone, formatBytes, matchesAccept }
+export {
+  Dropzone,
+  DropzoneArea,
+  DropzoneIcon,
+  DropzoneTitle,
+  DropzoneDescription,
+  DropzoneRejections,
+  DropzoneList,
+  DropzoneItem,
+  useDropzone,
+  formatBytes,
+  matchesAccept,
+}
 export type { DropzoneProps, FileError, FileRejection, ErrorCode as DropzoneErrorCode }

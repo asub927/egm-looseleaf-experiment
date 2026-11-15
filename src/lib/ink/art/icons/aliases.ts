@@ -14,11 +14,11 @@ export const ICON_ALIASES: Readonly<Record<string, readonly string[]>> = {
   "cloud-upload": ["upload-cloud"],
   "code-xml": ["code-2"],
   "columns-2": ["columns"],
-  "ellipsis": ["more-horizontal"],
+  ellipsis: ["more-horizontal"],
   "ellipsis-vertical": ["more-vertical"],
   "face-slightly-smiling": ["smile"],
-  "funnel": ["filter"],
-  "house": ["home"],
+  funnel: ["filter"],
+  house: ["home"],
   "loader-circle": ["loader-2"],
   "message-circle-question-mark": ["message-circle-question"],
   "octagon-alert": ["alert-octagon"],
@@ -27,12 +27,12 @@ export const ICON_ALIASES: Readonly<Record<string, readonly string[]>> = {
   "panel-left-close": ["sidebar-close"],
   "panel-left-open": ["sidebar-open"],
   "rotate-ccw-clock": ["history"],
-  "sparkles": ["stars"],
+  sparkles: ["stars"],
   "square-check": ["check-square-2"],
   "square-terminal": ["terminal-square"],
   "text-align-center": ["align-center"],
   "text-align-start": ["align-left", "text"],
-  "trash": ["trash-2"],
+  trash: ["trash-2"],
   "triangle-alert": ["alert-triangle"],
 }
 
@@ -41,13 +41,13 @@ for (const id of Object.keys(ICON_ALIASES)) for (const a of ICON_ALIASES[id]) RE
 
 export function kebabIconName(name: string): string {
   return name
-    .replace(/^Lucide(?=[A-Z])/, '')
-    .replace(/Icon$/, '')
-    .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
-    .replace(/([a-z])([A-Z])/g, '$1-$2')
-    .replace(/([a-zA-Z])(\d)/g, '$1-$2')
-    .replace(/(\d)([A-Z])/g, '$1-$2')
-    .replace(/[_\s]+/g, '-')
+    .replace(/^Lucide(?=[A-Z])/, "")
+    .replace(/Icon$/, "")
+    .replace(/([A-Z])([A-Z][a-z])/g, "$1-$2")
+    .replace(/([a-z])([A-Z])/g, "$1-$2")
+    .replace(/([a-zA-Z])(\d)/g, "$1-$2")
+    .replace(/(\d)([A-Z])/g, "$1-$2")
+    .replace(/[_\s]+/g, "-")
     .toLowerCase()
 }
 

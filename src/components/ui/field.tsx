@@ -15,14 +15,18 @@ function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
       className={cn(
         "flex flex-col gap-6 calm:gap-4",
         "has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3",
-        className
+        className,
       )}
       {...props}
     />
   )
 }
 
-function FieldLegend({ className, variant = "legend", ...props }: React.ComponentProps<"legend"> & { variant?: "legend" | "label" }) {
+function FieldLegend({
+  className,
+  variant = "legend",
+  ...props
+}: React.ComponentProps<"legend"> & { variant?: "legend" | "label" }) {
   return (
     <legend
       data-slot="field-legend"
@@ -31,7 +35,7 @@ function FieldLegend({ className, variant = "legend", ...props }: React.Componen
         "mb-3 font-bold",
         "data-[variant=legend]:font-script data-[variant=legend]:text-[1.6rem] data-[variant=legend]:leading-none",
         "data-[variant=label]:font-hand data-[variant=label]:text-[15px]",
-        className
+        className,
       )}
       {...props}
     />
@@ -44,7 +48,7 @@ function FieldGroup({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="field-group"
       className={cn(
         "group/field-group @container/field-group flex w-full flex-col gap-7 calm:gap-5 data-[slot=checkbox-group]:gap-3 [&>[data-slot=field-group]]:gap-4",
-        className
+        className,
       )}
       {...props}
     />
@@ -72,12 +76,30 @@ const fieldVariants = cva("group/field flex w-full gap-3 data-[invalid=true]:tex
   },
 })
 
-function Field({ className, orientation = "vertical", ...props }: React.ComponentProps<"div"> & VariantProps<typeof fieldVariants>) {
-  return <div role="group" data-slot="field" data-orientation={orientation} className={cn(fieldVariants({ orientation }), className)} {...props} />
+function Field({
+  className,
+  orientation = "vertical",
+  ...props
+}: React.ComponentProps<"div"> & VariantProps<typeof fieldVariants>) {
+  return (
+    <div
+      role="group"
+      data-slot="field"
+      data-orientation={orientation}
+      className={cn(fieldVariants({ orientation }), className)}
+      {...props}
+    />
+  )
 }
 
 function FieldContent({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="field-content" className={cn("group/field-content flex flex-1 flex-col gap-1.5 leading-snug", className)} {...props} />
+  return (
+    <div
+      data-slot="field-content"
+      className={cn("group/field-content flex flex-1 flex-col gap-1.5 leading-snug", className)}
+      {...props}
+    />
+  )
 }
 
 function FieldLabel({
@@ -90,20 +112,36 @@ function FieldLabel({
 }: React.ComponentProps<typeof Label> & {
   card?: boolean
 }) {
-  const isCard = card ?? React.Children.toArray(children).some((c) => React.isValidElement(c) && c.type === Field)
-  const content = React.Children.map(children, (c) => (React.isValidElement<{ role?: string }>(c) && c.type === Field ? React.cloneElement(c, { role: c.props.role ?? "none" }) : c))
-  const { hostRef, hostProps, node } = useInk({ recipe: fieldChoiceRecipe, params: {}, kind: "card", seed, still: true })
+  const isCard =
+    card ??
+    React.Children.toArray(children).some((c) => React.isValidElement(c) && c.type === Field)
+  const content = React.Children.map(children, (c) =>
+    React.isValidElement<{ role?: string }>(c) && c.type === Field
+      ? React.cloneElement(c, { role: c.props.role ?? "none" })
+      : c,
+  )
+  const { hostRef, hostProps, node } = useInk({
+    recipe: fieldChoiceRecipe,
+    params: {},
+    kind: "card",
+    seed,
+    still: true,
+  })
   return (
     <Label
       data-slot="field-label"
-      ref={useMergedRef<HTMLLabelElement>(isCard ? hostRef : undefined, ref as React.Ref<HTMLLabelElement> | undefined)}
+      ref={useMergedRef<HTMLLabelElement>(
+        isCard ? hostRef : undefined,
+        ref as React.Ref<HTMLLabelElement> | undefined,
+      )}
       {...(isCard ? hostProps : {})}
       className={cn(
         "group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:text-pencil-text",
         "has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:outline-hidden [&>*]:data-[slot=field]:p-4",
         "has-data-[state=checked]:[&>svg>[data-layer=checked]]:visible has-data-[state=checked]:[&>svg>[data-layer=checked]]:scale-100 has-data-[state=checked]:[&>svg>[data-layer=checked]]:rotate-0 has-data-[state=checked]:[&>svg>[data-layer=checked]]:opacity-100",
-        isCard && "cursor-pointer forced-colors:has-data-[state=checked]:bg-[Highlight] forced-colors:has-data-[state=checked]:text-[HighlightText]",
-        className
+        isCard &&
+          "cursor-pointer forced-colors:has-data-[state=checked]:bg-[Highlight] forced-colors:has-data-[state=checked]:text-[HighlightText]",
+        className,
       )}
       {...props}
     >
@@ -117,7 +155,10 @@ function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="field-label"
-      className={cn("flex w-fit items-center gap-2 font-hand text-[15px] leading-snug font-bold group-data-[disabled=true]/field:text-pencil-text", className)}
+      className={cn(
+        "flex w-fit items-center gap-2 font-hand text-[15px] leading-snug font-bold group-data-[disabled=true]/field:text-pencil-text",
+        className,
+      )}
       {...props}
     />
   )
@@ -131,17 +172,33 @@ function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
         "text-sm leading-normal font-normal text-muted-foreground group-has-[[data-orientation=horizontal]]/field:text-balance",
         "last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5",
         "[&>a]:text-link [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-link-hover",
-        className
+        className,
       )}
       {...props}
     />
   )
 }
 
-function FieldSeparator({ children, className, ...props }: React.ComponentProps<"div"> & { children?: React.ReactNode }) {
+function FieldSeparator({
+  children,
+  className,
+  ...props
+}: React.ComponentProps<"div"> & { children?: React.ReactNode }) {
   return (
-    <div data-slot="field-separator" data-content={!!children} className={cn("relative -my-2 flex h-5 items-center text-sm group-data-[variant=outline]/field-group:-mb-2", className)} {...props}>
-      {children ? <Separator data-slot="field-separator-content">{children}</Separator> : <Separator />}
+    <div
+      data-slot="field-separator"
+      data-content={!!children}
+      className={cn(
+        "relative -my-2 flex h-5 items-center text-sm group-data-[variant=outline]/field-group:-mb-2",
+        className,
+      )}
+      {...props}
+    >
+      {children ? (
+        <Separator data-slot="field-separator-content">{children}</Separator>
+      ) : (
+        <Separator />
+      )}
     </div>
   )
 }
@@ -178,7 +235,13 @@ function FieldError({
       </ul>
     )
   }, [children, errors])
-  const { hostRef, hostProps, node } = useInk({ recipe: fieldErrorRecipe, params: {}, kind: "underline", seed, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: fieldErrorRecipe,
+    params: {},
+    kind: "underline",
+    seed,
+    still: true,
+  })
   const mergedRef = useMergedRef<HTMLDivElement>(hostRef, ref)
 
   if (!content) {
@@ -191,7 +254,10 @@ function FieldError({
       data-slot="field-error"
       ref={mergedRef}
       {...hostProps}
-      className={cn("relative isolate w-fit max-w-full pb-1 text-sm font-normal text-destructive outline-hidden forced-colors:underline forced-colors:decoration-wavy", className)}
+      className={cn(
+        "relative isolate w-fit max-w-full pb-1 text-sm font-normal text-destructive outline-hidden forced-colors:underline forced-colors:decoration-wavy",
+        className,
+      )}
       {...props}
     >
       {node}
@@ -200,4 +266,15 @@ function FieldError({
   )
 }
 
-export { Field, FieldLabel, FieldDescription, FieldError, FieldGroup, FieldLegend, FieldSeparator, FieldSet, FieldContent, FieldTitle }
+export {
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldContent,
+  FieldTitle,
+}

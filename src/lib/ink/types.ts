@@ -1,25 +1,53 @@
-import type { PaintKey } from '@/lib/ink/paint'
+import type { PaintKey } from "@/lib/ink/paint"
 
 export type Pt = [number, number]
 
 export type BBox = [number, number, number, number]
 
-export type Tier = 'hi' | 'lo'
+export type Tier = "hi" | "lo"
 
-export type Material = 'under' | 'wash' | 'hl' | 'marker' | 'pencil' | 'waxy' | 'text' | 'felt' | 'stamp' | 'top'
+export type Material =
+  "under" | "wash" | "hl" | "marker" | "pencil" | "waxy" | "text" | "felt" | "stamp" | "top"
 
-export type LayerName = 'rest' | 'hover' | 'pressed' | 'focus' | 'disabled' | 'invalid' | 'checked' | 'indeterminate' | 'open' | 'busy'
+export type LayerName =
+  | "rest"
+  | "hover"
+  | "pressed"
+  | "focus"
+  | "disabled"
+  | "invalid"
+  | "checked"
+  | "indeterminate"
+  | "open"
+  | "busy"
 
-export type GrainKind = 'felt' | 'marker' | 'graphite' | 'waxy' | 'stamp'
+export type GrainKind = "felt" | "marker" | "graphite" | "waxy" | "stamp"
 
-export type PenKind = 'felt' | 'pencil' | 'marker' | 'hl'
+export type PenKind = "felt" | "pencil" | "marker" | "hl"
 
-export type WeightClass = 'fine' | 'std' | 'brush'
+export type WeightClass = "fine" | "std" | "brush"
 
-export type Accent = 'tomato' | 'tangerine' | 'lemon' | 'grass' | 'teal' | 'sky' | 'grape' | 'bubblegum'
+export type Accent =
+  "tomato" | "tangerine" | "lemon" | "grass" | "teal" | "sky" | "grape" | "bubblegum"
 
-export type BasePenName = 'ink' | 'blue' | 'redfelt' | 'greenfelt' | 'focus' | 'pencil' | 'red' | 'green' | 'orange' | 'bluepencil'
-export type PenName = BasePenName | `${BasePenName}.${'fine' | 'brush'}` | 'terracotta' | 'hi' | `m_${Accent}` | `f_${Accent}`
+export type BasePenName =
+  | "ink"
+  | "blue"
+  | "redfelt"
+  | "greenfelt"
+  | "focus"
+  | "pencil"
+  | "red"
+  | "green"
+  | "orange"
+  | "bluepencil"
+export type PenName =
+  | BasePenName
+  | `${BasePenName}.${"fine" | "brush"}`
+  | "terracotta"
+  | "hi"
+  | `m_${Accent}`
+  | `f_${Accent}`
 
 export interface PenSpec {
   kind: PenKind
@@ -55,8 +83,8 @@ export interface StrokeOpts {
   tier?: Tier
   wobble?: number
   speed?: number
-  start?: 'pool' | 'soft'
-  end?: 'pool' | 'flick' | 'soft'
+  start?: "pool" | "soft"
+  end?: "pool" | "flick" | "soft"
   width?: number
   alpha?: number
   color?: PaintKey
@@ -69,11 +97,11 @@ export interface StrokeOpts {
 }
 
 export interface RibbonLayer {
-  k: 'halo' | 'hair' | 'body' | 'core' | 'pool' | 'smear' | 'rim' | 'streak'
+  k: "halo" | "hair" | "body" | "core" | "pool" | "smear" | "rim" | "streak"
   d: string
   fill: PaintKey
   op: number
-  rule?: 'evenodd'
+  rule?: "evenodd"
 }
 
 export interface StrokeResult {

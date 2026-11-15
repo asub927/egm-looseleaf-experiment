@@ -72,17 +72,10 @@ const FLOAT_EPSILON = 1e-9
  * - wrong_share_count: "We need {targetShares} equal shares! Select the [{targetShares} {verbalShareName}] cutter."
  * - unpartitioned: "Use the cutter to partition the {context} into {targetShares} equal {verbalShareName}!"
  */
-export function evaluatePartition(
-  cuts: number[],
-  spec: GeometryProblemSpec
-): GeometryDiagnostic {
+export function evaluatePartition(cuts: number[], spec: GeometryProblemSpec): GeometryDiagnostic {
   const verbalShareName =
     spec.verbalShareName ||
-    (spec.targetShares === 2
-      ? "halves"
-      : spec.targetShares === 3
-        ? "thirds"
-        : "fourths")
+    (spec.targetShares === 2 ? "halves" : spec.targetShares === 3 ? "thirds" : "fourths")
   const context = spec.context || "shape"
 
   // 1. Unpartitioned check
@@ -96,8 +89,7 @@ export function evaluatePartition(
   // 2. Share count check
   // For rectangles, k-1 cuts partition into k shares (actualShares = cuts.length + 1).
   // For circles, k radial spoke cuts partition into k wedge shares (actualShares = cuts.length).
-  const actualShares =
-    spec.shapeType === "rectangle" ? cuts.length + 1 : cuts.length
+  const actualShares = spec.shapeType === "rectangle" ? cuts.length + 1 : cuts.length
 
   if (actualShares !== spec.targetShares) {
     return {
@@ -118,8 +110,7 @@ export function evaluatePartition(
       actualShares,
       largestShareRatio: 1,
       smallestShareRatio: 0,
-      feedback:
-        "These pieces aren't equal yet! Slide the cutter to make each share the same size.",
+      feedback: "These pieces aren't equal yet! Slide the cutter to make each share the same size.",
     }
   }
 
@@ -129,9 +120,7 @@ export function evaluatePartition(
 
   if (spec.shapeType === "rectangle") {
     // Sort cuts ascending. Clamp to [0, 1] to represent valid coordinate positions on the pan.
-    const sortedCuts = cuts
-      .map((c) => Math.max(0, Math.min(1, c)))
-      .sort((a, b) => a - b)
+    const sortedCuts = cuts.map((c) => Math.max(0, Math.min(1, c))).sort((a, b) => a - b)
 
     // s_0 = c_0
     shareFractions[0] = sortedCuts[0]
@@ -144,28 +133,24 @@ export function evaluatePartition(
   } else {
     // Circular radial partitioning:
     // Normalize angles modulo 360 into [0, 360) and sort ascending.
-    const sortedAngles = cuts
-      .map((theta) => ((theta % 360) + 360) % 360)
-      .sort((a, b) => a - b)
+    const sortedAngles = cuts.map((theta) => ((theta % 360) + 360) % 360).sort((a, b) => a - b)
 
     // s_i = (theta_{i+1} - theta_i) / 360 for i in 0..k-2
     for (let i = 0; i < k - 1; i++) {
       shareFractions[i] = (sortedAngles[i + 1] - sortedAngles[i]) / 360
     }
     // s_{k-1} = (360 - theta_{k-1} + theta_0) / 360
-    shareFractions[k - 1] =
-      (360 - sortedAngles[k - 1] + sortedAngles[0]) / 360
+    shareFractions[k - 1] = (360 - sortedAngles[k - 1] + sortedAngles[0]) / 360
   }
 
   // 4. Equality tolerance threshold: |s_i - 1/k| <= 0.05
   const targetShareFraction = 1 / spec.targetShares
   const isEqual = shareFractions.every(
-    (s) => Math.abs(s - targetShareFraction) <= GEOMETRY_TOLERANCE + FLOAT_EPSILON
+    (s) => Math.abs(s - targetShareFraction) <= GEOMETRY_TOLERANCE + FLOAT_EPSILON,
   )
 
   if (isEqual) {
-    const verbalEquation =
-      spec.equation || `${spec.targetShares} ${verbalShareName} = 1 whole`
+    const verbalEquation = spec.equation || `${spec.targetShares} ${verbalShareName} = 1 whole`
     return {
       status: "correct",
       shapeType: spec.shapeType,
@@ -187,7 +172,6 @@ export function evaluatePartition(
     actualShares,
     largestShareRatio,
     smallestShareRatio,
-    feedback:
-      "These pieces aren't equal yet! Slide the cutter to make each share the same size.",
+    feedback: "These pieces aren't equal yet! Slide the cutter to make each share the same size.",
   }
 }

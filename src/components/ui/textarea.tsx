@@ -21,7 +21,13 @@ const isTrue = (v: unknown) => v === true || v === "true"
 const noResize = (s: string) => /(?:^|\s)(?:[^\s:]+:)*resize-none(?:\s|$)/.test(s)
 
 function TextareaControl({ className, ...props }: React.ComponentProps<"textarea">) {
-  return <textarea data-slot="textarea" className={cn(control, "field-sizing-content", className)} {...props} />
+  return (
+    <textarea
+      data-slot="textarea"
+      className={cn(control, "field-sizing-content", className)}
+      {...props}
+    />
+  )
 }
 
 interface CountInfo {
@@ -78,23 +84,45 @@ function Textarea({
   const length = props.value !== undefined ? String(props.value).length : typed
   const mergedRef = useMergedRef(ref, inner)
   const countId = React.useId()
-  const count = typeof showCount === "function" ? showCount({ length, max: props.maxLength }) : `${length}${props.maxLength ? `/${props.maxLength}` : ""}`
+  const count =
+    typeof showCount === "function"
+      ? showCount({ length, max: props.maxLength })
+      : `${length}${props.maxLength ? `/${props.maxLength}` : ""}`
 
   return (
-    <span data-slot="textarea-frame" data-ink-focus="within" ref={hostRef} {...hostProps} style={style} className={cn(frame, ruled && "min-h-24", split.frame)}>
+    <span
+      data-slot="textarea-frame"
+      data-ink-focus="within"
+      ref={hostRef}
+      {...hostProps}
+      style={style}
+      className={cn(frame, ruled && "min-h-24", split.frame)}
+    >
       {node}
       <TextareaControl
         {...props}
         ref={mergedRef}
-        className={cn(!grow && "field-sizing-fixed", showCount && "pb-7", split.control, inputClassName, ruled && "pt-2 pb-2 leading-7")}
-        aria-describedby={showCount ? cn(countId, props["aria-describedby"]) : props["aria-describedby"]}
+        className={cn(
+          !grow && "field-sizing-fixed",
+          showCount && "pb-7",
+          split.control,
+          inputClassName,
+          ruled && "pt-2 pb-2 leading-7",
+        )}
+        aria-describedby={
+          showCount ? cn(countId, props["aria-describedby"]) : props["aria-describedby"]
+        }
         onChange={(e) => {
           if (showCount) setTyped(e.currentTarget.value.length)
           onChange?.(e)
         }}
       />
       {showCount && (
-        <span data-slot="textarea-count" id={countId} className="pointer-events-none absolute end-6 bottom-1.5 text-sm text-ink-muted ll-num">
+        <span
+          data-slot="textarea-count"
+          id={countId}
+          className="pointer-events-none absolute end-6 bottom-1.5 text-sm text-ink-muted ll-num"
+        >
           <span aria-hidden="true">{count}</span>
           <span className="sr-only">
             {length} characters{props.maxLength ? ` of ${props.maxLength}` : ""}

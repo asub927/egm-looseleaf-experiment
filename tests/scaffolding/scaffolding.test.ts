@@ -67,7 +67,10 @@ test("Tier 3 Demonstration: Array Step auto-places Row 1 with targetCols tokens"
 
   // Subsequent rows must be empty
   for (let r = 1; r < 5; r++) {
-    assert.equal(grid[r].every((c) => !c), true)
+    assert.equal(
+      grid[r].every((c) => !c),
+      true,
+    )
   }
 })
 
@@ -104,7 +107,9 @@ test("Deterministic 3-Tier Progressive Hint Ladder Progression Logic", () => {
   let status: string = "constructing"
 
   // Attempt 1: student checks empty or unequal grid -> fail
-  const badGrid = Array(5).fill(null).map(() => Array(5).fill(false))
+  const badGrid = Array(5)
+    .fill(null)
+    .map(() => Array(5).fill(false))
   badGrid[0][0] = true // 1 token placed (incomplete_inventory)
 
   const diag1 = evaluateArrayGrid(badGrid, SPEC_3x4)
@@ -128,7 +133,9 @@ test("Deterministic 3-Tier Progressive Hint Ladder Progression Logic", () => {
   assert.equal(status, "constructing")
 
   // Attempt 2: student checks orientation error (4 rows of 3) -> fail
-  const transposedGrid = Array(5).fill(null).map(() => Array(5).fill(false))
+  const transposedGrid = Array(5)
+    .fill(null)
+    .map(() => Array(5).fill(false))
   for (let r = 0; r < 4; r++) {
     for (let c = 0; c < 3; c++) transposedGrid[r][c] = true
   }
@@ -218,10 +225,7 @@ test("Isomorphic Spec Generator: Geometry returns complementary shape with match
     const next = getIsomorphicGeometrySpec(seed)
     assert.equal(next.targetShares, seed.targetShares)
     assert.notEqual(next.id, seed.id)
-    assert.equal(
-      next.shapeType,
-      seed.shapeType === "rectangle" ? "circle" : "rectangle"
-    )
+    assert.equal(next.shapeType, seed.shapeType === "rectangle" ? "circle" : "rectangle")
   }
 })
 
@@ -287,4 +291,3 @@ test("Deterministic 3-Tier Progressive Hint Ladder for Geometry", () => {
   const demoDiag = evaluatePartition(demoCuts, seed)
   assert.equal(demoDiag.status, "correct")
 })
-

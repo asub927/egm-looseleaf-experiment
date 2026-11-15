@@ -37,7 +37,18 @@ type FlipCardProps = Omit<React.ComponentProps<"div">, "onChange"> & {
   label?: string
 }
 
-function FlipCard({ className, children, ref, flipped: flippedProp, defaultFlipped = false, onFlippedChange, axis = "y", trigger = true, label = "Flip card", ...props }: FlipCardProps) {
+function FlipCard({
+  className,
+  children,
+  ref,
+  flipped: flippedProp,
+  defaultFlipped = false,
+  onFlippedChange,
+  axis = "y",
+  trigger = true,
+  label = "Flip card",
+  ...props
+}: FlipCardProps) {
   const [inner, setInner] = React.useState(defaultFlipped)
   const [touched, setTouched] = React.useState(false)
   const flipped = flippedProp ?? inner
@@ -65,7 +76,8 @@ function FlipCard({ className, children, ref, flipped: flippedProp, defaultFlipp
           data-slot="flip-card-inner"
           className={cn(
             "grid size-full [transform-style:preserve-3d] transition-transform duration-[calc(var(--ll-dur-sheet)*2)] ease-(--ll-ease-settle)",
-            flipped && (axis === "x" ? "[transform:rotateX(180deg)]" : "[transform:rotateY(180deg)]"),
+            flipped &&
+              (axis === "x" ? "[transform:rotateX(180deg)]" : "[transform:rotateY(180deg)]"),
           )}
         >
           {children}
@@ -76,7 +88,10 @@ function FlipCard({ className, children, ref, flipped: flippedProp, defaultFlipp
   )
 }
 
-type FaceProps = Omit<PaperProps, "ref" | "stock"> & { ref?: React.Ref<HTMLElement>; stock?: PaperProps["stock"] }
+type FaceProps = Omit<PaperProps, "ref" | "stock"> & {
+  ref?: React.Ref<HTMLElement>
+  stock?: PaperProps["stock"]
+}
 
 function Face({ side, stock, className, children, ref, ...props }: FaceProps & { side: Side }) {
   const { flipped, axis } = useFlipCard()
@@ -95,7 +110,8 @@ function Face({ side, stock, className, children, ref, ...props }: FaceProps & {
         "col-start-1 row-start-1 size-full [backface-visibility:hidden] flex flex-col items-center justify-center gap-1 px-6 py-5 text-center font-script text-2xl leading-tight",
         "[transition:visibility_0s_linear_calc(var(--ll-dur-sheet)*.24)]",
         hidden ? "invisible" : "visible",
-        side === "back" && (axis === "x" ? "[transform:rotateX(180deg)]" : "[transform:rotateY(180deg)]"),
+        side === "back" &&
+          (axis === "x" ? "[transform:rotateX(180deg)]" : "[transform:rotateY(180deg)]"),
         className,
       )}
       {...props}
@@ -120,10 +136,25 @@ type FlipCardTriggerProps = React.ComponentProps<"button"> & {
   seed?: string | number
 }
 
-function FlipCardTrigger({ className, children, asChild = false, overlay = true, hint, seed, ref, onClick, ...props }: FlipCardTriggerProps) {
+function FlipCardTrigger({
+  className,
+  children,
+  asChild = false,
+  overlay = true,
+  hint,
+  seed,
+  ref,
+  onClick,
+  ...props
+}: FlipCardTriggerProps) {
   const ctx = useFlipCard()
   const drawn = overlay && (hint ?? true)
-  const { hostRef, hostProps, node } = useInk({ recipe: flipTriggerRecipe, params: { hint: drawn }, kind: "flip-card-trigger", seed })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: flipTriggerRecipe,
+    params: { hint: drawn },
+    kind: "flip-card-trigger",
+    seed,
+  })
   const Comp = asChild ? Slot.Root : "button"
   return (
     <Comp
@@ -136,7 +167,10 @@ function FlipCardTrigger({ className, children, asChild = false, overlay = true,
         onClick?.(e)
         if (!e.defaultPrevented) ctx.toggle()
       }}
-      className={cn(overlay && "absolute inset-0 z-(--ll-z-raised) block size-full cursor-pointer", className)}
+      className={cn(
+        overlay && "absolute inset-0 z-(--ll-z-raised) block size-full cursor-pointer",
+        className,
+      )}
       {...props}
     >
       <Slot.Slottable>{children ?? <span className="sr-only">{ctx.label}</span>}</Slot.Slottable>

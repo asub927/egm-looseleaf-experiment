@@ -3,14 +3,8 @@
 import * as React from "react"
 import type { NC2GItem } from "../curriculum/invariants.ts"
 import { NC2_G_SEEDS } from "../curriculum/items/nc2-g.ts"
-import {
-  evaluatePartition,
-  type GeometryDiagnostic,
-} from "../lib/math/geometry-evaluator.ts"
-import type {
-  ScaffoldingTier,
-  ScaffoldingStatus,
-} from "./use-socratic-scaffolding.ts"
+import { evaluatePartition, type GeometryDiagnostic } from "../lib/math/geometry-evaluator.ts"
+import type { ScaffoldingTier, ScaffoldingStatus } from "./use-socratic-scaffolding.ts"
 import type { MascotPose } from "../lib/ink/art/mascots/index.ts"
 
 export type { ScaffoldingTier, ScaffoldingStatus }
@@ -84,22 +78,19 @@ export function demonstrateGeometryStep(spec: NC2GItem): number[] {
  */
 export function getIsomorphicGeometrySpec(
   current: NC2GItem,
-  seeds: readonly NC2GItem[] = NC2_G_SEEDS
+  seeds: readonly NC2GItem[] = NC2_G_SEEDS,
 ): NC2GItem {
   const pool = seeds ?? NC2_G_SEEDS
   const candidates = pool.filter(
-    (s) => s.targetShares === current.targetShares && s.id !== current.id
+    (s) => s.targetShares === current.targetShares && s.id !== current.id,
   )
 
   if (candidates.length === 0) {
     return current
   }
 
-  const oppositeShape =
-    current.shapeType === "rectangle" ? "circle" : "rectangle"
-  const oppositeCandidates = candidates.filter(
-    (s) => s.shapeType === oppositeShape
-  )
+  const oppositeShape = current.shapeType === "rectangle" ? "circle" : "rectangle"
+  const oppositeCandidates = candidates.filter((s) => s.shapeType === oppositeShape)
 
   if (oppositeCandidates.length > 0) {
     return oppositeCandidates[0]
@@ -109,8 +100,7 @@ export function getIsomorphicGeometrySpec(
 }
 
 function getInitialTierBadge(item: NC2GItem): string {
-  const capitalized =
-    item.verbalShareName.charAt(0).toUpperCase() + item.verbalShareName.slice(1)
+  const capitalized = item.verbalShareName.charAt(0).toUpperCase() + item.verbalShareName.slice(1)
   return `Step 1: Cut ${item.targetShares} ${capitalized}`
 }
 
@@ -126,7 +116,7 @@ function getInitialTierBadge(item: NC2GItem): string {
  *   Mastery credit is revoked for the current seed, unlocking isomorphic retry (`getIsomorphicGeometrySpec`).
  */
 export function useGeometryScaffolding(
-  config: GeometryScaffoldingConfig
+  config: GeometryScaffoldingConfig,
 ): GeometryScaffoldingReturn {
   const { spec } = config
 
@@ -136,9 +126,7 @@ export function useGeometryScaffolding(
   const [isGhostVisible, setIsGhostVisible] = React.useState<boolean>(false)
   const [feedback, setFeedback] = React.useState<string | null>(null)
   const [mascotPose, setMascotPose] = React.useState<MascotPose>("idle")
-  const [tierBadge, setTierBadge] = React.useState<string>(() =>
-    getInitialTierBadge(spec)
-  )
+  const [tierBadge, setTierBadge] = React.useState<string>(() => getInitialTierBadge(spec))
   const [wasDemonstrated, setWasDemonstrated] = React.useState<boolean>(false)
   const [masteryEligible, setMasteryEligible] = React.useState<boolean>(true)
   const [isValidated, setIsValidated] = React.useState<boolean>(false)
@@ -224,7 +212,7 @@ export function useGeometryScaffolding(
     setMascotPose("sketch")
     setTierBadge("Step 3: Step Demonstration")
     setFeedback(
-      `Pencil Pal demonstrated the cut for ${config.spec.targetShares} equal ${config.spec.verbalShareName}! Try another challenge to earn your star.`
+      `Pencil Pal demonstrated the cut for ${config.spec.targetShares} equal ${config.spec.verbalShareName}! Try another challenge to earn your star.`,
     )
     isDemonstratingRef.current = true
     config.onCutsChange(demoCuts)
@@ -267,8 +255,7 @@ export function useGeometryScaffolding(
         setIsValidated(true)
         setMascotPose("celebrate")
         const capitalized =
-          config.spec.verbalShareName.charAt(0).toUpperCase() +
-          config.spec.verbalShareName.slice(1)
+          config.spec.verbalShareName.charAt(0).toUpperCase() + config.spec.verbalShareName.slice(1)
         setTierBadge(`${config.spec.targetShares} Equal ${capitalized}! 🌟`)
         setFeedback(diagnostic.feedback)
         return diagnostic
@@ -294,7 +281,7 @@ export function useGeometryScaffolding(
         setMascotPose("sketch")
         setTierBadge("Step 2: Ghost Assist")
         setFeedback(
-          `Pencil Pal drew dotted guide lines for ${config.spec.targetShares} equal ${config.spec.verbalShareName}! Can you snap the cutter to the dotted lines?`
+          `Pencil Pal drew dotted guide lines for ${config.spec.targetShares} equal ${config.spec.verbalShareName}! Can you snap the cutter to the dotted lines?`,
         )
       } else {
         // Tier 3: Step Demonstration with Isomorphic Retry
@@ -303,7 +290,7 @@ export function useGeometryScaffolding(
 
       return diagnostic
     },
-    [config, failureCount, autoPlaceStep]
+    [config, failureCount, autoPlaceStep],
   )
 
   const resetScaffolding = React.useCallback(() => {

@@ -39,8 +39,14 @@ function StubbyFrames({ px, seed }: { px: number; seed: string }) {
   const uid = React.useId().replace(/[^a-zA-Z0-9]/g, "")
   const frames = React.useMemo(
     () =>
-      WRITE_FRAMES.map((id) => memo(`spinner|${id}|${px}|${seed}|${uid}`, () => drawMascot(mascotProps.frames[id], px, seed, { idPrefix: `ll-${uid}${id.replace("-", "")}` }))),
-    [px, seed, uid]
+      WRITE_FRAMES.map((id) =>
+        memo(`spinner|${id}|${px}|${seed}|${uid}`, () =>
+          drawMascot(mascotProps.frames[id], px, seed, {
+            idPrefix: `ll-${uid}${id.replace("-", "")}`,
+          }),
+        ),
+      ),
+    [px, seed, uid],
   )
   const { w, h } = frames[0]
   return (
@@ -82,7 +88,12 @@ function Spinner({
   const calm = useDensity() === "calm"
   const id = useInkSeed(seed)
   const asked = size ?? sizeFromClass(className)
-  const px = Math.max(8, Math.round(asked !== undefined && Number.isFinite(asked) ? asked : variant === "write" ? 64 : 16))
+  const px = Math.max(
+    8,
+    Math.round(
+      asked !== undefined && Number.isFinite(asked) ? asked : variant === "write" ? 64 : 16,
+    ),
+  )
   const mark = React.useMemo(
     () =>
       variant === "write"
@@ -90,7 +101,7 @@ function Spinner({
         : variant === "loops"
           ? spinnerMark(id, px, { shape: "loops", w: px * 4, h: px, tier, calm })
           : spinnerMark(id, px, { tier, calm }),
-    [id, px, variant, tier, calm]
+    [id, px, variant, tier, calm],
   )
   return (
     <span
@@ -98,11 +109,15 @@ function Spinner({
       aria-label="Loading"
       data-slot="spinner"
       data-variant={variant}
-      style={{ "--ll-write-lap": "calc(var(--ll-dur-boil) * 2.25)", ...style } as React.CSSProperties}
+      style={
+        { "--ll-write-lap": "calc(var(--ll-dur-boil) * 2.25)", ...style } as React.CSSProperties
+      }
       className={cn(
-        variant === "scribble" ? "inline-flex size-4 shrink-0 items-center justify-center" : "inline-flex shrink-0 items-center justify-center",
+        variant === "scribble"
+          ? "inline-flex size-4 shrink-0 items-center justify-center"
+          : "inline-flex shrink-0 items-center justify-center",
         scribble,
-        className
+        className,
       )}
       {...props}
     >
@@ -121,7 +136,10 @@ function Spinner({
           viewBox={`${-mark.pad} ${-mark.pad} ${mark.w + 2 * mark.pad} ${mark.h + 2 * mark.pad}`}
           width={variant === "loops" ? mark.w + 2 * mark.pad : undefined}
           height={variant === "loops" ? mark.h + 2 * mark.pad : undefined}
-          className={cn("pointer-events-none overflow-visible", variant === "scribble" ? "size-full" : "shrink-0")}
+          className={cn(
+            "pointer-events-none overflow-visible",
+            variant === "scribble" ? "size-full" : "shrink-0",
+          )}
           dangerouslySetInnerHTML={{ __html: mark.svg }}
         />
       ) : null}

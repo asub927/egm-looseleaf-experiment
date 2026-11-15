@@ -5,7 +5,12 @@ import { Checkbox as CheckboxPrimitive } from "radix-ui"
 
 import { useInk, useMergedRef } from "@/lib/ink/react"
 import { checkboxRecipe } from "@/lib/ink/recipes/checkbox-ink"
-import { REVEAL_DASH, REVEAL_WHEN_CHECKED, REVEAL_WHEN_INDETERMINATE, markTouched } from "@/lib/ink/recipes/draw-on-ink"
+import {
+  REVEAL_DASH,
+  REVEAL_WHEN_CHECKED,
+  REVEAL_WHEN_INDETERMINATE,
+  markTouched,
+} from "@/lib/ink/recipes/draw-on-ink"
 import { cn } from "@/lib/utils"
 
 function Checkbox({
@@ -20,7 +25,13 @@ function Checkbox({
 }) {
   const invalid = props["aria-invalid"] === true || props["aria-invalid"] === "true"
   const forced = "data-focus-visible" in props
-  const { hostRef, hostProps, node } = useInk({ recipe: checkboxRecipe, params: { disabled: !!disabled, invalid }, kind: "checkbox", seed, layers: forced ? "all" : undefined })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: checkboxRecipe,
+    params: { disabled: !!disabled, invalid },
+    kind: "checkbox",
+    seed,
+    layers: forced ? "all" : undefined,
+  })
   return (
     <CheckboxPrimitive.Root
       data-slot="checkbox"
@@ -39,7 +50,7 @@ function Checkbox({
         "group-hover/field:[&>svg_[data-layer=hover]]:visible group-hover/field:[&>svg_[data-layer=hover]]:opacity-100",
         "has-[+[data-slot=label]:hover]:[&>svg_[data-layer=hover]]:visible has-[+[data-slot=label]:hover]:[&>svg_[data-layer=hover]]:opacity-100",
         "has-[+input+[data-slot=label]:hover]:[&>svg_[data-layer=hover]]:visible has-[+input+[data-slot=label]:hover]:[&>svg_[data-layer=hover]]:opacity-100",
-        className
+        className,
       )}
       {...props}
     >

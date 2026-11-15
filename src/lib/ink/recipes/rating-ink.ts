@@ -1,13 +1,13 @@
-import { blobFill, wash } from '@/lib/ink/fills'
-import { TAU, seg } from '@/lib/ink/geom'
-import { clamp } from '@/lib/ink/rng'
-import { burstLines, focusRing, loopLines, starLines } from '@/lib/ink/shapes'
-import { defineRecipe } from '@/lib/ink/recipes'
-import type { Ink } from '@/lib/ink/builder'
-import type { PaintKey } from '@/lib/ink/paint'
-import type { Line, PenName, Pt } from '@/lib/ink/types'
+import { blobFill, wash } from "@/lib/ink/fills"
+import { TAU, seg } from "@/lib/ink/geom"
+import { clamp } from "@/lib/ink/rng"
+import { burstLines, focusRing, loopLines, starLines } from "@/lib/ink/shapes"
+import { defineRecipe } from "@/lib/ink/recipes"
+import type { Ink } from "@/lib/ink/builder"
+import type { PaintKey } from "@/lib/ink/paint"
+import type { Line, PenName, Pt } from "@/lib/ink/types"
 
-export const ratingIconList = ['star', 'heart', 'sun'] as const
+export const ratingIconList = ["star", "heart", "sun"] as const
 export type RatingIcon = (typeof ratingIconList)[number]
 
 export interface RatingParams {
@@ -16,7 +16,7 @@ export interface RatingParams {
   invalid?: boolean
 }
 
-const FILL: Record<RatingIcon, PaintKey> = { star: 'hi', heart: 'tomato', sun: 'hi' }
+const FILL: Record<RatingIcon, PaintKey> = { star: "hi", heart: "tomato", sun: "hi" }
 
 function starPoly(cx: number, cy: number, R: number): Pt[] {
   const pts: Pt[] = []
@@ -40,7 +40,10 @@ function heartPts(cx: number, cy: number, R: number, t0 = 0, t1 = TAU, n = 44): 
 }
 
 function discPoly(cx: number, cy: number, r: number, n = 24): Pt[] {
-  return Array.from({ length: n }, (_, i) => [cx + Math.cos((i / n) * TAU) * r, cy + Math.sin((i / n) * TAU) * r] as Pt)
+  return Array.from(
+    { length: n },
+    (_, i) => [cx + Math.cos((i / n) * TAU) * r, cy + Math.sin((i / n) * TAU) * r] as Pt,
+  )
 }
 
 function clipX(poly: Pt[], at: number, keepLow: boolean): Pt[] {
@@ -60,63 +63,95 @@ function clipX(poly: Pt[], at: number, keepLow: boolean): Pt[] {
   return out
 }
 
-function outlineLines(ink: Ink, icon: RatingIcon, cx: number, cy: number, R: number, filled = false): Line[] {
-  const rng = ink.next('outline')
-  if (icon === 'star' && filled) {
+function outlineLines(
+  ink: Ink,
+  icon: RatingIcon,
+  cx: number,
+  cy: number,
+  R: number,
+  filled = false,
+): Line[] {
+  const rng = ink.next("outline")
+  if (icon === "star" && filled) {
     const pts = starPoly(cx, cy + R * 0.05, R * 1.02)
     pts.push(pts[0], [pts[1][0] + rng.gauss(0, 0.1), pts[1][1]])
-    return [{ pts, o: { poly: true, start: 'pool', end: 'flick', wobble: 0.5 } }]
+    return [{ pts, o: { poly: true, start: "pool", end: "flick", wobble: 0.5 } }]
   }
-  if (icon === 'star') return starLines(rng, cx, cy + R * 0.05, R * 1.02)
-  if (icon === 'heart') {
-    const pts = heartPts(cx, cy, R, 0.06, TAU + 0.16).map((p, i, all) => [p[0] + rng.gauss(0, 0.12) * (i / all.length), p[1]] as Pt)
-    return [{ pts, o: { start: 'pool', end: 'flick', wobble: 0.6 } }]
+  if (icon === "star") return starLines(rng, cx, cy + R * 0.05, R * 1.02)
+  if (icon === "heart") {
+    const pts = heartPts(cx, cy, R, 0.06, TAU + 0.16).map(
+      (p, i, all) => [p[0] + rng.gauss(0, 0.12) * (i / all.length), p[1]] as Pt,
+    )
+    return [{ pts, o: { start: "pool", end: "flick", wobble: 0.6 } }]
   }
   const r = R * 0.5
-  return [...loopLines(rng.fork('disc'), cx, cy, r, r, { turns: 1.1 }), ...burstLines(rng.fork('rays'), cx, cy, R * 1.02, { rays: 9 })]
+  return [
+    ...loopLines(rng.fork("disc"), cx, cy, r, r, { turns: 1.1 }),
+    ...burstLines(rng.fork("rays"), cx, cy, R * 1.02, { rays: 9 }),
+  ]
 }
 
 export const ratingRecipe = defineRecipe<RatingParams>({
-  id: 'rating',
-  kind: 'rating',
-  layers: ['rest', 'checked', 'indeterminate', 'focus'],
-  lazy: ['focus'],
+  id: "rating",
+  kind: "rating",
+  layers: ["rest", "checked", "indeterminate", "focus"],
+  lazy: ["focus"],
   pad: 12,
-  draw(ink, { w, h }, { icon = 'star', disabled, invalid }, ctx) {
+  draw(ink, { w, h }, { icon = "star", disabled, invalid }, ctx) {
     const s = Math.min(w, h)
     const cx = w / 2
     const cy = h / 2
     const R = s / 2 - 1.6
     const calm = ctx.calm
-    const rtl = ctx.dir === 'rtl'
-    if (!disabled) ctx.lazy('focus', (f) => focusRing(f, 0, 0, w, h, { shape: 'ellipse', gap: 3 }))
+    const rtl = ctx.dir === "rtl"
+    if (!disabled) ctx.lazy("focus", (f) => focusRing(f, 0, 0, w, h, { shape: "ellipse", gap: 3 }))
     if (ctx.lazyOnly) return
 
     const fine = s < 22
-    const restPen: PenName = disabled ? 'pencil.fine' : invalid ? 'red' : 'pencil'
-    const feltPen: PenName = disabled ? 'pencil' : calm ? 'pencil.fine' : fine ? 'ink.fine' : 'ink'
+    const restPen: PenName = disabled ? "pencil.fine" : invalid ? "red" : "pencil"
+    const feltPen: PenName = disabled ? "pencil" : calm ? "pencil.fine" : fine ? "ink.fine" : "ink"
     const blob = (poly: Pt[]): void => {
-      ink.part('fill', () => {
-        if (disabled) return wash(ink, poly, 'pencil-mark', { alpha: 0.4, material: 'wash' })
-        return blobFill(ink, poly, FILL[icon], { alpha: icon === 'heart' ? 0.84 : 0.9, mis: clamp(s * 0.05, 0.6, 1.6) })
+      ink.part("fill", () => {
+        if (disabled) return wash(ink, poly, "pencil-mark", { alpha: 0.4, material: "wash" })
+        return blobFill(ink, poly, FILL[icon], {
+          alpha: icon === "heart" ? 0.84 : 0.9,
+          mis: clamp(s * 0.05, 0.6, 1.6),
+        })
       })
     }
-    const body = (): Pt[] => (icon === 'star' ? starPoly(cx, cy + R * 0.05, R) : icon === 'heart' ? heartPts(cx, cy, R) : discPoly(cx, cy, R * 0.52))
+    const body = (): Pt[] =>
+      icon === "star"
+        ? starPoly(cx, cy + R * 0.05, R)
+        : icon === "heart"
+          ? heartPts(cx, cy, R)
+          : discPoly(cx, cy, R * 0.52)
 
-    ink.layer('rest', () => {
-      const empty = (): void => ink.lines(outlineLines(ink, icon, cx, cy, R), restPen, { width: disabled ? 0.9 : 1, alpha: disabled ? 0.6 : 0.95, simple: s < 40 })
-      if (invalid && !disabled) ink.group({ hideOn: 'checked indeterminate' }, empty)
+    ink.layer("rest", () => {
+      const empty = (): void =>
+        ink.lines(outlineLines(ink, icon, cx, cy, R), restPen, {
+          width: disabled ? 0.9 : 1,
+          alpha: disabled ? 0.6 : 0.95,
+          simple: s < 40,
+        })
+      if (invalid && !disabled) ink.group({ hideOn: "checked indeterminate" }, empty)
       else empty()
     })
-    ink.layer('checked', () => {
+    ink.layer("checked", () => {
       blob(body())
       ink.lines(outlineLines(ink, icon, cx, cy, R, true), feltPen, { simple: s < 30 })
     })
-    ink.layer('indeterminate', () => {
+    ink.layer("indeterminate", () => {
       const half = clipX(body(), cx, !rtl)
       blob(half)
       ink.lines(outlineLines(ink, icon, cx, cy, R, true), feltPen, { alpha: 0.9, simple: s < 30 })
-      if (!calm) ink.stroke(seg(cx + 0.2, cy - R * 0.55, cx - 0.2, cy + R * 0.7, 0.3, 3), 'pencil.fine', { alpha: 0.5, start: 'soft', end: 'soft', wobble: 0.3, simple: true })
+      if (!calm)
+        ink.stroke(seg(cx + 0.2, cy - R * 0.55, cx - 0.2, cy + R * 0.7, 0.3, 3), "pencil.fine", {
+          alpha: 0.5,
+          start: "soft",
+          end: "soft",
+          wobble: 0.3,
+          simple: true,
+        })
     })
   },
 })

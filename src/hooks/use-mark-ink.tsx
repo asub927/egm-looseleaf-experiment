@@ -1,8 +1,20 @@
 import * as React from "react"
 
-import { ensureInkDefs, inkFrame, inkViewBox, useInkContext, useInkSeed, useMergedRef } from "@/lib/ink"
+import {
+  ensureInkDefs,
+  inkFrame,
+  inkViewBox,
+  useInkContext,
+  useInkSeed,
+  useMergedRef,
+} from "@/lib/ink"
 import type { Frame, Recipe } from "@/lib/ink"
-import { GUESS_RATIOS, lineMetrics, type FontRatios, type LineParams } from "@/lib/ink/recipes/text-marks-ink"
+import {
+  GUESS_RATIOS,
+  lineMetrics,
+  type FontRatios,
+  type LineParams,
+} from "@/lib/ink/recipes/text-marks-ink"
 
 export type MarkPhase = "idle" | "in" | "off"
 
@@ -57,7 +69,11 @@ export function mergeLineRects(list: readonly RectLike[]): RectLike[] {
   const out: RectLike[] = []
   for (const r of list) {
     if (!(r.width >= 0.5 && r.height >= 0.5)) continue
-    const same = out.find((o) => Math.min(o.top + o.height, r.top + r.height) - Math.max(o.top, r.top) > 0.6 * Math.min(o.height, r.height))
+    const same = out.find(
+      (o) =>
+        Math.min(o.top + o.height, r.top + r.height) - Math.max(o.top, r.top) >
+        0.6 * Math.min(o.height, r.height),
+    )
     if (same) {
       const left = Math.min(same.left, r.left)
       const top = Math.min(same.top, r.top)
@@ -78,7 +94,8 @@ function canvasContext(): typeof canvas {
   canvas = null
   try {
     if (typeof OffscreenCanvas !== "undefined") canvas = new OffscreenCanvas(1, 1).getContext("2d")
-    else if (typeof document !== "undefined" && !/jsdom/i.test(navigator.userAgent)) canvas = document.createElement("canvas").getContext("2d")
+    else if (typeof document !== "undefined" && !/jsdom/i.test(navigator.userAgent))
+      canvas = document.createElement("canvas").getContext("2d")
   } catch {
     canvas = null
   }
@@ -99,8 +116,19 @@ function fontRatios(cs: CSSStyleDeclaration): FontRatios | null {
     if (typeof m.fontBoundingBoxAscent !== "number") return null
     const cap = ctx.measureText("H").actualBoundingBoxAscent / 100
     const pd = ctx.measureText("p").actualBoundingBoxDescent / 100
-    const r: FontRatios = { asc: m.fontBoundingBoxAscent / 100, desc: m.fontBoundingBoxDescent / 100, xh: m.actualBoundingBoxAscent / 100, cap: cap || GUESS_RATIOS.cap, pdesc: pd || GUESS_RATIOS.pdesc }
-    if (typeof document !== "undefined" && document.fonts?.check && !document.fonts.check(`100px ${cs.fontFamily}`)) return r
+    const r: FontRatios = {
+      asc: m.fontBoundingBoxAscent / 100,
+      desc: m.fontBoundingBoxDescent / 100,
+      xh: m.actualBoundingBoxAscent / 100,
+      cap: cap || GUESS_RATIOS.cap,
+      pdesc: pd || GUESS_RATIOS.pdesc,
+    }
+    if (
+      typeof document !== "undefined" &&
+      document.fonts?.check &&
+      !document.fonts.check(`100px ${cs.fontFamily}`)
+    )
+      return r
     ratioCache.set(font, r)
     return r
   } catch {
@@ -120,9 +148,16 @@ function measure(host: HTMLElement, origin: HTMLElement | null): Measured | null
   const o = origin?.getBoundingClientRect()
   let rects: MarkRect[]
   if (raw.length > MAX_MARK_LINES) rects = []
-  else if (raw.length && o) rects = raw.map((r) => ({ x: q(r.left - o.left), y: q(r.top - o.top), w: q(r.width), h: q(r.height) }))
+  else if (raw.length && o)
+    rects = raw.map((r) => ({
+      x: q(r.left - o.left),
+      y: q(r.top - o.top),
+      w: q(r.width),
+      h: q(r.height),
+    }))
   else {
-    const w = host.offsetWidth, h = host.offsetHeight
+    const w = host.offsetWidth,
+      h = host.offsetHeight
     if (!(w > 0 && h > 0)) return null
     rects = [{ x: 0, y: 0, w, h }]
   }
@@ -132,9 +167,21 @@ function measure(host: HTMLElement, origin: HTMLElement | null): Measured | null
 function sameMeasure(a: Measured | null, b: Measured | null): boolean {
   if (a === b) return true
   if (!a || !b || a.rects.length !== b.rects.length || a.fs !== b.fs) return false
-  const ra = a.ratios, rb = b.ratios
-  if (ra !== rb && (ra.asc !== rb.asc || ra.desc !== rb.desc || ra.xh !== rb.xh || ra.cap !== rb.cap || ra.pdesc !== rb.pdesc)) return false
-  return a.rects.every((r, i) => r.x === b.rects[i].x && r.y === b.rects[i].y && r.w === b.rects[i].w && r.h === b.rects[i].h)
+  const ra = a.ratios,
+    rb = b.ratios
+  if (
+    ra !== rb &&
+    (ra.asc !== rb.asc ||
+      ra.desc !== rb.desc ||
+      ra.xh !== rb.xh ||
+      ra.cap !== rb.cap ||
+      ra.pdesc !== rb.pdesc)
+  )
+    return false
+  return a.rects.every(
+    (r, i) =>
+      r.x === b.rects[i].x && r.y === b.rects[i].y && r.w === b.rects[i].w && r.h === b.rects[i].h,
+  )
 }
 
 function boxParent(el: HTMLElement): HTMLElement {
@@ -149,7 +196,8 @@ function boxParent(el: HTMLElement): HTMLElement {
 }
 
 function detectDir(el: Element): "ltr" | "rtl" | null {
-  const d = el.closest("[dir]")?.getAttribute("dir") ?? el.ownerDocument.documentElement.getAttribute("dir")
+  const d =
+    el.closest("[dir]")?.getAttribute("dir") ?? el.ownerDocument.documentElement.getAttribute("dir")
   return d === "rtl" || d === "ltr" ? d : null
 }
 
@@ -200,7 +248,11 @@ export function useMarkPhase(o: { animate?: boolean; show?: boolean }): MarkPhas
     [watching],
   )
   const phase: MarkPhase = !show ? "off" : animate && !inView ? "idle" : "in"
-  return { phase, phaseRef, phaseProps: animate ? { "data-mark": phase, "data-animate": "" } : { "data-mark": phase } }
+  return {
+    phase,
+    phaseRef,
+    phaseProps: animate ? { "data-mark": phase, "data-animate": "" } : { "data-mark": phase },
+  }
 }
 
 export function useMarkInk<P extends LineParams>(o: UseMarkInkOptions<P>): UseMarkInkResult {
@@ -218,7 +270,7 @@ export function useMarkInk<P extends LineParams>(o: UseMarkInkOptions<P>): UseMa
       if (!el) return
       const update = () => {
         const next = measure(el, originEl.current)
-        setMeasured((prev) => (sameMeasure(prev, next) ? prev : next ?? prev))
+        setMeasured((prev) => (sameMeasure(prev, next) ? prev : (next ?? prev)))
       }
       update()
       const d = detectDir(el)
@@ -261,24 +313,71 @@ export function useMarkInk<P extends LineParams>(o: UseMarkInkOptions<P>): UseMa
     if (!rects.length) return []
     let list: MarkRect[] = rects
     if (o.mode === "box") {
-      const x0 = Math.min(...rects.map((r) => r.x)), x1 = Math.max(...rects.map((r) => r.x + r.w))
-      const y0 = Math.min(...rects.map((r) => r.y)), y1 = Math.max(...rects.map((r) => r.y + r.h))
+      const x0 = Math.min(...rects.map((r) => r.x)),
+        x1 = Math.max(...rects.map((r) => r.x + r.w))
+      const y0 = Math.min(...rects.map((r) => r.y)),
+        y1 = Math.max(...rects.map((r) => r.y + r.h))
       list = [{ x: q(x0), y: q(y0), w: q(x1 - x0), h: q(y1 - y0) }]
     }
     return list.map((r, i) => {
-      const lm = lineMetrics(o.mode === "box" ? Math.min(r.h, Math.round((ratios.asc + ratios.desc) * fs)) : r.h, fs, ratios)
-      const params = { ...(o.params as object), ...lm, first: i === 0, last: i === list.length - 1, n: list.length, animate } as unknown as P
-      const frame = inkFrame(o.recipe, { box: { w: r.w, h: r.h }, params, seed: `${seed}:${i}`, tier: ctx.tier, density: ctx.density, dir, knobs: ctx.knobs })
+      const lm = lineMetrics(
+        o.mode === "box" ? Math.min(r.h, Math.round((ratios.asc + ratios.desc) * fs)) : r.h,
+        fs,
+        ratios,
+      )
+      const params = {
+        ...(o.params as object),
+        ...lm,
+        first: i === 0,
+        last: i === list.length - 1,
+        n: list.length,
+        animate,
+      } as unknown as P
+      const frame = inkFrame(o.recipe, {
+        box: { w: r.w, h: r.h },
+        params,
+        seed: `${seed}:${i}`,
+        tier: ctx.tier,
+        density: ctx.density,
+        dir,
+        knobs: ctx.knobs,
+      })
       return { r, i, frame }
     })
-  }, [measured, show, o.recipe, o.mode, paramsKey, animate, seed, ctx.tier, ctx.density, dir, ctx.knobs])
+  }, [
+    measured,
+    show,
+    o.recipe,
+    o.mode,
+    paramsKey,
+    animate,
+    seed,
+    ctx.tier,
+    ctx.density,
+    dir,
+    ctx.knobs,
+  ])
 
   const ready = drawn.length > 0
   const nodes = (
     <>
-      <span ref={originEl} data-part="mark-origin" aria-hidden="true" className="pointer-events-none absolute size-0" style={{ left: 0, top: 0 }} />
+      <span
+        ref={originEl}
+        data-part="mark-origin"
+        aria-hidden="true"
+        className="pointer-events-none absolute size-0"
+        style={{ left: 0, top: 0 }}
+      />
       {drawn.map(({ r, i, frame }) => (
-        <MarkSvg key={i} kind={o.kind} frame={frame} rect={r} over={!!o.over} delay={(o.delay ?? 0) + i * 380} line={i} />
+        <MarkSvg
+          key={i}
+          kind={o.kind}
+          frame={frame}
+          rect={r}
+          over={!!o.over}
+          delay={(o.delay ?? 0) + i * 380}
+          line={i}
+        />
       ))}
     </>
   )
@@ -291,7 +390,21 @@ export function useMarkInk<P extends LineParams>(o: UseMarkInkOptions<P>): UseMa
   return { hostRef, hostProps, nodes, phase, ready, seed }
 }
 
-function MarkSvg({ kind, frame, rect, over, delay, line }: { kind: string; frame: Frame; rect: MarkRect; over: boolean; delay: number; line: number }) {
+function MarkSvg({
+  kind,
+  frame,
+  rect,
+  over,
+  delay,
+  line,
+}: {
+  kind: string
+  frame: Frame
+  rect: MarkRect
+  over: boolean
+  delay: number
+  line: number
+}) {
   const pad = frame.pad
   return (
     <svg
@@ -317,7 +430,12 @@ function MarkSvg({ kind, frame, rect, over, delay, line }: { kind: string; frame
       }
     >
       {frame.layers.map((name) => (
-        <g key={name} data-layer={name} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: frame.parts[name] ?? "" }} />
+        <g
+          key={name}
+          data-layer={name}
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: frame.parts[name] ?? "" }}
+        />
       ))}
     </svg>
   )
@@ -334,10 +452,24 @@ export function BlockSvg({ kind, frame, keep }: { kind: string; frame: Frame; ke
       className="pointer-events-none absolute"
       viewBox={inkViewBox(frame)}
       preserveAspectRatio="none"
-      style={{ position: "absolute", pointerEvents: "none", left: -pad, top: -pad, width: `calc(100% + ${2 * pad}px)`, height: `calc(100% + ${2 * pad}px)`, overflow: "visible", zIndex: -1 }}
+      style={{
+        position: "absolute",
+        pointerEvents: "none",
+        left: -pad,
+        top: -pad,
+        width: `calc(100% + ${2 * pad}px)`,
+        height: `calc(100% + ${2 * pad}px)`,
+        overflow: "visible",
+        zIndex: -1,
+      }}
     >
       {frame.layers.map((name) => (
-        <g key={name} data-layer={name} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: frame.parts[name] ?? "" }} />
+        <g
+          key={name}
+          data-layer={name}
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: frame.parts[name] ?? "" }}
+        />
       ))}
     </svg>
   )

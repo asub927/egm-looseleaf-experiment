@@ -104,10 +104,18 @@ export function validateNC2OA3Item(item: unknown): ValidationResult {
   if (!candidate.id || typeof candidate.id !== "string" || candidate.id.trim().length === 0) {
     errors.push("Item 'id' must be a non-empty string.")
   }
-  if (!candidate.context || typeof candidate.context !== "string" || candidate.context.trim().length === 0) {
+  if (
+    !candidate.context ||
+    typeof candidate.context !== "string" ||
+    candidate.context.trim().length === 0
+  ) {
     errors.push("Item 'context' must be a non-empty string.")
   }
-  if (!candidate.narrative || typeof candidate.narrative !== "string" || candidate.narrative.trim().length === 0) {
+  if (
+    !candidate.narrative ||
+    typeof candidate.narrative !== "string" ||
+    candidate.narrative.trim().length === 0
+  ) {
     errors.push("Item 'narrative' must be a non-empty string.")
   }
 
@@ -129,19 +137,19 @@ export function validateNC2OA3Item(item: unknown): ValidationResult {
 
     if (candidate.expectedPairs !== expectedPairs) {
       errors.push(
-        `expectedPairs must be ${expectedPairs} for totalTokens ${candidate.totalTokens}, got ${candidate.expectedPairs}.`
+        `expectedPairs must be ${expectedPairs} for totalTokens ${candidate.totalTokens}, got ${candidate.expectedPairs}.`,
       )
     }
 
     if (candidate.leftover !== expectedLeftover) {
       errors.push(
-        `leftover must be ${expectedLeftover} for totalTokens ${candidate.totalTokens}, got ${candidate.leftover}.`
+        `leftover must be ${expectedLeftover} for totalTokens ${candidate.totalTokens}, got ${candidate.leftover}.`,
       )
     }
 
     if (candidate.isEven !== expectedIsEven) {
       errors.push(
-        `isEven must be ${expectedIsEven} for totalTokens ${candidate.totalTokens}, got ${candidate.isEven}.`
+        `isEven must be ${expectedIsEven} for totalTokens ${candidate.totalTokens}, got ${candidate.isEven}.`,
       )
     }
 
@@ -150,9 +158,7 @@ export function validateNC2OA3Item(item: unknown): ValidationResult {
       : `${expectedPairs} + ${expectedPairs} + 1 = ${candidate.totalTokens}`
 
     if (candidate.equation !== expectedEquation) {
-      errors.push(
-        `equation must be '${expectedEquation}', got '${candidate.equation}'.`
-      )
+      errors.push(`equation must be '${expectedEquation}', got '${candidate.equation}'.`)
     }
   }
 
@@ -208,7 +214,8 @@ export function createNC2OA4Item(params: CreateNC2OA4ItemParams): NC2OA4Item {
   const equationRow = `${Array(params.targetRows).fill(params.targetCols).join(" + ")} = ${totalTokens}`
   const equationCol = `${Array(params.targetCols).fill(params.targetRows).join(" + ")} = ${totalTokens}`
   const repeatedAdditionEquation = equationRow
-  const label = params.label ?? `${params.targetRows}x${params.targetCols} (${totalTokens} ${params.context})`
+  const label =
+    params.label ?? `${params.targetRows}x${params.targetCols} (${totalTokens} ${params.context})`
 
   const item: NC2OA4Item = {
     id: params.id,
@@ -251,10 +258,18 @@ export function validateNC2OA4Item(item: unknown): ValidationResult {
   if (!candidate.id || typeof candidate.id !== "string" || candidate.id.trim().length === 0) {
     errors.push("Item 'id' must be a non-empty string.")
   }
-  if (!candidate.context || typeof candidate.context !== "string" || candidate.context.trim().length === 0) {
+  if (
+    !candidate.context ||
+    typeof candidate.context !== "string" ||
+    candidate.context.trim().length === 0
+  ) {
     errors.push("Item 'context' must be a non-empty string.")
   }
-  if (!candidate.narrative || typeof candidate.narrative !== "string" || candidate.narrative.trim().length === 0) {
+  if (
+    !candidate.narrative ||
+    typeof candidate.narrative !== "string" ||
+    candidate.narrative.trim().length === 0
+  ) {
     errors.push("Item 'narrative' must be a non-empty string.")
   }
 
@@ -280,7 +295,7 @@ export function validateNC2OA4Item(item: unknown): ValidationResult {
     const expectedTotal = candidate.targetRows * candidate.targetCols
     if (candidate.totalTokens !== expectedTotal) {
       errors.push(
-        `totalTokens must equal targetRows * targetCols (${expectedTotal}), got ${candidate.totalTokens}.`
+        `totalTokens must equal targetRows * targetCols (${expectedTotal}), got ${candidate.totalTokens}.`,
       )
     }
 
@@ -288,15 +303,11 @@ export function validateNC2OA4Item(item: unknown): ValidationResult {
     const expectedEquationCol = `${Array(candidate.targetCols).fill(candidate.targetRows).join(" + ")} = ${expectedTotal}`
 
     if (candidate.equationRow !== expectedEquationRow) {
-      errors.push(
-        `equationRow must be '${expectedEquationRow}', got '${candidate.equationRow}'.`
-      )
+      errors.push(`equationRow must be '${expectedEquationRow}', got '${candidate.equationRow}'.`)
     }
 
     if (candidate.equationCol !== expectedEquationCol) {
-      errors.push(
-        `equationCol must be '${expectedEquationCol}', got '${candidate.equationCol}'.`
-      )
+      errors.push(`equationCol must be '${expectedEquationCol}', got '${candidate.equationCol}'.`)
     }
 
     if (
@@ -304,7 +315,7 @@ export function validateNC2OA4Item(item: unknown): ValidationResult {
       candidate.repeatedAdditionEquation !== candidate.equationCol
     ) {
       errors.push(
-        `repeatedAdditionEquation must match equationRow ('${expectedEquationRow}') or equationCol ('${expectedEquationCol}').`
+        `repeatedAdditionEquation must match equationRow ('${expectedEquationRow}') or equationCol ('${expectedEquationCol}').`,
       )
     }
   }
@@ -362,15 +373,9 @@ export interface CreateNC2GItemParams {
 export function createNC2GItem(params: CreateNC2GItemParams): NC2GItem {
   const verbalShareName =
     params.verbalShareName ??
-    (params.targetShares === 2
-      ? "halves"
-      : params.targetShares === 3
-        ? "thirds"
-        : "fourths")
-  const equation =
-    params.equation ?? `${params.targetShares} ${verbalShareName} = 1 whole`
-  const label =
-    params.label ?? `${params.targetShares} ${verbalShareName} (${params.context})`
+    (params.targetShares === 2 ? "halves" : params.targetShares === 3 ? "thirds" : "fourths")
+  const equation = params.equation ?? `${params.targetShares} ${verbalShareName} = 1 whole`
+  const label = params.label ?? `${params.targetShares} ${verbalShareName} (${params.context})`
 
   const item: NC2GItem = {
     id: params.id,
@@ -411,10 +416,18 @@ export function validateNC2GItem(item: unknown): ValidationResult {
   if (!candidate.id || typeof candidate.id !== "string" || candidate.id.trim().length === 0) {
     errors.push("Item 'id' must be a non-empty string.")
   }
-  if (!candidate.context || typeof candidate.context !== "string" || candidate.context.trim().length === 0) {
+  if (
+    !candidate.context ||
+    typeof candidate.context !== "string" ||
+    candidate.context.trim().length === 0
+  ) {
     errors.push("Item 'context' must be a non-empty string.")
   }
-  if (!candidate.narrative || typeof candidate.narrative !== "string" || candidate.narrative.trim().length === 0) {
+  if (
+    !candidate.narrative ||
+    typeof candidate.narrative !== "string" ||
+    candidate.narrative.trim().length === 0
+  ) {
     errors.push("Item 'narrative' must be a non-empty string.")
   } else if (candidate.narrative.trim().length < 10) {
     errors.push("Item 'narrative' must be at least 10 characters.")
@@ -442,27 +455,21 @@ export function validateNC2GItem(item: unknown): ValidationResult {
     !validVerbalNames.includes(candidate.verbalShareName as "halves" | "thirds" | "fourths")
   ) {
     errors.push(
-      `verbalShareName must be 'halves', 'thirds', or 'fourths', got '${candidate.verbalShareName}'.`
+      `verbalShareName must be 'halves', 'thirds', or 'fourths', got '${candidate.verbalShareName}'.`,
     )
   } else if (validShares && candidate.targetShares) {
     const expectedVerbal =
-      candidate.targetShares === 2
-        ? "halves"
-        : candidate.targetShares === 3
-          ? "thirds"
-          : "fourths"
+      candidate.targetShares === 2 ? "halves" : candidate.targetShares === 3 ? "thirds" : "fourths"
 
     if (candidate.verbalShareName !== expectedVerbal) {
       errors.push(
-        `verbalShareName must be '${expectedVerbal}' for targetShares ${candidate.targetShares}, got '${candidate.verbalShareName}'.`
+        `verbalShareName must be '${expectedVerbal}' for targetShares ${candidate.targetShares}, got '${candidate.verbalShareName}'.`,
       )
     }
 
     const expectedEquation = `${candidate.targetShares} ${expectedVerbal} = 1 whole`
     if (candidate.equation !== expectedEquation) {
-      errors.push(
-        `equation must be '${expectedEquation}', got '${candidate.equation}'.`
-      )
+      errors.push(`equation must be '${expectedEquation}', got '${candidate.equation}'.`)
     }
   }
 
@@ -491,7 +498,7 @@ export interface BatchValidationResult {
 
 export function validateCurriculumBatch<T extends { id?: string }>(
   items: T[],
-  validator: (item: T) => ValidationResult
+  validator: (item: T) => ValidationResult,
 ): BatchValidationResult {
   const failures: { id?: string; index: number; errors: string[] }[] = []
 

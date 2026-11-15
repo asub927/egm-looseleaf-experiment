@@ -22,7 +22,7 @@ function avalanche(h: number): number {
 }
 
 export function hashSeed(s: string | number): number {
-  if (typeof s === 'number') return (Number.isFinite(s) ? avalanche(s >>> 0) : 0) || AVALANCHE
+  if (typeof s === "number") return (Number.isFinite(s) ? avalanche(s >>> 0) : 0) || AVALANCHE
   let h = 0x811c9dc5
   for (let i = 0; i < s.length; i++) {
     h ^= s.charCodeAt(i)

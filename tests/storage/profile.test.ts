@@ -87,7 +87,7 @@ test("Storage Profile: Gracefully sanitizes corrupted JSON or missing fields", (
       stars: -50,
       theme: "neon_dark",
       masteredStandards: "not an object",
-    })
+    }),
   )
   profile = loadStudentProfile()
   assert.equal(profile.avatar, "fox")

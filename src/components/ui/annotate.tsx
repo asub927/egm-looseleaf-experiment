@@ -10,7 +10,15 @@ import { Underline } from "@/components/ui/underline"
 import type { HighlightTone, MarkPen, MarkWeight } from "@/lib/ink/recipes/text-marks-ink"
 import type { UnderlineKind } from "@/lib/ink/recipes/underline-ink"
 
-export type AnnotateType = "underline" | "box" | "circle" | "highlight" | "strike-through" | "crossed-off" | "brackets" | "scribble"
+export type AnnotateType =
+  | "underline"
+  | "box"
+  | "circle"
+  | "highlight"
+  | "strike-through"
+  | "crossed-off"
+  | "brackets"
+  | "scribble"
 
 type Common = {
   type: AnnotateType
@@ -28,12 +36,26 @@ type Common = {
 const HIGHLIGHTS: readonly string[] = ["yellow", "pink", "green", "blue", "orange", "lilac", "teal"]
 const PENS: readonly string[] = ["ink", "blue", "red", "green", "pencil", "marker", "orange"]
 
-function Annotate({ type, color, weight, kind, ...props }: Common & Omit<React.ComponentProps<"span">, keyof Common | "color">) {
+function Annotate({
+  type,
+  color,
+  weight,
+  kind,
+  ...props
+}: Common & Omit<React.ComponentProps<"span">, keyof Common | "color">) {
   const pen: MarkPen | undefined = color && PENS.includes(color) ? (color as MarkPen) : undefined
-  const tone: HighlightTone | undefined = color && HIGHLIGHTS.includes(color) ? (color as HighlightTone) : undefined
+  const tone: HighlightTone | undefined =
+    color && HIGHLIGHTS.includes(color) ? (color as HighlightTone) : undefined
   switch (type) {
     case "highlight":
-      return <Highlight data-annotate={type} tone={tone} weight={weight === "fine" ? "light" : weight === "brush" ? "heavy" : undefined} {...(props as React.ComponentProps<"mark">)} />
+      return (
+        <Highlight
+          data-annotate={type}
+          tone={tone}
+          weight={weight === "fine" ? "light" : weight === "brush" ? "heavy" : undefined}
+          {...(props as React.ComponentProps<"mark">)}
+        />
+      )
     case "underline":
       return <Underline data-annotate={type} kind={kind} tone={pen} weight={weight} {...props} />
     case "circle":
@@ -43,9 +65,25 @@ function Annotate({ type, color, weight, kind, ...props }: Common & Omit<React.C
     case "brackets":
       return <Circled data-annotate={type} shape="brackets" tone={pen} weight={weight} {...props} />
     case "strike-through":
-      return <Strike data-annotate={type} kind="single" tone={pen} weight={weight} {...(props as React.ComponentProps<"s">)} />
+      return (
+        <Strike
+          data-annotate={type}
+          kind="single"
+          tone={pen}
+          weight={weight}
+          {...(props as React.ComponentProps<"s">)}
+        />
+      )
     case "crossed-off":
-      return <Strike data-annotate={type} kind="cross" tone={pen} weight={weight} {...(props as React.ComponentProps<"s">)} />
+      return (
+        <Strike
+          data-annotate={type}
+          kind="cross"
+          tone={pen}
+          weight={weight}
+          {...(props as React.ComponentProps<"s">)}
+        />
+      )
     case "scribble":
       return <Scribble data-annotate={type} tone={pen} weight={weight} {...props} />
     default:

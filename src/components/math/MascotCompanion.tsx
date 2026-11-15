@@ -46,7 +46,10 @@ export function MascotCompanion({
         <span className="text-xs font-bold flex items-center gap-1">
           <span>✏️</span> Pencil Pal
         </span>
-        <Badge variant="outline" className="text-[10px] h-5 bg-amber-100/60 border-amber-300 font-bold">
+        <Badge
+          variant="outline"
+          className="text-[10px] h-5 bg-amber-100/60 border-amber-300 font-bold"
+        >
           {tierBadge}
         </Badge>
       </div>
@@ -57,7 +60,11 @@ export function MascotCompanion({
       </div>
 
       {/* Reactive Speech Bubble with Real-Time Subtitle Highlighting */}
-      <Bubble variant="secondary" shape="cloud" className="mt-1 w-full max-h-[96px] overflow-hidden shrink-0">
+      <Bubble
+        variant="secondary"
+        shape="cloud"
+        className="mt-1 w-full max-h-[96px] overflow-hidden shrink-0"
+      >
         <BubbleContent className="text-xs sm:text-sm font-hand leading-tight p-2 text-ink">
           {isSpeaking && (
             <span
@@ -80,8 +87,8 @@ export function MascotCompanion({
                       isCurrent
                         ? "bg-amber-300 text-stone-900 font-bold px-1 py-0.5 rounded shadow-2xs inline-block scale-105 transition-all"
                         : isPast
-                        ? "text-stone-700"
-                        : "text-stone-900"
+                          ? "text-stone-700"
+                          : "text-stone-900"
                     }
                   >
                     {word}

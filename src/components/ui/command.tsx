@@ -4,7 +4,13 @@ import * as React from "react"
 import { createPortal } from "react-dom"
 import { Command as CommandPrimitive, useCommandState } from "cmdk"
 
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { Icon } from "@/components/ui/icon"
 import { Kbd } from "@/components/ui/kbd"
 import { Mascot } from "@/components/ui/mascot"
@@ -15,7 +21,10 @@ import { useInk, useMergedRef } from "@/lib/ink/react"
 import { commandInputRecipe } from "@/lib/ink/recipes/command-ink"
 import { cn } from "@/lib/utils"
 
-type CommandSheet = Pick<PaperProps, "stock" | "edge" | "tilt" | "tape" | "tapeKind" | "shadow" | "seed">
+type CommandSheet = Pick<
+  PaperProps,
+  "stock" | "edge" | "tilt" | "tape" | "tapeKind" | "shadow" | "seed"
+>
 
 const NESTED =
   "[[data-slot=popover-content]_&]:before:hidden [[data-slot=dialog-content]_&]:before:hidden [[data-slot=sheet-content]_&]:before:hidden [[data-slot=drawer-content]_&]:before:hidden [[data-slot=hover-card-content]_&]:before:hidden [[data-slot=select-content]_&]:before:hidden [[data-slot=card]_&]:before:hidden [[data-slot=dropdown-menu-content]_&]:before:hidden [[data-slot=dropdown-menu-sub-content]_&]:before:hidden [[data-slot=context-menu-content]_&]:before:hidden [[data-slot=context-menu-sub-content]_&]:before:hidden [[data-slot=menubar-content]_&]:before:hidden [[data-slot=menubar-sub-content]_&]:before:hidden"
@@ -30,9 +39,22 @@ function Command({
 }) {
   const paper: CommandSheet = typeof sheet === "object" ? sheet : {}
   return (
-    <CommandPrimitive data-slot="command" className={cn("flex h-full w-full flex-col text-popover-foreground", className)} {...props}>
+    <CommandPrimitive
+      data-slot="command"
+      className={cn("flex h-full w-full flex-col text-popover-foreground", className)}
+      {...props}
+    >
       {sheet ? (
-        <Paper data-slot="command-sheet" stock="slip" edge="cut" tilt={false} rules="none" shadow="lift" {...paper} className={cn("flex h-full w-full flex-col", NESTED)}>
+        <Paper
+          data-slot="command-sheet"
+          stock="slip"
+          edge="cut"
+          tilt={false}
+          rules="none"
+          shadow="lift"
+          {...paper}
+          className={cn("flex h-full w-full flex-col", NESTED)}
+        >
           {children}
         </Paper>
       ) : (
@@ -81,9 +103,13 @@ function CommandDialog({
           opener.current = null
           const active = document.activeElement
           const moved = active !== null && active !== document.body && active !== el
-          if (!moved && el instanceof HTMLElement && el !== document.body && el.isConnected) el.focus({ preventScroll: true })
+          if (!moved && el instanceof HTMLElement && el !== document.body && el.isConnected)
+            el.focus({ preventScroll: true })
         }}
-        className={cn("mt-[12dvh] mb-auto max-w-lg gap-0 p-3 max-sm:mt-2 compact:p-2.5 calm:p-2", className)}
+        className={cn(
+          "mt-[12dvh] mb-auto max-w-lg gap-0 p-3 max-sm:mt-2 compact:p-2.5 calm:p-2",
+          className,
+        )}
       >
         <DialogHeader className="sr-only">
           <DialogTitle>{title}</DialogTitle>
@@ -97,7 +123,8 @@ function CommandDialog({
   )
 }
 
-const defaultResultsLabel = (count: number): string => (count === 0 ? "No results" : count === 1 ? "1 result" : `${count} results`)
+const defaultResultsLabel = (count: number): string =>
+  count === 0 ? "No results" : count === 1 ? "1 result" : `${count} results`
 
 function ResultsAnnouncer({ label }: { label: (count: number) => string }) {
   const search = useCommandState((s) => s.search) as string
@@ -120,7 +147,8 @@ function useFreshActiveDescendant(input: React.RefObject<HTMLInputElement | null
     const list = el.ownerDocument.getElementById(el.getAttribute("aria-controls") ?? "")
     const row = list?.querySelector<HTMLElement>('[cmdk-item][aria-selected="true"]')
     if (row?.id) {
-      if (el.getAttribute("aria-activedescendant") !== row.id) el.setAttribute("aria-activedescendant", row.id)
+      if (el.getAttribute("aria-activedescendant") !== row.id)
+        el.setAttribute("aria-activedescendant", row.id)
     } else el.removeAttribute("aria-activedescendant")
   }, [input, search, value, count, recorded])
 }
@@ -137,8 +165,18 @@ function CommandInput({
   resultsLabel = defaultResultsLabel,
   ref,
   ...props
-}: React.ComponentProps<typeof CommandPrimitive.Input> & { wrapperClassName?: string; seed?: string | number; resultsLabel?: (count: number) => string }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: commandInputRecipe, params: {}, kind: "rule", seed, still: true })
+}: React.ComponentProps<typeof CommandPrimitive.Input> & {
+  wrapperClassName?: string
+  seed?: string | number
+  resultsLabel?: (count: number) => string
+}) {
+  const { hostRef, hostProps, node } = useInk({
+    recipe: commandInputRecipe,
+    params: {},
+    kind: "rule",
+    seed,
+    still: true,
+  })
   const inputRef = React.useRef<HTMLInputElement | null>(null)
   return (
     <div
@@ -146,7 +184,10 @@ function CommandInput({
       data-ink-focus="within"
       ref={hostRef}
       {...hostProps}
-      className={cn("relative isolate flex h-12 items-center gap-2 px-3 text-(--ll-input-ink) compact:h-10 calm:h-9", wrapperClassName)}
+      className={cn(
+        "relative isolate flex h-12 items-center gap-2 px-3 text-(--ll-input-ink) compact:h-10 calm:h-9",
+        wrapperClassName,
+      )}
     >
       {node}
       <Icon name="search" size={18} className="shrink-0 text-ink-soft" />
@@ -155,7 +196,7 @@ function CommandInput({
         ref={useMergedRef<HTMLInputElement>(inputRef, ref)}
         className={cn(
           "flex h-10 w-full bg-transparent py-3 font-hand text-base caret-(--ll-caret) outline-hidden placeholder:text-(--ll-placeholder) disabled:cursor-not-allowed disabled:text-pencil-text calm:text-[15px]",
-          className
+          className,
         )}
         {...props}
       />
@@ -173,7 +214,10 @@ function CommandList({ className, ...props }: React.ComponentProps<typeof Comman
     <StatusSlotContext.Provider value={slot}>
       <CommandPrimitive.List
         data-slot="command-list"
-        className={cn("max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto overscroll-contain p-1 [scrollbar-width:thin]", className)}
+        className={cn(
+          "max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto overscroll-contain p-1 [scrollbar-width:thin]",
+          className,
+        )}
         {...props}
       />
       <div data-slot="command-status" ref={setSlot} />
@@ -181,10 +225,22 @@ function CommandList({ className, ...props }: React.ComponentProps<typeof Comman
   )
 }
 
-function CommandEmpty({ className, children, mascot = true, ...props }: React.ComponentProps<typeof CommandPrimitive.Empty> & { mascot?: boolean }) {
+function CommandEmpty({
+  className,
+  children,
+  mascot = true,
+  ...props
+}: React.ComponentProps<typeof CommandPrimitive.Empty> & { mascot?: boolean }) {
   const slot = React.useContext(StatusSlotContext)
   const node = (
-    <CommandPrimitive.Empty data-slot="command-empty" className={cn("grid justify-items-center gap-1 px-4 py-5 text-center font-script text-xl leading-tight text-ink-muted", className)} {...props}>
+    <CommandPrimitive.Empty
+      data-slot="command-empty"
+      className={cn(
+        "grid justify-items-center gap-1 px-4 py-5 text-center font-script text-xl leading-tight text-ink-muted",
+        className,
+      )}
+      {...props}
+    >
       {mascot && <Mascot pose="search" size={64} />}
       <span>{children}</span>
     </CommandPrimitive.Empty>
@@ -192,10 +248,21 @@ function CommandEmpty({ className, children, mascot = true, ...props }: React.Co
   return slot ? createPortal(node, slot) : node
 }
 
-function CommandLoading({ className, children, ...props }: React.ComponentProps<typeof CommandPrimitive.Loading>) {
+function CommandLoading({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof CommandPrimitive.Loading>) {
   const slot = React.useContext(StatusSlotContext)
   const node = (
-    <CommandPrimitive.Loading data-slot="command-loading" className={cn("flex items-center justify-center gap-2 px-4 py-4 font-hand text-sm text-ink-muted", className)} {...props}>
+    <CommandPrimitive.Loading
+      data-slot="command-loading"
+      className={cn(
+        "flex items-center justify-center gap-2 px-4 py-4 font-hand text-sm text-ink-muted",
+        className,
+      )}
+      {...props}
+    >
       <Spinner variant="loops" size={14} />
       <span>{children}</span>
     </CommandPrimitive.Loading>
@@ -203,23 +270,33 @@ function CommandLoading({ className, children, ...props }: React.ComponentProps<
   return slot ? createPortal(node, slot) : node
 }
 
-function CommandGroup({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Group>) {
+function CommandGroup({
+  className,
+  ...props
+}: React.ComponentProps<typeof CommandPrimitive.Group>) {
   return (
     <CommandPrimitive.Group
       data-slot="command-group"
       className={cn(
         "p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:font-type [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:text-ink-muted",
-        className
+        className,
       )}
       {...props}
     />
   )
 }
 
-function CommandSeparator({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Separator>) {
+function CommandSeparator({
+  className,
+  ...props
+}: React.ComponentProps<typeof CommandPrimitive.Separator>) {
   return (
     <CommandPrimitive.Separator asChild {...props}>
-      <Separator role="none" data-slot="command-separator" className={cn("pointer-events-none -mx-1 my-1 w-auto", className)} />
+      <Separator
+        role="none"
+        data-slot="command-separator"
+        className={cn("pointer-events-none -mx-1 my-1 w-auto", className)}
+      />
     </CommandPrimitive.Separator>
   )
 }
@@ -233,7 +310,7 @@ function CommandItem({ className, ...props }: React.ComponentProps<typeof Comman
         "data-[selected=true]:ll-swipe data-[disabled=true]:pointer-events-none data-[disabled=true]:text-pencil-text",
         "forced-colors:data-[selected=true]:bg-[color:Highlight]! forced-colors:data-[selected=true]:text-[color:HighlightText]! forced-colors:data-[selected=true]:[&_svg]:text-[color:HighlightText]!",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not(.absolute):not([class*='size-'])]:size-4 [&_svg:not(.absolute):not([class*='text-'])]:text-ink-soft",
-        className
+        className,
       )}
       {...props}
     />
@@ -242,10 +319,30 @@ function CommandItem({ className, ...props }: React.ComponentProps<typeof Comman
 
 function CommandShortcut({ className, children, ...props }: React.ComponentProps<"span">) {
   return (
-    <span data-slot="command-shortcut" className={cn("ms-auto inline-flex items-center gap-1 text-xs text-muted-foreground", className)} {...props}>
+    <span
+      data-slot="command-shortcut"
+      className={cn(
+        "ms-auto inline-flex items-center gap-1 text-xs text-muted-foreground",
+        className,
+      )}
+      {...props}
+    >
       {typeof children === "string" ? <Kbd>{children}</Kbd> : children}
     </span>
   )
 }
 
-export { Command, CommandDialog, CommandInput, CommandList, CommandEmpty, CommandLoading, CommandGroup, CommandItem, CommandShortcut, CommandSeparator, useCommandState, useFreshActiveDescendant }
+export {
+  Command,
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandLoading,
+  CommandGroup,
+  CommandItem,
+  CommandShortcut,
+  CommandSeparator,
+  useCommandState,
+  useFreshActiveDescendant,
+}

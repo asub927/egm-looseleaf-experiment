@@ -26,7 +26,7 @@ const toggleVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 )
 
 function Toggle({
@@ -49,7 +49,12 @@ function Toggle({
   const forced = "data-focus-visible" in props
   const { hostRef, hostProps, node } = useInk({
     recipe: toggleRecipe,
-    params: { variant: v, disabled: !!disabled, tone, invalid: props["aria-invalid"] === true || props["aria-invalid"] === "true" },
+    params: {
+      variant: v,
+      disabled: !!disabled,
+      tone,
+      invalid: props["aria-invalid"] === true || props["aria-invalid"] === "true",
+    },
     kind: "toggle",
     seed,
     layers: forced ? "all" : undefined,

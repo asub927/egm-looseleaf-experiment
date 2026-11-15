@@ -10,7 +10,16 @@ type PolaroidProps = Omit<PaperProps, "stock" | "rules" | "as"> & {
 }
 
 function Polaroid({ className, as = "figure", ...props }: PolaroidProps) {
-  return <Paper data-slot="polaroid" as={as} stock="photo" rules="none" className={cn("flex w-64 flex-col gap-2.5 px-3.5 pt-3.5 pb-3 text-ink", className)} {...props} />
+  return (
+    <Paper
+      data-slot="polaroid"
+      as={as}
+      stock="photo"
+      rules="none"
+      className={cn("flex w-64 flex-col gap-2.5 px-3.5 pt-3.5 pb-3 text-ink", className)}
+      {...props}
+    />
+  )
 }
 
 type PolaroidImageProps = React.ComponentProps<"div"> & {
@@ -21,8 +30,24 @@ type PolaroidImageProps = React.ComponentProps<"div"> & {
   seed?: string | number
 }
 
-function PolaroidImage({ className, children, scene, date, develop, label, seed, ref, ...props }: PolaroidImageProps) {
-  const { hostRef, hostProps, node } = useInk({ recipe: polaroidPhotoRecipe, params: { scene: scene ?? "hills" }, kind: "photo", seed, still: true })
+function PolaroidImage({
+  className,
+  children,
+  scene,
+  date,
+  develop,
+  label,
+  seed,
+  ref,
+  ...props
+}: PolaroidImageProps) {
+  const { hostRef, hostProps, node } = useInk({
+    recipe: polaroidPhotoRecipe,
+    params: { scene: scene ?? "hills" },
+    kind: "photo",
+    seed,
+    still: true,
+  })
   const merged = useMergedRef<HTMLDivElement>(scene ? hostRef : undefined, ref)
   return (
     <div
@@ -41,19 +66,34 @@ function PolaroidImage({ className, children, scene, date, develop, label, seed,
       {scene ? node : null}
       {children}
       {date ? (
-        <span aria-hidden="true" className="pointer-events-none absolute end-2.5 bottom-2 z-(--ll-z-ink) font-mono text-[11px] tracking-wider text-tangerine [text-shadow:0_0_2px_rgb(var(--ll-shade)/0.7),0_0_6px_rgb(var(--ll-shade)/0.45)] calm:[text-shadow:none]">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute end-2.5 bottom-2 z-(--ll-z-ink) font-mono text-[11px] tracking-wider text-tangerine [text-shadow:0_0_2px_rgb(var(--ll-shade)/0.7),0_0_6px_rgb(var(--ll-shade)/0.45)] calm:[text-shadow:none]"
+        >
           {date}
         </span>
       ) : null}
       {develop ? (
-        <span aria-hidden="true" className="pointer-events-none absolute inset-0 z-(--ll-z-ink) animate-out bg-photo fade-out-0 fill-mode-forwards delay-500 duration-(--ll-dur-soak)" />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-(--ll-z-ink) animate-out bg-photo fade-out-0 fill-mode-forwards delay-500 duration-(--ll-dur-soak)"
+        />
       ) : null}
     </div>
   )
 }
 
 function PolaroidCaption({ className, ...props }: React.ComponentProps<"figcaption">) {
-  return <figcaption data-slot="polaroid-caption" className={cn("flex min-h-12 items-center justify-center px-1 text-center break-words font-script text-[1.65rem] leading-[1.05] font-semibold text-balance", className)} {...props} />
+  return (
+    <figcaption
+      data-slot="polaroid-caption"
+      className={cn(
+        "flex min-h-12 items-center justify-center px-1 text-center break-words font-script text-[1.65rem] leading-[1.05] font-semibold text-balance",
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 export { Polaroid, PolaroidImage, PolaroidCaption }

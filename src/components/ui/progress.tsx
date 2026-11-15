@@ -4,7 +4,11 @@ import * as React from "react"
 import { Progress as ProgressPrimitive } from "radix-ui"
 
 import { useInk, useMergedRef } from "@/lib/ink/react"
-import { progressFillRecipe, progressRecipe, type ProgressTone } from "@/lib/ink/recipes/progress-ink"
+import {
+  progressFillRecipe,
+  progressRecipe,
+  type ProgressTone,
+} from "@/lib/ink/recipes/progress-ink"
 import { cn } from "@/lib/utils"
 
 const css =
@@ -36,7 +40,13 @@ function Progress({
   const clamped = indeterminate ? null : Math.min(safeMax, Math.max(0, value))
   const pct = clamped === null ? 0 : (clamped / safeMax) * 100
   const root = useInk({ recipe: progressRecipe, params: {}, kind: "progress", seed, still: true })
-  const fill = useInk({ recipe: progressFillRecipe, params: { tone, indeterminate }, kind: "progress", seed: root.seed ? `${root.seed}:fill` : undefined, still: true })
+  const fill = useInk({
+    recipe: progressFillRecipe,
+    params: { tone, indeterminate },
+    kind: "progress",
+    seed: root.seed ? `${root.seed}:fill` : undefined,
+    still: true,
+  })
   return (
     <>
       <style href="ll-progress" precedence="low">
@@ -51,7 +61,7 @@ function Progress({
         className={cn(
           "relative isolate w-full bg-paper-shade outline-hidden data-ink-ready:bg-transparent forced-colors:border forced-colors:border-[ButtonText]",
           sizes[size],
-          className
+          className,
         )}
         {...props}
       >
@@ -67,7 +77,7 @@ function Progress({
             "transition-[clip-path] duration-(--ll-dur-sheet) ease-out",
             "data-[state=indeterminate]:animate-[ll-progress-slide_1.6s_linear_infinite] rtl:data-[state=indeterminate]:animate-[ll-progress-slide-rtl_1.6s_linear_infinite]",
             "motion-reduce:data-[state=indeterminate]:animate-none motion-reduce:data-[state=indeterminate]:[clip-path:inset(-12px_30%_-12px_30%)]",
-            "[[data-motion=reduced]_&]:data-[state=indeterminate]:animate-none [[data-motion=reduced]_&]:data-[state=indeterminate]:[clip-path:inset(-12px_30%_-12px_30%)]"
+            "[[data-motion=reduced]_&]:data-[state=indeterminate]:animate-none [[data-motion=reduced]_&]:data-[state=indeterminate]:[clip-path:inset(-12px_30%_-12px_30%)]",
           )}
         >
           {fill.node}

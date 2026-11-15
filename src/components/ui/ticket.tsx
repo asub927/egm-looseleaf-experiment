@@ -19,8 +19,29 @@ type TicketProps = React.ComponentProps<"div"> & {
   size?: readonly [number, number]
 }
 
-function Ticket({ className, style, children, ref, stock = "kraft", stub = "end", stubWidth = 88, punched = false, tilt, seed, size, ...props }: TicketProps) {
-  const o = useShapedSheet({ recipe: ticketRecipe, params: { stock, stub, stubWidth, punched }, ref, seed, tilt, tiltMax: 1.2, size })
+function Ticket({
+  className,
+  style,
+  children,
+  ref,
+  stock = "kraft",
+  stub = "end",
+  stubWidth = 88,
+  punched = false,
+  tilt,
+  seed,
+  size,
+  ...props
+}: TicketProps) {
+  const o = useShapedSheet({
+    recipe: ticketRecipe,
+    params: { stock, stub, stubWidth, punched },
+    ref,
+    seed,
+    tilt,
+    tiltMax: 1.2,
+    size,
+  })
   const ctx = React.useMemo(() => ({ stubWidth }), [stubWidth])
   return (
     <TicketContext.Provider value={ctx}>
@@ -30,7 +51,12 @@ function Ticket({ className, style, children, ref, stock = "kraft", stub = "end"
         data-punched={punched ? "" : undefined}
         {...o.root}
         {...props}
-        className={cn("relative isolate flex min-h-28 w-full max-w-lg items-stretch text-ink", stub === "start" && "flex-row-reverse", !o.ready && "bg-index-card shadow-card", className)}
+        className={cn(
+          "relative isolate flex min-h-28 w-full max-w-lg items-stretch text-ink",
+          stub === "start" && "flex-row-reverse",
+          !o.ready && "bg-index-card shadow-card",
+          className,
+        )}
         style={{ ...o.root.style, ...style }}
       >
         {o.node}
@@ -41,16 +67,38 @@ function Ticket({ className, style, children, ref, stock = "kraft", stub = "end"
 }
 
 function TicketBody({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="ticket-body" className={cn("flex min-w-0 flex-1 flex-col justify-center gap-1 px-6 py-4 font-type break-words", className)} {...props} />
+  return (
+    <div
+      data-slot="ticket-body"
+      className={cn(
+        "flex min-w-0 flex-1 flex-col justify-center gap-1 px-6 py-4 font-type break-words",
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 function TicketStub({ className, style, ...props }: React.ComponentProps<"aside">) {
   const { stubWidth } = React.useContext(TicketContext)
-  return <aside data-slot="ticket-stub" role="note" className={cn("flex shrink-0 flex-col items-center justify-center gap-1 px-2 py-3 text-center font-type break-words", className)} style={{ width: stubWidth, ...style }} {...props} />
+  return (
+    <aside
+      data-slot="ticket-stub"
+      role="note"
+      className={cn(
+        "flex shrink-0 flex-col items-center justify-center gap-1 px-2 py-3 text-center font-type break-words",
+        className,
+      )}
+      style={{ width: stubWidth, ...style }}
+      {...props}
+    />
+  )
 }
 
 function TicketTitle({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="ticket-title" className={cn("text-2xl leading-none", className)} {...props} />
+  return (
+    <div data-slot="ticket-title" className={cn("text-2xl leading-none", className)} {...props} />
+  )
 }
 
 function TicketDescription({ className, ...props }: React.ComponentProps<"div">) {
@@ -58,7 +106,16 @@ function TicketDescription({ className, ...props }: React.ComponentProps<"div">)
 }
 
 function TicketNumber({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="ticket-number" className={cn("ll-num text-sm tracking-widest text-[color-mix(in_srgb,var(--ll-red)_60%,var(--ll-ink))]", className)} {...props} />
+  return (
+    <div
+      data-slot="ticket-number"
+      className={cn(
+        "ll-num text-sm tracking-widest text-[color-mix(in_srgb,var(--ll-red)_60%,var(--ll-ink))]",
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 export { Ticket, TicketBody, TicketStub, TicketTitle, TicketDescription, TicketNumber }

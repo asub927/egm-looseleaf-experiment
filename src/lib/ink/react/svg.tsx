@@ -3,7 +3,17 @@ import * as React from "react"
 import { inkViewBox } from "@/lib/ink/builder"
 import type { Frame } from "@/lib/ink/react/cache"
 
-export function InkSvg({ kind, frame, still, ref }: { kind: string; frame: Frame | null; still?: boolean; ref?: React.Ref<SVGSVGElement> }) {
+export function InkSvg({
+  kind,
+  frame,
+  still,
+  ref,
+}: {
+  kind: string
+  frame: Frame | null
+  still?: boolean
+  ref?: React.Ref<SVGSVGElement>
+}) {
   const pad = frame?.pad ?? 0
   return (
     <svg
@@ -27,7 +37,12 @@ export function InkSvg({ kind, frame, still, ref }: { kind: string; frame: Frame
       }}
     >
       {frame?.layers.map((name) => (
-        <g key={name} data-layer={name} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: frame.parts[name] ?? "" }} />
+        <g
+          key={name}
+          data-layer={name}
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: frame.parts[name] ?? "" }}
+        />
       ))}
     </svg>
   )

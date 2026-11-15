@@ -4,12 +4,25 @@ import * as React from "react"
 
 import { svgPatternDefs, type PaperTileName } from "@/lib/ink/textures"
 
-export const PAPER_DEF_TILES: readonly PaperTileName[] = ["fibre", "relief", "slip", "kraft", "cloud"]
+export const PAPER_DEF_TILES: readonly PaperTileName[] = [
+  "fibre",
+  "relief",
+  "slip",
+  "kraft",
+  "cloud",
+]
 
 export function PaperDefs({ tiles = PAPER_DEF_TILES }: { tiles?: readonly PaperTileName[] }) {
   const html = React.useMemo(() => svgPatternDefs({ tiles }), [tiles])
   return (
-    <svg data-ll-paper-defs="" width={0} height={0} style={{ position: "absolute" }} aria-hidden="true" focusable="false">
+    <svg
+      data-ll-paper-defs=""
+      width={0}
+      height={0}
+      style={{ position: "absolute" }}
+      aria-hidden="true"
+      focusable="false"
+    >
       <defs dangerouslySetInnerHTML={{ __html: html }} />
     </svg>
   )

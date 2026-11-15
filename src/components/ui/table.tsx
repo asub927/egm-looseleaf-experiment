@@ -110,7 +110,10 @@ function Table({
   return (
     <div
       data-slot="table-container"
-      className={cn("relative -m-3 w-[calc(100%+1.5rem)] max-w-none overflow-x-auto p-3", containerClassName)}
+      className={cn(
+        "relative -m-3 w-[calc(100%+1.5rem)] max-w-none overflow-x-auto p-3",
+        containerClassName,
+      )}
     >
       <style href="ll-table" precedence="low">
         {tableSheet()}
@@ -132,7 +135,10 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
   return (
     <thead
       data-slot="table-header"
-      className={cn(sticky && "sticky top-0 z-(--ll-z-sticky) bg-(--ll-table-bg,var(--ll-card))", className)}
+      className={cn(
+        sticky && "sticky top-0 z-(--ll-z-sticky) bg-(--ll-table-bg,var(--ll-card))",
+        className,
+      )}
       {...props}
     />
   )
@@ -151,11 +157,7 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
 function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
   useInTable("TableRow")
   return (
-    <tr
-      data-slot="table-row"
-      className={cn("h-11 compact:h-9 calm:h-8", className)}
-      {...props}
-    />
+    <tr data-slot="table-row" className={cn("h-11 compact:h-9 calm:h-8", className)} {...props} />
   )
 }
 
@@ -166,7 +168,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
       data-slot="table-head"
       className={cn(
         "px-3 text-start align-middle font-script text-[19px] leading-none font-semibold whitespace-nowrap text-ink-you aria-[sort=ascending]:text-ink aria-[sort=descending]:text-ink calm:font-hand calm:text-sm calm:font-bold calm:text-ink-soft [&:has([role=checkbox])]:pe-0 [&>[role=checkbox]]:align-middle",
-        className
+        className,
       )}
       {...props}
     />
@@ -178,7 +180,10 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
   return (
     <td
       data-slot="table-cell"
-      className={cn("px-3 py-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pe-0 [&>[role=checkbox]]:align-middle", className)}
+      className={cn(
+        "px-3 py-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pe-0 [&>[role=checkbox]]:align-middle",
+        className,
+      )}
       {...props}
     />
   )
@@ -186,7 +191,13 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
 
 function TableCaption({ className, ...props }: React.ComponentProps<"caption">) {
   useInTable("TableCaption")
-  return <caption data-slot="table-caption" className={cn("mt-4 font-script text-lg text-muted-foreground", className)} {...props} />
+  return (
+    <caption
+      data-slot="table-caption"
+      className={cn("mt-4 font-script text-lg text-muted-foreground", className)}
+      {...props}
+    />
+  )
 }
 
 export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption }

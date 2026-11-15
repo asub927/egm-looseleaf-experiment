@@ -3,7 +3,9 @@ import assert from "node:assert/strict"
 import { evaluatePairingMat, type PairingSlot } from "../../src/lib/math/evaluator.ts"
 
 function emptySlots(count = 10): PairingSlot[] {
-  return Array(count).fill(null).map(() => ({ left: false, right: false }))
+  return Array(count)
+    .fill(null)
+    .map(() => ({ left: false, right: false }))
 }
 
 test("NC.2.OA.3 Invariant 1: Even number with complete pairs must PASS as correct_even", () => {

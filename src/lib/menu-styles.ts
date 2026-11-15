@@ -25,7 +25,10 @@ export function menuContentClass(kind: MenuKind): string {
 }
 
 export function menuViewportClass(kind: MenuKind, extra?: string): string {
-  return cn(`${AVAILABLE[kind]} overflow-x-hidden overflow-y-auto p-1 compact:p-0.5 calm:p-0.5`, extra)
+  return cn(
+    `${AVAILABLE[kind]} overflow-x-hidden overflow-y-auto p-1 compact:p-0.5 calm:p-0.5`,
+    extra,
+  )
 }
 
 const SCROLL = /^(?:max-h|overflow|overscroll)(?:-|$)/
@@ -39,13 +42,17 @@ function utilityOf(token: string): string {
     else if (ch === "]" || ch === ")") depth--
     else if (ch === ":" && depth === 0) cut = i + 1
   }
-  return token.slice(cut).replace(/^[-!]+/, "").replace(/!$/, "")
+  return token
+    .slice(cut)
+    .replace(/^[-!]+/, "")
+    .replace(/!$/, "")
 }
 
 export function splitMenuClass(className?: string): { content: string; viewport: string } {
   const content: string[] = []
   const viewport: string[] = []
-  for (const token of (className ?? "").split(/\s+/).filter(Boolean)) (SCROLL.test(utilityOf(token)) ? viewport : content).push(token)
+  for (const token of (className ?? "").split(/\s+/).filter(Boolean))
+    (SCROLL.test(utilityOf(token)) ? viewport : content).push(token)
   return { content: content.join(" "), viewport: viewport.join(" ") }
 }
 
@@ -66,13 +73,16 @@ export const MENU_CHOICE_ITEM = `${ROW} ps-9`
 
 export const MENU_SUB_TRIGGER = `${ROW} data-[inset]:ps-9 data-[state=open]:ll-swipe forced-colors:data-[state=open]:bg-[color:Highlight]! forced-colors:data-[state=open]:text-[color:HighlightText]!`
 
-export const MENU_LABEL = "px-2.5 py-1.5 font-type text-sm tracking-wide text-ink-muted data-[inset]:ps-9 calm:py-1"
+export const MENU_LABEL =
+  "px-2.5 py-1.5 font-type text-sm tracking-wide text-ink-muted data-[inset]:ps-9 calm:py-1"
 
 export const MENU_SEPARATOR = "pointer-events-none my-1.5 w-auto calm:my-1"
 
-export const MENU_INDICATOR = "pointer-events-none absolute start-2.5 top-1/2 grid size-4 -translate-y-1/2 place-items-center"
+export const MENU_INDICATOR =
+  "pointer-events-none absolute start-2.5 top-1/2 grid size-4 -translate-y-1/2 place-items-center"
 
-export const MENU_MARK = "absolute grid animate-[ll-wipe_var(--ll-dur-sheet)_var(--ll-ease-out)_both] text-ink-you forced-colors:text-[CanvasText]"
+export const MENU_MARK =
+  "absolute grid animate-[ll-wipe_var(--ll-dur-sheet)_var(--ll-ease-out)_both] text-ink-you forced-colors:text-[CanvasText]"
 
 export const MENU_SHORTCUT = "ms-auto flex items-center gap-1 ps-4"
 

@@ -25,8 +25,20 @@ const MARKS: Record<AsteriskMark, ArtDef> = {
   star: {
     kind: "icon",
     grid: 24,
-    parts: [["s", "M12.2 3.1 L14.8 9.3 L21.3 9.9 L16.4 14.3 L17.9 20.7 L12.1 17.3 L6.3 20.8 L7.7 14.3 L2.8 9.8 L9.4 9.3 L12.5 3.9", 1.15]],
-    small: [["s", "M12.2 2.6 L15 9 L21.6 9.7 L16.7 14.2 L18.2 21 L12.1 17.5 L5.9 21.1 L7.4 14.2 L2.4 9.6 L9.2 9 L12.6 3.4", 1.05]],
+    parts: [
+      [
+        "s",
+        "M12.2 3.1 L14.8 9.3 L21.3 9.9 L16.4 14.3 L17.9 20.7 L12.1 17.3 L6.3 20.8 L7.7 14.3 L2.8 9.8 L9.4 9.3 L12.5 3.9",
+        1.15,
+      ],
+    ],
+    small: [
+      [
+        "s",
+        "M12.2 2.6 L15 9 L21.6 9.7 L16.7 14.2 L18.2 21 L12.1 17.5 L5.9 21.1 L7.4 14.2 L2.4 9.6 L9.2 9 L12.6 3.4",
+        1.05,
+      ],
+    ],
   },
   dagger: {
     kind: "icon",
@@ -56,7 +68,12 @@ const MARKS: Record<AsteriskMark, ArtDef> = {
   },
 }
 
-const TONES = { red: "text-red", ink: "text-ink", blue: "text-ink-you", pencil: "text-pencil-text" } as const
+const TONES = {
+  red: "text-red",
+  ink: "text-ink",
+  blue: "text-ink-you",
+  pencil: "text-pencil-text",
+} as const
 
 function Asterisk({
   mark = "asterisk",
@@ -77,14 +94,19 @@ function Asterisk({
   useEnsureInkDefs()
   const s = useInkSeed(seed)
   const def = MARKS[mark] ?? MARKS.asterisk
-  const res = memo(`asterisk|${mark}|${s}`, () => drawSkeleton(def, 16, `${s}|${mark}`, { tone: "ui", kind: "icon" }))
+  const res = memo(`asterisk|${mark}|${s}`, () =>
+    drawSkeleton(def, 16, `${s}|${mark}`, { tone: "ui", kind: "icon" }),
+  )
   const glyph = (
     <svg
       data-ink="icon"
       aria-hidden="true"
       focusable="false"
       viewBox={`0 0 ${res.w} ${res.h}`}
-      className={cn("pointer-events-none inline-block size-[0.8em] shrink-0 overflow-visible align-[0.4em]", TONES[tone])}
+      className={cn(
+        "pointer-events-none inline-block size-[0.8em] shrink-0 overflow-visible align-[0.4em]",
+        TONES[tone],
+      )}
       dangerouslySetInnerHTML={{ __html: res.svg }}
     />
   )
@@ -92,13 +114,19 @@ function Asterisk({
     return (
       <span data-slot="asterisk" data-mark={mark} className={cn("inline", className)} {...props}>
         {children}
-        <a href={href} aria-label={label ?? "footnote"} className="relative after:absolute after:-inset-1.5 [&>svg]:transition-transform [&>svg]:duration-(--ll-dur-hover) hover:[&>svg]:scale-125">
+        <a
+          href={href}
+          aria-label={label ?? "footnote"}
+          className="relative after:absolute after:-inset-1.5 [&>svg]:transition-transform [&>svg]:duration-(--ll-dur-hover) hover:[&>svg]:scale-125"
+        >
           {glyph}
         </a>
       </span>
     )
   }
-  const named = label ? ({ role: "img", "aria-label": label } as const) : ({ "aria-hidden": true } as const)
+  const named = label
+    ? ({ role: "img", "aria-label": label } as const)
+    : ({ "aria-hidden": true } as const)
   return (
     <span data-slot="asterisk" data-mark={mark} className={cn("inline", className)} {...props}>
       {children}

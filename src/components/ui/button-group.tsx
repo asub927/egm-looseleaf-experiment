@@ -23,7 +23,7 @@ const buttonGroupVariants = cva(
     defaultVariants: {
       orientation: "horizontal",
     },
-  }
+  },
 )
 
 function ButtonGroup({
@@ -53,13 +53,18 @@ function ButtonGroupText({
   asChild?: boolean
   seed?: string | number
 }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: buttonGroupTextRecipe, params: {}, kind: "cell", seed })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: buttonGroupTextRecipe,
+    params: {},
+    kind: "cell",
+    seed,
+  })
   const shared = {
     ref: useMergedRef<HTMLElement>(hostRef, ref as React.Ref<HTMLElement> | undefined),
     ...hostProps,
     className: cn(
       "relative isolate flex min-h-9 items-center gap-2 px-4 font-hand text-base compact:min-h-8 calm:min-h-7 [&_svg]:pointer-events-none [&_svg:not(.absolute):not([class*='size-'])]:size-4",
-      className
+      className,
     ),
     ...props,
   }
@@ -94,9 +99,4 @@ function ButtonGroupSeparator({
   )
 }
 
-export {
-  ButtonGroup,
-  ButtonGroupSeparator,
-  ButtonGroupText,
-  buttonGroupVariants,
-}
+export { ButtonGroup, ButtonGroupSeparator, ButtonGroupText, buttonGroupVariants }

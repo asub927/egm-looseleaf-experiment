@@ -4,7 +4,11 @@ import type { InkResult } from "@/lib/ink/builder"
 import { ensureInkDefs } from "@/lib/ink/react/defs"
 import { useInkContext } from "@/lib/ink/react/hooks"
 
-export function PropSvg({ res, kind, ...props }: { res: InkResult; kind: string } & Omit<React.ComponentProps<"svg">, "children">) {
+export function PropSvg({
+  res,
+  kind,
+  ...props
+}: { res: InkResult; kind: string } & Omit<React.ComponentProps<"svg">, "children">) {
   const { hasProvider } = useInkContext()
   React.useLayoutEffect(() => {
     if (!hasProvider) ensureInkDefs()

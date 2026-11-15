@@ -46,8 +46,7 @@ export const NC2_G_SEEDS: readonly NC2GItem[] = [
     context: "cornbread",
     itemSingular: "square",
     icon: "🍞",
-    narrative:
-      "Kit baked golden cornbread in a rectangular pan. Cut the pan into 2 equal halves.",
+    narrative: "Kit baked golden cornbread in a rectangular pan. Cut the pan into 2 equal halves.",
   }),
   createNC2GItem({
     id: "nc2-g-halves-pizza",
@@ -68,8 +67,7 @@ export const NC2_G_SEEDS: readonly NC2GItem[] = [
     context: "fruit tart",
     itemSingular: "wedge",
     icon: "🥧",
-    narrative:
-      "Kit prepared a berry fruit tart! Divide the tart into 3 equal thirds for a picnic.",
+    narrative: "Kit prepared a berry fruit tart! Divide the tart into 3 equal thirds for a picnic.",
   }),
   createNC2GItem({
     id: "nc2-g-fourths-pie",
@@ -79,8 +77,7 @@ export const NC2_G_SEEDS: readonly NC2GItem[] = [
     context: "berry pie",
     itemSingular: "slice",
     icon: "🫐",
-    narrative:
-      "Baker Kit baked a sweet blueberry pie! Divide the pie into 4 equal fourths.",
+    narrative: "Baker Kit baked a sweet blueberry pie! Divide the pie into 4 equal fourths.",
   }),
   createNC2GItem({
     id: "nc2-g-fourths-cookie",

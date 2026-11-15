@@ -41,7 +41,9 @@ function Stamp({
   label?: string
 }) {
   useEnsureInkDefs()
-  const preset = name ? ((stickers as Record<string, StickerDef>)[name] as StampGen | undefined) : undefined
+  const preset = name
+    ? ((stickers as Record<string, StickerDef>)[name] as StampGen | undefined)
+    : undefined
   const p = preset && "gen" in preset && preset.gen === "stamp" ? preset : undefined
   const t = text ?? p?.text
   if (!t) return null

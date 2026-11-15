@@ -7,11 +7,24 @@ import { useInk, useMergedRef } from "@/lib/ink/react"
 import { emptyFrameRecipe, emptyMediaRecipe } from "@/lib/ink/recipes/empty-ink"
 import { cn } from "@/lib/utils"
 
-const hasClass = (className: string | undefined, name: string) => !!className && className.split(/\s+/).includes(name)
+const hasClass = (className: string | undefined, name: string) =>
+  !!className && className.split(/\s+/).includes(name)
 
-function Empty({ className, seed, ref, children, ...props }: React.ComponentProps<"div"> & { seed?: string | number }) {
+function Empty({
+  className,
+  seed,
+  ref,
+  children,
+  ...props
+}: React.ComponentProps<"div"> & { seed?: string | number }) {
   const framed = hasClass(className, "border")
-  const { hostRef, hostProps, node } = useInk({ recipe: emptyFrameRecipe, params: {}, kind: "frame", seed, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: emptyFrameRecipe,
+    params: {},
+    kind: "frame",
+    seed,
+    still: true,
+  })
   return (
     <div
       data-slot="empty"
@@ -19,7 +32,7 @@ function Empty({ className, seed, ref, children, ...props }: React.ComponentProp
       {...(framed && node ? hostProps : {})}
       className={cn(
         "relative isolate flex min-w-0 flex-1 flex-col items-center justify-center gap-6 p-6 text-center text-balance md:p-12 [.border]:border-transparent",
-        className
+        className,
       )}
       {...props}
     >
@@ -30,20 +43,29 @@ function Empty({ className, seed, ref, children, ...props }: React.ComponentProp
 }
 
 function EmptyHeader({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="empty-header" className={cn("flex max-w-sm flex-col items-center gap-2 text-center", className)} {...props} />
+  return (
+    <div
+      data-slot="empty-header"
+      className={cn("flex max-w-sm flex-col items-center gap-2 text-center", className)}
+      {...props}
+    />
+  )
 }
 
-const emptyMediaVariants = cva("mb-2 flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0", {
-  variants: {
-    variant: {
-      default: "bg-transparent",
-      icon: "relative isolate flex size-11 shrink-0 items-center justify-center text-foreground [&_svg:not(.absolute):not([class*='size-'])]:size-6",
+const emptyMediaVariants = cva(
+  "mb-2 flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  {
+    variants: {
+      variant: {
+        default: "bg-transparent",
+        icon: "relative isolate flex size-11 shrink-0 items-center justify-center text-foreground [&_svg:not(.absolute):not([class*='size-'])]:size-6",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
     },
   },
-  defaultVariants: {
-    variant: "default",
-  },
-})
+)
 
 function EmptyMedia({
   className,
@@ -63,7 +85,13 @@ function EmptyMedia({
     seed?: string | number
   }) {
   const tile = variant === "icon"
-  const { hostRef, hostProps, node } = useInk({ recipe: emptyMediaRecipe, params: {}, kind: "tile", seed, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: emptyMediaRecipe,
+    params: {},
+    kind: "tile",
+    seed,
+    still: true,
+  })
   return (
     <div
       data-slot="empty-icon"
@@ -82,21 +110,39 @@ function EmptyMedia({
 }
 
 function EmptyTitle({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="empty-title" className={cn("font-script text-[1.65rem] leading-none font-semibold", className)} {...props} />
+  return (
+    <div
+      data-slot="empty-title"
+      className={cn("font-script text-[1.65rem] leading-none font-semibold", className)}
+      {...props}
+    />
+  )
 }
 
 function EmptyDescription({ className, ...props }: React.ComponentProps<"p">) {
   return (
     <div
       data-slot="empty-description"
-      className={cn("text-sm/relaxed text-muted-foreground [&>a]:text-link [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-link-hover", className)}
+      className={cn(
+        "text-sm/relaxed text-muted-foreground [&>a]:text-link [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-link-hover",
+        className,
+      )}
       {...props}
     />
   )
 }
 
 function EmptyContent({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="empty-content" className={cn("flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance", className)} {...props} />
+  return (
+    <div
+      data-slot="empty-content"
+      className={cn(
+        "flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance",
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 export { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyContent, EmptyMedia }

@@ -1,9 +1,11 @@
 # Looseleaf Art Engine
 
 ## Overview
+
 Vector art generation, DSL parsing, typography rendering, and asset registry for hand-drawn icons, doodles, stickers, stamps, mascots, and scenes.
 
 ## Subdirectories & Boundaries
+
 - [doodles](./doodles/README.md) - Hand-drawn doodle vector art assets organized into nature, things, and marks categories.
 - [icons](./icons/README.md) - Hand-drawn vector icons collection categorized into domain-specific batches.
 - [mascots](./mascots/README.md) - Procedural mascot generator and pre-configured poses for the pencil/eraser character.
@@ -12,6 +14,7 @@ Vector art generation, DSL parsing, typography rendering, and asset registry for
 - [stickers](./stickers/README.md) - Decorative sticker and rubber-stamp illustrations.
 
 ## Interface
+
 - [badge-gen.ts:badgeSkeleton]
 - [dsl.ts:ACCENT_KEYS]
 - [dsl.ts:BUDGET]
@@ -42,11 +45,14 @@ Vector art generation, DSL parsing, typography rendering, and asset registry for
 - [types.ts:isGen]
 
 ## Invariants
+
 - Art definitions are validated against structural and command budgets per kind [dsl.ts:validateArt]
 - Mascot level of detail scales across size thresholds (<28, <56, <140, >=140) [mascot-draw.ts:mascotVariant]
 
 ## Side Effects
+
 - None
 
 ## Verification
+
 - Run: npm run build

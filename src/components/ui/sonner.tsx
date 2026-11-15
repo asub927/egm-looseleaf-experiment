@@ -23,7 +23,7 @@ const SLIP = cn(
   "data-[type=info]:ll-stock-sticky-blue data-[type=info]:ll-sheet-sticky data-[type=info]:[--ll-tilt:0.6deg]",
   "data-[type=loading]:[--ll-tilt:0.35deg] data-[type=default]:[--ll-tilt:-0.3deg]",
   "[&[data-expanded=false][data-front=false]>*]:opacity-0",
-  "data-[x-position=right]:animate-[ll-toss_var(--ll-dur-toss)_var(--ll-ease-settle)_backwards] data-[x-position=left]:animate-[ll-drop_var(--ll-dur-drop)_var(--ll-ease-settle)_backwards] data-[x-position=center]:animate-[ll-drop_var(--ll-dur-drop)_var(--ll-ease-settle)_backwards]"
+  "data-[x-position=right]:animate-[ll-toss_var(--ll-dur-toss)_var(--ll-ease-settle)_backwards] data-[x-position=left]:animate-[ll-drop_var(--ll-dur-drop)_var(--ll-ease-settle)_backwards] data-[x-position=center]:animate-[ll-drop_var(--ll-dur-drop)_var(--ll-ease-settle)_backwards]",
 )
 
 const TAPE =
@@ -40,12 +40,22 @@ const BASE: ToastClassNames = {
   loader: "text-ink",
   actionButton:
     "ll-swipe ms-auto min-h-6 shrink-0 cursor-pointer px-2.5 py-0.5 text-sm font-bold whitespace-nowrap transition-[translate] duration-(--ll-dur-press) active:translate-y-(--ll-press-sink)",
-  cancelButton: "ms-auto min-h-6 shrink-0 cursor-pointer px-2 py-0.5 text-sm whitespace-nowrap text-ink-muted underline decoration-wavy underline-offset-4 hover:text-foreground",
+  cancelButton:
+    "ms-auto min-h-6 shrink-0 cursor-pointer px-2 py-0.5 text-sm whitespace-nowrap text-ink-muted underline decoration-wavy underline-offset-4 hover:text-foreground",
   closeButton:
     "absolute end-1.5 top-1.5 z-(--ll-z-raised) grid size-6 cursor-pointer place-items-center text-ink hover:ll-swipe",
 }
 
-function Toaster({ className, toastOptions, decoration = "none", theme = "light", icons, style, portal = false, ...props }: LooseleafToasterProps) {
+function Toaster({
+  className,
+  toastOptions,
+  decoration = "none",
+  theme = "light",
+  icons,
+  style,
+  portal = false,
+  ...props
+}: LooseleafToasterProps) {
   const scope = useInkScope()
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => {
@@ -53,7 +63,14 @@ function Toaster({ className, toastOptions, decoration = "none", theme = "light"
   }, [portal])
   const user = toastOptions?.classNames ?? {}
   const merged = Object.fromEntries(
-    (Object.keys({ ...BASE, ...user }) as Array<keyof ToastClassNames>).map((k) => [k, cn(BASE[k], k === "content" && decoration !== "none" && (decoration === "tape" ? TAPE : PIN), user[k])])
+    (Object.keys({ ...BASE, ...user }) as Array<keyof ToastClassNames>).map((k) => [
+      k,
+      cn(
+        BASE[k],
+        k === "content" && decoration !== "none" && (decoration === "tape" ? TAPE : PIN),
+        user[k],
+      ),
+    ]),
   ) as ToastClassNames
   const stack = (
     // lint-house-disable-next-line data-slot
@@ -69,13 +86,26 @@ function Toaster({ className, toastOptions, decoration = "none", theme = "light"
         close: <Icon name="x" size={14} />,
         ...icons,
       }}
-      style={{ zIndex: "var(--ll-z-toast)", "--width": "min(360px, calc(100vw - 32px))", ...style } as React.CSSProperties}
+      style={
+        {
+          zIndex: "var(--ll-z-toast)",
+          "--width": "min(360px, calc(100vw - 32px))",
+          ...style,
+        } as React.CSSProperties
+      }
       toastOptions={{ unstyled: true, ...toastOptions, classNames: merged }}
       {...props}
     />
   )
   if (!portal) return stack
-  return mounted ? createPortal(<div data-slot="toaster-portal" {...scope} className="contents">{stack}</div>, document.body) : null
+  return mounted
+    ? createPortal(
+        <div data-slot="toaster-portal" {...scope} className="contents">
+          {stack}
+        </div>,
+        document.body,
+      )
+    : null
 }
 
 export { Toaster, toast, useSonner }

@@ -64,7 +64,12 @@ function Marquee({
   const [dur, setDur] = React.useState(30)
   const viewport = React.useRef<HTMLDivElement | null>(null)
   const group = React.useRef<HTMLDivElement | null>(null)
-  const { hostRef, hostProps, node } = useInk({ recipe: marqueeBandRecipe, params: { kind: tape, color }, kind: "marquee-band", seed })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: marqueeBandRecipe,
+    params: { kind: tape, color },
+    kind: "marquee-band",
+    seed,
+  })
   const ctx = React.useMemo<MarqueeContextValue>(
     () => ({
       paused,
@@ -77,10 +82,12 @@ function Marquee({
   )
 
   React.useLayoutEffect(() => {
-    const v = viewport.current, g = group.current
+    const v = viewport.current,
+      g = group.current
     if (!v || !g) return
     const measure = () => {
-      const gw = g.offsetWidth, vw = v.offsetWidth
+      const gw = g.offsetWidth,
+        vw = v.offsetWidth
       if (!(gw > 0)) return
       setCopies(clamp(Math.ceil(vw / gw) + 1, 2, MAX_COPIES))
       setDur(Math.max(4, gw / Math.max(1, speed)))
@@ -107,14 +114,23 @@ function Marquee({
         ref={useMergedRef<HTMLDivElement>(hostRef, ref)}
         {...hostProps}
         className={cn("relative isolate block h-11 w-full overflow-x-clip", className)}
-        style={{ "--ll-marquee-shift": `${-100 / copies}%`, "--ll-marquee-dur": `${dur.toFixed(2)}s`, ...style } as React.CSSProperties}
+        style={
+          {
+            "--ll-marquee-shift": `${-100 / copies}%`,
+            "--ll-marquee-dur": `${dur.toFixed(2)}s`,
+            ...style,
+          } as React.CSSProperties
+        }
         {...props}
       >
         {node}
         <div
           ref={viewport}
           data-slot="marquee-viewport"
-          className={cn("absolute inset-y-0 start-3 flex items-center overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]", controls ? "end-11" : "end-3")}
+          className={cn(
+            "absolute inset-y-0 start-3 flex items-center overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]",
+            controls ? "end-11" : "end-3",
+          )}
         >
           <div data-slot="marquee-track" className="flex w-max shrink-0 items-center">
             {Array.from({ length: copies }, (_, i) => (
@@ -138,19 +154,42 @@ function Marquee({
   )
 }
 
-function MarqueeItem({ className, children, separator, ...props }: React.ComponentProps<"span"> & { separator?: React.ReactNode | false }) {
+function MarqueeItem({
+  className,
+  children,
+  separator,
+  ...props
+}: React.ComponentProps<"span"> & { separator?: React.ReactNode | false }) {
   return (
-    <span data-slot="marquee-item" className={cn("inline-flex items-center gap-4 pe-4", className)} {...props}>
+    <span
+      data-slot="marquee-item"
+      className={cn("inline-flex items-center gap-4 pe-4", className)}
+      {...props}
+    >
       {children}
-      {separator === false ? null : (separator ?? <Doodle name="star" size={24} className="-mt-0.5 opacity-90" />)}
+      {separator === false
+        ? null
+        : (separator ?? <Doodle name="star" size={24} className="-mt-0.5 opacity-90" />)}
     </span>
   )
 }
 
-function MarqueeControl({ className, seed, ref, onClick, ...props }: React.ComponentProps<"button"> & { seed?: string | number }) {
+function MarqueeControl({
+  className,
+  seed,
+  ref,
+  onClick,
+  ...props
+}: React.ComponentProps<"button"> & { seed?: string | number }) {
   const ctx = React.useContext(MarqueeContext)
   if (!ctx) throw new Error("MarqueeControl must be used inside <Marquee>")
-  const { hostRef, hostProps, node } = useInk({ recipe: marqueeControlRecipe, params: { paused: ctx.paused }, kind: "marquee-control", size: [28, 28], seed })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: marqueeControlRecipe,
+    params: { paused: ctx.paused },
+    kind: "marquee-control",
+    size: [28, 28],
+    seed,
+  })
   return (
     <button
       type="button"
@@ -163,7 +202,10 @@ function MarqueeControl({ className, seed, ref, onClick, ...props }: React.Compo
         onClick?.(e)
         if (!e.defaultPrevented) ctx.toggle()
       }}
-      className={cn("absolute end-2 top-1/2 z-(--ll-z-raised) size-7 -translate-y-1/2 cursor-pointer", className)}
+      className={cn(
+        "absolute end-2 top-1/2 z-(--ll-z-raised) size-7 -translate-y-1/2 cursor-pointer",
+        className,
+      )}
       {...props}
     >
       {node}

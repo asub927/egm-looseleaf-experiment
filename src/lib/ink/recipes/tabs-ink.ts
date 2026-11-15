@@ -1,13 +1,13 @@
-import { flatFill, wash } from '@/lib/ink/fills'
-import { defineRecipe } from '@/lib/ink/recipes'
-import { focusRing } from '@/lib/ink/shapes'
-import type { Ink } from '@/lib/ink/builder'
-import type { PaintKey } from '@/lib/ink/paint'
-import type { Pt } from '@/lib/ink/types'
+import { flatFill, wash } from "@/lib/ink/fills"
+import { defineRecipe } from "@/lib/ink/recipes"
+import { focusRing } from "@/lib/ink/shapes"
+import type { Ink } from "@/lib/ink/builder"
+import type { PaintKey } from "@/lib/ink/paint"
+import type { Pt } from "@/lib/ink/types"
 
 export interface TabsParams {
-  variant: 'default' | 'line'
-  orientation: 'horizontal' | 'vertical'
+  variant: "default" | "line"
+  orientation: "horizontal" | "vertical"
   disabled?: boolean
 }
 
@@ -26,7 +26,8 @@ function tabEdge(w: number, h: number, vertical: boolean, rtl: boolean, grow: nu
       out.push([cx + r * Math.cos(a), cy + r * Math.sin(a)])
     }
   }
-  const x0 = 0.6, y0 = 0.6
+  const x0 = 0.6,
+    y0 = 0.6
   if (vertical) {
     const y1 = h - 0.6
     out.push([w + grow, y0])
@@ -45,12 +46,16 @@ function tabEdge(w: number, h: number, vertical: boolean, rtl: boolean, grow: nu
 
 function ribbon(pts: Pt[], width: number): Pt[] {
   const hw = width / 2
-  const left: Pt[] = [], right: Pt[] = []
+  const left: Pt[] = [],
+    right: Pt[] = []
   for (let i = 0; i < pts.length; i++) {
-    const a = pts[Math.max(0, i - 1)], b = pts[Math.min(pts.length - 1, i + 1)]
-    const tx = b[0] - a[0], ty = b[1] - a[1]
+    const a = pts[Math.max(0, i - 1)],
+      b = pts[Math.min(pts.length - 1, i + 1)]
+    const tx = b[0] - a[0],
+      ty = b[1] - a[1]
     const l = Math.hypot(tx, ty) || 1
-    const nx = -ty / l, ny = tx / l
+    const nx = -ty / l,
+      ny = tx / l
     left.push([pts[i][0] + nx * hw, pts[i][1] + ny * hw])
     right.push([pts[i][0] - nx * hw, pts[i][1] - ny * hw])
   }
@@ -58,69 +63,110 @@ function ribbon(pts: Pt[], width: number): Pt[] {
 }
 
 function rule(ink: Ink, pts: Pt[], color: PaintKey, width: number, alpha = 1) {
-  flatFill(ink, ribbon(pts, width), color, alpha, 'text')
+  flatFill(ink, ribbon(pts, width), color, alpha, "text")
 }
 
 export const tabsRecipe = defineRecipe<TabsParams>({
-  id: 'tabs',
-  kind: 'tab',
-  layers: ['rest', 'hover', 'checked', 'focus', 'disabled'],
-  lazy: ['focus'],
+  id: "tabs",
+  kind: "tab",
+  layers: ["rest", "hover", "checked", "focus", "disabled"],
+  lazy: ["focus"],
   pad: 12,
   draw(ink, { w, h }, { variant, orientation, disabled }, ctx) {
-    const vertical = orientation === 'vertical'
-    const rtl = ctx.dir === 'rtl'
+    const vertical = orientation === "vertical"
+    const rtl = ctx.dir === "rtl"
     const base = (color: PaintKey, width = HAIR, alpha = 1) => {
       if (vertical) {
         const x = rtl ? 0 : w
-        rule(ink, [[x, -REACH], [x, h + REACH]], color, width, alpha)
-      } else rule(ink, [[-REACH, h], [w + REACH, h]], color, width, alpha)
+        rule(
+          ink,
+          [
+            [x, -REACH],
+            [x, h + REACH],
+          ],
+          color,
+          width,
+          alpha,
+        )
+      } else
+        rule(
+          ink,
+          [
+            [-REACH, h],
+            [w + REACH, h],
+          ],
+          color,
+          width,
+          alpha,
+        )
     }
 
-    if (!disabled) ctx.lazy('focus', (f) => focusRing(f, 0, 0, w, h, { r: R }))
+    if (!disabled) ctx.lazy("focus", (f) => focusRing(f, 0, 0, w, h, { r: R }))
     if (ctx.lazyOnly) return
 
     if (disabled) {
-      ink.layer('disabled', () => {
-        base('pencil-mark', HAIR, 0.6)
-        if (variant === 'default') rule(ink, tabEdge(w, h, vertical, rtl, 0), 'pencil-mark', HAIR, 0.45)
+      ink.layer("disabled", () => {
+        base("pencil-mark", HAIR, 0.6)
+        if (variant === "default")
+          rule(ink, tabEdge(w, h, vertical, rtl, 0), "pencil-mark", HAIR, 0.45)
       })
       return
     }
 
-    if (variant === 'line') {
-      ink.layer('rest', () => base('pencil-mark'))
-      ink.layer('hover', () => base('pencil'))
-      ink.layer('checked', () => {
+    if (variant === "line") {
+      ink.layer("rest", () => base("pencil-mark"))
+      ink.layer("hover", () => base("pencil"))
+      ink.layer("checked", () => {
         ink.part(
-          'swipe',
+          "swipe",
           () => {
             if (vertical) {
               const x = rtl ? 1.4 : w - 1.4
-              rule(ink, [[x, 3], [x, h - 3]], 'ink-you', 2.4)
-            } else rule(ink, [[3, h - 1.4], [w - 3, h - 1.4]], 'ink-you', 2.4)
+              rule(
+                ink,
+                [
+                  [x, 3],
+                  [x, h - 3],
+                ],
+                "ink-you",
+                2.4,
+              )
+            } else
+              rule(
+                ink,
+                [
+                  [3, h - 1.4],
+                  [w - 3, h - 1.4],
+                ],
+                "ink-you",
+                2.4,
+              )
           },
-          'top',
+          "top",
         )
       })
       return
     }
 
     const outline = tabEdge(w, h, vertical, rtl, 0)
-    ink.layer('rest', () => {
-      ink.group({ hideOn: 'checked' }, () => {
-        base('pencil-mark')
-        rule(ink, outline, 'pencil-mark', HAIR)
-      }, 'text')
+    ink.layer("rest", () => {
+      ink.group(
+        { hideOn: "checked" },
+        () => {
+          base("pencil-mark")
+          rule(ink, outline, "pencil-mark", HAIR)
+        },
+        "text",
+      )
     })
-    ink.layer('hover', () => {
-      wash(ink, outline, 'hi', { alpha: 0.35 })
-      rule(ink, outline, 'pencil', HAIR)
+    ink.layer("hover", () => {
+      wash(ink, outline, "hi", { alpha: 0.35 })
+      rule(ink, outline, "pencil", HAIR)
     })
-    ink.layer('checked', () => {
+    ink.layer("checked", () => {
       const lifted = tabEdge(w, h, vertical, rtl, vertical ? -LIFT : LIFT)
-      ink.part('fill', () => flatFill(ink, lifted, 'hi', 0.92))
-      rule(ink, lifted, 'ink', EDGE)
+      ink.part("fill", () => flatFill(ink, lifted, "hi", 0.92))
+      rule(ink, lifted, "ink", EDGE)
     })
   },
 })

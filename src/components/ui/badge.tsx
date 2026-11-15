@@ -31,7 +31,7 @@ const badgeVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 )
 
 const BADGE_H = { sm: 20, default: 24, lg: 28 } as const
@@ -83,7 +83,11 @@ function Badge({
   if (asChild) {
     return (
       <IconSizeContext value={iconPx}>
-        <Slot.Root data-slot="badge" {...shared} className={cn(badgeVariants({ variant: v, size: s }), className)}>
+        <Slot.Root
+          data-slot="badge"
+          {...shared}
+          className={cn(badgeVariants({ variant: v, size: s }), className)}
+        >
           <Slot.Slottable>{children}</Slot.Slottable>
           {node}
         </Slot.Root>
@@ -91,15 +95,29 @@ function Badge({
     )
   }
 
-  const shown = children ?? (count === undefined ? undefined : count > max ? `${max}+` : String(count))
+  const shown =
+    children ?? (count === undefined ? undefined : count > max ? `${max}+` : String(count))
   return (
     <IconSizeContext value={iconPx}>
-      <span data-slot="badge" {...shared} className={cn(badgeVariants({ variant: v, size: s }), count !== undefined && "ll-num min-w-6 px-1.5", className)}>
+      <span
+        data-slot="badge"
+        {...shared}
+        className={cn(
+          badgeVariants({ variant: v, size: s }),
+          count !== undefined && "ll-num min-w-6 px-1.5",
+          className,
+        )}
+      >
         {node}
         {tallied ? (
           <>
             <span className="sr-only">{shown}</span>
-            <span aria-hidden="true" data-slot="badge-tally" className="inline-block h-full" style={{ width: tallyWidth(count, BADGE_H[s]) }} />
+            <span
+              aria-hidden="true"
+              data-slot="badge-tally"
+              className="inline-block h-full"
+              style={{ width: tallyWidth(count, BADGE_H[s]) }}
+            />
           </>
         ) : (
           shown

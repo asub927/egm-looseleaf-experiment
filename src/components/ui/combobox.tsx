@@ -2,15 +2,31 @@ import * as React from "react"
 import { Command as CommandPrimitive, defaultFilter, useCommandState } from "cmdk"
 
 import { Button } from "@/components/ui/button"
-import { CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandLoading, CommandSeparator, useFreshActiveDescendant } from "@/components/ui/command"
+import {
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandLoading,
+  CommandSeparator,
+  useFreshActiveDescendant,
+} from "@/components/ui/command"
 import { Icon } from "@/components/ui/icon"
 import { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { useFormReset } from "@/hooks/use-form-reset"
 import { useInk, useMergedRef } from "@/lib/ink/react"
-import { chipToneList, comboboxChipRecipe, comboboxChipsRecipe, comboboxTriggerRecipe, type ChipTone } from "@/lib/ink/recipes/combobox-ink"
+import {
+  chipToneList,
+  comboboxChipRecipe,
+  comboboxChipsRecipe,
+  comboboxTriggerRecipe,
+  type ChipTone,
+} from "@/lib/ink/recipes/combobox-ink"
 import { cn } from "@/lib/utils"
 
-type ComboboxItemData = string | { value: string; label?: string; disabled?: boolean; keywords?: string[] }
+type ComboboxItemData =
+  string | { value: string; label?: string; disabled?: boolean; keywords?: string[] }
 interface NormalItem {
   value: string
   label: string
@@ -19,7 +35,11 @@ interface NormalItem {
 }
 
 const normalize = (items: readonly ComboboxItemData[] | undefined): NormalItem[] =>
-  (items ?? []).map((i) => (typeof i === "string" ? { value: i, label: i } : { value: i.value, label: i.label ?? i.value, disabled: i.disabled, keywords: i.keywords }))
+  (items ?? []).map((i) =>
+    typeof i === "string"
+      ? { value: i, label: i }
+      : { value: i.value, label: i.label ?? i.value, disabled: i.disabled, keywords: i.keywords },
+  )
 
 type FieldMode = null | "single" | "chips"
 
@@ -61,7 +81,12 @@ function useCombobox(): ComboboxContextValue {
   return ctx
 }
 
-function useControllable<T>(props: object, key: string, defaultValue: T, onChange?: (v: T) => void): [T, (v: T) => void, () => void] {
+function useControllable<T>(
+  props: object,
+  key: string,
+  defaultValue: T,
+  onChange?: (v: T) => void,
+): [T, (v: T) => void, () => void] {
   const controlled = key in props
   const [inner, setInner] = React.useState<T>(defaultValue)
   const value = controlled ? (props as Record<string, T>)[key] : inner
@@ -70,7 +95,7 @@ function useControllable<T>(props: object, key: string, defaultValue: T, onChang
       if (!controlled) setInner(v)
       onChange?.(v)
     },
-    [controlled, onChange]
+    [controlled, onChange],
   )
   const reset = () => {
     if (!controlled) setInner(defaultValue)
@@ -99,24 +124,60 @@ interface ComboboxBaseProps {
   announce?: false | ((change: { added: string[]; removed: string[] }) => string)
   children?: React.ReactNode
 }
-type ComboboxSingleProps = { multiple?: false; value?: string | null; defaultValue?: string | null; onValueChange?: (value: string | null) => void }
-type ComboboxMultiProps = { multiple: true; value?: string[]; defaultValue?: string[]; onValueChange?: (value: string[]) => void }
+type ComboboxSingleProps = {
+  multiple?: false
+  value?: string | null
+  defaultValue?: string | null
+  onValueChange?: (value: string | null) => void
+}
+type ComboboxMultiProps = {
+  multiple: true
+  value?: string[]
+  defaultValue?: string[]
+  onValueChange?: (value: string[]) => void
+}
 type ComboboxProps = ComboboxBaseProps & (ComboboxSingleProps | ComboboxMultiProps)
 
 function Combobox(props: ComboboxProps) {
-  const { multiple = false, items: itemsProp, name, disabled = false, readOnly = false, required = false, invalid = false, loading = false, label, announce, filter, shouldFilter, loop, children, open: openProp, defaultOpen, onOpenChange } = props
+  const {
+    multiple = false,
+    items: itemsProp,
+    name,
+    disabled = false,
+    readOnly = false,
+    required = false,
+    invalid = false,
+    loading = false,
+    label,
+    announce,
+    filter,
+    shouldFilter,
+    loop,
+    children,
+    open: openProp,
+    defaultOpen,
+    onOpenChange,
+  } = props
   const [raw, setRaw, resetRaw] = useControllable<string | string[] | null | undefined>(
     props,
     "value",
     (props.defaultValue as string | string[] | null | undefined) ?? (multiple ? [] : null),
-    props.onValueChange as ((v: string | string[] | null | undefined) => void) | undefined
+    props.onValueChange as ((v: string | string[] | null | undefined) => void) | undefined,
   )
-  const value = React.useMemo<string[]>(() => (multiple ? ((raw as string[] | undefined) ?? []) : raw ? [raw as string] : []), [multiple, raw])
+  const value = React.useMemo<string[]>(
+    () => (multiple ? ((raw as string[] | undefined) ?? []) : raw ? [raw as string] : []),
+    [multiple, raw],
+  )
 
   const controlledOpen = openProp !== undefined
   const [innerOpen, setInnerOpen] = React.useState(defaultOpen ?? false)
   const open = controlledOpen ? openProp : innerOpen
-  const [query, setQuery, resetQuery] = useControllable<string>(props, "inputValue", props.defaultInputValue ?? "", props.onInputValueChange)
+  const [query, setQuery, resetQuery] = useControllable<string>(
+    props,
+    "inputValue",
+    props.defaultInputValue ?? "",
+    props.onInputValueChange,
+  )
   const [dirty, setDirty] = React.useState(false)
   const setOpen = React.useCallback(
     (next: boolean) => {
@@ -128,7 +189,7 @@ function Combobox(props: ComboboxProps) {
         setDirty(false)
       }
     },
-    [controlledOpen, onOpenChange, setQuery, readOnly]
+    [controlledOpen, onOpenChange, setQuery, readOnly],
   )
 
   const items = React.useMemo(() => normalize(itemsProp), [itemsProp])
@@ -140,16 +201,21 @@ function Combobox(props: ComboboxProps) {
     seen.current.set(v, l)
     bump((n) => n + 1)
   }, [])
-  const labelFor = React.useCallback((v: string) => itemMap.get(v)?.label ?? seen.current.get(v) ?? v, [itemMap])
+  const labelFor = React.useCallback(
+    (v: string) => itemMap.get(v)?.label ?? seen.current.get(v) ?? v,
+    [itemMap],
+  )
   const hasItem = React.useCallback(
     (text: string) => {
       const t = text.trim().toLowerCase()
       if (!t) return false
-      for (const i of items) if (i.value.toLowerCase() === t || i.label.toLowerCase() === t) return true
-      for (const [v, l] of seen.current) if (v.toLowerCase() === t || l.toLowerCase() === t) return true
+      for (const i of items)
+        if (i.value.toLowerCase() === t || i.label.toLowerCase() === t) return true
+      for (const [v, l] of seen.current)
+        if (v.toLowerCase() === t || l.toLowerCase() === t) return true
       return false
     },
-    [items]
+    [items],
   )
 
   const select = React.useCallback(
@@ -164,9 +230,12 @@ function Combobox(props: ComboboxProps) {
         setOpen(false)
       }
     },
-    [multiple, setRaw, setOpen, setQuery, value, readOnly]
+    [multiple, setRaw, setOpen, setQuery, value, readOnly],
   )
-  const remove = React.useCallback((v: string) => (readOnly ? undefined : setRaw(multiple ? value.filter((x) => x !== v) : null)), [multiple, setRaw, value, readOnly])
+  const remove = React.useCallback(
+    (v: string) => (readOnly ? undefined : setRaw(multiple ? value.filter((x) => x !== v) : null)),
+    [multiple, setRaw, value, readOnly],
+  )
   const clear = React.useCallback(() => {
     if (readOnly) return
     setRaw(multiple ? [] : null)
@@ -186,7 +255,7 @@ function Combobox(props: ComboboxProps) {
       resetRaw()
       resetQuery()
       setDirty(false)
-    }
+    },
   )
 
   const previous = React.useRef(value)
@@ -198,23 +267,91 @@ function Combobox(props: ComboboxProps) {
     const added = value.filter((v) => !before.includes(v)).map(labelFor)
     const removed = before.filter((v) => !value.includes(v)).map(labelFor)
     if (added.length === 0 && removed.length === 0) return
-    setSaid(announce ? announce({ added, removed }) : [added.length ? `${added.join(", ")} selected` : "", removed.length ? `${removed.join(", ")} removed` : ""].filter(Boolean).join(". "))
+    setSaid(
+      announce
+        ? announce({ added, removed })
+        : [
+            added.length ? `${added.join(", ")} selected` : "",
+            removed.length ? `${removed.join(", ")} removed` : "",
+          ]
+            .filter(Boolean)
+            .join(". "),
+    )
   }, [value, multiple, announce, labelFor])
 
   const ctx = React.useMemo<ComboboxContextValue>(
-    () => ({ multiple, value, select, remove, clear, open, setOpen, query, setQuery, dirty, setDirty, items, labelFor, register, hasItem, loading, disabled, readOnly, invalid, required, label, fieldMode, setFieldMode, anchorRef, inputRef, triggerRef }),
-    [multiple, value, select, remove, clear, open, setOpen, query, setQuery, dirty, items, labelFor, register, hasItem, loading, disabled, readOnly, invalid, required, label, fieldMode]
+    () => ({
+      multiple,
+      value,
+      select,
+      remove,
+      clear,
+      open,
+      setOpen,
+      query,
+      setQuery,
+      dirty,
+      setDirty,
+      items,
+      labelFor,
+      register,
+      hasItem,
+      loading,
+      disabled,
+      readOnly,
+      invalid,
+      required,
+      label,
+      fieldMode,
+      setFieldMode,
+      anchorRef,
+      inputRef,
+      triggerRef,
+    }),
+    [
+      multiple,
+      value,
+      select,
+      remove,
+      clear,
+      open,
+      setOpen,
+      query,
+      setQuery,
+      dirty,
+      items,
+      labelFor,
+      register,
+      hasItem,
+      loading,
+      disabled,
+      readOnly,
+      invalid,
+      required,
+      label,
+      fieldMode,
+    ],
   )
 
   const cmdkFilter = React.useCallback<NonNullable<ComboboxBaseProps["filter"]>>(
-    (v, search, keywords) => (fieldMode === "single" && !dirtyRef.current ? 1 : (filter ?? defaultFilter)(v, search, keywords)),
-    [fieldMode, filter]
+    (v, search, keywords) =>
+      fieldMode === "single" && !dirtyRef.current
+        ? 1
+        : (filter ?? defaultFilter)(v, search, keywords),
+    [fieldMode, filter],
   )
 
   return (
     <ComboboxContext.Provider value={ctx}>
       <Popover open={open} onOpenChange={setOpen}>
-        <CommandPrimitive data-slot="combobox" className="contents" label={label} filter={cmdkFilter} shouldFilter={shouldFilter} loop={loop}>
+        <CommandPrimitive
+          data-slot="combobox"
+          className="contents"
+          label={label}
+          filter={cmdkFilter}
+          shouldFilter={shouldFilter}
+          loop={loop}
+        >
           {children}
         </CommandPrimitive>
       </Popover>
@@ -244,11 +381,25 @@ function Combobox(props: ComboboxProps) {
 const TRIGGER =
   "group/combobox-trigger relative isolate flex h-9 w-full items-center justify-between gap-2 ps-3 pe-2 text-start font-hand text-base whitespace-nowrap text-(--ll-input-ink) compact:h-8 calm:h-7 calm:text-[15px] disabled:cursor-not-allowed disabled:text-pencil-text forced-colors:aria-invalid:underline forced-colors:aria-invalid:decoration-wavy [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not(.absolute):not([class*='size-'])]:size-4"
 
-function ComboboxTrigger({ className, children, seed, ref, onKeyDown, disabled: disabledProp, ...props }: React.ComponentProps<"button"> & { seed?: string | number }) {
+function ComboboxTrigger({
+  className,
+  children,
+  seed,
+  ref,
+  onKeyDown,
+  disabled: disabledProp,
+  ...props
+}: React.ComponentProps<"button"> & { seed?: string | number }) {
   const ctx = useCombobox()
   const disabled = ctx.disabled || !!disabledProp
   const invalid = ctx.invalid || props["aria-invalid"] === true || props["aria-invalid"] === "true"
-  const { hostRef, hostProps, node } = useInk({ recipe: comboboxTriggerRecipe, params: { disabled, invalid: invalid && !disabled }, kind: "field", seed, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: comboboxTriggerRecipe,
+    params: { disabled, invalid: invalid && !disabled },
+    kind: "field",
+    seed,
+    still: true,
+  })
   return (
     <PopoverTrigger asChild>
       <button
@@ -260,7 +411,11 @@ function ComboboxTrigger({ className, children, seed, ref, onKeyDown, disabled: 
         aria-invalid={invalid || undefined}
         data-slot="combobox-trigger"
         disabled={disabled}
-        ref={useMergedRef<HTMLButtonElement>(hostRef, ref, ctx.triggerRef as React.Ref<HTMLButtonElement>)}
+        ref={useMergedRef<HTMLButtonElement>(
+          hostRef,
+          ref,
+          ctx.triggerRef as React.Ref<HTMLButtonElement>,
+        )}
         {...hostProps}
         onKeyDown={(e) => {
           onKeyDown?.(e)
@@ -275,7 +430,12 @@ function ComboboxTrigger({ className, children, seed, ref, onKeyDown, disabled: 
       >
         {node}
         {children ?? <ComboboxValue />}
-        <Icon name="chevrons-up-down" size={16} data-slot="combobox-trigger-icon" className="text-ink-soft group-disabled/combobox-trigger:text-pencil-text" />
+        <Icon
+          name="chevrons-up-down"
+          size={16}
+          data-slot="combobox-trigger-icon"
+          className="text-ink-soft group-disabled/combobox-trigger:text-pencil-text"
+        />
       </button>
     </PopoverTrigger>
   )
@@ -288,13 +448,22 @@ function ComboboxValue({
   ...props
 }: Omit<React.ComponentProps<"span">, "children"> & {
   placeholder?: React.ReactNode
-  children?: (value: string | string[] | null, labelFor: (value: string) => string) => React.ReactNode
+  children?: (
+    value: string | string[] | null,
+    labelFor: (value: string) => string,
+  ) => React.ReactNode
 }) {
   const ctx = useCombobox()
-  if (children) return <>{children(ctx.multiple ? ctx.value : (ctx.value[0] ?? null), ctx.labelFor)}</>
+  if (children)
+    return <>{children(ctx.multiple ? ctx.value : (ctx.value[0] ?? null), ctx.labelFor)}</>
   const text = ctx.value.map(ctx.labelFor).join(", ")
   return (
-    <span data-slot="combobox-value" data-placeholder={text ? undefined : ""} className={cn("min-w-0 flex-1 truncate", !text && "text-(--ll-placeholder)", className)} {...props}>
+    <span
+      data-slot="combobox-value"
+      data-placeholder={text ? undefined : ""}
+      className={cn("min-w-0 flex-1 truncate", !text && "text-(--ll-placeholder)", className)}
+      {...props}
+    >
       {text || placeholder}
     </span>
   )
@@ -314,10 +483,15 @@ function ComboboxContent({
 }: React.ComponentProps<typeof PopoverContent> & { anchor?: React.RefObject<Element | null> }) {
   const ctx = useCombobox()
   const inField = ctx.fieldMode !== null
-  const inAnchor = (target: EventTarget | null): boolean => !!ctx.anchorRef.current && target instanceof Node && ctx.anchorRef.current.contains(target)
+  const inAnchor = (target: EventTarget | null): boolean =>
+    !!ctx.anchorRef.current && target instanceof Node && ctx.anchorRef.current.contains(target)
   return (
     <>
-      {anchor ? <PopoverAnchor virtualRef={anchor as React.RefObject<{ getBoundingClientRect(): DOMRect }>} /> : null}
+      {anchor ? (
+        <PopoverAnchor
+          virtualRef={anchor as React.RefObject<{ getBoundingClientRect(): DOMRect }>}
+        />
+      ) : null}
       <PopoverContent
         aria-label={ctx.label ?? "Options"}
         align={align}
@@ -339,7 +513,10 @@ function ComboboxContent({
           onMouseDown?.(e)
           if (!e.defaultPrevented && !(e.target instanceof HTMLInputElement)) e.preventDefault()
         }}
-        className={cn("w-(--radix-popover-trigger-width) max-w-[calc(100vw-1rem)] min-w-52 p-0", className)}
+        className={cn(
+          "w-(--radix-popover-trigger-width) max-w-[calc(100vw-1rem)] min-w-52 p-0",
+          className,
+        )}
         {...props}
       >
         <div data-slot="combobox-content" className="flex flex-col">
@@ -354,16 +531,33 @@ function useComboboxAnchor() {
   return React.useRef<HTMLDivElement | null>(null)
 }
 
-function ComboboxList({ className, children, ...props }: Omit<React.ComponentProps<typeof CommandList>, "children"> & { children?: React.ReactNode | ((item: NormalItem) => React.ReactNode) }) {
+function ComboboxList({
+  className,
+  children,
+  ...props
+}: Omit<React.ComponentProps<typeof CommandList>, "children"> & {
+  children?: React.ReactNode | ((item: NormalItem) => React.ReactNode)
+}) {
   const ctx = useCombobox()
   return (
-    <CommandList data-slot="combobox-list" label={ctx.label} className={cn("max-h-[min(20rem,var(--radix-popover-content-available-height))]", className)} {...props}>
+    <CommandList
+      data-slot="combobox-list"
+      label={ctx.label}
+      className={cn("max-h-[min(20rem,var(--radix-popover-content-available-height))]", className)}
+      {...props}
+    >
       {typeof children === "function" ? ctx.items.map(children) : children}
     </CommandList>
   )
 }
 
-function ComboboxCollection({ items, children }: { items?: readonly ComboboxItemData[]; children?: React.ReactNode | ((item: NormalItem, index: number) => React.ReactNode) }) {
+function ComboboxCollection({
+  items,
+  children,
+}: {
+  items?: readonly ComboboxItemData[]
+  children?: React.ReactNode | ((item: NormalItem, index: number) => React.ReactNode)
+}) {
   const ctx = useCombobox()
   const list = React.useMemo(() => (items ? normalize(items) : ctx.items), [items, ctx.items])
   return <>{typeof children === "function" ? list.map(children) : children}</>
@@ -377,9 +571,17 @@ function ComboboxItem({
   keywords,
   onSelect,
   ...props
-}: Omit<React.ComponentProps<typeof CommandItem>, "value" | "keywords"> & { value: string; label?: string; keywords?: string[] }) {
+}: Omit<React.ComponentProps<typeof CommandItem>, "value" | "keywords"> & {
+  value: string
+  label?: string
+  keywords?: string[]
+}) {
   const ctx = useCombobox()
-  const text = label ?? (typeof children === "string" ? children : (ctx.items.find((i) => i.value === value)?.label ?? value))
+  const text =
+    label ??
+    (typeof children === "string"
+      ? children
+      : (ctx.items.find((i) => i.value === value)?.label ?? value))
   const { register } = ctx
   React.useEffect(() => register(value, text), [register, value, text])
   const chosen = ctx.value.includes(value)
@@ -400,7 +602,11 @@ function ComboboxItem({
       {chosen && (
         <>
           <span className="sr-only">, selected</span>
-          <span data-slot="combobox-item-indicator" aria-hidden="true" className="pointer-events-none absolute end-2 grid size-4 place-items-center">
+          <span
+            data-slot="combobox-item-indicator"
+            aria-hidden="true"
+            className="pointer-events-none absolute end-2 grid size-4 place-items-center"
+          >
             <Icon name="check" size={16} className="text-ink-you forced-colors:text-[CanvasText]" />
           </span>
         </>
@@ -414,7 +620,14 @@ function ComboboxGroup({ className, ...props }: React.ComponentProps<typeof Comm
 }
 
 function ComboboxLabel({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="combobox-label" role="presentation" className={cn("px-2 py-1.5 font-type text-xs text-ink-muted", className)} {...props} />
+  return (
+    <div
+      data-slot="combobox-label"
+      role="presentation"
+      className={cn("px-2 py-1.5 font-type text-xs text-ink-muted", className)}
+      {...props}
+    />
+  )
 }
 
 function ComboboxSeparator({ className, ...props }: React.ComponentProps<typeof CommandSeparator>) {
@@ -436,7 +649,10 @@ function ComboboxCreate({
   children,
   onCreate,
   ...props
-}: Omit<React.ComponentProps<typeof CommandItem>, "children" | "value" | "onSelect"> & { onCreate?: (text: string) => void; children?: React.ReactNode | ((text: string) => React.ReactNode) }) {
+}: Omit<React.ComponentProps<typeof CommandItem>, "children" | "value" | "onSelect"> & {
+  onCreate?: (text: string) => void
+  children?: React.ReactNode | ((text: string) => React.ReactNode)
+}) {
   const ctx = useCombobox()
   const search = useCommandState((s) => s.search) as string
   const text = search.trim()
@@ -472,20 +688,44 @@ function useCallerId(input: React.RefObject<HTMLInputElement | null>, id: string
   React.useEffect(() => {
     const el = input.current
     if (!id || !el || el.id === id) return
-    const own = Array.from(el.ownerDocument.querySelectorAll("label[cmdk-label]")).find((l) => l.getAttribute("for") === el.id)
+    const own = Array.from(el.ownerDocument.querySelectorAll("label[cmdk-label]")).find(
+      (l) => l.getAttribute("for") === el.id,
+    )
     own?.setAttribute("for", id)
     el.id = id
   }, [input, id])
 }
 
-function ComboboxInput({ className, showTrigger = true, showClear = false, ...props }: React.ComponentProps<typeof CommandInput> & { showTrigger?: boolean; showClear?: boolean }) {
+function ComboboxInput({
+  className,
+  showTrigger = true,
+  showClear = false,
+  ...props
+}: React.ComponentProps<typeof CommandInput> & { showTrigger?: boolean; showClear?: boolean }) {
   const inContent = React.useContext(InContentContext)
-  return inContent ? <ComboboxSearch className={className} {...props} /> : <ComboboxField className={className} showTrigger={showTrigger} showClear={showClear} {...props} />
+  return inContent ? (
+    <ComboboxSearch className={className} {...props} />
+  ) : (
+    <ComboboxField
+      className={className}
+      showTrigger={showTrigger}
+      showClear={showClear}
+      {...props}
+    />
+  )
 }
 
 function ComboboxSearch({ className, ...props }: React.ComponentProps<typeof CommandInput>) {
   const ctx = useCombobox()
-  return <CommandInput data-slot="combobox-input" value={ctx.query} onValueChange={ctx.setQuery} className={className} {...props} />
+  return (
+    <CommandInput
+      data-slot="combobox-input"
+      value={ctx.query}
+      onValueChange={ctx.setQuery}
+      className={className}
+      {...props}
+    />
+  )
 }
 
 function ComboboxField({
@@ -507,7 +747,13 @@ function ComboboxField({
   useFreshActiveDescendant(inputRef)
   useCallerId(inputRef, props.id)
   const invalid = ctx.invalid
-  const { hostRef, hostProps, node } = useInk({ recipe: comboboxTriggerRecipe, params: { disabled: ctx.disabled, invalid: invalid && !ctx.disabled }, kind: "field", seed: seed as string | number | undefined, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: comboboxTriggerRecipe,
+    params: { disabled: ctx.disabled, invalid: invalid && !ctx.disabled },
+    kind: "field",
+    seed: seed as string | number | undefined,
+    still: true,
+  })
   const shown = ctx.dirty ? ctx.query : ctx.value[0] ? ctx.labelFor(ctx.value[0]) : ""
   return (
     <PopoverAnchor asChild>
@@ -520,7 +766,10 @@ function ComboboxField({
         onClick={() => {
           if (!ctx.disabled) inputRef.current?.focus()
         }}
-        className={cn("relative isolate flex h-9 w-full items-center compact:h-8 calm:h-7", wrapperClassName)}
+        className={cn(
+          "relative isolate flex h-9 w-full items-center compact:h-8 calm:h-7",
+          wrapperClassName,
+        )}
       >
         {node}
         <CommandPrimitive.Input
@@ -570,7 +819,12 @@ function ComboboxField({
   )
 }
 
-function ComboboxClear({ className, onClick, onKeyDown, ...props }: React.ComponentProps<typeof Button>) {
+function ComboboxClear({
+  className,
+  onClick,
+  onKeyDown,
+  ...props
+}: React.ComponentProps<typeof Button>) {
   const ctx = useCombobox()
   if (ctx.value.length === 0 || ctx.disabled || ctx.readOnly) return null
   return (
@@ -613,7 +867,11 @@ function ComboboxChips({
   seed,
   ref,
   ...props
-}: React.ComponentProps<"div"> & { renderChip?: (value: string, label: string) => React.ReactNode; tone?: ChipTone | "auto"; seed?: string | number }) {
+}: React.ComponentProps<"div"> & {
+  renderChip?: (value: string, label: string) => React.ReactNode
+  tone?: ChipTone | "auto"
+  seed?: string | number
+}) {
   const ctx = useCombobox()
   const { setFieldMode, anchorRef, inputRef } = ctx
   React.useEffect(() => {
@@ -622,7 +880,13 @@ function ComboboxChips({
   }, [setFieldMode])
   useExpandedAttr(inputRef, ctx.open)
   useFreshActiveDescendant(inputRef)
-  const { hostRef, hostProps, node } = useInk({ recipe: comboboxChipsRecipe, params: { disabled: ctx.disabled, invalid: ctx.invalid && !ctx.disabled }, kind: "field", seed, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: comboboxChipsRecipe,
+    params: { disabled: ctx.disabled, invalid: ctx.invalid && !ctx.disabled },
+    kind: "field",
+    seed,
+    still: true,
+  })
   return (
     <PopoverAnchor asChild>
       <div
@@ -636,7 +900,10 @@ function ComboboxChips({
           props.onClick?.(e)
           if (!ctx.disabled && !(e.target as Element).closest("button")) inputRef.current?.focus()
         }}
-        className={cn("relative isolate flex min-h-9 w-full flex-wrap items-center gap-1.5 px-2 py-1 font-hand text-base compact:min-h-8 calm:gap-1 calm:py-0.5", className)}
+        className={cn(
+          "relative isolate flex min-h-9 w-full flex-wrap items-center gap-1.5 px-2 py-1 font-hand text-base compact:min-h-8 calm:gap-1 calm:py-0.5",
+          className,
+        )}
         {...props}
       >
         {node}
@@ -647,7 +914,7 @@ function ComboboxChips({
             <ComboboxChip key={v} value={v} tone={tone === "auto" ? toneOf(v) : tone}>
               {ctx.labelFor(v)}
             </ComboboxChip>
-          )
+          ),
         )}
         {children ?? <ComboboxChipsInput />}
       </div>
@@ -664,10 +931,22 @@ function ComboboxChip({
   seed,
   removeLabel,
   ...props
-}: React.ComponentProps<"span"> & { value?: string; tone?: ChipTone; showRemove?: boolean; seed?: string | number; removeLabel?: string }) {
+}: React.ComponentProps<"span"> & {
+  value?: string
+  tone?: ChipTone
+  showRemove?: boolean
+  seed?: string | number
+  removeLabel?: string
+}) {
   const ctx = useCombobox()
   const key = value ?? (typeof children === "string" ? children : "")
-  const { hostRef, hostProps, node } = useInk({ recipe: comboboxChipRecipe, params: { tone, disabled: ctx.disabled }, kind: "chip", seed: seed ?? `chip|${key}`, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: comboboxChipRecipe,
+    params: { tone, disabled: ctx.disabled },
+    kind: "chip",
+    seed: seed ?? `chip|${key}`,
+    still: true,
+  })
   const label = typeof children === "string" ? children : ctx.labelFor(key)
   return (
     <span
@@ -678,7 +957,7 @@ function ComboboxChip({
       className={cn(
         "relative isolate inline-flex h-7 w-fit max-w-full items-center gap-0.5 ps-5 pe-0.5 text-sm font-bold whitespace-nowrap text-ink calm:h-6 calm:ps-4",
         ctx.disabled && "text-pencil-text",
-        className
+        className,
       )}
       {...props}
     >
@@ -705,7 +984,11 @@ function ComboboxChip({
   )
 }
 
-function ComboboxChipsInput({ className, onKeyDown, ...props }: React.ComponentProps<typeof CommandPrimitive.Input>) {
+function ComboboxChipsInput({
+  className,
+  onKeyDown,
+  ...props
+}: React.ComponentProps<typeof CommandPrimitive.Input>) {
   const ctx = useCombobox()
   useCallerId(ctx.inputRef, props.id)
   return (
@@ -723,13 +1006,17 @@ function ComboboxChipsInput({ className, onKeyDown, ...props }: React.ComponentP
       onKeyDown={(e) => {
         onKeyDown?.(e)
         if (e.defaultPrevented) return
-        if (e.key === "Backspace" && ctx.query === "" && ctx.value.length > 0) ctx.remove(ctx.value[ctx.value.length - 1])
+        if (e.key === "Backspace" && ctx.query === "" && ctx.value.length > 0)
+          ctx.remove(ctx.value[ctx.value.length - 1])
         else if (!ctx.open && !ctx.disabled && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
           e.preventDefault()
           ctx.setOpen(true)
         }
       }}
-      className={cn("h-7 min-w-16 flex-1 bg-transparent px-1 font-hand text-base text-(--ll-input-ink) caret-(--ll-caret) outline-hidden placeholder:text-(--ll-placeholder) disabled:cursor-not-allowed calm:h-6 calm:text-[15px]", className)}
+      className={cn(
+        "h-7 min-w-16 flex-1 bg-transparent px-1 font-hand text-base text-(--ll-input-ink) caret-(--ll-caret) outline-hidden placeholder:text-(--ll-placeholder) disabled:cursor-not-allowed calm:h-6 calm:text-[15px]",
+        className,
+      )}
       {...props}
     />
   )

@@ -4,7 +4,27 @@ import { makeRng } from "@/lib/ink/rng"
 import { useDensity, useInkSeed } from "@/lib/ink/react"
 import { cn } from "@/lib/utils"
 
-const SKIP = new Set(["code", "pre", "kbd", "samp", "var", "a", "svg", "math", "textarea", "input", "select", "button", "script", "style", "img", "video", "audio", "canvas", "iframe"])
+const SKIP = new Set([
+  "code",
+  "pre",
+  "kbd",
+  "samp",
+  "var",
+  "a",
+  "svg",
+  "math",
+  "textarea",
+  "input",
+  "select",
+  "button",
+  "script",
+  "style",
+  "img",
+  "video",
+  "audio",
+  "canvas",
+  "iframe",
+])
 
 const CSS = `[data-written] .ll-w{display:inline;position:relative;translate:none;rotate:none;opacity:1;padding-inline-end:0;margin-inline-end:0;top:calc(var(--jy,0px)*var(--ll-jitter-k,1));color:color-mix(in srgb,currentColor calc((1 - (1 - var(--jo,1))*var(--ll-jitter-k,1))*100%),transparent)}`
 
@@ -38,8 +58,13 @@ function walk(children: React.ReactNode, w: Walk): React.ReactNode[] {
         .map((part) => (part === "" ? null : /^\s+$/.test(part) ? part : word(part, w)))
       return <React.Fragment key={`t${at}`}>{words}</React.Fragment>
     }
-    if (!React.isValidElement<{ children?: React.ReactNode; "data-handwritten"?: string }>(node) || node.props["data-handwritten"] === "off") return node
-    const walked = node.type === React.Fragment || (typeof node.type === "string" && !SKIP.has(node.type))
+    if (
+      !React.isValidElement<{ children?: React.ReactNode; "data-handwritten"?: string }>(node) ||
+      node.props["data-handwritten"] === "off"
+    )
+      return node
+    const walked =
+      node.type === React.Fragment || (typeof node.type === "string" && !SKIP.has(node.type))
     if (!walked || node.props.children == null) return node
     return React.cloneElement(node, undefined, ...walk(node.props.children, w))
   })
@@ -62,7 +87,12 @@ function Handwritten({
   const density = useDensity()
   const k = Math.max(0, strength) * (density === "compact" ? 0.7 : 1)
   return (
-    <Comp data-slot="handwritten" data-written={k > 0 ? "" : undefined} className={cn(k > 0 && "ll-hand-jitter", className)} {...props}>
+    <Comp
+      data-slot="handwritten"
+      data-written={k > 0 ? "" : undefined}
+      className={cn(k > 0 && "ll-hand-jitter", className)}
+      {...props}
+    >
       {k > 0 ? (
         <style href="ll-handwritten" precedence="low">
           {CSS}

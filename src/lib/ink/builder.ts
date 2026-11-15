@@ -1,11 +1,23 @@
-import type { BBox, GrainKind, LayerName, Line, Material, PenName, PenSpec, Pt, StrokeOpts, StrokeResult, Tier } from '@/lib/ink/types'
-import { BLEND, esc, n, paint, type PaintKey } from '@/lib/ink/paint'
-import { hashSeed, makeRng, type Rng } from '@/lib/ink/rng'
-import { TIERS, smoothClosed } from '@/lib/ink/geom'
-import { dot as penDot, stroke as penStroke } from '@/lib/ink/pen'
-import { pen as resolvePen } from '@/lib/ink/pens'
+import type {
+  BBox,
+  GrainKind,
+  LayerName,
+  Line,
+  Material,
+  PenName,
+  PenSpec,
+  Pt,
+  StrokeOpts,
+  StrokeResult,
+  Tier,
+} from "@/lib/ink/types"
+import { BLEND, esc, n, paint, type PaintKey } from "@/lib/ink/paint"
+import { hashSeed, makeRng, type Rng } from "@/lib/ink/rng"
+import { TIERS, smoothClosed } from "@/lib/ink/geom"
+import { dot as penDot, stroke as penStroke } from "@/lib/ink/pen"
+import { pen as resolvePen } from "@/lib/ink/pens"
 
-export const GRAINS: readonly GrainKind[] = ['felt', 'marker', 'graphite', 'waxy', 'stamp']
+export const GRAINS: readonly GrainKind[] = ["felt", "marker", "graphite", "waxy", "stamp"]
 
 export const MASK_VARIANTS = 6
 
@@ -13,7 +25,9 @@ export function maskId(grain: GrainKind, variant: number): string {
   return `ll-${grain}-${((variant % MASK_VARIANTS) + MASK_VARIANTS) % MASK_VARIANTS}`
 }
 
-export const MASK_IDS: readonly string[] = GRAINS.flatMap((g) => Array.from({ length: MASK_VARIANTS }, (_, v) => maskId(g, v)))
+export const MASK_IDS: readonly string[] = GRAINS.flatMap((g) =>
+  Array.from({ length: MASK_VARIANTS }, (_, v) => maskId(g, v)),
+)
 
 export function maskPhase(variant: number): { x: number; y: number; rot: 0 | 90 | 180 | 270 } {
   const v = ((variant % MASK_VARIANTS) + MASK_VARIANTS) % MASK_VARIANTS
@@ -60,7 +74,7 @@ interface PathItem {
   d: string
   fill: PaintKey
   op: number
-  rule?: 'evenodd'
+  rule?: "evenodd"
   stroke?: PaintKey
   sw?: number
   clip?: string
@@ -78,20 +92,43 @@ class Scope {
   }
 }
 
-const ORDER: readonly Material[] = ['under', 'wash', 'hl', 'marker', 'pencil', 'waxy', 'text', 'felt', 'stamp', 'top']
-const GRAIN_OF: Partial<Record<Material, GrainKind>> = { marker: 'marker', pencil: 'graphite', waxy: 'waxy', text: 'felt', felt: 'felt', stamp: 'stamp' }
-const BLENDED: ReadonlySet<Material> = new Set(['hl', 'marker'])
-const SUBTLE: ReadonlySet<GrainKind> = new Set(['marker', 'felt'])
+const ORDER: readonly Material[] = [
+  "under",
+  "wash",
+  "hl",
+  "marker",
+  "pencil",
+  "waxy",
+  "text",
+  "felt",
+  "stamp",
+  "top",
+]
+const GRAIN_OF: Partial<Record<Material, GrainKind>> = {
+  marker: "marker",
+  pencil: "graphite",
+  waxy: "waxy",
+  text: "felt",
+  felt: "felt",
+  stamp: "stamp",
+}
+const BLENDED: ReadonlySet<Material> = new Set(["hl", "marker"])
+const SUBTLE: ReadonlySet<GrainKind> = new Set(["marker", "felt"])
 
 type Piece =
-  | { t: 'raw'; s: string }
-  | { t: 'mat'; grain?: GrainKind; blend: boolean; kids: Piece[] }
-  | { t: 'grp'; pre: string; open: string; kids: Piece[]; plain: boolean }
+  | { t: "raw"; s: string }
+  | { t: "mat"; grain?: GrainKind; blend: boolean; kids: Piece[] }
+  | { t: "grp"; pre: string; open: string; kids: Piece[]; plain: boolean }
 
 const mergeOpts = (a: StrokeOpts | undefined, b: StrokeOpts | undefined): StrokeOpts => {
   if (!a) return b ?? {}
   if (!b) return a
-  return { ...a, ...b, width: (a.width ?? 1) * (b.width ?? 1), alpha: (a.alpha ?? 1) * (b.alpha ?? 1) }
+  return {
+    ...a,
+    ...b,
+    width: (a.width ?? 1) * (b.width ?? 1),
+    alpha: (a.alpha ?? 1) * (b.alpha ?? 1),
+  }
 }
 
 export class Ink {
@@ -114,7 +151,7 @@ export class Ink {
     this.rng = makeRng(seed)
     this.seed = this.rng.seed
     this.calm = opts.calm ?? false
-    this.tier = this.calm ? 'lo' : (opts.tier ?? 'lo')
+    this.tier = this.calm ? "lo" : (opts.tier ?? "lo")
     this.grain = opts.grain ?? true
     this.knobs = { wobble: 1, misreg: 1, bleed: 1, width: 1, ...opts.knobs }
     if (this.calm) {
@@ -124,7 +161,7 @@ export class Ink {
     }
     this.variant = this.seed % MASK_VARIANTS
     this.tag = this.seed.toString(36)
-    this.cur = this.rootOf('rest')
+    this.cur = this.rootOf("rest")
   }
 
   lean(): void {
@@ -159,7 +196,7 @@ export class Ink {
     }
   }
 
-  group(attrs: GroupAttrs, fn: () => void, at: Material = 'top'): void {
+  group(attrs: GroupAttrs, fn: () => void, at: Material = "top"): void {
     const scope = new Scope(attrs)
     this.cur.add(at, { scope })
     const prev = this.cur
@@ -171,17 +208,21 @@ export class Ink {
     }
   }
 
-  part(name: string, fn: () => { dx: number; dy: number } | void, at: Material = 'wash'): void {
+  part(name: string, fn: () => { dx: number; dy: number } | void, at: Material = "wash"): void {
     const attrs: GroupAttrs = { part: name }
-    this.group(attrs, () => {
-      const off = fn()
-      if (off) attrs.vars = { mx: off.dx, my: off.dy }
-    }, at)
+    this.group(
+      attrs,
+      () => {
+        const off = fn()
+        if (off) attrs.vars = { mx: off.dx, my: off.dy }
+      },
+      at,
+    )
   }
 
   clipDef(d: string): string {
     const id = `ll-c${hashSeed(d).toString(36)}`
-    this.cur.add('under', { raw: `<clipPath id="${id}"><path d="${d}"/></clipPath>` })
+    this.cur.add("under", { raw: `<clipPath id="${id}"><path d="${d}"/></clipPath>` })
     return id
   }
 
@@ -195,33 +236,57 @@ export class Ink {
     } finally {
       this.cur = prev
     }
-    this.cur.add('under', { raw: `<defs><g id="${id}">${this.emitScope(scope)}</g></defs>` })
+    this.cur.add("under", { raw: `<defs><g id="${id}">${this.emitScope(scope)}</g></defs>` })
     return id
   }
 
-  use(id: string, o: { x?: number; y?: number; transform?: string } = {}, at: Material = 'top'): void {
-    const xy = (o.x ? ` x="${n(o.x)}"` : '') + (o.y ? ` y="${n(o.y)}"` : '')
-    this.cur.add(at, { raw: `<use href="#${id}"${xy}${o.transform ? ` transform="${o.transform}"` : ''}/>` })
+  use(
+    id: string,
+    o: { x?: number; y?: number; transform?: string } = {},
+    at: Material = "top",
+  ): void {
+    const xy = (o.x ? ` x="${n(o.x)}"` : "") + (o.y ? ` y="${n(o.y)}"` : "")
+    this.cur.add(at, {
+      raw: `<use href="#${id}"${xy}${o.transform ? ` transform="${o.transform}"` : ""}/>`,
+    })
   }
 
-  stroke(pts: Pt[], penIn: PenName | PenSpec = 'ink', o: StrokeOpts = {}): StrokeResult {
+  stroke(pts: Pt[], penIn: PenName | PenSpec = "ink", o: StrokeOpts = {}): StrokeResult {
     let P = resolvePen(penIn)
     if (this.knobs.bleed !== 1) P = { ...P, bleed: P.bleed * this.knobs.bleed }
-    const r = this.next('s')
-    const jr = r.fork('jit')
+    const r = this.next("s")
+    const jr = r.fork("jit")
     const width = (o.width ?? 1) * this.knobs.width * (1 + jr.gauss(0, 0.05))
-    const alpha = (o.alpha ?? 1) * (this.tier === 'hi' ? Math.min(1.08, Math.max(0.92, 1 + jr.gauss(0, 0.04))) : 1)
-    const res = penStroke(pts, P, r, { ...o, tier: this.tier, wobble: (o.wobble ?? 1) * this.knobs.wobble, width, alpha })
+    const alpha =
+      (o.alpha ?? 1) *
+      (this.tier === "hi" ? Math.min(1.08, Math.max(0.92, 1 + jr.gauss(0, 0.04))) : 1)
+    const res = penStroke(pts, P, r, {
+      ...o,
+      tier: this.tier,
+      wobble: (o.wobble ?? 1) * this.knobs.wobble,
+      width,
+      alpha,
+    })
     return this.put(res, P)
   }
 
-  lines(lines: Line[], penIn: PenName | PenSpec = 'ink', o?: StrokeOpts): void {
+  lines(lines: Line[], penIn: PenName | PenSpec = "ink", o?: StrokeOpts): void {
     for (const l of lines) this.stroke(l.pts, l.pen ?? penIn, mergeOpts(l.o, o))
   }
 
-  dot(cx: number, cy: number, r: number, penIn: PenName | PenSpec = 'ink', o: StrokeOpts = {}): void {
+  dot(
+    cx: number,
+    cy: number,
+    r: number,
+    penIn: PenName | PenSpec = "ink",
+    o: StrokeOpts = {},
+  ): void {
     const P = resolvePen(penIn)
-    const res = penDot(cx, cy, r, P, this.next('d'), { ...o, tier: this.tier, width: (o.width ?? 1) * this.knobs.width })
+    const res = penDot(cx, cy, r, P, this.next("d"), {
+      ...o,
+      tier: this.tier,
+      width: (o.width ?? 1) * this.knobs.width,
+    })
     this.put(res, P)
   }
 
@@ -229,24 +294,42 @@ export class Ink {
     for (const L of res.layers) {
       const item: PathItem = { d: L.d, fill: L.fill, op: L.op, rule: L.rule }
       let mat: Material
-      if (P.kind === 'felt') mat = (L.k === 'halo' || L.k === 'hair') && !this.leaned ? 'wash' : 'felt'
-      else if (P.kind === 'pencil') mat = P.waxy ? 'waxy' : 'pencil'
-      else mat = P.kind === 'marker' ? 'marker' : 'hl'
+      if (P.kind === "felt")
+        mat = (L.k === "halo" || L.k === "hair") && !this.leaned ? "wash" : "felt"
+      else if (P.kind === "pencil") mat = P.waxy ? "waxy" : "pencil"
+      else mat = P.kind === "marker" ? "marker" : "hl"
       this.cur.add(mat, item)
     }
     this.grow(res.bbox)
     return res
   }
 
-  flat(material: Material, d: string, fill: PaintKey, op = 1, extra: { rule?: 'evenodd'; stroke?: PaintKey; sw?: number; bbox?: BBox; clip?: string } = {}): void {
+  flat(
+    material: Material,
+    d: string,
+    fill: PaintKey,
+    op = 1,
+    extra: { rule?: "evenodd"; stroke?: PaintKey; sw?: number; bbox?: BBox; clip?: string } = {},
+  ): void {
     if (!d) return
-    this.cur.add(material, { d, fill, op, rule: extra.rule, stroke: extra.stroke, sw: extra.sw, clip: extra.clip })
+    this.cur.add(material, {
+      d,
+      fill,
+      op,
+      rule: extra.rule,
+      stroke: extra.stroke,
+      sw: extra.sw,
+      clip: extra.clip,
+    })
     if (extra.bbox) this.grow(extra.bbox)
   }
 
   poly(material: Material, pts: Pt[], fill: PaintKey, op = 1): void {
     if (pts.length < 3) return
-    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity
+    let x0 = Infinity,
+      y0 = Infinity,
+      x1 = -Infinity,
+      y1 = -Infinity
     for (const p of pts) {
       if (p[0] < x0) x0 = p[0]
       if (p[0] > x1) x1 = p[0]
@@ -256,30 +339,43 @@ export class Ink {
     this.flat(material, smoothClosed(pts, TIERS[this.tier]), fill, op, { bbox: [x0, y0, x1, y1] })
   }
 
-  raw(svg: string, material: Material = 'text'): void {
+  raw(svg: string, material: Material = "text"): void {
     if (svg) this.cur.add(material, { raw: svg })
   }
 
-  text(x: number, y: number, s: string, o: { size: number; fill?: PaintKey; font?: string; anchor?: 'start' | 'middle' | 'end'; weight?: number } = { size: 16 }): void {
-    const attrs = `x="${n(x)}" y="${n(y)}" font-size="${n(o.size)}" fill="${paint(o.fill ?? 'ink')}" font-family="${esc(o.font ?? 'var(--font-hand, cursive)')}"` +
-      (o.anchor ? ` text-anchor="${o.anchor}"` : '') + (o.weight ? ` font-weight="${o.weight}"` : '')
-    this.raw(`<text ${attrs}>${esc(s)}</text>`, 'text')
+  text(
+    x: number,
+    y: number,
+    s: string,
+    o: {
+      size: number
+      fill?: PaintKey
+      font?: string
+      anchor?: "start" | "middle" | "end"
+      weight?: number
+    } = { size: 16 },
+  ): void {
+    const attrs =
+      `x="${n(x)}" y="${n(y)}" font-size="${n(o.size)}" fill="${paint(o.fill ?? "ink")}" font-family="${esc(o.font ?? "var(--font-hand, cursive)")}"` +
+      (o.anchor ? ` text-anchor="${o.anchor}"` : "") +
+      (o.weight ? ` font-weight="${o.weight}"` : "")
+    this.raw(`<text ${attrs}>${esc(s)}</text>`, "text")
   }
 
   private itemNodes(items: Item[]): Piece[] {
-    const q = this.tier === 'lo' ? 50 : 100
+    const q = this.tier === "lo" ? 50 : 100
     const merged = new Map<string, PathItem>()
     const seq: Array<PathItem | Piece> = []
     for (const it of items) {
-      if ('raw' in it) {
-        seq.push({ t: 'raw', s: it.raw })
-      } else if ('scope' in it) {
+      if ("raw" in it) {
+        seq.push({ t: "raw", s: it.raw })
+      } else if ("scope" in it) {
         seq.push(this.groupNode(it.scope))
       } else if (it.rule || it.stroke) {
         seq.push(it)
       } else {
         const op = Math.round(it.op * q) / q
-        const key = `${it.fill}|${op}|${it.clip ?? ''}`
+        const key = `${it.fill}|${op}|${it.clip ?? ""}`
         const m = merged.get(key)
         if (m) m.d += it.d
         else {
@@ -291,16 +387,22 @@ export class Ink {
     }
     const out: Piece[] = []
     for (const it of seq) {
-      if ('t' in it) {
+      if ("t" in it) {
         out.push(it)
         continue
       }
       const op = n(it.op, 100)
-      const clip = it.clip ? ` clip-path="url(#${it.clip})"` : ''
+      const clip = it.clip ? ` clip-path="url(#${it.clip})"` : ""
       if (it.stroke) {
-        out.push({ t: 'raw', s: `<path d="${it.d}" fill="none" stroke="${paint(it.stroke)}" stroke-width="${n(it.sw ?? 1)}" stroke-linecap="round" stroke-linejoin="round"${it.op < 0.995 ? ` stroke-opacity="${op}"` : ''}${clip}/>` })
+        out.push({
+          t: "raw",
+          s: `<path d="${it.d}" fill="none" stroke="${paint(it.stroke)}" stroke-width="${n(it.sw ?? 1)}" stroke-linecap="round" stroke-linejoin="round"${it.op < 0.995 ? ` stroke-opacity="${op}"` : ""}${clip}/>`,
+        })
       } else {
-        out.push({ t: 'raw', s: `<path d="${it.d}" fill="${paint(it.fill)}"${it.op < 0.995 ? ` fill-opacity="${op}"` : ''}${it.rule ? ` fill-rule="${it.rule}"` : ''}${clip}/>` })
+        out.push({
+          t: "raw",
+          s: `<path d="${it.d}" fill="${paint(it.fill)}"${it.op < 0.995 ? ` fill-opacity="${op}"` : ""}${it.rule ? ` fill-rule="${it.rule}"` : ""}${clip}/>`,
+        })
       }
     }
     return out
@@ -315,7 +417,7 @@ export class Ink {
       const grain = this.grain ? GRAIN_OF[mat] : undefined
       const blend = BLENDED.has(mat)
       if (!grain && !blend) out.push(...kids)
-      else out.push({ t: 'mat', grain, blend, kids })
+      else out.push({ t: "mat", grain, blend, kids })
     }
     return out
   }
@@ -323,8 +425,8 @@ export class Ink {
   private groupNode(scope: Scope): Piece {
     const a = scope.attrs ?? {}
     const kids = this.scopeNodes(scope)
-    let pre = ''
-    let attrs = ''
+    let pre = ""
+    let attrs = ""
     if (a.clip) {
       const id = `ll-c${hashSeed(a.clip).toString(36)}`
       pre = `<clipPath id="${id}"><path d="${a.clip}"/></clipPath>`
@@ -336,28 +438,40 @@ export class Ink {
     if (a.part) attrs += ` data-part="${esc(a.part)}"`
     if (a.hideOn) attrs += ` data-hide-on="${esc(a.hideOn)}"`
     if (a.mask) attrs += ` mask="url(#${esc(a.mask)})"`
-    if (a.vars) attrs += ` style="${Object.entries(a.vars).map(([k, v]) => `--${k}:${n(v)}`).join(';')}"`
-    const plain = !a.clip && !a.transform && !(a.opacity !== undefined && a.opacity < 1) && !a.id && !a.mask
-    return { t: 'grp', pre, open: `<g${attrs}>`, kids, plain }
+    if (a.vars)
+      attrs += ` style="${Object.entries(a.vars)
+        .map(([k, v]) => `--${k}:${n(v)}`)
+        .join(";")}"`
+    const plain =
+      !a.clip && !a.transform && !(a.opacity !== undefined && a.opacity < 1) && !a.id && !a.mask
+    return { t: "grp", pre, open: `<g${attrs}>`, kids, plain }
   }
 
-  private static subtle(nd: Piece): nd is Extract<Piece, { t: 'mat' }> {
-    return nd.t === 'mat' && !!nd.grain && SUBTLE.has(nd.grain) && nd.kids.every((k) => k.t === 'raw')
+  private static subtle(nd: Piece): nd is Extract<Piece, { t: "mat" }> {
+    return (
+      nd.t === "mat" && !!nd.grain && SUBTLE.has(nd.grain) && nd.kids.every((k) => k.t === "raw")
+    )
   }
 
   private static pure(nd: Piece): boolean {
-    return nd.t === 'grp' && nd.plain && !nd.pre && nd.kids.length > 0 && nd.kids.every((k) => Ink.subtle(k) || Ink.pure(k))
+    return (
+      nd.t === "grp" &&
+      nd.plain &&
+      !nd.pre &&
+      nd.kids.length > 0 &&
+      nd.kids.every((k) => Ink.subtle(k) || Ink.pure(k))
+    )
   }
 
   private static bare(nd: Piece): Piece[] {
-    if (nd.t === 'mat') return nd.kids
-    if (nd.t === 'grp') return [{ ...nd, kids: nd.kids.flatMap((k) => Ink.bare(k)) }]
+    if (nd.t === "mat") return nd.kids
+    if (nd.t === "grp") return [{ ...nd, kids: nd.kids.flatMap((k) => Ink.bare(k)) }]
     return [nd]
   }
 
   private static grainsIn(nd: Piece, into: Array<{ grain?: GrainKind; blend: boolean }>): void {
-    if (nd.t === 'mat') into.push({ grain: nd.grain, blend: nd.blend })
-    else if (nd.t === 'grp') for (const k of nd.kids) Ink.grainsIn(k, into)
+    if (nd.t === "mat") into.push({ grain: nd.grain, blend: nd.blend })
+    else if (nd.t === "grp") for (const k of nd.kids) Ink.grainsIn(k, into)
   }
 
   private leanMerge(nodes: Piece[]): Piece[] {
@@ -369,7 +483,12 @@ export class Ink {
       } else {
         const found: Array<{ grain?: GrainKind; blend: boolean }> = []
         for (const r of run) Ink.grainsIn(r, found)
-        out.push({ t: 'mat', grain: found.some((f) => f.grain === 'marker') ? 'marker' : 'felt', blend: found.some((f) => f.blend), kids: run.flatMap((r) => Ink.bare(r)) })
+        out.push({
+          t: "mat",
+          grain: found.some((f) => f.grain === "marker") ? "marker" : "felt",
+          blend: found.some((f) => f.blend),
+          kids: run.flatMap((r) => Ink.bare(r)),
+        })
       }
       run = []
     }
@@ -378,7 +497,7 @@ export class Ink {
         run.push(nd)
       } else {
         flush()
-        out.push(nd.t === 'grp' ? { ...nd, kids: this.leanMerge(nd.kids) } : nd)
+        out.push(nd.t === "grp" ? { ...nd, kids: this.leanMerge(nd.kids) } : nd)
       }
     }
     flush()
@@ -389,20 +508,27 @@ export class Ink {
     const out: Piece[] = []
     for (const nd of nodes) {
       const last = out[out.length - 1]
-      if (nd.t === 'mat' && last && last.t === 'mat' && last.grain === nd.grain && last.blend === nd.blend) last.kids = [...last.kids, ...nd.kids]
-      else out.push(nd.t === 'mat' ? { ...nd } : nd)
+      if (
+        nd.t === "mat" &&
+        last &&
+        last.t === "mat" &&
+        last.grain === nd.grain &&
+        last.blend === nd.blend
+      )
+        last.kids = [...last.kids, ...nd.kids]
+      else out.push(nd.t === "mat" ? { ...nd } : nd)
     }
-    return out.map((nd) => (nd.t === 'grp' ? { ...nd, kids: Ink.join(nd.kids) } : nd))
+    return out.map((nd) => (nd.t === "grp" ? { ...nd, kids: Ink.join(nd.kids) } : nd))
   }
 
   private print(nodes: Piece[]): string {
-    let out = ''
+    let out = ""
     for (const nd of nodes) {
-      if (nd.t === 'raw') out += nd.s
-      else if (nd.t === 'grp') out += `${nd.pre}${nd.open}${this.print(nd.kids)}</g>`
+      if (nd.t === "raw") out += nd.s
+      else if (nd.t === "grp") out += `${nd.pre}${nd.open}${this.print(nd.kids)}</g>`
       else {
-        const mask = nd.grain ? ` mask="url(#${maskId(nd.grain, this.variant)})"` : ''
-        const style = nd.blend ? ` style="mix-blend-mode:${BLEND}"` : ''
+        const mask = nd.grain ? ` mask="url(#${maskId(nd.grain, this.variant)})"` : ""
+        const style = nd.blend ? ` style="mix-blend-mode:${BLEND}"` : ""
         out += `<g${mask}${style}>${this.print(nd.kids)}</g>`
       }
     }
@@ -424,7 +550,10 @@ export class Ink {
     const bbox: BBox = [fin(b[0]), fin(b[1]), fin(b[2]), fin(b[3])]
     const excursion = Math.max(0, -bbox[0], -bbox[1], bbox[2] - o.w, bbox[3] - o.h)
     const pad = o.pad ?? Math.max(2, Math.ceil(excursion) + 1)
-    const svg = names.length === 1 ? (parts[names[0]] as string) : names.map((k) => `<g data-layer="${k}">${parts[k]}</g>`).join('')
+    const svg =
+      names.length === 1
+        ? (parts[names[0]] as string)
+        : names.map((k) => `<g data-layer="${k}">${parts[k]}</g>`).join("")
     return { svg, w: o.w, h: o.h, pad, layers: names, parts, bbox }
   }
 }

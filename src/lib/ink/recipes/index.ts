@@ -1,9 +1,9 @@
-import { Ink, type InkOptions, type Knobs } from '@/lib/ink/builder'
-import type { LayerName, Tier } from '@/lib/ink/types'
+import { Ink, type InkOptions, type Knobs } from "@/lib/ink/builder"
+import type { LayerName, Tier } from "@/lib/ink/types"
 
-export type InkLayerName = LayerName | 'indeterminate' | 'open' | 'busy'
-export type Density = 'comfortable' | 'compact' | 'calm'
-export type Dir = 'ltr' | 'rtl'
+export type InkLayerName = LayerName | "indeterminate" | "open" | "busy"
+export type Density = "comfortable" | "compact" | "calm"
+export type Dir = "ltr" | "rtl"
 
 export interface Box {
   w: number
@@ -11,7 +11,16 @@ export interface Box {
 }
 
 export const INK_LAYER_ORDER: readonly InkLayerName[] = [
-  'rest', 'disabled', 'invalid', 'checked', 'indeterminate', 'open', 'busy', 'hover', 'pressed', 'focus',
+  "rest",
+  "disabled",
+  "invalid",
+  "checked",
+  "indeterminate",
+  "open",
+  "busy",
+  "hover",
+  "pressed",
+  "focus",
 ]
 
 export function orderLayers<T extends string>(names: readonly T[]): T[] {
@@ -54,10 +63,19 @@ const ID_RE = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/
 const registry = new Map<string, Recipe<never>>()
 
 export function defineRecipe<P = Record<string, never>>(def: RecipeDef<P>): Recipe<P> {
-  if (!ID_RE.test(def.id)) throw new Error(`ink recipe id "${def.id}" must be kebab-case (letters, digits, hyphens)`)
+  if (!ID_RE.test(def.id))
+    throw new Error(`ink recipe id "${def.id}" must be kebab-case (letters, digits, hyphens)`)
   const lazy = def.lazy ?? []
-  for (const l of lazy) if (!def.layers.includes(l)) throw new Error(`ink recipe "${def.id}": lazy layer "${l}" is not in layers`)
-  const recipe: Recipe<P> = { ...def, lazy, kind: def.kind ?? def.id, isInkRecipe: true, rev: (registry.get(def.id)?.rev ?? 0) + 1 }
+  for (const l of lazy)
+    if (!def.layers.includes(l))
+      throw new Error(`ink recipe "${def.id}": lazy layer "${l}" is not in layers`)
+  const recipe: Recipe<P> = {
+    ...def,
+    lazy,
+    kind: def.kind ?? def.id,
+    isInkRecipe: true,
+    rev: (registry.get(def.id)?.rev ?? 0) + 1,
+  }
   registry.set(def.id, recipe as unknown as Recipe<never>)
   return recipe
 }
@@ -73,8 +91,9 @@ export function allRecipes(): Recipe<never>[] {
 export const DEFAULT_KNOBS: Knobs = { wobble: 1, misreg: 1, bleed: 1, width: 1 }
 
 export function resolveKnobs(themeKnobs: Knobs, density: Density): Knobs {
-  if (density === 'calm') return { ...DEFAULT_KNOBS, bleed: themeKnobs.bleed }
-  if (density === 'compact') return { ...themeKnobs, misreg: themeKnobs.misreg * 0.85, width: themeKnobs.width * 0.94 }
+  if (density === "calm") return { ...DEFAULT_KNOBS, bleed: themeKnobs.bleed }
+  if (density === "compact")
+    return { ...themeKnobs, misreg: themeKnobs.misreg * 0.85, width: themeKnobs.width * 0.94 }
   return themeKnobs
 }
 
@@ -104,15 +123,23 @@ export const runCounter = { runs: 0 }
 
 export function runRecipe<P>(recipe: Recipe<P>, req: RunRequest<P>): RawFrame {
   const { box, params } = req
-  const calm = req.density === 'calm'
-  const tier: Tier = calm ? 'lo' : req.tier
+  const calm = req.density === "calm"
+  const tier: Tier = calm ? "lo" : req.tier
   const wanted = new Set<InkLayerName>(req.lazy ?? [])
   const inkOpts: InkOptions = { tier, calm, knobs: req.knobs }
   const seed = `${req.seed}|${recipe.id}`
   const lazyOnly = req.lazyOnly === true
-  const ctxBase = { tier, density: req.density, calm, knobs: req.knobs, dir: req.dir, seed, lazyOnly }
+  const ctxBase = {
+    tier,
+    density: req.density,
+    calm,
+    knobs: req.knobs,
+    dir: req.dir,
+    seed,
+    lazyOnly,
+  }
   const lazyParts: Partial<Record<InkLayerName, string>> = {}
-  const pad0 = req.pad ?? (typeof recipe.pad === 'number' ? recipe.pad : undefined)
+  const pad0 = req.pad ?? (typeof recipe.pad === "number" ? recipe.pad : undefined)
   const ctx: RecipeContext = {
     ...ctxBase,
     wants: (layer) => wanted.has(layer),
@@ -120,13 +147,15 @@ export function runRecipe<P>(recipe: Recipe<P>, req: RunRequest<P>): RawFrame {
       if (!wanted.has(layer)) return
       const li = new Ink(`${seed}|${layer}`, inkOpts)
       li.layer(layer as LayerName, () => fn(li))
-      lazyParts[layer] = li.toSvg({ w: box.w, h: box.h, pad: pad0 ?? 12 }).parts[layer as LayerName] ?? ''
+      lazyParts[layer] =
+        li.toSvg({ w: box.w, h: box.h, pad: pad0 ?? 12 }).parts[layer as LayerName] ?? ""
     },
   }
   const ink = new Ink(seed, inkOpts)
   runCounter.runs++
   recipe.draw(ink, box, params, ctx)
-  const pad = req.pad ?? (typeof recipe.pad === 'number' ? recipe.pad : recipe.pad(box, params, ctx))
+  const pad =
+    req.pad ?? (typeof recipe.pad === "number" ? recipe.pad : recipe.pad(box, params, ctx))
   const parts: Partial<Record<InkLayerName, string>> = {}
   if (!lazyOnly) {
     const res = ink.toSvg({ w: box.w, h: box.h, pad })
@@ -142,24 +171,35 @@ export function runRecipe<P>(recipe: Recipe<P>, req: RunRequest<P>): RawFrame {
       lazyLayers.push(k)
     }
   }
-  return { parts, layers: orderLayers(Object.keys(parts) as InkLayerName[]), lazyLayers: orderLayers(lazyLayers), pad, w: box.w, h: box.h }
+  return {
+    parts,
+    layers: orderLayers(Object.keys(parts) as InkLayerName[]),
+    lazyLayers: orderLayers(lazyLayers),
+    pad,
+    w: box.w,
+    h: box.h,
+  }
 }
 
 let warnedFn = false
 
 export function stableStringify(v: unknown): string {
-  if (v === null || typeof v === 'boolean' || typeof v === 'string') return JSON.stringify(v)
-  if (typeof v === 'number') return Number.isFinite(v) ? String(v) : '"NaN"'
-  if (v === undefined) return 'null'
-  if (Array.isArray(v)) return `[${v.map(stableStringify).join(',')}]`
-  if (typeof v === 'object') {
+  if (v === null || typeof v === "boolean" || typeof v === "string") return JSON.stringify(v)
+  if (typeof v === "number") return Number.isFinite(v) ? String(v) : '"NaN"'
+  if (v === undefined) return "null"
+  if (Array.isArray(v)) return `[${v.map(stableStringify).join(",")}]`
+  if (typeof v === "object") {
     const o = v as Record<string, unknown>
-    const keys = Object.keys(o).filter((k) => o[k] !== undefined).sort()
-    return `{${keys.map((k) => `${JSON.stringify(k)}:${stableStringify(o[k])}`).join(',')}}`
+    const keys = Object.keys(o)
+      .filter((k) => o[k] !== undefined)
+      .sort()
+    return `{${keys.map((k) => `${JSON.stringify(k)}:${stableStringify(o[k])}`).join(",")}}`
   }
   if (!warnedFn) {
     warnedFn = true
-    console.error('ink: recipe params must be plain JSON (found a function or symbol); it cannot be part of the memo key')
+    console.error(
+      "ink: recipe params must be plain JSON (found a function or symbol); it cannot be part of the memo key",
+    )
   }
   return '"[unhashable]"'
 }
@@ -170,5 +210,8 @@ export function knobsKey(k: Knobs): string {
 }
 
 export function bucketBox(w: number, h: number, q: readonly [number, number] = [4, 2]): Box {
-  return { w: Math.max(q[0], Math.round(w / q[0]) * q[0]), h: Math.max(q[1], Math.round(h / q[1]) * q[1]) }
+  return {
+    w: Math.max(q[0], Math.round(w / q[0]) * q[0]),
+    h: Math.max(q[1], Math.round(h / q[1]) * q[1]),
+  }
 }

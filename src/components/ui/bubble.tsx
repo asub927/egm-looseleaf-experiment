@@ -7,20 +7,37 @@ import { Slot } from "radix-ui"
 import { Paper, type PaperProps } from "@/components/ui/paper"
 import { useChatAlign } from "@/lib/chat-align"
 import { useInk, useMergedRef } from "@/lib/ink/react"
-import { bubbleReactionsRecipe, bubbleRecipe, type BubbleVariant } from "@/lib/ink/recipes/bubble-ink"
+import {
+  bubbleReactionsRecipe,
+  bubbleRecipe,
+  type BubbleVariant,
+} from "@/lib/ink/recipes/bubble-ink"
 import { cn } from "@/lib/utils"
 
 type BubbleShape = "cloud" | "note" | "sticky"
 type BubblePen = "ink" | "you"
 
-type BubbleState = { variant: BubbleVariant; align: "start" | "end"; shape: BubbleShape; pen: BubblePen }
-const BubbleContext = React.createContext<BubbleState>({ variant: "default", align: "start", shape: "cloud", pen: "ink" })
+type BubbleState = {
+  variant: BubbleVariant
+  align: "start" | "end"
+  shape: BubbleShape
+  pen: BubblePen
+}
+const BubbleContext = React.createContext<BubbleState>({
+  variant: "default",
+  align: "start",
+  shape: "cloud",
+  pen: "ink",
+})
 
 function BubbleGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="bubble-group"
-      className={cn("flex min-w-0 flex-col gap-2 [&>[data-slot=bubble]:not(:last-child)_[data-part=tail]]:hidden", className)}
+      className={cn(
+        "flex min-w-0 flex-col gap-2 [&>[data-slot=bubble]:not(:last-child)_[data-part=tail]]:hidden",
+        className,
+      )}
       {...props}
     />
   )
@@ -43,7 +60,7 @@ const bubbleVariants = cva(
     defaultVariants: {
       variant: "default",
     },
-  }
+  },
 )
 
 function Bubble({
@@ -64,7 +81,10 @@ function Bubble({
   const inherited = useChatAlign()
   const a = align ?? inherited ?? "start"
   const v = variant ?? "default"
-  const state = React.useMemo<BubbleState>(() => ({ variant: v, align: a, shape, pen }), [v, a, shape, pen])
+  const state = React.useMemo<BubbleState>(
+    () => ({ variant: v, align: a, shape, pen }),
+    [v, a, shape, pen],
+  )
   return (
     <BubbleContext.Provider value={state}>
       <div
@@ -95,7 +115,7 @@ const contentVariants = cva(
       },
     },
     defaultVariants: { variant: "default" },
-  }
+  },
 )
 
 const NOTE_STOCK: Record<BubbleVariant, NonNullable<PaperProps["stock"]>> = {
@@ -143,7 +163,10 @@ function BubbleContent({
     seed,
     still: true,
   })
-  const merged = useMergedRef<HTMLElement>(drawn ? hostRef : undefined, ref as React.Ref<HTMLElement> | undefined)
+  const merged = useMergedRef<HTMLElement>(
+    drawn ? hostRef : undefined,
+    ref as React.Ref<HTMLElement> | undefined,
+  )
   const voice = pen === "you" ? "font-script text-[1.35rem] leading-snug text-ink-you" : undefined
   const base = contentVariants({ variant })
 
@@ -156,7 +179,13 @@ function BubbleContent({
         stock={sticky ? STICKY_STOCK[variant] : NOTE_STOCK[variant]}
         curl
         seed={seed}
-        className={cn(base, "rounded-none font-script text-[1.35rem] leading-snug text-ink", !sticky && CREASES, voice, className)}
+        className={cn(
+          base,
+          "rounded-none font-script text-[1.35rem] leading-snug text-ink",
+          !sticky && CREASES,
+          voice,
+          className,
+        )}
         {...paper}
         {...props}
       >
@@ -197,7 +226,7 @@ const bubbleReactionsPlace = cva(
       side: "bottom",
       align: "end",
     },
-  }
+  },
 )
 
 function BubbleReactions({
@@ -213,13 +242,24 @@ function BubbleReactions({
   side?: "top" | "bottom"
   seed?: string | number
 }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: bubbleReactionsRecipe, params: {}, kind: "reactions", seed, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: bubbleReactionsRecipe,
+    params: {},
+    kind: "reactions",
+    seed,
+    still: true,
+  })
   return (
     <div
       data-slot="bubble-reactions"
       data-align={align}
       data-side={side}
-      ref={useMergedRef<HTMLElement>(hostRef, ref as React.Ref<HTMLElement> | undefined) as React.Ref<HTMLDivElement>}
+      ref={
+        useMergedRef<HTMLElement>(
+          hostRef,
+          ref as React.Ref<HTMLElement> | undefined,
+        ) as React.Ref<HTMLDivElement>
+      }
       {...hostProps}
       className={cn(bubbleReactionsPlace({ side, align }), className)}
       {...props}

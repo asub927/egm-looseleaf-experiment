@@ -1,1083 +1,1147 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>2nd Grade Mental Math · blu.school × Whispering Vine</title>
-  <style>
-    :root {
-      /* blu.school Minimalist Modern Canvas */
-      --bg: #FBF9F5;
-      --surface: #FFFFFF;
-      --surface-subtle: #F5EFE6;
-      --border: #E8E2D8;
-      --border-focus: #2B2A3A;
-      --ink: #201E2B;
-      --ink-muted: #646277;
-      --ink-faint: #A6A3B8;
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>2nd Grade Mental Math · blu.school × Whispering Vine</title>
+    <style>
+      :root {
+        /* blu.school Minimalist Modern Canvas */
+        --bg: #fbf9f5;
+        --surface: #ffffff;
+        --surface-subtle: #f5efe6;
+        --border: #e8e2d8;
+        --border-focus: #2b2a3a;
+        --ink: #201e2b;
+        --ink-muted: #646277;
+        --ink-faint: #a6a3b8;
 
-      /* Whimsical Botanical Palette */
-      --terracotta: #D97757;
-      --terracotta-soft: #FBEFEA;
-      --stem: #70A08B;
-      --stem-joint: #4F7E6B;
-      --peach: #FFD4C7;
-      --peach-deep: #F19C84;
-      --mint: #C5EED9;
-      --mint-deep: #4EA37C;
-      --honey: #FFF1B8;
-      --honey-deep: #E5B842;
-      --lavender: #E5DEFF;
-      --lavender-deep: #7C3AED;
-      --sky: #D6ECFF;
-      --sky-deep: #3B82F6;
-      --gold-glow: rgba(229, 184, 66, 0.45);
+        /* Whimsical Botanical Palette */
+        --terracotta: #d97757;
+        --terracotta-soft: #fbefea;
+        --stem: #70a08b;
+        --stem-joint: #4f7e6b;
+        --peach: #ffd4c7;
+        --peach-deep: #f19c84;
+        --mint: #c5eed9;
+        --mint-deep: #4ea37c;
+        --honey: #fff1b8;
+        --honey-deep: #e5b842;
+        --lavender: #e5deff;
+        --lavender-deep: #7c3aed;
+        --sky: #d6ecff;
+        --sky-deep: #3b82f6;
+        --gold-glow: rgba(229, 184, 66, 0.45);
 
-      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-      --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
-    }
+        --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+      }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
 
-    body {
-      width: 100vw;
-      min-height: 100vh;
-      background: var(--bg);
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Rounded", ui-rounded, "Segoe UI", Roboto, sans-serif;
-      color: var(--ink);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      overflow-x: hidden;
-      padding: 14px 20px 20px;
-    }
-
-    /* Top Navigation Bar */
-    header {
-      width: 100%;
-      max-width: 1000px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 4px 0 14px;
-      border-bottom: 1.5px solid var(--border);
-      position: relative;
-      z-index: 100;
-    }
-
-    .brand-group {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      background: var(--surface);
-      border: 2px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-    }
-
-    .brand-title h1 {
-      font-size: 17px;
-      font-weight: 800;
-      letter-spacing: -0.01em;
-      color: var(--ink);
-    }
-
-    .brand-title p {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--ink-muted);
-    }
-
-    /* Unit-Level Dropdown */
-    .unit-dropdown-wrap {
-      position: relative;
-    }
-
-    .unit-dropdown-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 18px;
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 999px;
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--ink);
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-      transition: all 0.15s var(--ease-smooth);
-    }
-
-    .unit-dropdown-btn:hover {
-      border-color: var(--border-focus);
-      transform: translateY(-1px);
-    }
-
-    .unit-dropdown-btn .chevron {
-      font-size: 11px;
-      transition: transform 0.2s ease;
-    }
-
-    .unit-dropdown-btn.open .chevron {
-      transform: rotate(180deg);
-    }
-
-    .unit-dropdown-menu {
-      position: absolute;
-      top: calc(100% + 8px);
-      left: 50%;
-      transform: translateX(-50%);
-      width: 370px;
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 22px;
-      box-shadow: 0 16px 40px rgba(32, 30, 43, 0.14);
-      padding: 10px;
-      display: none;
-      flex-direction: column;
-      gap: 6px;
-      z-index: 200;
-      animation: menuFade 0.18s var(--ease-spring);
-    }
-
-    @keyframes menuFade {
-      from { opacity: 0; transform: translate(-50%, -6px) scale(0.97); }
-      to { opacity: 1; transform: translate(-50%, 0) scale(1); }
-    }
-
-    .unit-dropdown-menu.show {
-      display: flex;
-    }
-
-    .unit-menu-item {
-      padding: 11px 14px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      color: var(--ink);
-      font-size: 13px;
-      font-weight: 700;
-      transition: all 0.12s ease;
-      cursor: pointer;
-      border: 1.5px solid transparent;
-    }
-
-    .unit-menu-item:hover {
-      background: var(--surface-subtle);
-      border-color: var(--border);
-    }
-
-    .unit-menu-item.active {
-      background: var(--mint);
-      border-color: #4EA37C;
-      color: #064E3B;
-    }
-
-    .unit-menu-item .unit-badge {
-      font-size: 10px;
-      text-transform: uppercase;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: rgba(0,0,0,0.06);
-    }
-
-    .unit-menu-item.active .unit-badge {
-      background: #065F46;
-      color: #FFFFFF;
-    }
-
-    /* Top Right Controls */
-    .top-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .quiet-pill {
-      padding: 6px 14px;
-      border-radius: 999px;
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--ink-muted);
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .quiet-pill:hover {
-      border-color: var(--ink);
-      color: var(--ink);
-    }
-
-    .quiet-pill.active {
-      background: var(--honey);
-      border-color: var(--honey-deep);
-      color: #78350F;
-    }
-
-    /* Main Stage Card Layout */
-    main {
-      width: 100%;
-      max-width: 1000px;
-      display: flex;
-      align-items: stretch;
-      justify-content: center;
-      gap: 26px;
-      padding: 12px 0;
-      flex: 1;
-      z-index: 10;
-    }
-
-    @media (max-width: 860px) {
-      main {
+      body {
+        width: 100vw;
+        min-height: 100vh;
+        background: var(--bg);
+        font-family:
+          -apple-system, BlinkMacSystemFont, "SF Pro Rounded", ui-rounded, "Segoe UI", Roboto,
+          sans-serif;
+        color: var(--ink);
+        display: flex;
         flex-direction: column;
         align-items: center;
-      }
-    }
-
-    /* Left Stage Card */
-    .stage-card {
-      flex: 1.15;
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 32px;
-      padding: 16px 18px;
-      box-shadow: 0 4px 20px rgba(32, 30, 43, 0.04);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      position: relative;
-    }
-
-    .stage-header-bar {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-bottom: 8px;
-      border-bottom: 1px dashed var(--border);
-      gap: 12px;
-    }
-
-    .question-progress-indicator {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .progress-step-pip {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--border);
-      transition: all 0.3s ease;
-    }
-    .progress-step-pip.active {
-      background: var(--terracotta);
-      transform: scale(1.35);
-    }
-    .progress-step-pip.done {
-      background: var(--mint-deep);
-    }
-
-    .question-counter-label {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--ink-muted);
-      margin-left: 4px;
-    }
-
-    .stage-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--terracotta);
-      background: var(--terracotta-soft);
-      padding: 4px 12px;
-      border-radius: 999px;
-    }
-
-    /* SVG Stage Canvas */
-    .interactive-svg {
-      display: block;
-      width: 100%;
-      max-width: 470px;
-      height: 480px;
-      overflow: visible;
-      touch-action: none;
-    }
-
-    /* Right Socratic Dialogue Card */
-    .socratic-side-card {
-      flex: 0.85;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      justify-content: space-between;
-    }
-
-    .socratic-dialogue {
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 26px;
-      padding: 20px;
-      box-shadow: 0 4px 20px rgba(32, 30, 43, 0.04);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .mascot-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .mascot-pfp {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--honey);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      border: 1.5px solid var(--honey-deep);
-    }
-
-    .mascot-name {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--ink);
-    }
-
-    .strategy-tag {
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--mint-deep);
-      background: var(--mint);
-      padding: 2px 8px;
-      border-radius: 999px;
-    }
-
-    .socratic-prompt-text {
-      font-size: 19px;
-      font-weight: 800;
-      line-height: 1.35;
-      color: var(--ink);
-    }
-
-    .socratic-subtext {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--ink-muted);
-      line-height: 1.4;
-    }
-
-    /* Interactive Strategy Visual Card (Unit specific) */
-    .strategy-visual-card {
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 22px;
-      padding: 14px 18px;
-      box-shadow: 0 4px 20px rgba(32, 30, 43, 0.04);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .strategy-title {
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--ink-faint);
-    }
-
-    /* Number Bond */
-    .bond-diagram {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-    }
-
-    .bond-circle {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: 2px solid var(--ink);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: 900;
-      background: var(--surface);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-      position: relative;
-    }
-
-    .bond-circle.whole-addend { background: var(--lavender); border-color: #7C3AED; color: #5B21B6; }
-    .bond-circle.part-ten { background: var(--honey); border-color: var(--honey-deep); color: #92400E; }
-    .bond-circle.part-overflow { background: var(--mint); border-color: var(--mint-deep); color: #065F46; }
-
-    .bond-circle .sublabel {
-      font-size: 9px;
-      font-weight: 800;
-      position: absolute;
-      bottom: -16px;
-      white-space: nowrap;
-      color: var(--ink-muted);
-    }
-
-    /* Equation Bridge */
-    .equation-bridge-card {
-      background: var(--surface-subtle);
-      border: 1.5px solid var(--border);
-      border-radius: 16px;
-      padding: 12px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .equation-bridge-math {
-      font-size: 19px;
-      font-weight: 900;
-      color: var(--ink);
-      letter-spacing: -0.01em;
-    }
-
-    .highlight-span {
-      padding: 2px 8px;
-      border-radius: 8px;
-      font-weight: 900;
-    }
-    .highlight-span.ten { color: #B45309; background: var(--honey); }
-    .highlight-span.sum { color: #065F46; background: var(--mint); }
-    .highlight-span.diff { color: #5B21B6; background: var(--lavender); }
-
-    /* Auto-Advance Notification Banner */
-    .auto-advance-banner {
-      background: #ECFDF5;
-      border: 2px solid #10B981;
-      border-radius: 16px;
-      padding: 10px 14px;
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      animation: popIn 0.25s var(--ease-spring);
-    }
-
-    .auto-advance-text {
-      font-size: 13px;
-      font-weight: 800;
-      color: #065F46;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .auto-advance-skip {
-      padding: 4px 12px;
-      border-radius: 999px;
-      background: #059669;
-      color: #FFFFFF;
-      font-size: 12px;
-      font-weight: 800;
-      border: none;
-      cursor: pointer;
-    }
-
-    /* Socratic Teach-Back Modal Card */
-    .teach-back-card {
-      background: #FFFDF9;
-      border: 2px solid #F59E0B;
-      border-radius: 18px;
-      padding: 14px;
-      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
-      display: none;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .teach-back-prompt {
-      font-size: 13px;
-      font-weight: 800;
-      color: #92400E;
-    }
-
-    .teach-back-btn {
-      padding: 8px 12px;
-      border-radius: 10px;
-      border: 1.5px solid #F59E0B;
-      background: #FFFFFF;
-      font-size: 12px;
-      font-weight: 700;
-      color: #78350F;
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.15s ease;
-    }
-
-    .teach-back-btn:hover {
-      background: #FEF3C7;
-      transform: translateX(3px);
-    }
-
-    /* Actions Rack */
-    .actions-rack {
-      display: flex;
-      gap: 10px;
-    }
-
-    .blu-btn {
-      flex: 1;
-      height: 48px;
-      border-radius: 14px;
-      border: 2px solid var(--ink);
-      font-size: 14px;
-      font-weight: 800;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: all 0.15s ease;
-      background: var(--surface);
-      color: var(--ink);
-      box-shadow: 0 2px 0 var(--ink);
-    }
-
-    .blu-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 0 var(--ink);
-    }
-
-    .blu-btn:active {
-      transform: translateY(1px);
-      box-shadow: 0 1px 0 var(--ink);
-    }
-
-    .blu-btn.primary {
-      background: var(--mint);
-      color: #064E3B;
-      border-color: #064E3B;
-    }
-
-    /* Unit Complete Overlay Modal */
-    .victory-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(32, 30, 43, 0.45);
-      backdrop-filter: blur(5px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      animation: popIn 0.25s var(--ease-spring);
-    }
-
-    .victory-card {
-      width: 420px;
-      background: var(--surface);
-      border: 2px solid var(--border);
-      border-radius: 28px;
-      padding: 32px 26px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-    }
-
-    @keyframes popIn {
-      0% { opacity: 0; transform: scale(0.9); }
-      100% { opacity: 1; transform: scale(1); }
-    }
-
-    /* Bottom Grown-Up Co-Play Prompt (From NCDPI Parent Guide) */
-    footer {
-      width: 100%;
-      max-width: 1000px;
-      padding-top: 12px;
-      border-top: 1.5px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .coplay-card {
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: 999px;
-      padding: 7px 22px;
-      font-size: 13px;
-      color: var(--ink-muted);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .coplay-card strong {
-      color: var(--terracotta);
-    }
-
-    /* Petal Confetti */
-    .confetti-petal {
-      position: absolute;
-      width: 12px;
-      height: 16px;
-      border-radius: 50% 50% 50% 0;
-      pointer-events: none;
-      z-index: 100;
-      animation: petalFall 2.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    }
-
-    @keyframes petalFall {
-      0% { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(0.6); }
-      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(1.1); }
-    }
-
-    /* Calm mode overrides */
-    body.calm .pulse-glow,
-    body.calm .confetti-petal {
-      animation: none !important;
-      opacity: 0.2 !important;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Top Bar: Logo + Unit Dropdown + Calm Switch -->
-  <header>
-    <div class="brand-group">
-      <div class="brand-icon">🐌</div>
-      <div class="brand-title">
-        <h1>Whispering Vine</h1>
-        <p>2nd Grade Mental Math · NC.2.OA.2</p>
-      </div>
-    </div>
-
-    <!-- The Unit-Level Dropdown (All 4 Units Active & Playable!) -->
-    <div class="unit-dropdown-wrap">
-      <button class="unit-dropdown-btn" id="unit-dropdown-btn" onclick="toggleUnitMenu()">
-        <span id="current-unit-title">Unit 1: Making Ten to Add (within 20)</span>
-        <span class="chevron">▼</span>
-      </button>
-
-      <div class="unit-dropdown-menu" id="unit-dropdown-menu">
-        <div class="unit-menu-item active" id="menu-u1" onclick="switchUnit(1)">
-          <div>
-            <div>Unit 1: Making Ten to Add</div>
-            <div style="font-size: 11px; color: #065F46; font-weight: 600;">8 + 5 = 8 + 2 + 3 = 13 (Decomposing to 10)</div>
-          </div>
-          <span class="unit-badge">Unit 1</span>
-        </div>
-
-        <div class="unit-menu-item" id="menu-u2" onclick="switchUnit(2)">
-          <div>
-            <div>Unit 2: Think Addition (Subtract within 20)</div>
-            <div style="font-size: 11px; color: var(--ink-muted); font-weight: 600;">14 − 6 = ? (Think 6 + ? = 14)</div>
-          </div>
-          <span class="unit-badge">Unit 2</span>
-        </div>
-
-        <div class="unit-menu-item" id="menu-u3" onclick="switchUnit(3)">
-          <div>
-            <div>Unit 3: Doubles & Near Doubles (±1)</div>
-            <div style="font-size: 11px; color: var(--ink-muted); font-weight: 600;">7 + 8 = 7 + 7 + 1 = 15 (Twin Dancing Vines)</div>
-          </div>
-          <span class="unit-badge">Unit 3</span>
-        </div>
-
-        <div class="unit-menu-item" id="menu-u4" onclick="switchUnit(4)">
-          <div>
-            <div>Unit 4: Taking from Ten to Subtract</div>
-            <div style="font-size: 11px; color: var(--ink-muted); font-weight: 600;">13 − 5 = 13 − 3 − 2 = 8 (Seed Pod Harvest)</div>
-          </div>
-          <span class="unit-badge">Unit 4</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Calm Mode & Sound -->
-    <div class="top-controls">
-      <button class="quiet-pill" id="calm-toggle" onclick="toggleCalm()">🌿 Calm</button>
-    </div>
-  </header>
-
-  <!-- Main Manipulative & Socratic Stage -->
-  <main>
-
-    <!-- Left Stage Card: Houses the Unit-Specific SVG Manipulative -->
-    <div class="stage-card" id="stage-card">
-      <div class="stage-header-bar">
-        <div class="question-progress-indicator">
-          <div class="progress-step-pip active" id="pip-0"></div>
-          <div class="progress-step-pip" id="pip-1"></div>
-          <div class="progress-step-pip" id="pip-2"></div>
-          <div class="progress-step-pip" id="pip-3"></div>
-          <div class="progress-step-pip" id="pip-4"></div>
-          <span class="question-counter-label" id="question-label">Question 1 of 5</span>
-        </div>
-
-        <div class="stage-badge" id="step-badge">
-          Step 1: Fill Vine 1 to Make 10
-        </div>
-      </div>
-
-      <!-- Main Unit SVG Stage (Rendered dynamically by active unit) -->
-      <svg class="interactive-svg" id="main-svg" viewBox="0 0 460 480">
-        <!-- Injected dynamically per unit -->
-      </svg>
-    </div>
-
-    <!-- Right Side: Socratic Dialogue + Strategy Visual Card + Actions -->
-    <div class="socratic-side-card">
-
-      <!-- Socratic Dialogue Box -->
-      <div class="socratic-dialogue">
-        <div class="mascot-row">
-          <div class="mascot-pfp" id="mascot-icon">🐌</div>
-          <div>
-            <div class="mascot-name" id="mascot-name">Barnaby the Snail</div>
-            <div class="strategy-tag" id="strategy-tag">Making Ten Strategy</div>
-          </div>
-        </div>
-
-        <div class="socratic-prompt-text" id="prompt-heading">
-          Vine 1 has 8 blossoms. How many more make a friendly 10?
-        </div>
-        <div class="socratic-subtext" id="prompt-subtext">
-          Drag the snail up into the glowing gap to complete the first ten!
-        </div>
-      </div>
-
-      <!-- Unit Strategy Visual Card (e.g. Number Bond or Twin Sync Meter) -->
-      <div class="strategy-visual-card" id="strategy-visual-card">
-        <!-- Rendered per unit -->
-      </div>
-
-      <!-- Equation Bridge Card -->
-      <div class="equation-bridge-card">
-        <div class="equation-bridge-math" id="equation-bridge">
-          <!-- Injected dynamically -->
-        </div>
-      </div>
-
-      <!-- Auto-Advance Banner (Shown after solving) -->
-      <div class="auto-advance-banner" id="auto-advance-banner">
-        <div class="auto-advance-text">
-          <span>🌟</span>
-          <span id="auto-advance-msg">Great job! Next question in 3s…</span>
-        </div>
-        <button class="auto-advance-skip" onclick="skipToNextQuestion()">Next Question ➔</button>
-      </div>
-
-      <!-- Socratic Teach-Back Modal Card -->
-      <div class="teach-back-card" id="teach-back-card">
-        <div class="teach-back-prompt" id="teach-back-prompt">
-          💬 Mascot Teach-Back: "Why did we split 5 into 2 and 3?"
-        </div>
-        <div id="teach-back-options" style="display: flex; flex-direction: column; gap: 6px;"></div>
-      </div>
-
-      <!-- Actions Rack -->
-      <div class="actions-rack">
-        <button class="blu-btn primary" id="btn-action" onclick="handlePrimaryAction()">Make 10 ✨</button>
-        <button class="blu-btn" id="btn-watch" onclick="handleWatchDemo()">Watch Snail 🐌</button>
-        <button class="blu-btn" onclick="resetCurrentProblem()">Reset ↺</button>
-      </div>
-
-    </div>
-
-  </main>
-
-  <!-- Bottom Grown-Up Co-Play Prompt (From NCDPI Parent Guide) -->
-  <footer>
-    <div class="coplay-card">
-      <span>💬</span>
-      <span id="coplay-text"><strong>Grown-Up Co-Play Prompt:</strong> Ask your learner: <em>"Can you show me how making 10 helped you solve 8 + 5 without using fingers?"</em></span>
-    </div>
-  </footer>
-
-  <!-- Unit Complete Victory Modal -->
-  <div class="victory-modal" id="victory-modal">
-    <div class="victory-card">
-      <div style="font-size: 54px;">🏆</div>
-      <div style="font-size: 22px; font-weight: 900; color: var(--ink);">Unit Complete!</div>
-      <div style="font-size: 14px; color: var(--ink-muted); line-height: 1.5;" id="victory-desc">
-        You solved all 5 challenges in this unit using mental math strategies.
-      </div>
-      <button class="blu-btn primary" style="width: 100%; justify-content: center;" onclick="advanceToNextUnit()">
-        Continue to Next Unit ➔
-      </button>
-      <button class="blu-btn" style="width: 100%; justify-content: center;" onclick="replayUnit()">
-        Replay Unit ↺
-      </button>
-    </div>
-  </div>
-
-  <script>
-    // --- Web Audio Synthesizer (Kalimba + Windchimes) ---
-    let audioCtx = null;
-    function getAudio() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      return audioCtx;
-    }
-
-    const PENTATONIC = [
-      261.63, 293.66, 329.63, 392.00, 440.00,
-      523.25, 587.33, 659.25, 783.99, 1046.50
-    ];
-
-    function playTone(idx, pitchOffset = 0) {
-      try {
-        const ctx = getAudio();
-        const freq = PENTATONIC[Math.min(PENTATONIC.length - 1, Math.max(0, idx))] * Math.pow(2, pitchOffset / 12);
-        const osc1 = ctx.createOscillator();
-        const osc2 = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        osc1.type = "sine";
-        osc2.type = "triangle";
-        osc1.frequency.setValueAtTime(freq, ctx.currentTime);
-        osc2.frequency.setValueAtTime(freq * 2.01, ctx.currentTime);
-
-        gain.gain.setValueAtTime(0.28, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
-
-        osc1.connect(gain);
-        osc2.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc1.start();
-        osc2.start();
-        osc1.stop(ctx.currentTime + 0.36);
-        osc2.stop(ctx.currentTime + 0.36);
-      } catch (e) {}
-    }
-
-    function playVictoryChimes() {
-      try {
-        const chord = [523.25, 659.25, 783.99, 1046.50];
-        chord.forEach((f, i) => {
-          setTimeout(() => {
-            const ctx = getAudio();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = "sine";
-            osc.frequency.setValueAtTime(f, ctx.currentTime);
-            gain.gain.setValueAtTime(0.2, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.6);
-          }, i * 110);
-        });
-      } catch (e) {}
-    }
-
-    // --- CURRICULUM DEFINITIONS: 4 UNITS ---
-    const UNITS = {
-      1: {
-        id: 1,
-        title: "Unit 1: Making Ten to Add (within 20)",
-        strategy: "Making Ten Strategy",
-        mascot: "🐌",
-        mascotName: "Barnaby the Snail",
-        coplay: "Ask: 'Can you show me how making 10 helped you solve without using fingers?'",
-        problems: [
-          { a: 8, b: 5 },
-          { a: 9, b: 4 },
-          { a: 8, b: 6 },
-          { a: 7, b: 5 },
-          { a: 9, b: 7 }
-        ]
-      },
-      2: {
-        id: 2,
-        title: "Unit 2: Think Addition (Subtract within 20)",
-        strategy: "Think Addition Strategy",
-        mascot: "🦊",
-        mascotName: "Kit the Fox",
-        coplay: "Ask: 'How did thinking of addition help you find what was missing to subtract?'",
-        problems: [
-          { whole: 14, known: 6 }, // 14 - 6 = 8
-          { whole: 12, known: 7 }, // 12 - 7 = 5
-          { whole: 15, known: 8 }, // 15 - 8 = 7
-          { whole: 13, known: 9 }, // 13 - 9 = 4
-          { whole: 16, known: 7 }  // 16 - 7 = 9
-        ]
-      },
-      3: {
-        id: 3,
-        title: "Unit 3: Doubles & Near Doubles (±1)",
-        strategy: "Doubles & Near Doubles",
-        mascot: "🐻",
-        mascotName: "Bramble the Bear",
-        coplay: "Ask: 'Which double did you start with, and how did adding 1 finish the problem?'",
-        problems: [
-          { a: 7, b: 8 }, // 7 + 7 + 1 = 15
-          { a: 6, b: 7 }, // 6 + 6 + 1 = 13
-          { a: 8, b: 9 }, // 8 + 8 + 1 = 17
-          { a: 5, b: 6 }, // 5 + 5 + 1 = 11
-          { a: 9, b: 8 }  // 8 + 8 + 1 = 17
-        ]
-      },
-      4: {
-        id: 4,
-        title: "Unit 4: Taking from Ten to Subtract",
-        strategy: "Taking from Ten Strategy",
-        mascot: "🐿️",
-        mascotName: "Pippa the Squirrel",
-        coplay: "Ask: 'How did taking away down to 10 first make the subtraction easier?'",
-        problems: [
-          { whole: 13, sub: 5 }, // 13 - 3 - 2 = 8
-          { whole: 14, sub: 6 }, // 14 - 4 - 2 = 8
-          { whole: 15, sub: 7 }, // 15 - 5 - 2 = 8
-          { whole: 12, sub: 5 }, // 12 - 2 - 3 = 7
-          { whole: 16, sub: 8 }  // 16 - 6 - 2 = 8
-        ]
-      }
-    };
-
-    // --- State Management ---
-    let currentUnitId = 1;
-    let questionIndex = 0; // 0 to 4
-    let unitStep = 1;      // multi-step state within current problem
-    let userSliderVal = 0; // interactive slider value
-    let autoAdvanceTimer = null;
-
-    // Node Y Coordinates (10 nodes along 360px vertical stalk)
-    const NODE_Y = [];
-    const BOTTOM_Y = 380;
-    const TOP_Y = 56;
-    const STEP_Y = (BOTTOM_Y - TOP_Y) / 9; // ~36px
-    for (let i = 0; i < 10; i++) {
-      NODE_Y.push(BOTTOM_Y - i * STEP_Y);
-    }
-
-    // DOM Elements
-    const mainSvg = document.getElementById("main-svg");
-    const promptHeading = document.getElementById("prompt-heading");
-    const promptSubtext = document.getElementById("prompt-subtext");
-    const stepBadge = document.getElementById("step-badge");
-    const mascotIcon = document.getElementById("mascot-icon");
-    const mascotName = document.getElementById("mascot-name");
-    const strategyTag = document.getElementById("strategy-tag");
-    const strategyVisualCard = document.getElementById("strategy-visual-card");
-    const equationBridge = document.getElementById("equation-bridge");
-    const btnAction = document.getElementById("btn-action");
-    const btnWatch = document.getElementById("btn-watch");
-    const coplayText = document.getElementById("coplay-text");
-    const questionLabel = document.getElementById("question-label");
-    const autoAdvanceBanner = document.getElementById("auto-advance-banner");
-    const autoAdvanceMsg = document.getElementById("auto-advance-msg");
-    const teachBackCard = document.getElementById("teach-back-card");
-    const teachBackPrompt = document.getElementById("teach-back-prompt");
-    const teachBackOptions = document.getElementById("teach-back-options");
-    const victoryModal = document.getElementById("victory-modal");
-
-    // --- UNIT SWITCHING ---
-    function switchUnit(unitId) {
-      currentUnitId = unitId;
-      questionIndex = 0;
-      clearAutoAdvance();
-
-      // Update Dropdown UI
-      document.querySelectorAll(".unit-menu-item").forEach(item => item.classList.remove("active"));
-      document.getElementById(`menu-u${unitId}`).classList.add("active");
-      document.getElementById("current-unit-title").textContent = UNITS[unitId].title;
-      toggleUnitMenu();
-
-      // Update Mascot and Coplay
-      mascotIcon.textContent = UNITS[unitId].mascot;
-      mascotName.textContent = UNITS[unitId].mascotName;
-      strategyTag.textContent = UNITS[unitId].strategy;
-      coplayText.innerHTML = `<strong>Grown-Up Co-Play Prompt:</strong> ${UNITS[unitId].coplay}`;
-
-      loadCurrentQuestion();
-    }
-
-    function loadCurrentQuestion() {
-      clearAutoAdvance();
-      unitStep = 1;
-      userSliderVal = 0;
-      teachBackCard.style.display = "none";
-      autoAdvanceBanner.style.display = "none";
-      btnAction.style.display = "inline-flex";
-
-      // Update question pip dots
-      for (let i = 0; i < 5; i++) {
-        const pip = document.getElementById(`pip-${i}`);
-        pip.className = "progress-step-pip";
-        if (i < questionIndex) pip.classList.add("done");
-        else if (i === questionIndex) pip.classList.add("active");
-      }
-      questionLabel.textContent = `Question ${questionIndex + 1} of 5`;
-
-      // Render the specific Unit layout and animation
-      if (currentUnitId === 1) renderUnit1();
-      else if (currentUnitId === 2) renderUnit2();
-      else if (currentUnitId === 3) renderUnit3();
-      else if (currentUnitId === 4) renderUnit4();
-    }
-
-    // =========================================================================
-    // UNIT 1: MAKING TEN TO ADD (Dual Vines + Number Bond)
-    // =========================================================================
-    function renderUnit1() {
-      const prob = UNITS[1].problems[questionIndex];
-      const neededForTen = 10 - prob.a;
-      const leftover = prob.b - neededForTen;
-
-      stepBadge.textContent = unitStep === 1 ? "Step 1: Fill Vine 1 to Make 10" : "Step 2: Add Leftover to Vine 2";
-      btnAction.textContent = unitStep === 1 ? "Make 10 ✨" : "Finish Addition ✨";
-
-      if (unitStep === 1) {
-        promptHeading.textContent = `Vine 1 has ${prob.a} blossoms. How many more make a friendly 10?`;
-        promptSubtext.textContent = `Drag Snail 1 up into the glowing gap (or tap the sleeping buds)!`;
-      } else {
-        promptHeading.textContent = `Vine 1 made 10! Now add the remaining ${leftover} blossoms.`;
-        promptSubtext.textContent = `We split ${prob.b} into ${neededForTen} (to make 10) + ${leftover} (leftover).`;
+        justify-content: space-between;
+        overflow-x: hidden;
+        padding: 14px 20px 20px;
       }
 
-      // Strategy Visual Card: Number Bond
-      strategyVisualCard.innerHTML = `
+      /* Top Navigation Bar */
+      header {
+        width: 100%;
+        max-width: 1000px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 4px 0 14px;
+        border-bottom: 1.5px solid var(--border);
+        position: relative;
+        z-index: 100;
+      }
+
+      .brand-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: var(--surface);
+        border: 2px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+      }
+
+      .brand-title h1 {
+        font-size: 17px;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+      }
+
+      .brand-title p {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--ink-muted);
+      }
+
+      /* Unit-Level Dropdown */
+      .unit-dropdown-wrap {
+        position: relative;
+      }
+
+      .unit-dropdown-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 18px;
+        background: var(--surface);
+        border: 2px solid var(--border);
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--ink);
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+        transition: all 0.15s var(--ease-smooth);
+      }
+
+      .unit-dropdown-btn:hover {
+        border-color: var(--border-focus);
+        transform: translateY(-1px);
+      }
+
+      .unit-dropdown-btn .chevron {
+        font-size: 11px;
+        transition: transform 0.2s ease;
+      }
+
+      .unit-dropdown-btn.open .chevron {
+        transform: rotate(180deg);
+      }
+
+      .unit-dropdown-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%);
+        width: 370px;
+        background: var(--surface);
+        border: 2px solid var(--border);
+        border-radius: 22px;
+        box-shadow: 0 16px 40px rgba(32, 30, 43, 0.14);
+        padding: 10px;
+        display: none;
+        flex-direction: column;
+        gap: 6px;
+        z-index: 200;
+        animation: menuFade 0.18s var(--ease-spring);
+      }
+
+      @keyframes menuFade {
+        from {
+          opacity: 0;
+          transform: translate(-50%, -6px) scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: translate(-50%, 0) scale(1);
+        }
+      }
+
+      .unit-dropdown-menu.show {
+        display: flex;
+      }
+
+      .unit-menu-item {
+        padding: 11px 14px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--ink);
+        font-size: 13px;
+        font-weight: 700;
+        transition: all 0.12s ease;
+        cursor: pointer;
+        border: 1.5px solid transparent;
+      }
+
+      .unit-menu-item:hover {
+        background: var(--surface-subtle);
+        border-color: var(--border);
+      }
+
+      .unit-menu-item.active {
+        background: var(--mint);
+        border-color: #4ea37c;
+        color: #064e3b;
+      }
+
+      .unit-menu-item .unit-badge {
+        font-size: 10px;
+        text-transform: uppercase;
+        font-weight: 800;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.06);
+      }
+
+      .unit-menu-item.active .unit-badge {
+        background: #065f46;
+        color: #ffffff;
+      }
+
+      /* Top Right Controls */
+      .top-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .quiet-pill {
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink-muted);
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .quiet-pill:hover {
+        border-color: var(--ink);
+        color: var(--ink);
+      }
+
+      .quiet-pill.active {
+        background: var(--honey);
+        border-color: var(--honey-deep);
+        color: #78350f;
+      }
+
+      /* Main Stage Card Layout */
+      main {
+        width: 100%;
+        max-width: 1000px;
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        gap: 26px;
+        padding: 12px 0;
+        flex: 1;
+        z-index: 10;
+      }
+
+      @media (max-width: 860px) {
+        main {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+
+      /* Left Stage Card */
+      .stage-card {
+        flex: 1.15;
+        background: var(--surface);
+        border: 2px solid var(--border);
+        border-radius: 32px;
+        padding: 16px 18px;
+        box-shadow: 0 4px 20px rgba(32, 30, 43, 0.04);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+      }
+
+      .stage-header-bar {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 8px;
+        border-bottom: 1px dashed var(--border);
+        gap: 12px;
+      }
+
+      .question-progress-indicator {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .progress-step-pip {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--border);
+        transition: all 0.3s ease;
+      }
+      .progress-step-pip.active {
+        background: var(--terracotta);
+        transform: scale(1.35);
+      }
+      .progress-step-pip.done {
+        background: var(--mint-deep);
+      }
+
+      .question-counter-label {
+        font-size: 13px;
+        font-weight: 800;
+        color: var(--ink-muted);
+        margin-left: 4px;
+      }
+
+      .stage-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--terracotta);
+        background: var(--terracotta-soft);
+        padding: 4px 12px;
+        border-radius: 999px;
+      }
+
+      /* SVG Stage Canvas */
+      .interactive-svg {
+        display: block;
+        width: 100%;
+        max-width: 470px;
+        height: 480px;
+        overflow: visible;
+        touch-action: none;
+      }
+
+      /* Right Socratic Dialogue Card */
+      .socratic-side-card {
+        flex: 0.85;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        justify-content: space-between;
+      }
+
+      .socratic-dialogue {
+        background: var(--surface);
+        border: 2px solid var(--border);
+        border-radius: 26px;
+        padding: 20px;
+        box-shadow: 0 4px 20px rgba(32, 30, 43, 0.04);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .mascot-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .mascot-pfp {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--honey);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        border: 1.5px solid var(--honey-deep);
+      }
+
+      .mascot-name {
+        font-size: 13px;
+        font-weight: 800;
+        color: var(--ink);
+      }
+
+      .strategy-tag {
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--mint-deep);
+        background: var(--mint);
+        padding: 2px 8px;
+        border-radius: 999px;
+      }
+
+      .socratic-prompt-text {
+        font-size: 19px;
+        font-weight: 800;
+        line-height: 1.35;
+        color: var(--ink);
+      }
+
+      .socratic-subtext {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ink-muted);
+        line-height: 1.4;
+      }
+
+      /* Interactive Strategy Visual Card (Unit specific) */
+      .strategy-visual-card {
+        background: var(--surface);
+        border: 2px solid var(--border);
+        border-radius: 22px;
+        padding: 14px 18px;
+        box-shadow: 0 4px 20px rgba(32, 30, 43, 0.04);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .strategy-title {
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--ink-faint);
+      }
+
+      /* Number Bond */
+      .bond-diagram {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+      }
+
+      .bond-circle {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 2px solid var(--ink);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 900;
+        background: var(--surface);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        position: relative;
+      }
+
+      .bond-circle.whole-addend {
+        background: var(--lavender);
+        border-color: #7c3aed;
+        color: #5b21b6;
+      }
+      .bond-circle.part-ten {
+        background: var(--honey);
+        border-color: var(--honey-deep);
+        color: #92400e;
+      }
+      .bond-circle.part-overflow {
+        background: var(--mint);
+        border-color: var(--mint-deep);
+        color: #065f46;
+      }
+
+      .bond-circle .sublabel {
+        font-size: 9px;
+        font-weight: 800;
+        position: absolute;
+        bottom: -16px;
+        white-space: nowrap;
+        color: var(--ink-muted);
+      }
+
+      /* Equation Bridge */
+      .equation-bridge-card {
+        background: var(--surface-subtle);
+        border: 1.5px solid var(--border);
+        border-radius: 16px;
+        padding: 12px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .equation-bridge-math {
+        font-size: 19px;
+        font-weight: 900;
+        color: var(--ink);
+        letter-spacing: -0.01em;
+      }
+
+      .highlight-span {
+        padding: 2px 8px;
+        border-radius: 8px;
+        font-weight: 900;
+      }
+      .highlight-span.ten {
+        color: #b45309;
+        background: var(--honey);
+      }
+      .highlight-span.sum {
+        color: #065f46;
+        background: var(--mint);
+      }
+      .highlight-span.diff {
+        color: #5b21b6;
+        background: var(--lavender);
+      }
+
+      /* Auto-Advance Notification Banner */
+      .auto-advance-banner {
+        background: #ecfdf5;
+        border: 2px solid #10b981;
+        border-radius: 16px;
+        padding: 10px 14px;
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        animation: popIn 0.25s var(--ease-spring);
+      }
+
+      .auto-advance-text {
+        font-size: 13px;
+        font-weight: 800;
+        color: #065f46;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .auto-advance-skip {
+        padding: 4px 12px;
+        border-radius: 999px;
+        background: #059669;
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: 800;
+        border: none;
+        cursor: pointer;
+      }
+
+      /* Socratic Teach-Back Modal Card */
+      .teach-back-card {
+        background: #fffdf9;
+        border: 2px solid #f59e0b;
+        border-radius: 18px;
+        padding: 14px;
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
+        display: none;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .teach-back-prompt {
+        font-size: 13px;
+        font-weight: 800;
+        color: #92400e;
+      }
+
+      .teach-back-btn {
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 1.5px solid #f59e0b;
+        background: #ffffff;
+        font-size: 12px;
+        font-weight: 700;
+        color: #78350f;
+        cursor: pointer;
+        text-align: left;
+        transition: all 0.15s ease;
+      }
+
+      .teach-back-btn:hover {
+        background: #fef3c7;
+        transform: translateX(3px);
+      }
+
+      /* Actions Rack */
+      .actions-rack {
+        display: flex;
+        gap: 10px;
+      }
+
+      .blu-btn {
+        flex: 1;
+        height: 48px;
+        border-radius: 14px;
+        border: 2px solid var(--ink);
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: all 0.15s ease;
+        background: var(--surface);
+        color: var(--ink);
+        box-shadow: 0 2px 0 var(--ink);
+      }
+
+      .blu-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 0 var(--ink);
+      }
+
+      .blu-btn:active {
+        transform: translateY(1px);
+        box-shadow: 0 1px 0 var(--ink);
+      }
+
+      .blu-btn.primary {
+        background: var(--mint);
+        color: #064e3b;
+        border-color: #064e3b;
+      }
+
+      /* Unit Complete Overlay Modal */
+      .victory-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(32, 30, 43, 0.45);
+        backdrop-filter: blur(5px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        animation: popIn 0.25s var(--ease-spring);
+      }
+
+      .victory-card {
+        width: 420px;
+        background: var(--surface);
+        border: 2px solid var(--border);
+        border-radius: 28px;
+        padding: 32px 26px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+      }
+
+      @keyframes popIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* Bottom Grown-Up Co-Play Prompt (From NCDPI Parent Guide) */
+      footer {
+        width: 100%;
+        max-width: 1000px;
+        padding-top: 12px;
+        border-top: 1.5px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .coplay-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 999px;
+        padding: 7px 22px;
+        font-size: 13px;
+        color: var(--ink-muted);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .coplay-card strong {
+        color: var(--terracotta);
+      }
+
+      /* Petal Confetti */
+      .confetti-petal {
+        position: absolute;
+        width: 12px;
+        height: 16px;
+        border-radius: 50% 50% 50% 0;
+        pointer-events: none;
+        z-index: 100;
+        animation: petalFall 2.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      }
+
+      @keyframes petalFall {
+        0% {
+          opacity: 1;
+          transform: translate(0, 0) rotate(0deg) scale(0.6);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(1.1);
+        }
+      }
+
+      /* Calm mode overrides */
+      body.calm .pulse-glow,
+      body.calm .confetti-petal {
+        animation: none !important;
+        opacity: 0.2 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Bar: Logo + Unit Dropdown + Calm Switch -->
+    <header>
+      <div class="brand-group">
+        <div class="brand-icon">🐌</div>
+        <div class="brand-title">
+          <h1>Whispering Vine</h1>
+          <p>2nd Grade Mental Math · NC.2.OA.2</p>
+        </div>
+      </div>
+
+      <!-- The Unit-Level Dropdown (All 4 Units Active & Playable!) -->
+      <div class="unit-dropdown-wrap">
+        <button class="unit-dropdown-btn" id="unit-dropdown-btn" onclick="toggleUnitMenu()">
+          <span id="current-unit-title">Unit 1: Making Ten to Add (within 20)</span>
+          <span class="chevron">▼</span>
+        </button>
+
+        <div class="unit-dropdown-menu" id="unit-dropdown-menu">
+          <div class="unit-menu-item active" id="menu-u1" onclick="switchUnit(1)">
+            <div>
+              <div>Unit 1: Making Ten to Add</div>
+              <div style="font-size: 11px; color: #065f46; font-weight: 600">
+                8 + 5 = 8 + 2 + 3 = 13 (Decomposing to 10)
+              </div>
+            </div>
+            <span class="unit-badge">Unit 1</span>
+          </div>
+
+          <div class="unit-menu-item" id="menu-u2" onclick="switchUnit(2)">
+            <div>
+              <div>Unit 2: Think Addition (Subtract within 20)</div>
+              <div style="font-size: 11px; color: var(--ink-muted); font-weight: 600">
+                14 − 6 = ? (Think 6 + ? = 14)
+              </div>
+            </div>
+            <span class="unit-badge">Unit 2</span>
+          </div>
+
+          <div class="unit-menu-item" id="menu-u3" onclick="switchUnit(3)">
+            <div>
+              <div>Unit 3: Doubles & Near Doubles (±1)</div>
+              <div style="font-size: 11px; color: var(--ink-muted); font-weight: 600">
+                7 + 8 = 7 + 7 + 1 = 15 (Twin Dancing Vines)
+              </div>
+            </div>
+            <span class="unit-badge">Unit 3</span>
+          </div>
+
+          <div class="unit-menu-item" id="menu-u4" onclick="switchUnit(4)">
+            <div>
+              <div>Unit 4: Taking from Ten to Subtract</div>
+              <div style="font-size: 11px; color: var(--ink-muted); font-weight: 600">
+                13 − 5 = 13 − 3 − 2 = 8 (Seed Pod Harvest)
+              </div>
+            </div>
+            <span class="unit-badge">Unit 4</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calm Mode & Sound -->
+      <div class="top-controls">
+        <button class="quiet-pill" id="calm-toggle" onclick="toggleCalm()">🌿 Calm</button>
+      </div>
+    </header>
+
+    <!-- Main Manipulative & Socratic Stage -->
+    <main>
+      <!-- Left Stage Card: Houses the Unit-Specific SVG Manipulative -->
+      <div class="stage-card" id="stage-card">
+        <div class="stage-header-bar">
+          <div class="question-progress-indicator">
+            <div class="progress-step-pip active" id="pip-0"></div>
+            <div class="progress-step-pip" id="pip-1"></div>
+            <div class="progress-step-pip" id="pip-2"></div>
+            <div class="progress-step-pip" id="pip-3"></div>
+            <div class="progress-step-pip" id="pip-4"></div>
+            <span class="question-counter-label" id="question-label">Question 1 of 5</span>
+          </div>
+
+          <div class="stage-badge" id="step-badge">Step 1: Fill Vine 1 to Make 10</div>
+        </div>
+
+        <!-- Main Unit SVG Stage (Rendered dynamically by active unit) -->
+        <svg class="interactive-svg" id="main-svg" viewBox="0 0 460 480">
+          <!-- Injected dynamically per unit -->
+        </svg>
+      </div>
+
+      <!-- Right Side: Socratic Dialogue + Strategy Visual Card + Actions -->
+      <div class="socratic-side-card">
+        <!-- Socratic Dialogue Box -->
+        <div class="socratic-dialogue">
+          <div class="mascot-row">
+            <div class="mascot-pfp" id="mascot-icon">🐌</div>
+            <div>
+              <div class="mascot-name" id="mascot-name">Barnaby the Snail</div>
+              <div class="strategy-tag" id="strategy-tag">Making Ten Strategy</div>
+            </div>
+          </div>
+
+          <div class="socratic-prompt-text" id="prompt-heading">
+            Vine 1 has 8 blossoms. How many more make a friendly 10?
+          </div>
+          <div class="socratic-subtext" id="prompt-subtext">
+            Drag the snail up into the glowing gap to complete the first ten!
+          </div>
+        </div>
+
+        <!-- Unit Strategy Visual Card (e.g. Number Bond or Twin Sync Meter) -->
+        <div class="strategy-visual-card" id="strategy-visual-card">
+          <!-- Rendered per unit -->
+        </div>
+
+        <!-- Equation Bridge Card -->
+        <div class="equation-bridge-card">
+          <div class="equation-bridge-math" id="equation-bridge">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+        <!-- Auto-Advance Banner (Shown after solving) -->
+        <div class="auto-advance-banner" id="auto-advance-banner">
+          <div class="auto-advance-text">
+            <span>🌟</span>
+            <span id="auto-advance-msg">Great job! Next question in 3s…</span>
+          </div>
+          <button class="auto-advance-skip" onclick="skipToNextQuestion()">Next Question ➔</button>
+        </div>
+
+        <!-- Socratic Teach-Back Modal Card -->
+        <div class="teach-back-card" id="teach-back-card">
+          <div class="teach-back-prompt" id="teach-back-prompt">
+            💬 Mascot Teach-Back: "Why did we split 5 into 2 and 3?"
+          </div>
+          <div
+            id="teach-back-options"
+            style="display: flex; flex-direction: column; gap: 6px"
+          ></div>
+        </div>
+
+        <!-- Actions Rack -->
+        <div class="actions-rack">
+          <button class="blu-btn primary" id="btn-action" onclick="handlePrimaryAction()">
+            Make 10 ✨
+          </button>
+          <button class="blu-btn" id="btn-watch" onclick="handleWatchDemo()">Watch Snail 🐌</button>
+          <button class="blu-btn" onclick="resetCurrentProblem()">Reset ↺</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Grown-Up Co-Play Prompt (From NCDPI Parent Guide) -->
+    <footer>
+      <div class="coplay-card">
+        <span>💬</span>
+        <span id="coplay-text"
+          ><strong>Grown-Up Co-Play Prompt:</strong> Ask your learner:
+          <em
+            >"Can you show me how making 10 helped you solve 8 + 5 without using fingers?"</em
+          ></span
+        >
+      </div>
+    </footer>
+
+    <!-- Unit Complete Victory Modal -->
+    <div class="victory-modal" id="victory-modal">
+      <div class="victory-card">
+        <div style="font-size: 54px">🏆</div>
+        <div style="font-size: 22px; font-weight: 900; color: var(--ink)">Unit Complete!</div>
+        <div style="font-size: 14px; color: var(--ink-muted); line-height: 1.5" id="victory-desc">
+          You solved all 5 challenges in this unit using mental math strategies.
+        </div>
+        <button
+          class="blu-btn primary"
+          style="width: 100%; justify-content: center"
+          onclick="advanceToNextUnit()"
+        >
+          Continue to Next Unit ➔
+        </button>
+        <button class="blu-btn" style="width: 100%; justify-content: center" onclick="replayUnit()">
+          Replay Unit ↺
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // --- Web Audio Synthesizer (Kalimba + Windchimes) ---
+      let audioCtx = null
+      function getAudio() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+        if (audioCtx.state === "suspended") audioCtx.resume()
+        return audioCtx
+      }
+
+      const PENTATONIC = [
+        261.63, 293.66, 329.63, 392.0, 440.0, 523.25, 587.33, 659.25, 783.99, 1046.5,
+      ]
+
+      function playTone(idx, pitchOffset = 0) {
+        try {
+          const ctx = getAudio()
+          const freq =
+            PENTATONIC[Math.min(PENTATONIC.length - 1, Math.max(0, idx))] *
+            Math.pow(2, pitchOffset / 12)
+          const osc1 = ctx.createOscillator()
+          const osc2 = ctx.createOscillator()
+          const gain = ctx.createGain()
+
+          osc1.type = "sine"
+          osc2.type = "triangle"
+          osc1.frequency.setValueAtTime(freq, ctx.currentTime)
+          osc2.frequency.setValueAtTime(freq * 2.01, ctx.currentTime)
+
+          gain.gain.setValueAtTime(0.28, ctx.currentTime)
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35)
+
+          osc1.connect(gain)
+          osc2.connect(gain)
+          gain.connect(ctx.destination)
+
+          osc1.start()
+          osc2.start()
+          osc1.stop(ctx.currentTime + 0.36)
+          osc2.stop(ctx.currentTime + 0.36)
+        } catch (e) {}
+      }
+
+      function playVictoryChimes() {
+        try {
+          const chord = [523.25, 659.25, 783.99, 1046.5]
+          chord.forEach((f, i) => {
+            setTimeout(() => {
+              const ctx = getAudio()
+              const osc = ctx.createOscillator()
+              const gain = ctx.createGain()
+              osc.type = "sine"
+              osc.frequency.setValueAtTime(f, ctx.currentTime)
+              gain.gain.setValueAtTime(0.2, ctx.currentTime)
+              gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6)
+              osc.connect(gain)
+              gain.connect(ctx.destination)
+              osc.start()
+              osc.stop(ctx.currentTime + 0.6)
+            }, i * 110)
+          })
+        } catch (e) {}
+      }
+
+      // --- CURRICULUM DEFINITIONS: 4 UNITS ---
+      const UNITS = {
+        1: {
+          id: 1,
+          title: "Unit 1: Making Ten to Add (within 20)",
+          strategy: "Making Ten Strategy",
+          mascot: "🐌",
+          mascotName: "Barnaby the Snail",
+          coplay: "Ask: 'Can you show me how making 10 helped you solve without using fingers?'",
+          problems: [
+            { a: 8, b: 5 },
+            { a: 9, b: 4 },
+            { a: 8, b: 6 },
+            { a: 7, b: 5 },
+            { a: 9, b: 7 },
+          ],
+        },
+        2: {
+          id: 2,
+          title: "Unit 2: Think Addition (Subtract within 20)",
+          strategy: "Think Addition Strategy",
+          mascot: "🦊",
+          mascotName: "Kit the Fox",
+          coplay: "Ask: 'How did thinking of addition help you find what was missing to subtract?'",
+          problems: [
+            { whole: 14, known: 6 }, // 14 - 6 = 8
+            { whole: 12, known: 7 }, // 12 - 7 = 5
+            { whole: 15, known: 8 }, // 15 - 8 = 7
+            { whole: 13, known: 9 }, // 13 - 9 = 4
+            { whole: 16, known: 7 }, // 16 - 7 = 9
+          ],
+        },
+        3: {
+          id: 3,
+          title: "Unit 3: Doubles & Near Doubles (±1)",
+          strategy: "Doubles & Near Doubles",
+          mascot: "🐻",
+          mascotName: "Bramble the Bear",
+          coplay:
+            "Ask: 'Which double did you start with, and how did adding 1 finish the problem?'",
+          problems: [
+            { a: 7, b: 8 }, // 7 + 7 + 1 = 15
+            { a: 6, b: 7 }, // 6 + 6 + 1 = 13
+            { a: 8, b: 9 }, // 8 + 8 + 1 = 17
+            { a: 5, b: 6 }, // 5 + 5 + 1 = 11
+            { a: 9, b: 8 }, // 8 + 8 + 1 = 17
+          ],
+        },
+        4: {
+          id: 4,
+          title: "Unit 4: Taking from Ten to Subtract",
+          strategy: "Taking from Ten Strategy",
+          mascot: "🐿️",
+          mascotName: "Pippa the Squirrel",
+          coplay: "Ask: 'How did taking away down to 10 first make the subtraction easier?'",
+          problems: [
+            { whole: 13, sub: 5 }, // 13 - 3 - 2 = 8
+            { whole: 14, sub: 6 }, // 14 - 4 - 2 = 8
+            { whole: 15, sub: 7 }, // 15 - 5 - 2 = 8
+            { whole: 12, sub: 5 }, // 12 - 2 - 3 = 7
+            { whole: 16, sub: 8 }, // 16 - 6 - 2 = 8
+          ],
+        },
+      }
+
+      // --- State Management ---
+      let currentUnitId = 1
+      let questionIndex = 0 // 0 to 4
+      let unitStep = 1 // multi-step state within current problem
+      let userSliderVal = 0 // interactive slider value
+      let autoAdvanceTimer = null
+
+      // Node Y Coordinates (10 nodes along 360px vertical stalk)
+      const NODE_Y = []
+      const BOTTOM_Y = 380
+      const TOP_Y = 56
+      const STEP_Y = (BOTTOM_Y - TOP_Y) / 9 // ~36px
+      for (let i = 0; i < 10; i++) {
+        NODE_Y.push(BOTTOM_Y - i * STEP_Y)
+      }
+
+      // DOM Elements
+      const mainSvg = document.getElementById("main-svg")
+      const promptHeading = document.getElementById("prompt-heading")
+      const promptSubtext = document.getElementById("prompt-subtext")
+      const stepBadge = document.getElementById("step-badge")
+      const mascotIcon = document.getElementById("mascot-icon")
+      const mascotName = document.getElementById("mascot-name")
+      const strategyTag = document.getElementById("strategy-tag")
+      const strategyVisualCard = document.getElementById("strategy-visual-card")
+      const equationBridge = document.getElementById("equation-bridge")
+      const btnAction = document.getElementById("btn-action")
+      const btnWatch = document.getElementById("btn-watch")
+      const coplayText = document.getElementById("coplay-text")
+      const questionLabel = document.getElementById("question-label")
+      const autoAdvanceBanner = document.getElementById("auto-advance-banner")
+      const autoAdvanceMsg = document.getElementById("auto-advance-msg")
+      const teachBackCard = document.getElementById("teach-back-card")
+      const teachBackPrompt = document.getElementById("teach-back-prompt")
+      const teachBackOptions = document.getElementById("teach-back-options")
+      const victoryModal = document.getElementById("victory-modal")
+
+      // --- UNIT SWITCHING ---
+      function switchUnit(unitId) {
+        currentUnitId = unitId
+        questionIndex = 0
+        clearAutoAdvance()
+
+        // Update Dropdown UI
+        document
+          .querySelectorAll(".unit-menu-item")
+          .forEach((item) => item.classList.remove("active"))
+        document.getElementById(`menu-u${unitId}`).classList.add("active")
+        document.getElementById("current-unit-title").textContent = UNITS[unitId].title
+        toggleUnitMenu()
+
+        // Update Mascot and Coplay
+        mascotIcon.textContent = UNITS[unitId].mascot
+        mascotName.textContent = UNITS[unitId].mascotName
+        strategyTag.textContent = UNITS[unitId].strategy
+        coplayText.innerHTML = `<strong>Grown-Up Co-Play Prompt:</strong> ${UNITS[unitId].coplay}`
+
+        loadCurrentQuestion()
+      }
+
+      function loadCurrentQuestion() {
+        clearAutoAdvance()
+        unitStep = 1
+        userSliderVal = 0
+        teachBackCard.style.display = "none"
+        autoAdvanceBanner.style.display = "none"
+        btnAction.style.display = "inline-flex"
+
+        // Update question pip dots
+        for (let i = 0; i < 5; i++) {
+          const pip = document.getElementById(`pip-${i}`)
+          pip.className = "progress-step-pip"
+          if (i < questionIndex) pip.classList.add("done")
+          else if (i === questionIndex) pip.classList.add("active")
+        }
+        questionLabel.textContent = `Question ${questionIndex + 1} of 5`
+
+        // Render the specific Unit layout and animation
+        if (currentUnitId === 1) renderUnit1()
+        else if (currentUnitId === 2) renderUnit2()
+        else if (currentUnitId === 3) renderUnit3()
+        else if (currentUnitId === 4) renderUnit4()
+      }
+
+      // =========================================================================
+      // UNIT 1: MAKING TEN TO ADD (Dual Vines + Number Bond)
+      // =========================================================================
+      function renderUnit1() {
+        const prob = UNITS[1].problems[questionIndex]
+        const neededForTen = 10 - prob.a
+        const leftover = prob.b - neededForTen
+
+        stepBadge.textContent =
+          unitStep === 1 ? "Step 1: Fill Vine 1 to Make 10" : "Step 2: Add Leftover to Vine 2"
+        btnAction.textContent = unitStep === 1 ? "Make 10 ✨" : "Finish Addition ✨"
+
+        if (unitStep === 1) {
+          promptHeading.textContent = `Vine 1 has ${prob.a} blossoms. How many more make a friendly 10?`
+          promptSubtext.textContent = `Drag Snail 1 up into the glowing gap (or tap the sleeping buds)!`
+        } else {
+          promptHeading.textContent = `Vine 1 made 10! Now add the remaining ${leftover} blossoms.`
+          promptSubtext.textContent = `We split ${prob.b} into ${neededForTen} (to make 10) + ${leftover} (leftover).`
+        }
+
+        // Strategy Visual Card: Number Bond
+        strategyVisualCard.innerHTML = `
         <div class="strategy-title">Number Bond · Decomposing the Addend</div>
         <div class="bond-diagram">
           <div class="bond-circle whole-addend"><span>${prob.b}</span><span class="sublabel">Add ${prob.b}</span></div>
@@ -1086,18 +1150,18 @@
           <div style="font-size: 18px; font-weight: 900; color: var(--ink-faint);">+</div>
           <div class="bond-circle part-overflow"><span>${leftover}</span><span class="sublabel">leftover</span></div>
         </div>
-      `;
+      `
 
-      // Equation Bridge
-      const currentSum = 10 + (unitStep === 2 ? userSliderVal : 0);
-      if (unitStep === 1) {
-        equationBridge.innerHTML = `${prob.a} + ${prob.b} = (${prob.a} + <span class="highlight-span ten">${userSliderVal}</span>) + ?`;
-      } else {
-        equationBridge.innerHTML = `${prob.a} + ${prob.b} = <span class="highlight-span ten">10</span> + ${userSliderVal} = <span class="highlight-span sum">${currentSum}</span>`;
-      }
+        // Equation Bridge
+        const currentSum = 10 + (unitStep === 2 ? userSliderVal : 0)
+        if (unitStep === 1) {
+          equationBridge.innerHTML = `${prob.a} + ${prob.b} = (${prob.a} + <span class="highlight-span ten">${userSliderVal}</span>) + ?`
+        } else {
+          equationBridge.innerHTML = `${prob.a} + ${prob.b} = <span class="highlight-span ten">10</span> + ${userSliderVal} = <span class="highlight-span sum">${currentSum}</span>`
+        }
 
-      // Dual Vines SVG
-      mainSvg.innerHTML = `
+        // Dual Vines SVG
+        mainSvg.innerHTML = `
         <defs>
           <linearGradient id="pGrad1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F28B6D"/><stop offset="100%" stop-color="#C85A3C"/></linearGradient>
           <linearGradient id="pGrad2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#B8D0E8"/><stop offset="100%" stop-color="#7DA0C8"/></linearGradient>
@@ -1115,9 +1179,13 @@
           <path d="M130 406 L130 50" stroke="url(#sGrad)" stroke-width="10" stroke-linecap="round" />
           <ellipse cx="130" cy="44" rx="20" ry="12" fill="none" stroke="#D1C7B7" stroke-width="2" stroke-dasharray="3 3" />
           <text x="130" y="32" text-anchor="middle" font-size="13" font-weight="900" fill="#B45309">MAKE 10</text>
-          ${(unitStep === 1 && userSliderVal < neededForTen) ? `
+          ${
+            unitStep === 1 && userSliderVal < neededForTen
+              ? `
             <rect x="96" y="${NODE_Y[9] - 12}" width="68" height="${NODE_Y[prob.a - 1] - NODE_Y[9] + 16}" rx="16" fill="#FFF1B8" opacity="0.4" class="pulse-glow" />
-          ` : ''}
+          `
+              : ""
+          }
           <g id="v1-nodes-g"></g>
           <!-- Snail 1 -->
           <g id="snail-1" transform="translate(130, ${NODE_Y[Math.min(9, prob.a + (unitStep === 1 ? userSliderVal : neededForTen) - 1)]})" style="cursor: grab;">
@@ -1139,7 +1207,9 @@
           <path d="M330 406 L330 50" stroke="url(#sGrad)" stroke-width="10" stroke-linecap="round" />
           <text x="330" y="32" text-anchor="middle" font-size="13" font-weight="900" fill="#065F46">LEFTOVER</text>
           <g id="v2-nodes-g"></g>
-          ${unitStep === 2 ? `
+          ${
+            unitStep === 2
+              ? `
             <g id="snail-2" transform="translate(330, ${userSliderVal > 0 ? NODE_Y[userSliderVal - 1] : BOTTOM_Y + 16})" style="cursor: grab;">
               <circle cx="0" cy="0" r="28" fill="transparent"/>
               <path d="M-18 8 C-24 8 -26 2 -22 -4 C-16 -10 -8 -12 -4 -8 C2 -4 6 0 10 6 C12 10 8 12 2 12 Z" fill="#FFE3D8" stroke="#201E2B" stroke-width="2"/>
@@ -1149,88 +1219,98 @@
               <rect x="-62" y="-12" width="38" height="24" rx="8" fill="#C5EED9" stroke="#201E2B" stroke-width="1.8"/>
               <text x="-43" y="5" text-anchor="middle" font-size="14" font-weight="900" fill="#201E2B">+${userSliderVal}</text>
             </g>
-          ` : ''}
+          `
+              : ""
+          }
         </g>
-      `;
+      `
 
-      // Render Nodes for Vine 1
-      const v1NodesG = document.getElementById("v1-nodes-g");
-      const v1CurrentTotal = prob.a + (unitStep === 1 ? userSliderVal : neededForTen);
-      for (let i = 0; i < 10; i++) {
-        const nNum = i + 1;
-        const cy = NODE_Y[i];
-        const isOriginalA = nNum <= prob.a;
-        const isAdded = !isOriginalA && nNum <= v1CurrentTotal;
-        const isAwake = isOriginalA || isAdded;
+        // Render Nodes for Vine 1
+        const v1NodesG = document.getElementById("v1-nodes-g")
+        const v1CurrentTotal = prob.a + (unitStep === 1 ? userSliderVal : neededForTen)
+        for (let i = 0; i < 10; i++) {
+          const nNum = i + 1
+          const cy = NODE_Y[i]
+          const isOriginalA = nNum <= prob.a
+          const isAdded = !isOriginalA && nNum <= v1CurrentTotal
+          const isAwake = isOriginalA || isAdded
 
-        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        g.setAttribute("transform", `translate(130, ${cy})`);
-        if (!isOriginalA && unitStep === 1) {
-          g.style.cursor = "pointer";
-          g.onclick = () => {
-            userSliderVal = Math.max(0, Math.min(neededForTen, nNum - prob.a));
-            playTone(nNum - 1);
-            renderUnit1();
-          };
-        }
-        g.innerHTML = `
-          <rect x="-6" y="-3" width="12" height="6" rx="2" fill="#4F7E6B" />
-          <text x="-18" y="4" text-anchor="end" font-size="11" font-weight="800" fill="${isAwake ? '#201E2B' : '#A6A3B8'}">${nNum}</text>
-          ${isAwake ? `
-            <circle cx="${(i%2===0?1:-1)*18}" cy="-4" r="7" fill="${nNum===10 ? '#FFEAA7' : (isOriginalA ? '#FFD4C7' : '#FFF1B8')}" stroke="${nNum===10 ? '#E5B842' : '#F19C84'}" stroke-width="1.2" />
-          ` : `
-            <circle cx="${(i%2===0?1:-1)*14}" cy="-2" r="8" fill="#FFEAA7" opacity="0.4" class="pulse-glow" />
-            <ellipse cx="${(i%2===0?1:-1)*14}" cy="-2" rx="5" ry="7" fill="#FFF9D2" stroke="#D97706" stroke-width="1.2" stroke-dasharray="2 2" />
-          `}
-        `;
-        v1NodesG.appendChild(g);
-      }
-
-      // Render Nodes for Vine 2
-      const v2NodesG = document.getElementById("v2-nodes-g");
-      for (let i = 0; i < 10; i++) {
-        const nNum = i + 1;
-        const cy = NODE_Y[i];
-        const isAwakeV2 = unitStep === 2 && nNum <= userSliderVal;
-
-        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        g.setAttribute("transform", `translate(330, ${cy})`);
-        if (unitStep === 2) {
-          g.style.cursor = "pointer";
-          g.onclick = () => {
-            if (nNum <= leftover) {
-              userSliderVal = nNum;
-              playTone(nNum - 1, 2);
-              renderUnit1();
+          const g = document.createElementNS("http://www.w3.org/2000/svg", "g")
+          g.setAttribute("transform", `translate(130, ${cy})`)
+          if (!isOriginalA && unitStep === 1) {
+            g.style.cursor = "pointer"
+            g.onclick = () => {
+              userSliderVal = Math.max(0, Math.min(neededForTen, nNum - prob.a))
+              playTone(nNum - 1)
+              renderUnit1()
             }
-          };
-        }
-        g.innerHTML = `
+          }
+          g.innerHTML = `
           <rect x="-6" y="-3" width="12" height="6" rx="2" fill="#4F7E6B" />
-          <text x="18" y="4" text-anchor="start" font-size="11" font-weight="800" fill="${isAwakeV2 ? '#065F46' : '#A6A3B8'}">+${nNum}</text>
-          ${isAwakeV2 ? `
-            <circle cx="${(i%2===0?-1:1)*18}" cy="-4" r="7" fill="#C5EED9" stroke="#4EA37C" stroke-width="1.2" />
-          ` : ''}
-        `;
-        v2NodesG.appendChild(g);
+          <text x="-18" y="4" text-anchor="end" font-size="11" font-weight="800" fill="${isAwake ? "#201E2B" : "#A6A3B8"}">${nNum}</text>
+          ${
+            isAwake
+              ? `
+            <circle cx="${(i % 2 === 0 ? 1 : -1) * 18}" cy="-4" r="7" fill="${nNum === 10 ? "#FFEAA7" : isOriginalA ? "#FFD4C7" : "#FFF1B8"}" stroke="${nNum === 10 ? "#E5B842" : "#F19C84"}" stroke-width="1.2" />
+          `
+              : `
+            <circle cx="${(i % 2 === 0 ? 1 : -1) * 14}" cy="-2" r="8" fill="#FFEAA7" opacity="0.4" class="pulse-glow" />
+            <ellipse cx="${(i % 2 === 0 ? 1 : -1) * 14}" cy="-2" rx="5" ry="7" fill="#FFF9D2" stroke="#D97706" stroke-width="1.2" stroke-dasharray="2 2" />
+          `
+          }
+        `
+          v1NodesG.appendChild(g)
+        }
+
+        // Render Nodes for Vine 2
+        const v2NodesG = document.getElementById("v2-nodes-g")
+        for (let i = 0; i < 10; i++) {
+          const nNum = i + 1
+          const cy = NODE_Y[i]
+          const isAwakeV2 = unitStep === 2 && nNum <= userSliderVal
+
+          const g = document.createElementNS("http://www.w3.org/2000/svg", "g")
+          g.setAttribute("transform", `translate(330, ${cy})`)
+          if (unitStep === 2) {
+            g.style.cursor = "pointer"
+            g.onclick = () => {
+              if (nNum <= leftover) {
+                userSliderVal = nNum
+                playTone(nNum - 1, 2)
+                renderUnit1()
+              }
+            }
+          }
+          g.innerHTML = `
+          <rect x="-6" y="-3" width="12" height="6" rx="2" fill="#4F7E6B" />
+          <text x="18" y="4" text-anchor="start" font-size="11" font-weight="800" fill="${isAwakeV2 ? "#065F46" : "#A6A3B8"}">+${nNum}</text>
+          ${
+            isAwakeV2
+              ? `
+            <circle cx="${(i % 2 === 0 ? -1 : 1) * 18}" cy="-4" r="7" fill="#C5EED9" stroke="#4EA37C" stroke-width="1.2" />
+          `
+              : ""
+          }
+        `
+          v2NodesG.appendChild(g)
+        }
       }
-    }
 
-    // =========================================================================
-    // UNIT 2: THINK ADDITION (Vertical Snail Slide + Firefly Constellation)
-    // =========================================================================
-    function renderUnit2() {
-      const prob = UNITS[2].problems[questionIndex];
-      const expectedDiff = prob.whole - prob.known;
+      // =========================================================================
+      // UNIT 2: THINK ADDITION (Vertical Snail Slide + Firefly Constellation)
+      // =========================================================================
+      function renderUnit2() {
+        const prob = UNITS[2].problems[questionIndex]
+        const expectedDiff = prob.whole - prob.known
 
-      stepBadge.textContent = "Think Addition: What + Known = Whole?";
-      btnAction.textContent = "Lock in Difference ✨";
+        stepBadge.textContent = "Think Addition: What + Known = Whole?"
+        btnAction.textContent = "Lock in Difference ✨"
 
-      promptHeading.textContent = `${prob.whole} − ${prob.known} = ? (Think: ${prob.known} + ? = ${prob.whole})`;
-      promptSubtext.textContent = `Slide the snail through the glowing gap from ${prob.known} up to ${prob.whole}!`;
+        promptHeading.textContent = `${prob.whole} − ${prob.known} = ? (Think: ${prob.known} + ? = ${prob.whole})`
+        promptSubtext.textContent = `Slide the snail through the glowing gap from ${prob.known} up to ${prob.whole}!`
 
-      // Strategy Visual Card: Think Addition Relation
-      strategyVisualCard.innerHTML = `
+        // Strategy Visual Card: Think Addition Relation
+        strategyVisualCard.innerHTML = `
         <div class="strategy-title">Missing Addend · Think Addition</div>
         <div style="display: flex; align-items: center; justify-content: center; gap: 14px; padding: 4px 0;">
           <div style="background: var(--peach); padding: 8px 16px; border-radius: 12px; font-weight: 900;">${prob.known} (known)</div>
@@ -1239,12 +1319,12 @@
           <div style="font-size: 20px; font-weight: 900; color: var(--ink-faint);">=</div>
           <div style="background: var(--mint); padding: 8px 16px; border-radius: 12px; font-weight: 900; color: #065F46;">${prob.known + userSliderVal} / ${prob.whole}</div>
         </div>
-      `;
+      `
 
-      equationBridge.innerHTML = `${prob.whole} − ${prob.known} = <span class="highlight-span diff">${userSliderVal}</span> (because ${prob.known} + ${userSliderVal} = ${prob.known + userSliderVal})`;
+        equationBridge.innerHTML = `${prob.whole} − ${prob.known} = <span class="highlight-span diff">${userSliderVal}</span> (because ${prob.known} + ${userSliderVal} = ${prob.known + userSliderVal})`
 
-      // Single Tall Vine with Firefly Constellation Gap
-      mainSvg.innerHTML = `
+        // Single Tall Vine with Firefly Constellation Gap
+        mainSvg.innerHTML = `
         <ellipse cx="230" cy="462" rx="160" ry="12" fill="#EADBC8" opacity="0.4" />
         <path d="M190 416 L270 416 L260 466 L200 466 Z" fill="url(#pGrad1)" stroke="#201E2B" stroke-width="2.5" />
         <rect x="185" y="406" width="90" height="12" rx="4" fill="#E07A5F" stroke="#201E2B" stroke-width="2.5" />
@@ -1258,77 +1338,82 @@
           <rect x="-66" y="-12" width="44" height="24" rx="8" fill="#D6ECFF" stroke="#201E2B" stroke-width="1.8"/>
           <text x="-44" y="5" text-anchor="middle" font-size="13" font-weight="900" fill="#201E2B">+${userSliderVal}</text>
         </g>
-      `;
+      `
 
-      const u2Nodes = document.getElementById("u2-nodes-g");
-      const currentFill = prob.known + userSliderVal;
-      for (let i = 0; i < 10; i++) {
-        const nNum = i + 1;
-        const cy = NODE_Y[i];
-        const isKnown = nNum <= prob.known;
-        const isAdded = !isKnown && nNum <= currentFill;
-        const isAwake = isKnown || isAdded;
+        const u2Nodes = document.getElementById("u2-nodes-g")
+        const currentFill = prob.known + userSliderVal
+        for (let i = 0; i < 10; i++) {
+          const nNum = i + 1
+          const cy = NODE_Y[i]
+          const isKnown = nNum <= prob.known
+          const isAdded = !isKnown && nNum <= currentFill
+          const isAwake = isKnown || isAdded
 
-        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        g.setAttribute("transform", `translate(230, ${cy})`);
-        if (!isKnown) {
-          g.style.cursor = "pointer";
-          g.onclick = () => {
-            userSliderVal = Math.max(0, Math.min(expectedDiff, nNum - prob.known));
-            playTone(nNum - 1);
-            renderUnit2();
-          };
-        }
-        g.innerHTML = `
+          const g = document.createElementNS("http://www.w3.org/2000/svg", "g")
+          g.setAttribute("transform", `translate(230, ${cy})`)
+          if (!isKnown) {
+            g.style.cursor = "pointer"
+            g.onclick = () => {
+              userSliderVal = Math.max(0, Math.min(expectedDiff, nNum - prob.known))
+              playTone(nNum - 1)
+              renderUnit2()
+            }
+          }
+          g.innerHTML = `
           <rect x="-6" y="-3" width="12" height="6" rx="2" fill="#4F7E6B" />
-          <text x="-20" y="4" text-anchor="end" font-size="11" font-weight="800" fill="${isAwake ? '#201E2B' : '#A6A3B8'}">${nNum}</text>
-          ${isAwake ? `
-            <circle cx="${(i%2===0?1:-1)*20}" cy="-4" r="7" fill="${isKnown ? '#FFD4C7' : '#E5DEFF'}" stroke="${isKnown ? '#F19C84' : '#7C3AED'}" stroke-width="1.4" />
-          ` : `
-            <circle cx="${(i%2===0?1:-1)*16}" cy="-2" r="9" fill="#FFF1B8" opacity="0.5" class="pulse-glow" />
-            <ellipse cx="${(i%2===0?1:-1)*16}" cy="-2" rx="5" ry="7" fill="#FFF" stroke="#D97706" stroke-width="1.2" stroke-dasharray="2 2" />
-          `}
-        `;
-        u2Nodes.appendChild(g);
-      }
-    }
-
-    // =========================================================================
-    // UNIT 3: DOUBLES & NEAR DOUBLES (Twin Dancing Stalks + Mirrors)
-    // =========================================================================
-    function renderUnit3() {
-      const prob = UNITS[3].problems[questionIndex]; // a + b, near double e.g. 7 + 8
-      const baseDouble = Math.min(prob.a, prob.b);
-
-      stepBadge.textContent = unitStep === 1 ? "Step 1: Match the Double Stalks" : "Step 2: Add the +1 Blossom";
-      btnAction.textContent = unitStep === 1 ? "Sync Doubles ✨" : "Add +1 Crown ✨";
-
-      if (unitStep === 1) {
-        promptHeading.textContent = `${prob.a} + ${prob.b}: First, double the smaller number (${baseDouble} + ${baseDouble})!`;
-        promptSubtext.textContent = `Slide Stalk B to match Stalk A at exactly ${baseDouble}!`;
-      } else {
-        promptHeading.textContent = `Double ${baseDouble} is ${baseDouble * 2}! Now add the +1 near double.`;
-        promptSubtext.textContent = `Tap the top +1 golden bud to finish: ${baseDouble * 2} + 1 = ${prob.a + prob.b}!`;
+          <text x="-20" y="4" text-anchor="end" font-size="11" font-weight="800" fill="${isAwake ? "#201E2B" : "#A6A3B8"}">${nNum}</text>
+          ${
+            isAwake
+              ? `
+            <circle cx="${(i % 2 === 0 ? 1 : -1) * 20}" cy="-4" r="7" fill="${isKnown ? "#FFD4C7" : "#E5DEFF"}" stroke="${isKnown ? "#F19C84" : "#7C3AED"}" stroke-width="1.4" />
+          `
+              : `
+            <circle cx="${(i % 2 === 0 ? 1 : -1) * 16}" cy="-2" r="9" fill="#FFF1B8" opacity="0.5" class="pulse-glow" />
+            <ellipse cx="${(i % 2 === 0 ? 1 : -1) * 16}" cy="-2" rx="5" ry="7" fill="#FFF" stroke="#D97706" stroke-width="1.2" stroke-dasharray="2 2" />
+          `
+          }
+        `
+          u2Nodes.appendChild(g)
+        }
       }
 
-      // Strategy Visual Card: Doubles Decomposition
-      strategyVisualCard.innerHTML = `
+      // =========================================================================
+      // UNIT 3: DOUBLES & NEAR DOUBLES (Twin Dancing Stalks + Mirrors)
+      // =========================================================================
+      function renderUnit3() {
+        const prob = UNITS[3].problems[questionIndex] // a + b, near double e.g. 7 + 8
+        const baseDouble = Math.min(prob.a, prob.b)
+
+        stepBadge.textContent =
+          unitStep === 1 ? "Step 1: Match the Double Stalks" : "Step 2: Add the +1 Blossom"
+        btnAction.textContent = unitStep === 1 ? "Sync Doubles ✨" : "Add +1 Crown ✨"
+
+        if (unitStep === 1) {
+          promptHeading.textContent = `${prob.a} + ${prob.b}: First, double the smaller number (${baseDouble} + ${baseDouble})!`
+          promptSubtext.textContent = `Slide Stalk B to match Stalk A at exactly ${baseDouble}!`
+        } else {
+          promptHeading.textContent = `Double ${baseDouble} is ${baseDouble * 2}! Now add the +1 near double.`
+          promptSubtext.textContent = `Tap the top +1 golden bud to finish: ${baseDouble * 2} + 1 = ${prob.a + prob.b}!`
+        }
+
+        // Strategy Visual Card: Doubles Decomposition
+        strategyVisualCard.innerHTML = `
         <div class="strategy-title">Doubles + 1 Strategy · Mental Math</div>
         <div style="display: flex; align-items: center; justify-content: center; gap: 12px; padding: 4px 0;">
           <div style="background: var(--honey); padding: 8px 14px; border-radius: 12px; font-weight: 900; color: #92400E;">${baseDouble} + ${baseDouble} = ${baseDouble * 2}</div>
           <div style="font-size: 18px; font-weight: 900; color: var(--ink-faint);">──►</div>
           <div style="background: var(--mint); padding: 8px 14px; border-radius: 12px; font-weight: 900; color: #065F46;">${baseDouble * 2} + 1 = ${prob.a + prob.b}</div>
         </div>
-      `;
+      `
 
-      if (unitStep === 1) {
-        equationBridge.innerHTML = `${prob.a} + ${prob.b} = (${baseDouble} + <span class="highlight-span ten">${userSliderVal}</span>) + ?`;
-      } else {
-        equationBridge.innerHTML = `${prob.a} + ${prob.b} = (${baseDouble} + ${baseDouble}) + <span class="highlight-span sum">1</span> = <span class="highlight-span sum">${prob.a + prob.b}</span>`;
-      }
+        if (unitStep === 1) {
+          equationBridge.innerHTML = `${prob.a} + ${prob.b} = (${baseDouble} + <span class="highlight-span ten">${userSliderVal}</span>) + ?`
+        } else {
+          equationBridge.innerHTML = `${prob.a} + ${prob.b} = (${baseDouble} + ${baseDouble}) + <span class="highlight-span sum">1</span> = <span class="highlight-span sum">${prob.a + prob.b}</span>`
+        }
 
-      // Twin Dancing Vines SVG
-      mainSvg.innerHTML = `
+        // Twin Dancing Vines SVG
+        mainSvg.innerHTML = `
         <ellipse cx="230" cy="462" rx="200" ry="12" fill="#EADBC8" opacity="0.4" />
 
         <!-- Twin Stalk A -->
@@ -1340,10 +1425,14 @@
         </g>
 
         <!-- Twin Dancing Laser Mirror Beam between vines -->
-        ${userSliderVal === baseDouble ? `
+        ${
+          userSliderVal === baseDouble
+            ? `
           <line x1="130" y1="${NODE_Y[baseDouble - 1]}" x2="330" y2="${NODE_Y[baseDouble - 1]}" stroke="#E5B842" stroke-width="3" stroke-dasharray="4 4" class="pulse-glow" />
           <text x="230" y="${NODE_Y[baseDouble - 1] - 8}" text-anchor="middle" font-size="12" font-weight="900" fill="#92400E">DOUBLES MATCH! (${baseDouble} = ${baseDouble})</text>
-        ` : ''}
+        `
+            : ""
+        }
 
         <!-- Twin Stalk B -->
         <g id="stalk-b">
@@ -1353,101 +1442,110 @@
           <g id="stalk-b-nodes"></g>
 
           <!-- Top Springing +1 Golden Bud -->
-          ${unitStep === 2 ? `
+          ${
+            unitStep === 2
+              ? `
             <g transform="translate(330, ${NODE_Y[baseDouble]})" style="cursor: pointer;" onclick="completeUnit3Question()">
               <circle cx="0" cy="0" r="14" fill="#FFEAA7" stroke="#E5B842" stroke-width="2" class="pulse-glow" />
               <text x="0" y="5" text-anchor="middle" font-size="13" font-weight="900" fill="#92400E">+1</text>
             </g>
-          ` : ''}
+          `
+              : ""
+          }
         </g>
-      `;
+      `
 
-      // Render Stalk A Nodes (Always baseDouble awake)
-      const aNodes = document.getElementById("stalk-a-nodes");
-      for (let i = 0; i < 10; i++) {
-        const isAwake = (i + 1) <= baseDouble;
-        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        g.setAttribute("transform", `translate(130, ${NODE_Y[i]})`);
-        g.innerHTML = `
+        // Render Stalk A Nodes (Always baseDouble awake)
+        const aNodes = document.getElementById("stalk-a-nodes")
+        for (let i = 0; i < 10; i++) {
+          const isAwake = i + 1 <= baseDouble
+          const g = document.createElementNS("http://www.w3.org/2000/svg", "g")
+          g.setAttribute("transform", `translate(130, ${NODE_Y[i]})`)
+          g.innerHTML = `
           <rect x="-5" y="-2" width="10" height="4" rx="2" fill="#4F7E6B" />
-          ${isAwake ? `<circle cx="${(i%2===0?1:-1)*16}" cy="-3" r="6" fill="#FFD4C7" stroke="#F19C84" stroke-width="1.2" />` : ''}
-        `;
-        aNodes.appendChild(g);
-      }
-
-      // Render Stalk B Nodes (Interactive to match baseDouble)
-      const bNodes = document.getElementById("stalk-b-nodes");
-      for (let i = 0; i < 10; i++) {
-        const nNum = i + 1;
-        const isAwake = nNum <= userSliderVal;
-        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        g.setAttribute("transform", `translate(330, ${NODE_Y[i]})`);
-        if (unitStep === 1) {
-          g.style.cursor = "pointer";
-          g.onclick = () => {
-            userSliderVal = Math.min(baseDouble, nNum);
-            playTone(nNum - 1);
-            renderUnit3();
-          };
+          ${isAwake ? `<circle cx="${(i % 2 === 0 ? 1 : -1) * 16}" cy="-3" r="6" fill="#FFD4C7" stroke="#F19C84" stroke-width="1.2" />` : ""}
+        `
+          aNodes.appendChild(g)
         }
-        g.innerHTML = `
+
+        // Render Stalk B Nodes (Interactive to match baseDouble)
+        const bNodes = document.getElementById("stalk-b-nodes")
+        for (let i = 0; i < 10; i++) {
+          const nNum = i + 1
+          const isAwake = nNum <= userSliderVal
+          const g = document.createElementNS("http://www.w3.org/2000/svg", "g")
+          g.setAttribute("transform", `translate(330, ${NODE_Y[i]})`)
+          if (unitStep === 1) {
+            g.style.cursor = "pointer"
+            g.onclick = () => {
+              userSliderVal = Math.min(baseDouble, nNum)
+              playTone(nNum - 1)
+              renderUnit3()
+            }
+          }
+          g.innerHTML = `
           <rect x="-5" y="-2" width="10" height="4" rx="2" fill="#4F7E6B" />
-          <text x="16" y="4" text-anchor="start" font-size="11" font-weight="800" fill="${isAwake ? '#065F46' : '#A6A3B8'}">${nNum}</text>
-          ${isAwake ? `<circle cx="${(i%2===0?-1:1)*16}" cy="-3" r="6" fill="#FFF1B8" stroke="#E5B842" stroke-width="1.2" />` : `
-            ${nNum <= baseDouble ? `<circle cx="${(i%2===0?-1:1)*14}" cy="-2" r="7" fill="#FFF1B8" opacity="0.4" class="pulse-glow" />` : ''}
-          `}
-        `;
-        bNodes.appendChild(g);
-      }
-    }
-
-    function completeUnit3Question() {
-      playVictoryChimes();
-      triggerPetals();
-      showTeachBack([
-        { text: "Because doubles are quick to remember, and adding 1 is easy!", correct: true },
-        { text: "Because near doubles let us skip counting on our fingers!", correct: true }
-      ]);
-    }
-
-    // =========================================================================
-    // UNIT 4: TAKING FROM TEN TO SUBTRACT (Harvest Basket + Pod Plucking)
-    // =========================================================================
-    function renderUnit4() {
-      const prob = UNITS[4].problems[questionIndex]; // whole - sub, e.g. 13 - 5
-      const overflow = prob.whole - 10; // e.g. 3
-      const needFromTen = prob.sub - overflow; // e.g. 2
-      const finalRemaining = 10 - needFromTen; // e.g. 8
-
-      stepBadge.textContent = unitStep === 1 ? "Step 1: Trim Overflow down to 10" : "Step 2: Harvest Remaining from 10";
-      btnAction.textContent = unitStep === 1 ? "Drop to 10 🍃" : "Harvest to Basket 🧺";
-
-      if (unitStep === 1) {
-        promptHeading.textContent = `${prob.whole} − ${prob.sub}: First, trim ${overflow} blossoms to reach an easy 10!`;
-        promptSubtext.textContent = `Click the overflow blossoms above 10 to drop them into the picnic basket!`;
-      } else {
-        promptHeading.textContent = `We reached 10! We need to subtract ${prob.sub} in total (plucked ${overflow}, need ${needFromTen} more).`;
-        promptSubtext.textContent = `Pluck ${needFromTen} more pods from the top of the 10-stalk!`;
+          <text x="16" y="4" text-anchor="start" font-size="11" font-weight="800" fill="${isAwake ? "#065F46" : "#A6A3B8"}">${nNum}</text>
+          ${
+            isAwake
+              ? `<circle cx="${(i % 2 === 0 ? -1 : 1) * 16}" cy="-3" r="6" fill="#FFF1B8" stroke="#E5B842" stroke-width="1.2" />`
+              : `
+            ${nNum <= baseDouble ? `<circle cx="${(i % 2 === 0 ? -1 : 1) * 14}" cy="-2" r="7" fill="#FFF1B8" opacity="0.4" class="pulse-glow" />` : ""}
+          `
+          }
+        `
+          bNodes.appendChild(g)
+        }
       }
 
-      // Strategy Visual Card
-      strategyVisualCard.innerHTML = `
+      function completeUnit3Question() {
+        playVictoryChimes()
+        triggerPetals()
+        showTeachBack([
+          { text: "Because doubles are quick to remember, and adding 1 is easy!", correct: true },
+          { text: "Because near doubles let us skip counting on our fingers!", correct: true },
+        ])
+      }
+
+      // =========================================================================
+      // UNIT 4: TAKING FROM TEN TO SUBTRACT (Harvest Basket + Pod Plucking)
+      // =========================================================================
+      function renderUnit4() {
+        const prob = UNITS[4].problems[questionIndex] // whole - sub, e.g. 13 - 5
+        const overflow = prob.whole - 10 // e.g. 3
+        const needFromTen = prob.sub - overflow // e.g. 2
+        const finalRemaining = 10 - needFromTen // e.g. 8
+
+        stepBadge.textContent =
+          unitStep === 1 ? "Step 1: Trim Overflow down to 10" : "Step 2: Harvest Remaining from 10"
+        btnAction.textContent = unitStep === 1 ? "Drop to 10 🍃" : "Harvest to Basket 🧺"
+
+        if (unitStep === 1) {
+          promptHeading.textContent = `${prob.whole} − ${prob.sub}: First, trim ${overflow} blossoms to reach an easy 10!`
+          promptSubtext.textContent = `Click the overflow blossoms above 10 to drop them into the picnic basket!`
+        } else {
+          promptHeading.textContent = `We reached 10! We need to subtract ${prob.sub} in total (plucked ${overflow}, need ${needFromTen} more).`
+          promptSubtext.textContent = `Pluck ${needFromTen} more pods from the top of the 10-stalk!`
+        }
+
+        // Strategy Visual Card
+        strategyVisualCard.innerHTML = `
         <div class="strategy-title">Taking from Ten · Decomposing Subtrahend</div>
         <div style="display: flex; align-items: center; justify-content: center; gap: 14px; padding: 4px 0;">
           <div style="background: var(--peach); padding: 8px 14px; border-radius: 12px; font-weight: 900;">${prob.whole} − ${overflow} = 10</div>
           <div style="font-size: 18px; font-weight: 900; color: var(--ink-faint);">──►</div>
           <div style="background: var(--mint); padding: 8px 14px; border-radius: 12px; font-weight: 900; color: #065F46;">10 − ${needFromTen} = ${finalRemaining}</div>
         </div>
-      `;
+      `
 
-      if (unitStep === 1) {
-        equationBridge.innerHTML = `${prob.whole} − ${prob.sub} = (${prob.whole} − <span class="highlight-span ten">${overflow}</span>) − ? = 10 − ?`;
-      } else {
-        equationBridge.innerHTML = `${prob.whole} − ${prob.sub} = 10 − <span class="highlight-span ten">${needFromTen}</span> = <span class="highlight-span sum">${finalRemaining}</span>`;
-      }
+        if (unitStep === 1) {
+          equationBridge.innerHTML = `${prob.whole} − ${prob.sub} = (${prob.whole} − <span class="highlight-span ten">${overflow}</span>) − ? = 10 − ?`
+        } else {
+          equationBridge.innerHTML = `${prob.whole} − ${prob.sub} = 10 − <span class="highlight-span ten">${needFromTen}</span> = <span class="highlight-span sum">${finalRemaining}</span>`
+        }
 
-      // Stalk with Overflow and Harvest Basket
-      mainSvg.innerHTML = `
+        // Stalk with Overflow and Harvest Basket
+        mainSvg.innerHTML = `
         <ellipse cx="180" cy="462" rx="140" ry="12" fill="#EADBC8" opacity="0.4" />
         <path d="M140 416 L220 416 L210 466 L150 466 Z" fill="url(#pGrad1)" stroke="#201E2B" stroke-width="2.5" />
         <rect x="135" y="406" width="90" height="12" rx="4" fill="#E07A5F" stroke="#201E2B" stroke-width="2.5" />
@@ -1459,317 +1557,338 @@
           <path d="M-36 0 L36 0 L28 46 L-28 46 Z" fill="#D4A373" stroke="#201E2B" stroke-width="2.5" />
           <path d="M-24 0 Q0 -34 24 0" fill="none" stroke="#201E2B" stroke-width="2.5" />
           <text x="0" y="28" text-anchor="middle" font-size="11" font-weight="900" fill="#FFF">BASKET</text>
-          <text x="0" y="62" text-anchor="middle" font-size="12" font-weight="900" fill="#78350F">Plucked: ${unitStep === 1 ? userSliderVal : (overflow + userSliderVal)} / ${prob.sub}</text>
+          <text x="0" y="62" text-anchor="middle" font-size="12" font-weight="900" fill="#78350F">Plucked: ${unitStep === 1 ? userSliderVal : overflow + userSliderVal} / ${prob.sub}</text>
         </g>
 
         <!-- Nodes Layer -->
         <g id="u4-nodes-g"></g>
-      `;
+      `
 
-      const u4Nodes = document.getElementById("u4-nodes-g");
-      const currentRemaining = unitStep === 1 ? (prob.whole - userSliderVal) : (10 - userSliderVal);
+        const u4Nodes = document.getElementById("u4-nodes-g")
+        const currentRemaining = unitStep === 1 ? prob.whole - userSliderVal : 10 - userSliderVal
 
-      for (let i = 0; i < 10; i++) {
-        const nNum = i + 1;
-        const cy = NODE_Y[i];
-        const isAwake = nNum <= currentRemaining;
+        for (let i = 0; i < 10; i++) {
+          const nNum = i + 1
+          const cy = NODE_Y[i]
+          const isAwake = nNum <= currentRemaining
 
-        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        g.setAttribute("transform", `translate(180, ${cy})`);
-        if (unitStep === 2 && nNum > finalRemaining && nNum <= 10) {
-          g.style.cursor = "pointer";
-          g.onclick = () => {
-            userSliderVal = 10 - nNum + 1;
-            playTone(nNum - 1);
-            renderUnit4();
-          };
-        }
-        g.innerHTML = `
+          const g = document.createElementNS("http://www.w3.org/2000/svg", "g")
+          g.setAttribute("transform", `translate(180, ${cy})`)
+          if (unitStep === 2 && nNum > finalRemaining && nNum <= 10) {
+            g.style.cursor = "pointer"
+            g.onclick = () => {
+              userSliderVal = 10 - nNum + 1
+              playTone(nNum - 1)
+              renderUnit4()
+            }
+          }
+          g.innerHTML = `
           <rect x="-6" y="-3" width="12" height="6" rx="2" fill="#4F7E6B" />
-          <text x="-20" y="4" text-anchor="end" font-size="11" font-weight="800" fill="${isAwake ? '#201E2B' : '#A6A3B8'}">${nNum}</text>
-          ${isAwake ? `
-            <circle cx="${(i%2===0?1:-1)*18}" cy="-4" r="7" fill="#C5EED9" stroke="#4EA37C" stroke-width="1.3" />
-          ` : `
-            <circle cx="${(i%2===0?1:-1)*18}" cy="-4" r="5" fill="#EADBC8" stroke="#D1C7B7" stroke-width="1" stroke-dasharray="2 2" />
-          `}
-        `;
-        u4Nodes.appendChild(g);
-      }
-    }
-
-    // --- STEP ACTION HANDLER ---
-    function handlePrimaryAction() {
-      if (currentUnitId === 1) {
-        const prob = UNITS[1].problems[questionIndex];
-        const needed = 10 - prob.a;
-        const leftover = prob.b - needed;
-
-        if (unitStep === 1) {
-          if (userSliderVal === needed) {
-            playVictoryChimes();
-            triggerPetals();
-            unitStep = 2;
-            userSliderVal = 0;
-            renderUnit1();
-          } else {
-            promptSubtext.textContent = `🌱 Vine 1 needs ${needed} to make 10. Slide or tap to 10!`;
+          <text x="-20" y="4" text-anchor="end" font-size="11" font-weight="800" fill="${isAwake ? "#201E2B" : "#A6A3B8"}">${nNum}</text>
+          ${
+            isAwake
+              ? `
+            <circle cx="${(i % 2 === 0 ? 1 : -1) * 18}" cy="-4" r="7" fill="#C5EED9" stroke="#4EA37C" stroke-width="1.3" />
+          `
+              : `
+            <circle cx="${(i % 2 === 0 ? 1 : -1) * 18}" cy="-4" r="5" fill="#EADBC8" stroke="#D1C7B7" stroke-width="1" stroke-dasharray="2 2" />
+          `
           }
-        } else if (unitStep === 2) {
-          if (userSliderVal === leftover) {
-            playVictoryChimes();
-            triggerPetals();
+        `
+          u4Nodes.appendChild(g)
+        }
+      }
+
+      // --- STEP ACTION HANDLER ---
+      function handlePrimaryAction() {
+        if (currentUnitId === 1) {
+          const prob = UNITS[1].problems[questionIndex]
+          const needed = 10 - prob.a
+          const leftover = prob.b - needed
+
+          if (unitStep === 1) {
+            if (userSliderVal === needed) {
+              playVictoryChimes()
+              triggerPetals()
+              unitStep = 2
+              userSliderVal = 0
+              renderUnit1()
+            } else {
+              promptSubtext.textContent = `🌱 Vine 1 needs ${needed} to make 10. Slide or tap to 10!`
+            }
+          } else if (unitStep === 2) {
+            if (userSliderVal === leftover) {
+              playVictoryChimes()
+              triggerPetals()
+              showTeachBack([
+                {
+                  text: "To make a friendly 10 first, so we don't have to count fingers!",
+                  correct: true,
+                },
+                { text: "Because 10 is easy to add to any number!", correct: true },
+              ])
+            } else {
+              promptSubtext.textContent = `🌱 There are ${leftover} leftover blossoms. Slide Snail 2 up to +${leftover}!`
+            }
+          }
+        } else if (currentUnitId === 2) {
+          const prob = UNITS[2].problems[questionIndex]
+          const diff = prob.whole - prob.known
+          if (userSliderVal === diff) {
+            playVictoryChimes()
+            triggerPetals()
             showTeachBack([
-              { text: "To make a friendly 10 first, so we don't have to count fingers!", correct: true },
-              { text: "Because 10 is easy to add to any number!", correct: true }
-            ]);
+              {
+                text: `Because ${prob.known} + ${diff} = ${prob.whole}, so ${prob.whole} − ${prob.known} must be ${diff}!`,
+                correct: true,
+              },
+              {
+                text: "Thinking addition lets us find what's missing instead of taking away!",
+                correct: true,
+              },
+            ])
           } else {
-            promptSubtext.textContent = `🌱 There are ${leftover} leftover blossoms. Slide Snail 2 up to +${leftover}!`;
+            promptSubtext.textContent = `🌱 Slide up to ${prob.whole} to find the difference!`
+          }
+        } else if (currentUnitId === 3) {
+          const prob = UNITS[3].problems[questionIndex]
+          const baseDouble = Math.min(prob.a, prob.b)
+          if (unitStep === 1) {
+            if (userSliderVal === baseDouble) {
+              playVictoryChimes()
+              triggerPetals()
+              unitStep = 2
+              renderUnit3()
+            } else {
+              promptSubtext.textContent = `🌱 Match Stalk B to exactly ${baseDouble}!`
+            }
+          }
+        } else if (currentUnitId === 4) {
+          const prob = UNITS[4].problems[questionIndex]
+          const overflow = prob.whole - 10
+          const needFromTen = prob.sub - overflow
+          if (unitStep === 1) {
+            playVictoryChimes()
+            unitStep = 2
+            userSliderVal = 0
+            renderUnit4()
+          } else if (unitStep === 2) {
+            if (userSliderVal === needFromTen) {
+              playVictoryChimes()
+              triggerPetals()
+              showTeachBack([
+                {
+                  text: "Dropping down to 10 first makes subtraction super fast and easy!",
+                  correct: true,
+                },
+                {
+                  text: "Because 10 minus small numbers is a fact we know by heart!",
+                  correct: true,
+                },
+              ])
+            } else {
+              promptSubtext.textContent = `🌱 Pluck ${needFromTen} pods from the 10-stalk into the basket!`
+            }
           }
         }
-      } else if (currentUnitId === 2) {
-        const prob = UNITS[2].problems[questionIndex];
-        const diff = prob.whole - prob.known;
-        if (userSliderVal === diff) {
-          playVictoryChimes();
-          triggerPetals();
+      }
+
+      // --- Socratic Teach-Back & Auto-Advance ---
+      function showTeachBack(options) {
+        btnAction.style.display = "none"
+        teachBackCard.style.display = "flex"
+        teachBackOptions.innerHTML = ""
+        options.forEach((opt) => {
+          const b = document.createElement("button")
+          b.className = "teach-back-btn"
+          b.textContent = `✨ "${opt.text}"`
+          b.onclick = () => {
+            teachBackCard.style.display = "none"
+            triggerAutoAdvance()
+          }
+          teachBackOptions.appendChild(b)
+        })
+
+        // Start auto-advance timer immediately as well
+        triggerAutoAdvance()
+      }
+
+      function triggerAutoAdvance() {
+        clearAutoAdvance()
+        autoAdvanceBanner.style.display = "flex"
+        let secondsLeft = 3
+        autoAdvanceMsg.textContent = `🌟 Solved! Next question in ${secondsLeft}s…`
+
+        autoAdvanceTimer = setInterval(() => {
+          secondsLeft--
+          if (secondsLeft <= 0) {
+            clearAutoAdvance()
+            skipToNextQuestion()
+          } else {
+            autoAdvanceMsg.textContent = `🌟 Solved! Next question in ${secondsLeft}s…`
+          }
+        }, 1000)
+      }
+
+      function clearAutoAdvance() {
+        if (autoAdvanceTimer) {
+          clearInterval(autoAdvanceTimer)
+          autoAdvanceTimer = null
+        }
+        autoAdvanceBanner.style.display = "none"
+      }
+
+      function skipToNextQuestion() {
+        clearAutoAdvance()
+        if (questionIndex < 4) {
+          questionIndex++
+          loadCurrentQuestion()
+        } else {
+          // Unit Complete!
+          victoryModal.style.display = "flex"
+          playVictoryChimes()
+        }
+      }
+
+      function advanceToNextUnit() {
+        victoryModal.style.display = "none"
+        const nextU = currentUnitId < 4 ? currentUnitId + 1 : 1
+        switchUnit(nextU)
+      }
+
+      function replayUnit() {
+        victoryModal.style.display = "none"
+        questionIndex = 0
+        loadCurrentQuestion()
+      }
+
+      // Autonomous Demonstration
+      async function handleWatchDemo() {
+        btnWatch.disabled = true
+        btnAction.disabled = true
+
+        if (currentUnitId === 1) {
+          const prob = UNITS[1].problems[questionIndex]
+          const needed = 10 - prob.a
+          const leftover = prob.b - needed
+
+          for (let s = 1; s <= needed; s++) {
+            userSliderVal = s
+            playTone(prob.a + s - 1)
+            renderUnit1()
+            await new Promise((r) => setTimeout(r, 300))
+          }
+          await new Promise((r) => setTimeout(r, 400))
+          unitStep = 2
+          userSliderVal = 0
+          renderUnit1()
+
+          for (let s = 1; s <= leftover; s++) {
+            userSliderVal = s
+            playTone(s - 1, 2)
+            renderUnit1()
+            await new Promise((r) => setTimeout(r, 300))
+          }
+          playVictoryChimes()
+          triggerPetals()
           showTeachBack([
-            { text: `Because ${prob.known} + ${diff} = ${prob.whole}, so ${prob.whole} − ${prob.known} must be ${diff}!`, correct: true },
-            { text: "Thinking addition lets us find what's missing instead of taking away!", correct: true }
-          ]);
-        } else {
-          promptSubtext.textContent = `🌱 Slide up to ${prob.whole} to find the difference!`;
-        }
-      } else if (currentUnitId === 3) {
-        const prob = UNITS[3].problems[questionIndex];
-        const baseDouble = Math.min(prob.a, prob.b);
-        if (unitStep === 1) {
-          if (userSliderVal === baseDouble) {
-            playVictoryChimes();
-            triggerPetals();
-            unitStep = 2;
-            renderUnit3();
-          } else {
-            promptSubtext.textContent = `🌱 Match Stalk B to exactly ${baseDouble}!`;
+            {
+              text: "To make a friendly 10 first, so we don't have to count fingers!",
+              correct: true,
+            },
+          ])
+        } else if (currentUnitId === 2) {
+          const prob = UNITS[2].problems[questionIndex]
+          const diff = prob.whole - prob.known
+          for (let s = 1; s <= diff; s++) {
+            userSliderVal = s
+            playTone(prob.known + s - 1)
+            renderUnit2()
+            await new Promise((r) => setTimeout(r, 300))
           }
-        }
-      } else if (currentUnitId === 4) {
-        const prob = UNITS[4].problems[questionIndex];
-        const overflow = prob.whole - 10;
-        const needFromTen = prob.sub - overflow;
-        if (unitStep === 1) {
-          playVictoryChimes();
-          unitStep = 2;
-          userSliderVal = 0;
-          renderUnit4();
-        } else if (unitStep === 2) {
-          if (userSliderVal === needFromTen) {
-            playVictoryChimes();
-            triggerPetals();
-            showTeachBack([
-              { text: "Dropping down to 10 first makes subtraction super fast and easy!", correct: true },
-              { text: "Because 10 minus small numbers is a fact we know by heart!", correct: true }
-            ]);
-          } else {
-            promptSubtext.textContent = `🌱 Pluck ${needFromTen} pods from the 10-stalk into the basket!`;
+          playVictoryChimes()
+          triggerPetals()
+          showTeachBack([
+            { text: `Because ${prob.known} + ${diff} = ${prob.whole}!`, correct: true },
+          ])
+        } else if (currentUnitId === 3) {
+          const prob = UNITS[3].problems[questionIndex]
+          const base = Math.min(prob.a, prob.b)
+          for (let s = 1; s <= base; s++) {
+            userSliderVal = s
+            playTone(s - 1)
+            renderUnit3()
+            await new Promise((r) => setTimeout(r, 260))
           }
+          unitStep = 2
+          renderUnit3()
+          await new Promise((r) => setTimeout(r, 400))
+          completeUnit3Question()
+        } else if (currentUnitId === 4) {
+          unitStep = 2
+          const prob = UNITS[4].problems[questionIndex]
+          const overflow = prob.whole - 10
+          const need = prob.sub - overflow
+          userSliderVal = need
+          renderUnit4()
+          playVictoryChimes()
+          triggerPetals()
+          showTeachBack([
+            { text: "Dropping to 10 makes subtraction fast and easy!", correct: true },
+          ])
         }
-      }
-    }
 
-    // --- Socratic Teach-Back & Auto-Advance ---
-    function showTeachBack(options) {
-      btnAction.style.display = "none";
-      teachBackCard.style.display = "flex";
-      teachBackOptions.innerHTML = "";
-      options.forEach(opt => {
-        const b = document.createElement("button");
-        b.className = "teach-back-btn";
-        b.textContent = `✨ "${opt.text}"`;
-        b.onclick = () => {
-          teachBackCard.style.display = "none";
-          triggerAutoAdvance();
-        };
-        teachBackOptions.appendChild(b);
-      });
-
-      // Start auto-advance timer immediately as well
-      triggerAutoAdvance();
-    }
-
-    function triggerAutoAdvance() {
-      clearAutoAdvance();
-      autoAdvanceBanner.style.display = "flex";
-      let secondsLeft = 3;
-      autoAdvanceMsg.textContent = `🌟 Solved! Next question in ${secondsLeft}s…`;
-
-      autoAdvanceTimer = setInterval(() => {
-        secondsLeft--;
-        if (secondsLeft <= 0) {
-          clearAutoAdvance();
-          skipToNextQuestion();
-        } else {
-          autoAdvanceMsg.textContent = `🌟 Solved! Next question in ${secondsLeft}s…`;
-        }
-      }, 1000);
-    }
-
-    function clearAutoAdvance() {
-      if (autoAdvanceTimer) {
-        clearInterval(autoAdvanceTimer);
-        autoAdvanceTimer = null;
-      }
-      autoAdvanceBanner.style.display = "none";
-    }
-
-    function skipToNextQuestion() {
-      clearAutoAdvance();
-      if (questionIndex < 4) {
-        questionIndex++;
-        loadCurrentQuestion();
-      } else {
-        // Unit Complete!
-        victoryModal.style.display = "flex";
-        playVictoryChimes();
-      }
-    }
-
-    function advanceToNextUnit() {
-      victoryModal.style.display = "none";
-      const nextU = currentUnitId < 4 ? currentUnitId + 1 : 1;
-      switchUnit(nextU);
-    }
-
-    function replayUnit() {
-      victoryModal.style.display = "none";
-      questionIndex = 0;
-      loadCurrentQuestion();
-    }
-
-    // Autonomous Demonstration
-    async function handleWatchDemo() {
-      btnWatch.disabled = true;
-      btnAction.disabled = true;
-
-      if (currentUnitId === 1) {
-        const prob = UNITS[1].problems[questionIndex];
-        const needed = 10 - prob.a;
-        const leftover = prob.b - needed;
-
-        for (let s = 1; s <= needed; s++) {
-          userSliderVal = s;
-          playTone(prob.a + s - 1);
-          renderUnit1();
-          await new Promise(r => setTimeout(r, 300));
-        }
-        await new Promise(r => setTimeout(r, 400));
-        unitStep = 2;
-        userSliderVal = 0;
-        renderUnit1();
-
-        for (let s = 1; s <= leftover; s++) {
-          userSliderVal = s;
-          playTone(s - 1, 2);
-          renderUnit1();
-          await new Promise(r => setTimeout(r, 300));
-        }
-        playVictoryChimes();
-        triggerPetals();
-        showTeachBack([
-          { text: "To make a friendly 10 first, so we don't have to count fingers!", correct: true }
-        ]);
-
-      } else if (currentUnitId === 2) {
-        const prob = UNITS[2].problems[questionIndex];
-        const diff = prob.whole - prob.known;
-        for (let s = 1; s <= diff; s++) {
-          userSliderVal = s;
-          playTone(prob.known + s - 1);
-          renderUnit2();
-          await new Promise(r => setTimeout(r, 300));
-        }
-        playVictoryChimes();
-        triggerPetals();
-        showTeachBack([
-          { text: `Because ${prob.known} + ${diff} = ${prob.whole}!`, correct: true }
-        ]);
-      } else if (currentUnitId === 3) {
-        const prob = UNITS[3].problems[questionIndex];
-        const base = Math.min(prob.a, prob.b);
-        for (let s = 1; s <= base; s++) {
-          userSliderVal = s;
-          playTone(s - 1);
-          renderUnit3();
-          await new Promise(r => setTimeout(r, 260));
-        }
-        unitStep = 2;
-        renderUnit3();
-        await new Promise(r => setTimeout(r, 400));
-        completeUnit3Question();
-      } else if (currentUnitId === 4) {
-        unitStep = 2;
-        const prob = UNITS[4].problems[questionIndex];
-        const overflow = prob.whole - 10;
-        const need = prob.sub - overflow;
-        userSliderVal = need;
-        renderUnit4();
-        playVictoryChimes();
-        triggerPetals();
-        showTeachBack([
-          { text: "Dropping to 10 makes subtraction fast and easy!", correct: true }
-        ]);
+        btnWatch.disabled = false
+        btnAction.disabled = false
       }
 
-      btnWatch.disabled = false;
-      btnAction.disabled = false;
-    }
-
-    function resetCurrentProblem() {
-      loadCurrentQuestion();
-    }
-
-    // Dropdown toggles
-    function toggleUnitMenu() {
-      const btn = document.getElementById("unit-dropdown-btn");
-      const menu = document.getElementById("unit-dropdown-menu");
-      btn.classList.toggle("open");
-      menu.classList.toggle("show");
-    }
-
-    window.addEventListener("click", (e) => {
-      const wrap = document.querySelector(".unit-dropdown-wrap");
-      if (wrap && !wrap.contains(e.target)) {
-        document.getElementById("unit-dropdown-btn")?.classList.remove("open");
-        document.getElementById("unit-dropdown-menu")?.classList.remove("show");
+      function resetCurrentProblem() {
+        loadCurrentQuestion()
       }
-    });
 
-    function toggleCalm() {
-      document.body.classList.toggle("calm");
-      document.getElementById("calm-toggle").classList.toggle("active");
-    }
-
-    function triggerPetals() {
-      if (document.body.classList.contains("calm")) return;
-      const card = document.getElementById("stage-card");
-      const colors = ["#FFCAD4", "#FFEAA7", "#C5EED9", "#D6ECFF", "#FFD4C7"];
-      for (let i = 0; i < 20; i++) {
-        const petal = document.createElement("div");
-        petal.className = "confetti-petal";
-        petal.style.background = colors[i % colors.length];
-        petal.style.left = "230px";
-        petal.style.top = "100px";
-        const angle = (Math.PI * 2 * i) / 20;
-        const dist = 60 + Math.random() * 100;
-        petal.style.setProperty("--dx", `${Math.cos(angle) * dist}px`);
-        petal.style.setProperty("--dy", `${Math.sin(angle) * dist - 20}px`);
-        petal.style.setProperty("--rot", `${Math.random() * 360}deg`);
-        card.appendChild(petal);
-        setTimeout(() => petal.remove(), 2400);
+      // Dropdown toggles
+      function toggleUnitMenu() {
+        const btn = document.getElementById("unit-dropdown-btn")
+        const menu = document.getElementById("unit-dropdown-menu")
+        btn.classList.toggle("open")
+        menu.classList.toggle("show")
       }
-    }
 
-    // Boot
-    loadCurrentQuestion();
-  </script>
-</body>
+      window.addEventListener("click", (e) => {
+        const wrap = document.querySelector(".unit-dropdown-wrap")
+        if (wrap && !wrap.contains(e.target)) {
+          document.getElementById("unit-dropdown-btn")?.classList.remove("open")
+          document.getElementById("unit-dropdown-menu")?.classList.remove("show")
+        }
+      })
+
+      function toggleCalm() {
+        document.body.classList.toggle("calm")
+        document.getElementById("calm-toggle").classList.toggle("active")
+      }
+
+      function triggerPetals() {
+        if (document.body.classList.contains("calm")) return
+        const card = document.getElementById("stage-card")
+        const colors = ["#FFCAD4", "#FFEAA7", "#C5EED9", "#D6ECFF", "#FFD4C7"]
+        for (let i = 0; i < 20; i++) {
+          const petal = document.createElement("div")
+          petal.className = "confetti-petal"
+          petal.style.background = colors[i % colors.length]
+          petal.style.left = "230px"
+          petal.style.top = "100px"
+          const angle = (Math.PI * 2 * i) / 20
+          const dist = 60 + Math.random() * 100
+          petal.style.setProperty("--dx", `${Math.cos(angle) * dist}px`)
+          petal.style.setProperty("--dy", `${Math.sin(angle) * dist - 20}px`)
+          petal.style.setProperty("--rot", `${Math.random() * 360}deg`)
+          card.appendChild(petal)
+          setTimeout(() => petal.remove(), 2400)
+        }
+      }
+
+      // Boot
+      loadCurrentQuestion()
+    </script>
+  </body>
 </html>

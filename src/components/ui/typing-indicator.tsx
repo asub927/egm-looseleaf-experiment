@@ -1,7 +1,11 @@
 import * as React from "react"
 
 import { useInk, useMergedRef } from "@/lib/ink/react"
-import { typingGeometry, typingIndicatorRecipe, type TypingVariant } from "@/lib/ink/recipes/typing-indicator-ink"
+import {
+  typingGeometry,
+  typingIndicatorRecipe,
+  type TypingVariant,
+} from "@/lib/ink/recipes/typing-indicator-ink"
 import { cn } from "@/lib/utils"
 
 const CSS = `
@@ -12,7 +16,10 @@ const CSS = `
 [data-slot=typing-indicator] [data-part^=dot]{transform-box:fill-box;transform-origin:50% 50%}
 `
 
-const SIZE: Record<TypingVariant, readonly [number, number]> = { dots: [56, 24], squiggle: [80, 24] }
+const SIZE: Record<TypingVariant, readonly [number, number]> = {
+  dots: [56, 24],
+  squiggle: [80, 24],
+}
 
 const DOTS_ANIM =
   "[&>svg_[data-part^=dot]]:animate-[ll-type-dot_2s_ease-out_infinite_both] [&>svg_[data-part=dot-2]]:[animation-delay:0.4s] [&>svg_[data-part=dot-3]]:[animation-delay:0.8s] [&>svg_[data-part=pencil]]:animate-[ll-type-hop_2s_ease-in-out_infinite_both]"
@@ -39,7 +46,14 @@ function TypingIndicator({
   seed?: string | number
 }) {
   const [w, h] = SIZE[variant]
-  const { hostRef, hostProps, node } = useInk({ recipe: typingIndicatorRecipe, params: { variant, pen, pencil }, kind: "typing", seed, size: [w, h], still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: typingIndicatorRecipe,
+    params: { variant, pen, pencil },
+    kind: "typing",
+    seed,
+    size: [w, h],
+    still: true,
+  })
   const span = typingGeometry(w, h, variant).span
   return (
     <>
@@ -52,14 +66,19 @@ function TypingIndicator({
         data-active={active ? "" : undefined}
         role="status"
         aria-live="polite"
-        ref={useMergedRef<HTMLElement>(active ? hostRef : undefined, ref as React.Ref<HTMLElement> | undefined) as React.Ref<HTMLDivElement>}
+        ref={
+          useMergedRef<HTMLElement>(
+            active ? hostRef : undefined,
+            ref as React.Ref<HTMLElement> | undefined,
+          ) as React.Ref<HTMLDivElement>
+        }
         {...(active ? hostProps : {})}
         style={{ "--ll-type-span": `${span}px`, ...style } as React.CSSProperties}
         className={cn(
           "relative isolate inline-block h-6 shrink-0 align-middle rtl:[&>svg]:-scale-x-100 forced-colors:text-center forced-colors:leading-6 forced-colors:font-bold forced-colors:outline-none! forced-colors:after:content-['...']",
           variant === "dots" ? "w-14" : "w-20",
           active && (variant === "dots" ? DOTS_ANIM : SQUIGGLE_ANIM),
-          className
+          className,
         )}
         {...props}
       >

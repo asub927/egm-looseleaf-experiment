@@ -1,7 +1,15 @@
 import * as React from "react"
 import type { Label as LabelPrimitive } from "radix-ui"
 import { Slot } from "radix-ui"
-import { Controller, FormProvider, useFormContext, useFormState, type ControllerProps, type FieldPath, type FieldValues } from "react-hook-form"
+import {
+  Controller,
+  FormProvider,
+  useFormContext,
+  useFormState,
+  type ControllerProps,
+  type FieldPath,
+  type FieldValues,
+} from "react-hook-form"
 
 import { Label } from "@/components/ui/label"
 import { useInk, useMergedRef } from "@/lib/ink/react"
@@ -10,13 +18,19 @@ import { cn } from "@/lib/utils"
 
 const Form = FormProvider
 
-type FormFieldContextValue<TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>> = {
+type FormFieldContextValue<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> = {
   name: TName
 }
 
 const FormFieldContext = React.createContext<FormFieldContextValue>({} as FormFieldContextValue)
 
-const FormField = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({
+const FormField = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
   ...props
 }: ControllerProps<TFieldValues, TName>) => {
   return (
@@ -68,7 +82,15 @@ function FormItem({ className, ...props }: React.ComponentProps<"div">) {
 function FormLabel({ className, ...props }: React.ComponentProps<typeof LabelPrimitive.Root>) {
   const { error, formItemId } = useFormField()
 
-  return <Label data-slot="form-label" data-error={!!error} className={cn("data-[error=true]:text-destructive", className)} htmlFor={formItemId} {...props} />
+  return (
+    <Label
+      data-slot="form-label"
+      data-error={!!error}
+      className={cn("data-[error=true]:text-destructive", className)}
+      htmlFor={formItemId}
+      {...props}
+    />
+  )
 }
 
 function FormControl({ ...props }: React.ComponentProps<typeof Slot.Root>) {
@@ -88,13 +110,31 @@ function FormControl({ ...props }: React.ComponentProps<typeof Slot.Root>) {
 function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
   const { formDescriptionId } = useFormField()
 
-  return <p data-slot="form-description" id={formDescriptionId} className={cn("text-sm text-muted-foreground", className)} {...props} />
+  return (
+    <p
+      data-slot="form-description"
+      id={formDescriptionId}
+      className={cn("text-sm text-muted-foreground", className)}
+      {...props}
+    />
+  )
 }
 
-function FormMessage({ className, seed, ref, ...props }: React.ComponentProps<"p"> & { seed?: string | number }) {
+function FormMessage({
+  className,
+  seed,
+  ref,
+  ...props
+}: React.ComponentProps<"p"> & { seed?: string | number }) {
   const { error, formMessageId } = useFormField()
   const body = error ? String(error?.message ?? "") : props.children
-  const { hostRef, hostProps, node } = useInk({ recipe: fieldErrorRecipe, params: {}, kind: "underline", seed, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: fieldErrorRecipe,
+    params: {},
+    kind: "underline",
+    seed,
+    still: true,
+  })
   const mergedRef = useMergedRef<HTMLParagraphElement>(hostRef, ref)
 
   if (!body) {
@@ -107,7 +147,10 @@ function FormMessage({ className, seed, ref, ...props }: React.ComponentProps<"p
       id={formMessageId}
       ref={mergedRef}
       {...hostProps}
-      className={cn("relative isolate w-fit max-w-full pb-1 text-sm text-destructive outline-hidden forced-colors:underline forced-colors:decoration-wavy", className)}
+      className={cn(
+        "relative isolate w-fit max-w-full pb-1 text-sm text-destructive outline-hidden forced-colors:underline forced-colors:decoration-wavy",
+        className,
+      )}
       {...props}
     >
       {node}
@@ -116,4 +159,13 @@ function FormMessage({ className, seed, ref, ...props }: React.ComponentProps<"p
   )
 }
 
-export { useFormField, Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, FormField }
+export {
+  useFormField,
+  Form,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+  FormField,
+}

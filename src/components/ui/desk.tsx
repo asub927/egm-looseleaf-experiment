@@ -24,7 +24,16 @@ function lampVignette(lamp: number): string | undefined {
   return `radial-gradient(ellipse 120% 100% at 50% 40%, transparent 60%, rgb(var(--ll-shade) / calc(${Math.round(lamp * lamp * 0.05 * 1000) / 1000} * var(--ll-shadow-k))))`
 }
 
-function Desk({ className, style, children, as = "div", objects = false, lamp = 1, seed, ...props }: DeskProps) {
+function Desk({
+  className,
+  style,
+  children,
+  as = "div",
+  objects = false,
+  lamp = 1,
+  seed,
+  ...props
+}: DeskProps) {
   const Comp = as as React.ElementType
   const list = objects === true ? DESK_OBJECTS : objects || []
   const vignette = lampVignette(lamp === true ? 1 : lamp === false ? 0 : lamp)
@@ -34,7 +43,9 @@ function Desk({ className, style, children, as = "div", objects = false, lamp = 
       <Comp
         data-slot="desk"
         className={cn("ll-desk relative isolate", className)}
-        style={vignette ? ({ "--ll-desk-vignette": vignette, ...style } as React.CSSProperties) : style}
+        style={
+          vignette ? ({ "--ll-desk-vignette": vignette, ...style } as React.CSSProperties) : style
+        }
         {...props}
       >
         {list.length ? <DeskObjects objects={list} seed={seed} /> : null}
@@ -66,16 +77,25 @@ function DeskObjects({ objects, seed: seedProp, className, ...props }: DeskObjec
     return {
       coffee: [coffeeRing(`${seed}:coffee`, { radius: 64, ...o })],
       pencil: [pencil(`${seed}:pencil`, { length: 200, ...o })],
-      clips: [clip(`${seed}:clip-a`, { height: 62, tone: "steel", ...o }), clip(`${seed}:clip-b`, { height: 58, tone: "sky", ...o })],
+      clips: [
+        clip(`${seed}:clip-a`, { height: 62, tone: "steel", ...o }),
+        clip(`${seed}:clip-b`, { height: 58, tone: "sky", ...o }),
+      ],
       ruler: [ruler(`${seed}:ruler`, 300, { height: 30, ...o })],
-      pins: [pin(`${seed}:pin-a`, { size: 22, color: "tomato", ...o }), pin(`${seed}:pin-b`, { size: 24, color: "sky", ...o })],
+      pins: [
+        pin(`${seed}:pin-a`, { size: 22, color: "tomato", ...o }),
+        pin(`${seed}:pin-b`, { size: 24, color: "sky", ...o }),
+      ],
     } satisfies Record<DeskObject, ReturnType<typeof pin>[]>
   }, [seed, tier, calm])
   return (
     <div
       data-slot="desk-objects"
       aria-hidden="true"
-      className={cn("pointer-events-none absolute inset-0 z-(--ll-z-sheet) overflow-hidden max-sm:hidden calm:hidden", className)}
+      className={cn(
+        "pointer-events-none absolute inset-0 z-(--ll-z-sheet) overflow-hidden max-sm:hidden calm:hidden",
+        className,
+      )}
       {...props}
     >
       {objects.map((name) => (
@@ -86,7 +106,11 @@ function DeskObjects({ objects, seed: seedProp, className, ...props }: DeskObjec
               res={res}
               kind="prop"
               data-slot="desk-object"
-              className={cn("block shrink-0", name === "clips" && (i ? "-mt-1 rotate-[-9deg]" : "rotate-12"), name === "pins" && (i ? "mt-4" : ""))}
+              className={cn(
+                "block shrink-0",
+                name === "clips" && (i ? "-mt-1 rotate-[-9deg]" : "rotate-12"),
+                name === "pins" && (i ? "mt-4" : ""),
+              )}
               style={name === "coffee" ? undefined : { filter: dropShadow("prop") }}
             />
           ))}

@@ -1,4 +1,16 @@
-export type TokenType = "plain" | "comment" | "string" | "keyword" | "literal" | "number" | "function" | "type" | "tag" | "attr" | "variable" | "punct"
+export type TokenType =
+  | "plain"
+  | "comment"
+  | "string"
+  | "keyword"
+  | "literal"
+  | "number"
+  | "function"
+  | "type"
+  | "tag"
+  | "attr"
+  | "variable"
+  | "punct"
 
 export interface Token {
   type: TokenType
@@ -46,14 +58,19 @@ const KEYWORDS = new Set(
     "abstract as async await break case catch class const continue debugger declare default delete do else enum export extends " +
     "finally for from function get if implements import in infer instanceof interface is keyof let namespace new of override " +
     "private protected public readonly return satisfies set static super switch this throw try type typeof var void while with yield"
-  ).split(" ")
+  ).split(" "),
 )
 const LITERALS = new Set(["true", "false", "null", "undefined", "NaN", "Infinity"])
-const BASH_KEYWORDS = new Set("if then else elif fi for while until do done case esac in function select time export local return exit source alias unset".split(" "))
+const BASH_KEYWORDS = new Set(
+  "if then else elif fi for while until do done case esac in function select time export local return exit source alias unset".split(
+    " ",
+  ),
+)
 
 const WS = /^\s+/
 const IDENT = /^[A-Za-z_$][\w$]*/
-const NUMBER = /^(?:0[xX][\da-fA-F_]+|0[bB][01_]+|\d[\d_]*(?:\.\d[\d_]*)?(?:[eE][+-]?\d+)?n?|\.\d[\d_]*)/
+const NUMBER =
+  /^(?:0[xX][\da-fA-F_]+|0[bB][01_]+|\d[\d_]*(?:\.\d[\d_]*)?(?:[eE][+-]?\d+)?n?|\.\d[\d_]*)/
 const OPERATOR = /^(?:=>|\.\.\.|\?\?=?|\?\.|[=!<>]=?=?|&&=?|\|\|=?|[+\-*/%&|^~?:]=?|<<=?|>>>?=?)/
 const PUNCT = /^[()[\];,.@#\\{}]/
 
@@ -107,7 +124,14 @@ function tokenizeJs(src: string, jsx: boolean): Token[] {
   const modes: Array<{ mode: Mode; depth: number; closing?: boolean }> = [{ mode: "js", depth: 0 }]
   let i = 0
   let prev = ""
-  const startsExpression = () => prev === "" || /[(=,:?{[&|!]$/.test(prev) || prev === "=>" || prev === "return" || prev === "&&" || prev === "||" || prev === "??"
+  const startsExpression = () =>
+    prev === "" ||
+    /[(=,:?{[&|!]$/.test(prev) ||
+    prev === "=>" ||
+    prev === "return" ||
+    prev === "&&" ||
+    prev === "||" ||
+    prev === "??"
   while (i < src.length) {
     const top = modes[modes.length - 1]
     const rest = src.slice(i, i + 400)
@@ -443,7 +467,8 @@ function tokenizeBash(src: string): Token[] {
       i += m[0].length
     } else if ((m = /^[^\s|;&<>"'$#]+/.exec(rest))) {
       const w = m[0]
-      const type: TokenType = command || BASH_KEYWORDS.has(w) ? "keyword" : /^\d+$/.test(w) ? "number" : "plain"
+      const type: TokenType =
+        command || BASH_KEYWORDS.has(w) ? "keyword" : /^\d+$/.test(w) ? "number" : "plain"
       push(out, type, w)
       i += w.length
       command = false
@@ -499,7 +524,12 @@ export function parseDiff(code: string): DiffLine[] {
   const lines = code.split("\n")
   if (lines.length && lines[lines.length - 1] === "") lines.pop()
   for (const l of lines) {
-    if (/^(?:diff --git |index [\da-f]+\.\.|--- (?:a\/|\/dev\/null)|\+\+\+ (?:b\/|\/dev\/null)|@@ |\\ No newline at end of file)/.test(l)) out.push({ kind: "meta", text: l })
+    if (
+      /^(?:diff --git |index [\da-f]+\.\.|--- (?:a\/|\/dev\/null)|\+\+\+ (?:b\/|\/dev\/null)|@@ |\\ No newline at end of file)/.test(
+        l,
+      )
+    )
+      out.push({ kind: "meta", text: l })
     else if (l.startsWith("+")) out.push({ kind: "add", text: l.slice(1) })
     else if (l.startsWith("-")) out.push({ kind: "del", text: l.slice(1) })
     else if (l.startsWith(" ")) out.push({ kind: "ctx", text: l.slice(1) })

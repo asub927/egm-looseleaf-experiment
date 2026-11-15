@@ -4,20 +4,36 @@ import * as React from "react"
 import { Direction, Slider as SliderPrimitive } from "radix-ui"
 
 import { useInk, useInkSeed, useMergedRef } from "@/lib/ink/react"
-import { sliderRangeRecipe, sliderThumbRecipe, sliderTrackRecipe, type SliderTone } from "@/lib/ink/recipes/slider-ink"
+import {
+  sliderRangeRecipe,
+  sliderThumbRecipe,
+  sliderTrackRecipe,
+  type SliderTone,
+} from "@/lib/ink/recipes/slider-ink"
 import { cn } from "@/lib/utils"
 
 const THUMB = 20
 
-function tickIntervals(ticks: boolean | number | undefined, min: number, max: number, step: number): number {
+function tickIntervals(
+  ticks: boolean | number | undefined,
+  min: number,
+  max: number,
+  step: number,
+): number {
   if (!ticks) return 0
   if (typeof ticks === "number") return Math.max(0, Math.min(200, Math.round(ticks)))
   const n = Math.round((max - min) / step)
   return n >= 1 && n <= 20 ? n : 10
 }
 
-function fillWindow(from: number, to: number, thumbAtFrom: boolean, o: { vertical: boolean; startsLow: boolean }): React.CSSProperties {
-  const at = (pct: number, thumb: boolean) => `calc(${thumb ? THUMB / 2 : 0}px + (100% - ${thumb ? THUMB : 0}px) * ${pct / 100})`
+function fillWindow(
+  from: number,
+  to: number,
+  thumbAtFrom: boolean,
+  o: { vertical: boolean; startsLow: boolean },
+): React.CSSProperties {
+  const at = (pct: number, thumb: boolean) =>
+    `calc(${thumb ? THUMB / 2 : 0}px + (100% - ${thumb ? THUMB : 0}px) * ${pct / 100})`
   const a = at(from, thumbAtFrom)
   const b = at(to, true)
   const inset = o.vertical
@@ -30,8 +46,25 @@ function fillWindow(from: number, to: number, thumbAtFrom: boolean, o: { vertica
   return { clipPath: `inset(${inset})` }
 }
 
-function SliderThumb({ seed, disabled, invalid, className, ref, ...props }: React.ComponentProps<typeof SliderPrimitive.Thumb> & { seed: string; disabled: boolean; invalid: boolean }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: sliderThumbRecipe, params: { disabled, invalid }, kind: "thumb", seed, still: true })
+function SliderThumb({
+  seed,
+  disabled,
+  invalid,
+  className,
+  ref,
+  ...props
+}: React.ComponentProps<typeof SliderPrimitive.Thumb> & {
+  seed: string
+  disabled: boolean
+  invalid: boolean
+}) {
+  const { hostRef, hostProps, node } = useInk({
+    recipe: sliderThumbRecipe,
+    params: { disabled, invalid },
+    kind: "thumb",
+    seed,
+    still: true,
+  })
   return (
     <SliderPrimitive.Thumb
       data-slot="slider-thumb"
@@ -40,7 +73,7 @@ function SliderThumb({ seed, disabled, invalid, className, ref, ...props }: Reac
       className={cn(
         "relative isolate block size-5 shrink-0 rounded-full outline-hidden transition-transform duration-(--ll-dur-press) ease-out after:absolute after:-inset-1.5 hover:scale-105 active:scale-95 disabled:pointer-events-none",
         "bg-slip data-ink-ready:bg-transparent forced-colors:rounded-full forced-colors:bg-[ButtonText]",
-        className
+        className,
       )}
       {...props}
     >
@@ -80,15 +113,32 @@ function Slider({
   const vertical = orientation === "vertical"
   const seed = useInkSeed(seedProp)
   const direction = Direction.useDirection(dir)
-  const [uncontrolled, setUncontrolled] = React.useState<number[]>(() => (Array.isArray(defaultValue) ? defaultValue : [min]))
-  const safeValue = Array.isArray(value) && value.some((v) => !Number.isFinite(v)) ? value.map((v) => (Number.isFinite(v) ? v : min)) : value
+  const [uncontrolled, setUncontrolled] = React.useState<number[]>(() =>
+    Array.isArray(defaultValue) ? defaultValue : [min],
+  )
+  const safeValue =
+    Array.isArray(value) && value.some((v) => !Number.isFinite(v))
+      ? value.map((v) => (Number.isFinite(v) ? v : min))
+      : value
   const values = Array.isArray(safeValue) ? safeValue : uncontrolled
   const intervals = tickIntervals(ticks, min, max, step)
   const isOff = !!disabled
   const invalid = ariaInvalid === true || ariaInvalid === "true"
 
-  const track = useInk({ recipe: sliderTrackRecipe, params: { vertical, ticks: intervals, disabled: isOff, invalid }, kind: "slider", seed: `${seed}:track`, still: true })
-  const range = useInk({ recipe: sliderRangeRecipe, params: { vertical, tone, disabled: isOff }, kind: "slider", seed: `${seed}:range`, still: true })
+  const track = useInk({
+    recipe: sliderTrackRecipe,
+    params: { vertical, ticks: intervals, disabled: isOff, invalid },
+    kind: "slider",
+    seed: `${seed}:track`,
+    still: true,
+  })
+  const range = useInk({
+    recipe: sliderRangeRecipe,
+    params: { vertical, tone, disabled: isOff },
+    kind: "slider",
+    seed: `${seed}:range`,
+    still: true,
+  })
 
   const span = max - min || 1
   const pct = values.map((v) => Math.min(100, Math.max(0, ((v - min) / span) * 100)))
@@ -110,7 +160,14 @@ function Slider({
       inverted={inverted}
       disabled={disabled}
       dir={dir}
-      {...(multi ? { role: "group", "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, "aria-describedby": ariaDescribedby } : {})}
+      {...(multi
+        ? {
+            role: "group",
+            "aria-label": ariaLabel,
+            "aria-labelledby": ariaLabelledby,
+            "aria-describedby": ariaDescribedby,
+          }
+        : {})}
       onValueChange={(v) => {
         if (!Array.isArray(value)) setUncontrolled(v)
         onValueChange?.(v)
@@ -118,7 +175,7 @@ function Slider({
       style={style}
       className={cn(
         "relative flex w-full touch-none items-center select-none data-[orientation=horizontal]:min-h-6 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:min-w-6 data-[orientation=vertical]:flex-col",
-        className
+        className,
       )}
       {...props}
     >
@@ -147,7 +204,13 @@ function Slider({
           invalid={invalid}
           aria-invalid={ariaInvalid}
           aria-valuetext={getValueText?.(values[index], index)}
-          {...(multi ? {} : { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, "aria-describedby": ariaDescribedby })}
+          {...(multi
+            ? {}
+            : {
+                "aria-label": ariaLabel,
+                "aria-labelledby": ariaLabelledby,
+                "aria-describedby": ariaDescribedby,
+              })}
         />
       ))}
     </SliderPrimitive.Root>

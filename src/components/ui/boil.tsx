@@ -26,10 +26,22 @@ type BoilProps = Omit<React.ComponentProps<"span">, "children"> & {
   strength?: number
   active?: boolean
   reseed?: boolean
-  children?: React.ReactNode | ((frame: { frame: number; seed: (base: string | number) => string }) => React.ReactNode)
+  children?:
+    | React.ReactNode
+    | ((frame: { frame: number; seed: (base: string | number) => string }) => React.ReactNode)
 }
 
-function Boil({ className, children, ref, fps = 6, frames = 3, strength = 1, active = true, reseed = true, ...props }: BoilProps) {
+function Boil({
+  className,
+  children,
+  ref,
+  fps = 6,
+  frames = 3,
+  strength = 1,
+  active = true,
+  reseed = true,
+  ...props
+}: BoilProps) {
   const outer = useInkContext()
   const providerReduced = outer.motion === "reduced" || outer.density === "calm"
   const n = Math.min(BOIL_MAX_FRAMES, Math.max(2, Math.round(frames)))
@@ -42,7 +54,9 @@ function Boil({ className, children, ref, fps = 6, frames = 3, strength = 1, act
   React.useEffect(() => {
     const el = root.current
     if (!el || typeof IntersectionObserver === "undefined") return
-    const io = new IntersectionObserver((entries) => setOnScreen(entries.some((e) => e.isIntersecting)))
+    const io = new IntersectionObserver((entries) =>
+      setOnScreen(entries.some((e) => e.isIntersecting)),
+    )
     io.observe(el)
     return () => io.disconnect()
   }, [])
@@ -66,7 +80,10 @@ function Boil({ className, children, ref, fps = 6, frames = 3, strength = 1, act
       setFrame(0)
       return
     }
-    const id = setInterval(() => setFrame((f) => (f + 1) % n), 1000 / Math.min(12, Math.max(1, fps)))
+    const id = setInterval(
+      () => setFrame((f) => (f + 1) % n),
+      1000 / Math.min(12, Math.max(1, fps)),
+    )
     return () => clearInterval(id)
   }, [boiling, fps, n])
 
@@ -81,7 +98,14 @@ function Boil({ className, children, ref, fps = 6, frames = 3, strength = 1, act
       ? children({ frame: f, seed: seedOf })
       : reseed
         ? React.Children.map(children, (child, i) => {
-            if (f === 0 || !React.isValidElement<{ seed?: string | number; name?: string; id?: string }>(child) || typeof child.type === "string") return child
+            if (
+              f === 0 ||
+              !React.isValidElement<{ seed?: string | number; name?: string; id?: string }>(
+                child,
+              ) ||
+              typeof child.type === "string"
+            )
+              return child
             const base = child.props.seed ?? child.props.name ?? child.props.id ?? i
             return React.cloneElement(child, { seed: seedOf(base) })
           })
@@ -90,7 +114,14 @@ function Boil({ className, children, ref, fps = 6, frames = 3, strength = 1, act
   return (
     <BoilContext.Provider value={{ frame: f, frames: n }}>
       <InkContext.Provider value={value}>
-        <span data-slot="boil" data-state={boiling ? "boiling" : "still"} data-frame={f} ref={useMergedRef<HTMLSpanElement>(root, ref)} className={cn("inline-block", className)} {...props}>
+        <span
+          data-slot="boil"
+          data-state={boiling ? "boiling" : "still"}
+          data-frame={f}
+          ref={useMergedRef<HTMLSpanElement>(root, ref)}
+          className={cn("inline-block", className)}
+          {...props}
+        >
           {body}
         </span>
       </InkContext.Provider>
@@ -98,7 +129,10 @@ function Boil({ className, children, ref, fps = 6, frames = 3, strength = 1, act
   )
 }
 
-const mulKnobs = (a: { wobble: number; misreg: number; bleed: number; width: number }, b: { wobble: number; misreg: number; bleed: number; width: number }) => ({
+const mulKnobs = (
+  a: { wobble: number; misreg: number; bleed: number; width: number },
+  b: { wobble: number; misreg: number; bleed: number; width: number },
+) => ({
   wobble: a.wobble * b.wobble,
   misreg: a.misreg * b.misreg,
   bleed: a.bleed * b.bleed,

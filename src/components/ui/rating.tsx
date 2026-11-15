@@ -41,10 +41,26 @@ const glyph: Record<RatingSize, string> = {
 const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, v))
 const noop = (): void => {}
 
-function RatingItem({ index, className, ref, ...props }: Omit<React.ComponentProps<"span">, "children"> & { index: number }) {
+function RatingItem({
+  index,
+  className,
+  ref,
+  ...props
+}: Omit<React.ComponentProps<"span">, "children"> & { index: number }) {
   const c = useRatingContext()
-  const state = c.shown >= index ? "checked" : c.allowHalf && c.shown >= index - 0.5 ? "indeterminate" : "unchecked"
-  const { hostRef, hostProps, node } = useInk({ recipe: ratingRecipe, params: { icon: c.icon, disabled: c.disabled, invalid: c.invalid }, kind: "rating", seed: `${c.seed}:${index}`, still: true })
+  const state =
+    c.shown >= index
+      ? "checked"
+      : c.allowHalf && c.shown >= index - 0.5
+        ? "indeterminate"
+        : "unchecked"
+  const { hostRef, hostProps, node } = useInk({
+    recipe: ratingRecipe,
+    params: { icon: c.icon, disabled: c.disabled, invalid: c.invalid },
+    kind: "rating",
+    seed: `${c.seed}:${index}`,
+    still: true,
+  })
   const values = c.allowHalf ? [index - 0.5, index] : [index]
   return (
     <span
@@ -59,7 +75,7 @@ function RatingItem({ index, className, ref, ...props }: Omit<React.ComponentPro
         glyph[c.size],
         c.interactive && "hover:scale-110",
         "forced-colors:before:absolute forced-colors:before:inset-0 forced-colors:before:grid forced-colors:before:place-content-center forced-colors:before:leading-none forced-colors:before:content-['☆'] forced-colors:data-[state=checked]:before:content-['★'] forced-colors:data-[state=indeterminate]:before:content-['◐']",
-        className
+        className,
       )}
       {...props}
     >
@@ -82,7 +98,11 @@ function RatingItem({ index, className, ref, ...props }: Omit<React.ComponentPro
               }}
               className={cn(
                 "absolute -inset-y-0.5 cursor-pointer appearance-none bg-transparent outline-hidden disabled:cursor-not-allowed",
-                values.length === 1 ? "-inset-x-0.5" : i === 0 ? "-start-0.5 w-[calc(50%+2px)]" : "-end-0.5 w-[calc(50%+2px)]"
+                values.length === 1
+                  ? "-inset-x-0.5"
+                  : i === 0
+                    ? "-start-0.5 w-[calc(50%+2px)]"
+                    : "-end-0.5 w-[calc(50%+2px)]",
               )}
             />
           ))
@@ -184,7 +204,8 @@ function Rating({
     preview: setHover,
   }
 
-  const items = children ?? Array.from({ length: max }, (_, i) => <RatingItem key={i} index={i + 1} />)
+  const items =
+    children ?? Array.from({ length: max }, (_, i) => <RatingItem key={i} index={i + 1} />)
 
   return (
     <RatingContext.Provider value={ctx}>
@@ -193,7 +214,11 @@ function Rating({
         data-readonly={readOnly ? "" : undefined}
         data-disabled={disabled ? "" : undefined}
         role={readOnly ? "img" : "radiogroup"}
-        aria-label={readOnly && !props["aria-label"] && !props["aria-labelledby"] ? `Rated ${current} out of ${max}` : props["aria-label"]}
+        aria-label={
+          readOnly && !props["aria-label"] && !props["aria-labelledby"]
+            ? `Rated ${current} out of ${max}`
+            : props["aria-label"]
+        }
         aria-required={!readOnly && required ? true : undefined}
         aria-disabled={disabled && !readOnly ? true : undefined}
         ref={useMergedRef<HTMLDivElement>(rootRef, ref)}
@@ -204,7 +229,12 @@ function Rating({
         }}
         onKeyDown={(e) => {
           onKeyDown?.(e)
-          if (e.defaultPrevented || !interactive || !(e.target as HTMLElement).matches("[role=radio]")) return
+          if (
+            e.defaultPrevented ||
+            !interactive ||
+            !(e.target as HTMLElement).matches("[role=radio]")
+          )
+            return
           const rtl = getComputedStyle(e.currentTarget).direction === "rtl"
           let next: number
           if (e.key === "ArrowRight") next = current + (rtl ? -step : step)

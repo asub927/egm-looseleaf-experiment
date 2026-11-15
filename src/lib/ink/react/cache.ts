@@ -1,9 +1,19 @@
-import type { Knobs } from '@/lib/ink/builder'
-import type { Tier } from '@/lib/ink/types'
+import type { Knobs } from "@/lib/ink/builder"
+import type { Tier } from "@/lib/ink/types"
 import {
-  bucketBox, knobsKey, orderLayers, runCounter, runRecipe, stableStringify,
-  type Box, type Density, type Dir, type InkLayerName, type RawFrame, type Recipe,
-} from '@/lib/ink/recipes'
+  bucketBox,
+  knobsKey,
+  orderLayers,
+  runCounter,
+  runRecipe,
+  stableStringify,
+  type Box,
+  type Density,
+  type Dir,
+  type InkLayerName,
+  type RawFrame,
+  type Recipe,
+} from "@/lib/ink/recipes"
 
 export interface FrameRequest<P> {
   box: Box
@@ -87,7 +97,13 @@ class InkCache {
   }
 
   stats(): { hits: number; misses: number; runs: number; size: number; chars: number } {
-    return { hits: this.hits, misses: this.misses, runs: runCounter.runs, size: this.map.size, chars: this.chars }
+    return {
+      hits: this.hits,
+      misses: this.misses,
+      runs: runCounter.runs,
+      size: this.map.size,
+      chars: this.chars,
+    }
   }
 }
 
@@ -101,43 +117,70 @@ const sum = (parts: Partial<Record<string, string>>): number => {
 
 export function frameKey<P>(recipe: Recipe<P>, req: FrameRequest<P>): string {
   const b = bucketBox(req.box.w, req.box.h)
-  const tier = req.density === 'calm' ? 'lo' : req.tier
-  return [`${recipe.id}@${recipe.rev}`, `${b.w}x${b.h}`, req.seed, tier, req.density, req.dir, req.pad ?? '', req.paramsKey ?? stableStringify(req.params), knobsKey(req.knobs)].join('|')
+  const tier = req.density === "calm" ? "lo" : req.tier
+  return [
+    `${recipe.id}@${recipe.rev}`,
+    `${b.w}x${b.h}`,
+    req.seed,
+    tier,
+    req.density,
+    req.dir,
+    req.pad ?? "",
+    req.paramsKey ?? stableStringify(req.params),
+    knobsKey(req.knobs),
+  ].join("|")
 }
 
 export function inkFrame<P>(recipe: Recipe<P>, req: FrameRequest<P>): Frame {
   const key = frameKey(recipe, req)
   const box = bucketBox(req.box.w, req.box.h)
   const want = (req.lazy ?? []).filter((l) => recipe.lazy.includes(l))
-  const run = (lazy: readonly InkLayerName[], lazyOnly: boolean): RawFrame => runRecipe(recipe, { ...req, box, lazy, lazyOnly })
+  const run = (lazy: readonly InkLayerName[], lazyOnly: boolean): RawFrame =>
+    runRecipe(recipe, { ...req, box, lazy, lazyOnly })
   let entry = inkCache.get(key)
   if (entry) inkCache.hits++
   else {
     inkCache.misses++
     const raw = run(want, false)
-    const lazy: Entry['lazy'] = {}
-    const parts: RawFrame['parts'] = {}
+    const lazy: Entry["lazy"] = {}
+    const parts: RawFrame["parts"] = {}
     for (const k of raw.layers) {
       if (raw.lazyLayers.includes(k)) lazy[k] = raw.parts[k]
       else parts[k] = raw.parts[k]
     }
-    for (const l of want) lazy[l] ??= ''
-    entry = { raw: { ...raw, parts, layers: orderLayers(Object.keys(parts) as InkLayerName[]) }, lazy, chars: sum(parts) + sum(lazy) }
+    for (const l of want) lazy[l] ??= ""
+    entry = {
+      raw: { ...raw, parts, layers: orderLayers(Object.keys(parts) as InkLayerName[]) },
+      lazy,
+      chars: sum(parts) + sum(lazy),
+    }
     inkCache.set(key, entry)
   }
   const missing = want.filter((l) => entry.lazy[l] === undefined)
   if (missing.length) {
     const raw = run(missing, true)
-    for (const l of missing) entry.lazy[l] = raw.parts[l] ?? ''
+    for (const l of missing) entry.lazy[l] = raw.parts[l] ?? ""
     inkCache.grow(entry, sum(raw.parts))
   }
-  const parts: Frame['parts'] = { ...entry.raw.parts }
+  const parts: Frame["parts"] = { ...entry.raw.parts }
   for (const l of want) if (entry.lazy[l]) parts[l] = entry.lazy[l]
-  return { key, parts, layers: orderLayers(Object.keys(parts) as InkLayerName[]), pad: entry.raw.pad, w: box.w, h: box.h, chars: sum(parts) }
+  return {
+    key,
+    parts,
+    layers: orderLayers(Object.keys(parts) as InkLayerName[]),
+    pad: entry.raw.pad,
+    w: box.w,
+    h: box.h,
+    chars: sum(parts),
+  }
 }
 
-export function frameSvg(frame: Pick<Frame, 'parts' | 'layers'>, layers?: readonly InkLayerName[], wrap = true): string {
-  let out = ''
+export function frameSvg(
+  frame: Pick<Frame, "parts" | "layers">,
+  layers?: readonly InkLayerName[],
+  wrap = true,
+): string {
+  let out = ""
   for (const k of frame.layers) {
     if (layers && !layers.includes(k)) continue
     out += wrap ? `<g data-layer="${k}">${frame.parts[k]}</g>` : frame.parts[k]

@@ -37,7 +37,11 @@ function Input({
 }) {
   const { hostRef, hostProps, node } = useInk({
     recipe: inputRecipe,
-    params: { disabled: !!props.disabled, invalid: isTrue(props["aria-invalid"]), readOnly: !!props.readOnly },
+    params: {
+      disabled: !!props.disabled,
+      invalid: isTrue(props["aria-invalid"]),
+      readOnly: !!props.readOnly,
+    },
     kind: "field",
     seed,
     still: true,
@@ -45,9 +49,21 @@ function Input({
   if (type === "hidden") return <InputControl type="hidden" ref={ref} {...props} />
   const split = splitFieldClass(className)
   return (
-    <span data-slot="input-frame" data-ink-focus="within" ref={hostRef} {...hostProps} style={style} className={cn(frame, split.frame)}>
+    <span
+      data-slot="input-frame"
+      data-ink-focus="within"
+      ref={hostRef}
+      {...hostProps}
+      style={style}
+      className={cn(frame, split.frame)}
+    >
       {node}
-      <InputControl type={type} ref={ref} className={cn(split.control, inputClassName)} {...props} />
+      <InputControl
+        type={type}
+        ref={ref}
+        className={cn(split.control, inputClassName)}
+        {...props}
+      />
     </span>
   )
 }

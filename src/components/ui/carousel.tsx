@@ -6,7 +6,11 @@ import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-reac
 import { Button } from "@/components/ui/button"
 import { Icon } from "@/components/ui/icon"
 import { useInk, useInkSeed } from "@/lib/ink/react"
-import { CAROUSEL_TICK_PAD, CAROUSEL_TICK_PAD_PLAIN, carouselTickRecipe } from "@/lib/ink/recipes/carousel-ink"
+import {
+  CAROUSEL_TICK_PAD,
+  CAROUSEL_TICK_PAD_PLAIN,
+  carouselTickRecipe,
+} from "@/lib/ink/recipes/carousel-ink"
 import { cn } from "@/lib/utils"
 
 type CarouselApi = UseEmblaCarouselType[1]
@@ -49,7 +53,12 @@ function useCarousel() {
 function isEditable(target: EventTarget | null): boolean {
   const el = target as HTMLElement | null
   if (!el || typeof el.tagName !== "string") return false
-  return el.isContentEditable || el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT"
+  return (
+    el.isContentEditable ||
+    el.tagName === "INPUT" ||
+    el.tagName === "TEXTAREA" ||
+    el.tagName === "SELECT"
+  )
 }
 
 function Carousel({
@@ -72,7 +81,7 @@ function Carousel({
       ...opts,
       axis: orientation === "horizontal" ? "x" : "y",
     },
-    plugins
+    plugins,
   )
   const [canScrollPrev, setCanScrollPrev] = React.useState(false)
   const [canScrollNext, setCanScrollNext] = React.useState(false)
@@ -99,13 +108,20 @@ function Carousel({
     (index: number) => {
       api?.scrollTo(index)
     },
-    [api]
+    [api],
   )
 
   const handleKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
       onKeyDown?.(event)
-      if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
+      if (
+        event.defaultPrevented ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.shiftKey
+      )
+        return
       if (!event.currentTarget.contains(event.target as Node)) return
       if (isEditable(event.target)) return
       const rtl = getComputedStyle(event.currentTarget).direction === "rtl"
@@ -119,7 +135,7 @@ function Carousel({
         scrollNext()
       }
     },
-    [orientation, scrollPrev, scrollNext, onKeyDown]
+    [orientation, scrollPrev, scrollNext, onKeyDown],
   )
 
   React.useEffect(() => {
@@ -156,7 +172,14 @@ function Carousel({
         seed,
       }}
     >
-      <div onKeyDown={handleKeyDown} className={cn("relative min-w-0", className)} role="region" aria-roledescription="carousel" data-slot="carousel" {...props}>
+      <div
+        onKeyDown={handleKeyDown}
+        className={cn("relative min-w-0", className)}
+        role="region"
+        aria-roledescription="carousel"
+        data-slot="carousel"
+        {...props}
+      >
         {children}
         <span data-slot="carousel-status" className="sr-only" aria-live="polite" aria-atomic="true">
           {snapCount > 1 ? `Slide ${selectedIndex + 1} of ${snapCount}` : ""}
@@ -170,8 +193,15 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
   const { carouselRef, orientation } = useCarousel()
 
   return (
-    <div ref={carouselRef} className={cn("overflow-hidden", orientation === "horizontal" ? "-my-3 py-3" : "-mx-3 px-3")} data-slot="carousel-content">
-      <div className={cn("flex", orientation === "horizontal" ? "-ms-4" : "-mt-4 flex-col", className)} {...props} />
+    <div
+      ref={carouselRef}
+      className={cn("overflow-hidden", orientation === "horizontal" ? "-my-3 py-3" : "-mx-3 px-3")}
+      data-slot="carousel-content"
+    >
+      <div
+        className={cn("flex", orientation === "horizontal" ? "-ms-4" : "-mt-4 flex-col", className)}
+        {...props}
+      />
     </div>
   )
 }
@@ -184,13 +214,22 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
       role="group"
       aria-roledescription="slide"
       data-slot="carousel-item"
-      className={cn("min-w-0 shrink-0 grow-0 basis-full", orientation === "horizontal" ? "ps-4" : "pt-4", className)}
+      className={cn(
+        "min-w-0 shrink-0 grow-0 basis-full",
+        orientation === "horizontal" ? "ps-4" : "pt-4",
+        className,
+      )}
       {...props}
     />
   )
 }
 
-function CarouselPrevious({ className, variant = "outline", size = "icon", ...props }: React.ComponentProps<typeof Button>) {
+function CarouselPrevious({
+  className,
+  variant = "outline",
+  size = "icon",
+  ...props
+}: React.ComponentProps<typeof Button>) {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel()
 
   return (
@@ -198,7 +237,13 @@ function CarouselPrevious({ className, variant = "outline", size = "icon", ...pr
       data-slot="carousel-previous"
       variant={variant}
       size={size}
-      className={cn("absolute size-8", orientation === "horizontal" ? "-start-12 top-1/2 -translate-y-1/2" : "-top-12 left-1/2 -translate-x-1/2", className)}
+      className={cn(
+        "absolute size-8",
+        orientation === "horizontal"
+          ? "-start-12 top-1/2 -translate-y-1/2"
+          : "-top-12 left-1/2 -translate-x-1/2",
+        className,
+      )}
       disabled={!canScrollPrev}
       onClick={scrollPrev}
       {...props}
@@ -209,7 +254,12 @@ function CarouselPrevious({ className, variant = "outline", size = "icon", ...pr
   )
 }
 
-function CarouselNext({ className, variant = "outline", size = "icon", ...props }: React.ComponentProps<typeof Button>) {
+function CarouselNext({
+  className,
+  variant = "outline",
+  size = "icon",
+  ...props
+}: React.ComponentProps<typeof Button>) {
   const { orientation, scrollNext, canScrollNext } = useCarousel()
 
   return (
@@ -217,7 +267,13 @@ function CarouselNext({ className, variant = "outline", size = "icon", ...props 
       data-slot="carousel-next"
       variant={variant}
       size={size}
-      className={cn("absolute size-8", orientation === "horizontal" ? "-end-12 top-1/2 -translate-y-1/2" : "-bottom-12 left-1/2 -translate-x-1/2", className)}
+      className={cn(
+        "absolute size-8",
+        orientation === "horizontal"
+          ? "-end-12 top-1/2 -translate-y-1/2"
+          : "-bottom-12 left-1/2 -translate-x-1/2",
+        className,
+      )}
       disabled={!canScrollNext}
       onClick={scrollNext}
       {...props}
@@ -230,7 +286,19 @@ function CarouselNext({ className, variant = "outline", size = "icon", ...props 
 
 const PITCH = 24
 
-function Tick({ index, selected, slash, onSelect, seed }: { index: number; selected: boolean; slash: boolean; onSelect: () => void; seed: string }) {
+function Tick({
+  index,
+  selected,
+  slash,
+  onSelect,
+  seed,
+}: {
+  index: number
+  selected: boolean
+  slash: boolean
+  onSelect: () => void
+  seed: string
+}) {
   const { hostRef, hostProps, node } = useInk({
     recipe: carouselTickRecipe,
     params: { slash, pitch: PITCH },
@@ -264,7 +332,9 @@ function CarouselDots({ className, ...props }: React.ComponentProps<"div">) {
   const focusIn = React.useRef(false)
   React.useEffect(() => {
     if (!focusIn.current) return
-    list.current?.querySelector<HTMLElement>(`[data-slot="carousel-dot"][data-index="${selectedIndex}"]`)?.focus()
+    list.current
+      ?.querySelector<HTMLElement>(`[data-slot="carousel-dot"][data-index="${selectedIndex}"]`)
+      ?.focus()
   }, [selectedIndex])
   if (snapCount < 2) return null
   const groups = Math.ceil(snapCount / 5)
@@ -280,14 +350,26 @@ function CarouselDots({ className, ...props }: React.ComponentProps<"div">) {
       onBlur={(e) => {
         focusIn.current = e.currentTarget.contains(e.relatedTarget as Node | null)
       }}
-      className={cn("-mx-4 -mb-4 flex flex-wrap items-center justify-center gap-x-2 overflow-clip p-4", className)}
+      className={cn(
+        "-mx-4 -mb-4 flex flex-wrap items-center justify-center gap-x-2 overflow-clip p-4",
+        className,
+      )}
       {...props}
     >
       {Array.from({ length: groups }, (_, g) => (
         <span key={g} className="flex shrink-0">
           {Array.from({ length: Math.min(5, snapCount - g * 5) }, (_, k) => {
             const i = g * 5 + k
-            return <Tick key={i} index={i} selected={i === selectedIndex} slash={i % 5 === 4} onSelect={() => scrollTo(i)} seed={seed} />
+            return (
+              <Tick
+                key={i}
+                index={i}
+                selected={i === selectedIndex}
+                slash={i % 5 === 4}
+                onSelect={() => scrollTo(i)}
+                seed={seed}
+              />
+            )
           })}
         </span>
       ))}
@@ -295,4 +377,12 @@ function CarouselDots({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-export { type CarouselApi, Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, CarouselDots }
+export {
+  type CarouselApi,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+  CarouselDots,
+}

@@ -86,10 +86,13 @@ function Callout({
         as="span"
         seed={seed}
         data-slot="callout-text"
-        style={animate && delay ? ({ transitionDelay: `${delay}ms` } as React.CSSProperties) : undefined}
+        style={
+          animate && delay ? ({ transitionDelay: `${delay}ms` } as React.CSSProperties) : undefined
+        }
         className={cn(
           "max-w-[16ch] font-script text-[22px] leading-[1.05] text-ink-you",
-          animate && "transition-opacity duration-(--ll-dur-sheet) ease-out group-data-[mark=idle]/callout:opacity-0",
+          animate &&
+            "transition-opacity duration-(--ll-dur-sheet) ease-out group-data-[mark=idle]/callout:opacity-0",
           vertical && "max-w-[22ch] text-center",
         )}
       >

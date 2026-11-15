@@ -63,10 +63,27 @@ function PeelCorner({
   const root = React.useRef<HTMLDivElement | null>(null)
   const k = React.useRef(open ? OPEN : REST)
   const frame = React.useRef(0)
-  const drag = React.useRef<{ pointer: number; moved: boolean; startX: number; startY: number } | null>(null)
+  const drag = React.useRef<{
+    pointer: number
+    moved: boolean
+    startX: number
+    startY: number
+  } | null>(null)
   const under = React.useId()
-  const flap = useInk({ recipe: peelFlapRecipe, params: { back, mirror: left }, kind: "peel-corner-flap", size: [size, size], seed })
-  const hit = useInk({ recipe: peelTriggerRecipe, params: {}, kind: "peel-corner-trigger", size: [HIT, HIT], seed: seed === undefined ? undefined : `${seed}|hit` })
+  const flap = useInk({
+    recipe: peelFlapRecipe,
+    params: { back, mirror: left },
+    kind: "peel-corner-flap",
+    size: [size, size],
+    seed,
+  })
+  const hit = useInk({
+    recipe: peelTriggerRecipe,
+    params: {},
+    kind: "peel-corner-trigger",
+    size: [HIT, HIT],
+    seed: seed === undefined ? undefined : `${seed}|hit`,
+  })
 
   const paint = (v: number) => {
     k.current = v
@@ -120,7 +137,9 @@ function PeelCorner({
   const pull = (e: React.PointerEvent) => {
     const r = root.current?.getBoundingClientRect()
     if (!r) return REST
-    const p = left ? (e.clientX - r.left + (r.bottom - e.clientY)) / 2 : (r.right - e.clientX + (r.bottom - e.clientY)) / 2
+    const p = left
+      ? (e.clientX - r.left + (r.bottom - e.clientY)) / 2
+      : (r.right - e.clientX + (r.bottom - e.clientY)) / 2
     return clamp(p / size, 0.05, MAX)
   }
   const down = (e: React.PointerEvent<HTMLButtonElement>) => {
@@ -128,8 +147,7 @@ function PeelCorner({
     drag.current = { pointer: e.pointerId, moved: false, startX: e.clientX, startY: e.clientY }
     try {
       e.currentTarget.setPointerCapture(e.pointerId)
-    } catch {
-    }
+    } catch {}
     cancelAnimationFrame(frame.current)
     root.current?.setAttribute("data-dragging", "")
   }
@@ -152,7 +170,11 @@ function PeelCorner({
   }
 
   const first = React.useRef(String(open ? OPEN : REST)).current
-  const vars = { "--peel-size": `${size}px`, "--peel-k": first, "--peel": "calc(var(--peel-k) * var(--peel-size))" } as React.CSSProperties
+  const vars = {
+    "--peel-size": `${size}px`,
+    "--peel-k": first,
+    "--peel": "calc(var(--peel-k) * var(--peel-size))",
+  } as React.CSSProperties
   const origin = left ? "left-0 origin-bottom-left" : "right-0 origin-bottom-right"
 
   return (
@@ -194,7 +216,10 @@ function PeelCorner({
           onClick={(e) => {
             if (e.detail === 0) set(!open)
           }}
-          className={cn("absolute bottom-0 z-3 cursor-grab touch-none active:cursor-grabbing", left ? "left-0" : "right-0")}
+          className={cn(
+            "absolute bottom-0 z-3 cursor-grab touch-none active:cursor-grabbing",
+            left ? "left-0" : "right-0",
+          )}
           style={{ width: HIT, height: HIT }}
         >
           {hit.node}
@@ -206,7 +231,13 @@ function PeelCorner({
 
 type PageProps = Omit<PaperProps, "ref"> & { ref?: React.Ref<HTMLElement> }
 
-function PeelCornerPage({ className, children, stock = "paper", tilt = false, ...props }: PageProps) {
+function PeelCornerPage({
+  className,
+  children,
+  stock = "paper",
+  tilt = false,
+  ...props
+}: PageProps) {
   usePeelCorner()
   return (
     <Paper
@@ -237,7 +268,10 @@ function PeelCornerUnder({ className, children, stock = "kraft", ...props }: Pag
       tilt={false}
       inert={!open}
       aria-hidden={!open || undefined}
-      className={cn("absolute inset-0 z-0 flex items-end justify-end p-3 group-data-[corner=bottom-left]/peel:justify-start", className)}
+      className={cn(
+        "absolute inset-0 z-0 flex items-end justify-end p-3 group-data-[corner=bottom-left]/peel:justify-start",
+        className,
+      )}
       {...props}
     >
       {children}

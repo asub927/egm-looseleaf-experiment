@@ -7,6 +7,7 @@
 ---
 
 ### Task 1: Mathematical Evaluator & Seeds for Whispering Vine (NC.2.OA.2)
+
 - **Files:**
   - Create: `src/lib/math/vine-evaluator.ts`
   - Create: `tests/invariants/vine_evaluator.test.ts`
@@ -19,6 +20,7 @@
 ---
 
 ### Task 2: Whimsical Audio Synthesizer (Kalimba & Garden Chimes)
+
 - **Files:**
   - Create: `src/lib/audio/garden-chimes.ts`
 - **Behavior:**
@@ -30,6 +32,7 @@
 ---
 
 ### Task 3: React 19 Component: `WhisperingVine.tsx`
+
 - **Files:**
   - Create: `src/components/math/WhisperingVine.tsx`
 - **Behavior:**
@@ -46,6 +49,7 @@
 ---
 
 ### Task 4: App Integration & Story Mode Wireframe
+
 - **Files:**
   - Modify: `src/components/math/NC2GWireframe.tsx`
   - Modify: `src/App.tsx`
@@ -56,6 +60,7 @@
 ---
 
 ### Task 5: Full Invariant Test Suite & Production Build Verification
+
 - **Files:**
   - Verify: `npm test` (all 35+ invariant tests must pass)
   - Verify: `npm run check` (TypeScript typecheck + Vite build must succeed with 0 errors)

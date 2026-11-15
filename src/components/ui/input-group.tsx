@@ -10,8 +10,20 @@ import { useInk, useMergedRef } from "@/lib/ink/react"
 import { inputGroupRecipe, inputGroupRuleRecipe } from "@/lib/ink/recipes/input-group-ink"
 import { cn } from "@/lib/utils"
 
-function InputGroup({ className, seed, ref, children, ...props }: React.ComponentProps<"div"> & { seed?: string | number }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: inputGroupRecipe, params: {}, kind: "field", seed, still: true })
+function InputGroup({
+  className,
+  seed,
+  ref,
+  children,
+  ...props
+}: React.ComponentProps<"div"> & { seed?: string | number }) {
+  const { hostRef, hostProps, node } = useInk({
+    recipe: inputGroupRecipe,
+    params: {},
+    kind: "field",
+    seed,
+    still: true,
+  })
   return (
     <div
       data-slot="input-group"
@@ -33,7 +45,7 @@ function InputGroup({ className, seed, ref, children, ...props }: React.Componen
         "has-[[data-slot=input-group-control]:disabled]:[&>svg>[data-layer=disabled]]:visible has-[[data-slot=input-group-control]:disabled]:[&>svg>[data-layer=disabled]]:opacity-100",
         "has-[[data-slot=input-group-control]:disabled]:[&>svg_[data-hide-on~=disabled]]:invisible has-[[data-slot=input-group-control]:disabled]:[&>svg_[data-hide-on~=disabled]]:opacity-0",
         "has-[[data-slot=input-group-control]:disabled]:[&>svg>[data-layer=hover]]:hidden data-[disabled=true]:[&>svg>[data-layer=hover]]:hidden",
-        className
+        className,
       )}
       {...props}
     >
@@ -50,21 +62,40 @@ const inputGroupAddonVariants = cva(
       align: {
         "inline-start": "order-first ps-3 has-[>button]:-ms-[0.45rem] has-[>kbd]:-ms-[0.35rem]",
         "inline-end": "order-last pe-3 has-[>button]:-me-[0.45rem] has-[>kbd]:-me-[0.35rem]",
-        "block-start": "order-first w-full justify-start px-3 pt-3 group-has-[>input]/input-group:pt-2.5 [.border-b]:pb-3",
-        "block-end": "order-last w-full justify-start px-3 pb-3 group-has-[>input]/input-group:pb-2.5 [.border-t]:pt-3",
+        "block-start":
+          "order-first w-full justify-start px-3 pt-3 group-has-[>input]/input-group:pt-2.5 [.border-b]:pb-3",
+        "block-end":
+          "order-last w-full justify-start px-3 pb-3 group-has-[>input]/input-group:pb-2.5 [.border-t]:pt-3",
       },
     },
     defaultVariants: {
       align: "inline-start",
     },
-  }
+  },
 )
 
-const hasClass = (className: string | undefined, name: string) => !!className && className.split(/\s+/).includes(name)
+const hasClass = (className: string | undefined, name: string) =>
+  !!className && className.split(/\s+/).includes(name)
 
-function InputGroupAddon({ className, align = "inline-start", onClick, ref, children, ...props }: React.ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>) {
-  const edge = hasClass(className, "border-b") ? "bottom" : hasClass(className, "border-t") ? "top" : null
-  const { hostRef, hostProps, node } = useInk({ recipe: inputGroupRuleRecipe, params: { edge: edge ?? "bottom" }, kind: "rule", still: true })
+function InputGroupAddon({
+  className,
+  align = "inline-start",
+  onClick,
+  ref,
+  children,
+  ...props
+}: React.ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>) {
+  const edge = hasClass(className, "border-b")
+    ? "bottom"
+    : hasClass(className, "border-t")
+      ? "top"
+      : null
+  const { hostRef, hostProps, node } = useInk({
+    recipe: inputGroupRuleRecipe,
+    params: { edge: edge ?? "bottom" },
+    kind: "rule",
+    still: true,
+  })
   const drawn = edge !== null
   return (
     <div
@@ -73,10 +104,19 @@ function InputGroupAddon({ className, align = "inline-start", onClick, ref, chil
       data-align={align}
       ref={useMergedRef<HTMLDivElement>(drawn ? hostRef : undefined, ref)}
       {...(drawn && node ? hostProps : {})}
-      className={cn(inputGroupAddonVariants({ align }), drawn && "[.border-b]:border-transparent [.border-t]:border-transparent forced-colors:outline-0!", className)}
+      className={cn(
+        inputGroupAddonVariants({ align }),
+        drawn &&
+          "[.border-b]:border-transparent [.border-t]:border-transparent forced-colors:outline-0!",
+        className,
+      )}
       onClick={(e) => {
         onClick?.(e)
-        if ((e.target as HTMLElement).closest("button, a[href], select, input, textarea, [role=button], [role=combobox], [role=checkbox], [role=switch]")) {
+        if (
+          (e.target as HTMLElement).closest(
+            "button, a[href], select, input, textarea, [role=button], [role=combobox], [role=checkbox], [role=switch]",
+          )
+        ) {
           return
         }
         e.currentTarget.parentElement?.querySelector<HTMLElement>("input, textarea")?.focus()
@@ -109,26 +149,58 @@ function InputGroupButton({
   variant = "ghost",
   size = "xs",
   ...props
-}: Omit<React.ComponentProps<typeof Button>, "size"> & VariantProps<typeof inputGroupButtonVariants>) {
-  return <Button type={type} data-size={size} variant={variant} size={size} className={cn(inputGroupButtonVariants({ size }), className)} {...props} />
+}: Omit<React.ComponentProps<typeof Button>, "size"> &
+  VariantProps<typeof inputGroupButtonVariants>) {
+  return (
+    <Button
+      type={type}
+      data-size={size}
+      variant={variant}
+      size={size}
+      className={cn(inputGroupButtonVariants({ size }), className)}
+      {...props}
+    />
+  )
 }
 
 function InputGroupText({ className, ...props }: React.ComponentProps<"span">) {
   return (
     <span
       data-slot="input-group-text"
-      className={cn("flex items-center gap-2 font-hand text-[15px] text-muted-foreground [&_svg]:pointer-events-none [&_svg:not(.absolute):not([class*='size-'])]:size-4", className)}
+      className={cn(
+        "flex items-center gap-2 font-hand text-[15px] text-muted-foreground [&_svg]:pointer-events-none [&_svg:not(.absolute):not([class*='size-'])]:size-4",
+        className,
+      )}
       {...props}
     />
   )
 }
 
 function InputGroupInput({ className, ...props }: React.ComponentProps<"input">) {
-  return <InputControl data-slot="input-group-control" className={cn("flex-1 aria-invalid:pe-3", className)} {...props} />
+  return (
+    <InputControl
+      data-slot="input-group-control"
+      className={cn("flex-1 aria-invalid:pe-3", className)}
+      {...props}
+    />
+  )
 }
 
 function InputGroupTextarea({ className, ...props }: React.ComponentProps<"textarea">) {
-  return <TextareaControl data-slot="input-group-control" className={cn("flex-1 resize-none py-3 aria-invalid:pe-3", className)} {...props} />
+  return (
+    <TextareaControl
+      data-slot="input-group-control"
+      className={cn("flex-1 resize-none py-3 aria-invalid:pe-3", className)}
+      {...props}
+    />
+  )
 }
 
-export { InputGroup, InputGroupAddon, InputGroupButton, InputGroupText, InputGroupInput, InputGroupTextarea }
+export {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupText,
+  InputGroupInput,
+  InputGroupTextarea,
+}

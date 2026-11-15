@@ -8,14 +8,23 @@ import { cn } from "@/lib/utils"
 
 const RadioGroupContext = React.createContext({ invalid: false, disabled: false })
 
-function RadioGroup({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {
+function RadioGroup({
+  className,
+  ...props
+}: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {
   const invalid = props["aria-invalid"] === true || props["aria-invalid"] === "true"
-  const group = React.useMemo(() => ({ invalid, disabled: !!props.disabled }), [invalid, props.disabled])
+  const group = React.useMemo(
+    () => ({ invalid, disabled: !!props.disabled }),
+    [invalid, props.disabled],
+  )
   return (
     <RadioGroupContext.Provider value={group}>
       <RadioGroupPrimitive.Root
         data-slot="radio-group"
-        className={cn("grid gap-3 data-[orientation=horizontal]:flex data-[orientation=horizontal]:flex-wrap data-[orientation=horizontal]:gap-x-6", className)}
+        className={cn(
+          "grid gap-3 data-[orientation=horizontal]:flex data-[orientation=horizontal]:flex-wrap data-[orientation=horizontal]:gap-x-6",
+          className,
+        )}
         {...props}
       />
     </RadioGroupContext.Provider>
@@ -33,9 +42,17 @@ function RadioGroupItem({
   seed?: string | number
 }) {
   const group = React.useContext(RadioGroupContext)
-  const invalid = props["aria-invalid"] === true || props["aria-invalid"] === "true" || (group.invalid && props["aria-invalid"] === undefined)
+  const invalid =
+    props["aria-invalid"] === true ||
+    props["aria-invalid"] === "true" ||
+    (group.invalid && props["aria-invalid"] === undefined)
   const off = !!disabled || group.disabled
-  const { hostRef, hostProps, node } = useInk({ recipe: radioRecipe, params: { disabled: off, invalid }, kind: "radio", seed })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: radioRecipe,
+    params: { disabled: off, invalid },
+    kind: "radio",
+    seed,
+  })
   return (
     <RadioGroupPrimitive.Item
       data-slot="radio-group-item"
@@ -53,7 +70,7 @@ function RadioGroupItem({
         "group-hover/field:[&>svg_[data-layer=hover]]:visible group-hover/field:[&>svg_[data-layer=hover]]:opacity-100",
         "has-[+[data-slot=label]:hover]:[&>svg_[data-layer=hover]]:visible has-[+[data-slot=label]:hover]:[&>svg_[data-layer=hover]]:opacity-100",
         "has-[+input+[data-slot=label]:hover]:[&>svg_[data-layer=hover]]:visible has-[+input+[data-slot=label]:hover]:[&>svg_[data-layer=hover]]:opacity-100",
-        className
+        className,
       )}
       {...props}
     >

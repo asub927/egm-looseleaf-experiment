@@ -1,18 +1,22 @@
 # UI Components
 
 ## Overview
+
 The `src/components/ui` package provides a design system of 123 composable React 19 UI components with a distinct tactile stationery, paper-craft, and ink-pen aesthetic. Constructed upon Radix UI primitives, Tailwind CSS v4, Lucide icons, and the custom `@/lib/ink` engine, this component package unifies standard interactive application controls (buttons, dialogs, forms, tables, carousels) with tactile desk elements (corkboards, sticky notes, torn paper stubs, wax seals, stamps, sketchpads, and animated typewriter effects).
 
 Key architectural principles across the package include:
+
 - **Procedural Ink & Texture Integration**: Visual elements integrate with `@/lib/ink` (`useInk`) to project procedural SVG stroke outlines, hand-drawn line boil oscillations, and press-sink physics.
 - **Accessible Primitives**: Dialogs, menus, tooltips, popovers, and accordions wrap headless Radix UI components, ensuring full WAI-ARIA compliance, focus trapping, and keyboard navigation.
 - **Compound Component Hierarchies**: Complex surfaces (e.g., `Carousel`, `Chart`, `Table`, `Form`, `Corkboard`, `Sketchpad`) use React Context providers and subcomponents, with strict runtime enforcement against out-of-context mounting.
 - **Controlled & Uncontrolled Flexibility**: Form controls and interactive widgets support both controlled and uncontrolled usage patterns with seamless ref forwarding and custom styling via Tailwind class merges (`cn`).
 
 ## Interface
+
 All components and public interfaces exported by the package are categorized below with explicit symbol citations:
 
 ### Core Primitives & Form Controls
+
 - **[`button.tsx`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/button.tsx)** - Ink-styled and accessible button with variant styling and press physics
   - Exports: [`Button`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/button.tsx) (`[button.tsx:Button]`), [`buttonVariants`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/button.tsx) (`[button.tsx:buttonVariants]`)
 - **[`button-group.tsx`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/button-group.tsx)** - Group container for coordinating related button primitives
@@ -55,6 +59,7 @@ All components and public interfaces exported by the package are categorized bel
   - Exports: [`Calendar`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/calendar.tsx) (`[calendar.tsx:Calendar]`), [`CalendarDayButton`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/calendar.tsx) (`[calendar.tsx:CalendarDayButton]`), [`CalendarProps`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/calendar.tsx) (`[calendar.tsx:CalendarProps]`)
 
 ### Layout & Surfaces
+
 - **[`card.tsx`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/card.tsx)** - Standard card container with header, content, and footer sections
   - Exports: [`Card`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/card.tsx) (`[card.tsx:Card]`), [`CardHeader`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/card.tsx) (`[card.tsx:CardHeader]`), [`CardFooter`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/card.tsx) (`[card.tsx:CardFooter]`), [`CardTitle`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/card.tsx) (`[card.tsx:CardTitle]`), [`CardAction`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/card.tsx) (`[card.tsx:CardAction]`), [`CardDescription`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/card.tsx) (`[card.tsx:CardDescription]`), [`CardContent`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/card.tsx) (`[card.tsx:CardContent]`), [`CardProps`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/card.tsx) (`[card.tsx:CardProps]`)
 - **[`dialog.tsx`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/dialog.tsx)** - Modal dialog surface with overlay backdrop and accessible focus trap
@@ -101,6 +106,7 @@ All components and public interfaces exported by the package are categorized bel
   - Exports: [`Sidebar`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:Sidebar]`), [`SidebarContent`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarContent]`), [`SidebarFooter`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarFooter]`), [`SidebarGroup`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarGroup]`), [`SidebarGroupAction`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarGroupAction]`), [`SidebarGroupContent`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarGroupContent]`), [`SidebarGroupLabel`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarGroupLabel]`), [`SidebarHeader`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarHeader]`), [`SidebarInput`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarInput]`), [`SidebarInset`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarInset]`), [`SidebarMenu`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarMenu]`), [`SidebarMenuAction`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarMenuAction]`), [`SidebarMenuBadge`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarMenuBadge]`), [`SidebarMenuButton`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarMenuButton]`), [`SidebarMenuItem`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarMenuItem]`), [`SidebarMenuSkeleton`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarMenuSkeleton]`), [`SidebarMenuSub`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarMenuSub]`), [`SidebarMenuSubButton`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarMenuSubButton]`), [`SidebarMenuSubItem`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarMenuSubItem]`), [`SidebarProvider`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarProvider]`), [`SidebarRail`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarRail]`), [`SidebarSeparator`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarSeparator]`), [`SidebarTrigger`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:SidebarTrigger]`), [`useSidebar`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sidebar.tsx) (`[sidebar.tsx:useSidebar]`)
 
 ### Data Display & Feedback
+
 - **[`table.tsx`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/table.tsx)** - Data table structure with row headers, cells, and captions
   - Exports: [`Table`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/table.tsx) (`[table.tsx:Table]`), [`TableHeader`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/table.tsx) (`[table.tsx:TableHeader]`), [`TableBody`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/table.tsx) (`[table.tsx:TableBody]`), [`TableFooter`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/table.tsx) (`[table.tsx:TableFooter]`), [`TableHead`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/table.tsx) (`[table.tsx:TableHead]`), [`TableRow`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/table.tsx) (`[table.tsx:TableRow]`), [`TableCell`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/table.tsx) (`[table.tsx:TableCell]`), [`TableCaption`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/table.tsx) (`[table.tsx:TableCaption]`)
 - **[`chart.tsx`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/chart.tsx)** - Responsive data charting container with tooltip and legend support
@@ -137,6 +143,7 @@ All components and public interfaces exported by the package are categorized bel
   - Exports: [`DirectionProvider`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/direction.tsx) (`[direction.tsx:DirectionProvider]`), [`useDirection`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/direction.tsx) (`[direction.tsx:useDirection]`)
 
 ### Stationery & Tactile Scrapbook Primitives
+
 - **[`desk.tsx`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/desk.tsx)** - Scattered workspace tabletop container holding stationary items
   - Exports: [`Desk`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/desk.tsx) (`[desk.tsx:Desk]`), [`DeskObjects`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/desk.tsx) (`[desk.tsx:DeskObjects]`), [`DeskProps`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/desk.tsx) (`[desk.tsx:DeskProps]`), [`DeskObjectsProps`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/desk.tsx) (`[desk.tsx:DeskObjectsProps]`), [`DeskObject`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/desk.tsx) (`[desk.tsx:DeskObject]`)
 - **[`corkboard.tsx`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/corkboard.tsx)** - Interactive cork bulletin board surface with pinned notes
@@ -187,6 +194,7 @@ All components and public interfaces exported by the package are categorized bel
   - Exports: [`StickerPicker`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sticker-picker.tsx) (`[sticker-picker.tsx:StickerPicker]`), [`StickerPickerTrigger`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sticker-picker.tsx) (`[sticker-picker.tsx:StickerPickerTrigger]`), [`StickerPickerContent`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sticker-picker.tsx) (`[sticker-picker.tsx:StickerPickerContent]`), [`useStickerPicker`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sticker-picker.tsx) (`[sticker-picker.tsx:useStickerPicker]`), [`StickerPickerProps`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sticker-picker.tsx) (`[sticker-picker.tsx:StickerPickerProps]`), [`StickerPickerContentProps`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sticker-picker.tsx) (`[sticker-picker.tsx:StickerPickerContentProps]`), [`StickerPickerItem`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sticker-picker.tsx) (`[sticker-picker.tsx:StickerPickerItem]`), [`StickerPickerInput`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/sticker-picker.tsx) (`[sticker-picker.tsx:StickerPickerInput]`)
 
 ### Artistic, Ink & Hand-Drawn Elements
+
 - **[`arrow.tsx`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/arrow.tsx)** - Connecting dynamic arrow vector drawn between two DOM targets
   - Exports: [`Arrow`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/arrow.tsx) (`[arrow.tsx:Arrow]`)
 - **[`annotate.tsx`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/annotate.tsx)** - Procedural hand-drawn annotation callout and pointer
@@ -231,6 +239,7 @@ All components and public interfaces exported by the package are categorized bel
   - Exports: [`Icon`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/icon.tsx) (`[icon.tsx:Icon]`), [`IconName`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/icon.tsx) (`[icon.tsx:IconName]`)
 
 ### Dynamic & Media Interactions
+
 - **[`carousel.tsx`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/carousel.tsx)** - Embla-powered swipeable multi-card carousel
   - Exports: [`CarouselApi`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/carousel.tsx) (`[carousel.tsx:CarouselApi]`), [`Carousel`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/carousel.tsx) (`[carousel.tsx:Carousel]`), [`CarouselContent`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/carousel.tsx) (`[carousel.tsx:CarouselContent]`), [`CarouselItem`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/carousel.tsx) (`[carousel.tsx:CarouselItem]`), [`CarouselPrevious`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/carousel.tsx) (`[carousel.tsx:CarouselPrevious]`), [`CarouselNext`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/carousel.tsx) (`[carousel.tsx:CarouselNext]`), [`CarouselDots`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/carousel.tsx) (`[carousel.tsx:CarouselDots]`)
 - **[`confetti.tsx`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/confetti.tsx)** - Canvas particle burst explosion physics simulator
@@ -271,7 +280,9 @@ All components and public interfaces exported by the package are categorized bel
   - Exports: [`Avatar`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/avatar.tsx) (`[avatar.tsx:Avatar]`), [`AvatarImage`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/avatar.tsx) (`[avatar.tsx:AvatarImage]`), [`AvatarFallback`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/avatar.tsx) (`[avatar.tsx:AvatarFallback]`), [`AvatarBadge`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/avatar.tsx) (`[avatar.tsx:AvatarBadge]`), [`AvatarGroup`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/avatar.tsx) (`[avatar.tsx:AvatarGroup]`), [`AvatarGroupCount`](file:///Users/aaranvi/dev/elephant-goldfish/src/components/ui/avatar.tsx) (`[avatar.tsx:AvatarGroupCount]`)
 
 ## Invariants
+
 The package strictly enforces component hierarchy and context boundary invariants at runtime:
+
 - `[carousel.tsx:useCarousel]`: Throws `"useCarousel must be used within a <Carousel />"` - Subcomponents (e.g., CarouselContent, CarouselItem, CarouselPrevious, CarouselNext) require a Carousel root context provider.
 - `[chart.tsx:useChart]`: Throws `"useChart must be used within a <ChartContainer />"` - Chart tooltip, legends, and styling hooks require ChartContainer provider context.
 - `[code-block.tsx:useCode]`: Throws `"CodeBlock parts must be used inside <CodeBlock>"` - CodeBlockHeader, CodeBlockTitle, CodeBlockCopy, and code lines require the enclosing CodeBlock context.
@@ -296,7 +307,9 @@ The package strictly enforces component hierarchy and context boundary invariant
 - `[tear-off.tsx:useTearOff]`: Throws `"TearOff parts must be used inside <TearOff>"` - TearOffBody and TearOffStub must be nested within TearOff.
 
 ## Side Effects
+
 The package utilizes React lifecycle hooks, browser event listeners, timers, and canvas drawing pipelines for dynamic behaviors:
+
 - `[arrow.tsx:Arrow]`: useLayoutEffect and window.addEventListener('resize') - Measures target DOM element bounding boxes and recomputes connecting SVG bezier vector curves upon layout shifts.
 - `[attachment.tsx:Attachment]`: useLayoutEffect - Measures attachment container dimensions to dynamically scale media thumbnails and file metadata badges.
 - `[boil.tsx:Boil]`: useEffect and setInterval timer - Cycles procedural turbulent SVG filter displacement seeds at configurable intervals (default 150ms) to produce animated hand-drawn line boiling motion.
@@ -331,4 +344,5 @@ The package utilizes React lifecycle hooks, browser event listeners, timers, and
 - `[typewriter.tsx:Typewriter]`: useEffect, useLayoutEffect, and setTimeout timers - Advances typewriter cursor character-by-character with procedural cadence delays simulating human typing.
 
 ## Verification
+
 - Run: npm run build

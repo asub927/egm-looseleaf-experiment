@@ -96,10 +96,7 @@ test("NC.2.G.3 Invariant 1: Valid halves, thirds, and fourths for rectangles mus
     assert.equal(resHalves.shares, 2)
     assert.deepEqual(resHalves.shareFractions, [0.5, 0.5])
     assert.equal(resHalves.verbalEquation, "2 halves = 1 whole")
-    assert.equal(
-      resHalves.feedback,
-      "Great job! You cut the brownies into 2 equal halves!"
-    )
+    assert.equal(resHalves.feedback, "Great job! You cut the brownies into 2 equal halves!")
   }
 
   // 2. Thirds: 2 cuts at 1/3 and 2/3
@@ -108,10 +105,7 @@ test("NC.2.G.3 Invariant 1: Valid halves, thirds, and fourths for rectangles mus
   if (resThirds.status === "correct") {
     assert.equal(resThirds.shares, 3)
     assert.equal(resThirds.verbalEquation, "3 thirds = 1 whole")
-    assert.equal(
-      resThirds.feedback,
-      "Great job! You cut the sheet cake into 3 equal thirds!"
-    )
+    assert.equal(resThirds.feedback, "Great job! You cut the sheet cake into 3 equal thirds!")
   }
 
   // Approximate thirds: [0.333, 0.667]
@@ -125,10 +119,7 @@ test("NC.2.G.3 Invariant 1: Valid halves, thirds, and fourths for rectangles mus
     assert.equal(resFourths.shares, 4)
     assert.deepEqual(resFourths.shareFractions, [0.25, 0.25, 0.25, 0.25])
     assert.equal(resFourths.verbalEquation, "4 fourths = 1 whole")
-    assert.equal(
-      resFourths.feedback,
-      "Great job! You cut the brownies into 4 equal fourths!"
-    )
+    assert.equal(resFourths.feedback, "Great job! You cut the brownies into 4 equal fourths!")
   }
 
   // 4. Out-of-order cuts must sort and still PASS
@@ -143,10 +134,7 @@ test("NC.2.G.3 Invariant 2: Valid halves, thirds, and fourths for circles with a
   if (resHalves.status === "correct") {
     assert.equal(resHalves.shares, 2)
     assert.deepEqual(resHalves.shareFractions, [0.5, 0.5])
-    assert.equal(
-      resHalves.feedback,
-      "Great job! You cut the pizza into 2 equal halves!"
-    )
+    assert.equal(resHalves.feedback, "Great job! You cut the pizza into 2 equal halves!")
   }
 
   // Halves - Rotated [45, 225]
@@ -168,10 +156,7 @@ test("NC.2.G.3 Invariant 2: Valid halves, thirds, and fourths for circles with a
   assert.equal(resThirds.status, "correct")
   if (resThirds.status === "correct") {
     assert.equal(resThirds.shares, 3)
-    assert.equal(
-      resThirds.feedback,
-      "Great job! You cut the fruit tart into 3 equal thirds!"
-    )
+    assert.equal(resThirds.feedback, "Great job! You cut the fruit tart into 3 equal thirds!")
   }
 
   // Thirds - Rotated wrap-around [60, 180, 300]
@@ -188,10 +173,7 @@ test("NC.2.G.3 Invariant 2: Valid halves, thirds, and fourths for circles with a
   if (resFourths.status === "correct") {
     assert.equal(resFourths.shares, 4)
     assert.deepEqual(resFourths.shareFractions, [0.25, 0.25, 0.25, 0.25])
-    assert.equal(
-      resFourths.feedback,
-      "Great job! You cut the berry pie into 4 equal fourths!"
-    )
+    assert.equal(resFourths.feedback, "Great job! You cut the berry pie into 4 equal fourths!")
   }
 
   // Fourths - Rotated [45, 135, 225, 315]
@@ -236,15 +218,19 @@ test("NC.2.G.3 Invariant 3: Tolerance boundaries (+/- 5% absolute) must resolve 
 
   // Outside bound: 180 + 20 = 200 deg (20/360 = 5.56% > 5%) -> FAIL
   const resCircOutOfBound = evaluatePartition([0, 200], SPEC_CIRC_HALVES)
-  assert.equal(resCircOutOfBound.status, "unequal_shares", "200 deg is outside 5% angular tolerance")
+  assert.equal(
+    resCircOutOfBound.status,
+    "unequal_shares",
+    "200 deg is outside 5% angular tolerance",
+  )
 
   // Rectangular Fourths: Target share = 0.25 (tolerance [0.20, 0.30])
   // Boundary shares: [0.20, 0.25, 0.25, 0.30] -> PASS
-  const resFourthsLimit = evaluatePartition([0.20, 0.45, 0.70], SPEC_RECT_FOURTHS)
+  const resFourthsLimit = evaluatePartition([0.2, 0.45, 0.7], SPEC_RECT_FOURTHS)
   assert.equal(resFourthsLimit.status, "correct")
 
   // Exceeding tolerance: [0.19, 0.45, 0.70] (share 0 is 0.19, dev = 0.06) -> FAIL
-  const resFourthsExceed = evaluatePartition([0.19, 0.45, 0.70], SPEC_RECT_FOURTHS)
+  const resFourthsExceed = evaluatePartition([0.19, 0.45, 0.7], SPEC_RECT_FOURTHS)
   assert.equal(resFourthsExceed.status, "unequal_shares")
 })
 
@@ -260,7 +246,7 @@ test("NC.2.G.3 Invariant 4: Unequal shares must FAIL as unequal_shares with accu
     assert.equal(resRect.smallestShareRatio, 0.25)
     assert.equal(
       resRect.feedback,
-      "These pieces aren't equal yet! Slide the cutter to make each share the same size."
+      "These pieces aren't equal yet! Slide the cutter to make each share the same size.",
     )
   }
 
@@ -275,7 +261,7 @@ test("NC.2.G.3 Invariant 4: Unequal shares must FAIL as unequal_shares with accu
     assert.equal(resCirc.smallestShareRatio, 0.25)
     assert.equal(
       resCirc.feedback,
-      "These pieces aren't equal yet! Slide the cutter to make each share the same size."
+      "These pieces aren't equal yet! Slide the cutter to make each share the same size.",
     )
   }
 })
@@ -288,10 +274,7 @@ test("NC.2.G.3 Invariant 5: Wrong share count must FAIL as wrong_share_count", (
     assert.equal(resUnder.shapeType, "rectangle")
     assert.equal(resUnder.actualShares, 2)
     assert.equal(resUnder.targetShares, 3)
-    assert.equal(
-      resUnder.feedback,
-      "We need 3 equal shares! Select the [3 thirds] cutter."
-    )
+    assert.equal(resUnder.feedback, "We need 3 equal shares! Select the [3 thirds] cutter.")
   }
 
   // Rectangle targetShares = 2, but 3 cuts provided (actualShares = 4)
@@ -300,10 +283,7 @@ test("NC.2.G.3 Invariant 5: Wrong share count must FAIL as wrong_share_count", (
   if (resOver.status === "wrong_share_count") {
     assert.equal(resOver.actualShares, 4)
     assert.equal(resOver.targetShares, 2)
-    assert.equal(
-      resOver.feedback,
-      "We need 2 equal shares! Select the [2 halves] cutter."
-    )
+    assert.equal(resOver.feedback, "We need 2 equal shares! Select the [2 halves] cutter.")
   }
 
   // Circle targetShares = 4, but only 2 cuts provided (actualShares = 2)
@@ -313,10 +293,7 @@ test("NC.2.G.3 Invariant 5: Wrong share count must FAIL as wrong_share_count", (
     assert.equal(resCircUnder.shapeType, "circle")
     assert.equal(resCircUnder.actualShares, 2)
     assert.equal(resCircUnder.targetShares, 4)
-    assert.equal(
-      resCircUnder.feedback,
-      "We need 4 equal shares! Select the [4 fourths] cutter."
-    )
+    assert.equal(resCircUnder.feedback, "We need 4 equal shares! Select the [4 fourths] cutter.")
   }
 
   // Circle targetShares = 2, but 3 cuts provided (actualShares = 3)
@@ -325,10 +302,7 @@ test("NC.2.G.3 Invariant 5: Wrong share count must FAIL as wrong_share_count", (
   if (resCircOver.status === "wrong_share_count") {
     assert.equal(resCircOver.actualShares, 3)
     assert.equal(resCircOver.targetShares, 2)
-    assert.equal(
-      resCircOver.feedback,
-      "We need 2 equal shares! Select the [2 halves] cutter."
-    )
+    assert.equal(resCircOver.feedback, "We need 2 equal shares! Select the [2 halves] cutter.")
   }
 })
 
@@ -338,7 +312,7 @@ test("NC.2.G.3 Invariant 6: Empty/unpartitioned cuts must FAIL as unpartitioned"
   assert.equal(resRectHalves.status, "unpartitioned")
   assert.equal(
     resRectHalves.feedback,
-    "Use the cutter to partition the brownies into 2 equal halves!"
+    "Use the cutter to partition the brownies into 2 equal halves!",
   )
 
   // Circle thirds with empty cuts
@@ -346,7 +320,7 @@ test("NC.2.G.3 Invariant 6: Empty/unpartitioned cuts must FAIL as unpartitioned"
   assert.equal(resCircThirds.status, "unpartitioned")
   assert.equal(
     resCircThirds.feedback,
-    "Use the cutter to partition the fruit tart into 3 equal thirds!"
+    "Use the cutter to partition the fruit tart into 3 equal thirds!",
   )
 
   // Fourths with empty cuts
@@ -354,7 +328,7 @@ test("NC.2.G.3 Invariant 6: Empty/unpartitioned cuts must FAIL as unpartitioned"
   assert.equal(resRectFourths.status, "unpartitioned")
   assert.equal(
     resRectFourths.feedback,
-    "Use the cutter to partition the brownies into 4 equal fourths!"
+    "Use the cutter to partition the brownies into 4 equal fourths!",
   )
 })
 
@@ -400,73 +374,63 @@ test("NC.2.G.3 Invariant 7: Adversarial Cut Fuzzing Matrix (200 Seeds) verifying
 
     assert.ok(diag, `Seed ${seed}: Diagnostic must be defined`)
     assert.ok(
-      ["correct", "unequal_shares", "wrong_share_count", "unpartitioned"].includes(
-        diag.status
-      ),
-      `Seed ${seed}: Status must be valid, got ${diag.status}`
+      ["correct", "unequal_shares", "wrong_share_count", "unpartitioned"].includes(diag.status),
+      `Seed ${seed}: Status must be valid, got ${diag.status}`,
     )
     assert.ok(
       typeof diag.feedback === "string" && diag.feedback.length > 0,
-      `Seed ${seed}: Feedback must be a non-empty string`
+      `Seed ${seed}: Feedback must be a non-empty string`,
     )
-    assert.ok(
-      !diag.feedback.includes("NaN"),
-      `Seed ${seed}: Feedback must never contain NaN`
-    )
+    assert.ok(!diag.feedback.includes("NaN"), `Seed ${seed}: Feedback must never contain NaN`)
     assert.ok(
       !diag.feedback.includes("undefined"),
-      `Seed ${seed}: Feedback must never contain undefined`
+      `Seed ${seed}: Feedback must never contain undefined`,
     )
 
     if (diag.status === "correct") {
-      assert.equal(
-        diag.shares,
-        spec.targetShares,
-        `Seed ${seed}: Correct shares must match target`
-      )
+      assert.equal(diag.shares, spec.targetShares, `Seed ${seed}: Correct shares must match target`)
       assert.equal(
         diag.shareFractions.length,
         spec.targetShares,
-        `Seed ${seed}: Share fractions count must match target`
+        `Seed ${seed}: Share fractions count must match target`,
       )
       assert.ok(
         diag.shareFractions.every(
-          (f) => typeof f === "number" && Number.isFinite(f) && !Number.isNaN(f)
+          (f) => typeof f === "number" && Number.isFinite(f) && !Number.isNaN(f),
         ),
-        `Seed ${seed}: Share fractions must all be finite numbers without NaN`
+        `Seed ${seed}: Share fractions must all be finite numbers without NaN`,
       )
       const sum = diag.shareFractions.reduce((acc, v) => acc + v, 0)
       assert.ok(
         Math.abs(sum - 1.0) < 1e-4,
-        `Seed ${seed}: Share fractions must sum to 1.0 (got ${sum})`
+        `Seed ${seed}: Share fractions must sum to 1.0 (got ${sum})`,
       )
     } else if (diag.status === "unequal_shares") {
       assert.ok(
         typeof diag.largestShareRatio === "number" &&
           Number.isFinite(diag.largestShareRatio) &&
           !Number.isNaN(diag.largestShareRatio),
-        `Seed ${seed}: largestShareRatio must be a valid finite number`
+        `Seed ${seed}: largestShareRatio must be a valid finite number`,
       )
       assert.ok(
         typeof diag.smallestShareRatio === "number" &&
           Number.isFinite(diag.smallestShareRatio) &&
           !Number.isNaN(diag.smallestShareRatio),
-        `Seed ${seed}: smallestShareRatio must be a valid finite number`
+        `Seed ${seed}: smallestShareRatio must be a valid finite number`,
       )
       assert.ok(
         diag.largestShareRatio >= diag.smallestShareRatio,
-        `Seed ${seed}: largestShareRatio (${diag.largestShareRatio}) must be >= smallestShareRatio (${diag.smallestShareRatio})`
+        `Seed ${seed}: largestShareRatio (${diag.largestShareRatio}) must be >= smallestShareRatio (${diag.smallestShareRatio})`,
       )
     } else if (diag.status === "wrong_share_count") {
       assert.ok(
-        typeof diag.actualShares === "number" &&
-          Number.isInteger(diag.actualShares),
-        `Seed ${seed}: actualShares must be an integer`
+        typeof diag.actualShares === "number" && Number.isInteger(diag.actualShares),
+        `Seed ${seed}: actualShares must be an integer`,
       )
       assert.notEqual(
         diag.actualShares,
         spec.targetShares,
-        `Seed ${seed}: actualShares must differ from targetShares`
+        `Seed ${seed}: actualShares must differ from targetShares`,
       )
     }
   }
@@ -479,13 +443,11 @@ test("NC.2.G.3 Invariant 8: demonstrateGeometryStep produces canonical partition
     assert.ok(Array.isArray(demoCuts), `Seed ${seed.id}: demoCuts must be an array`)
 
     const expectedCutCount =
-      seed.shapeType === "rectangle"
-        ? seed.targetShares - 1
-        : seed.targetShares
+      seed.shapeType === "rectangle" ? seed.targetShares - 1 : seed.targetShares
     assert.equal(
       demoCuts.length,
       expectedCutCount,
-      `Seed ${seed.id}: expected ${expectedCutCount} cuts, got ${demoCuts.length}`
+      `Seed ${seed.id}: expected ${expectedCutCount} cuts, got ${demoCuts.length}`,
     )
 
     if (seed.shapeType === "rectangle") {
@@ -510,7 +472,7 @@ test("NC.2.G.3 Invariant 8: demonstrateGeometryStep produces canonical partition
     assert.equal(
       res.status,
       "correct",
-      `Seed ${seed.id} demonstration failed evaluation: ${res.feedback}`
+      `Seed ${seed.id} demonstration failed evaluation: ${res.feedback}`,
     )
     if (res.status === "correct") {
       assert.equal(res.shares, seed.targetShares)
@@ -528,17 +490,16 @@ test("NC.2.G.3 Invariant 9: getIsomorphicGeometrySpec preserves targetShares acr
     assert.equal(
       iso.targetShares,
       seed.targetShares,
-      `Seed ${seed.id}: targetShares must be preserved (expected ${seed.targetShares}, got ${iso.targetShares})`
+      `Seed ${seed.id}: targetShares must be preserved (expected ${seed.targetShares}, got ${iso.targetShares})`,
     )
     assert.equal(iso.standard, "NC.2.G.3")
 
     // Verify alternate shapeType preference
-    const expectedAlternateShape =
-      seed.shapeType === "rectangle" ? "circle" : "rectangle"
+    const expectedAlternateShape = seed.shapeType === "rectangle" ? "circle" : "rectangle"
     assert.equal(
       iso.shapeType,
       expectedAlternateShape,
-      `Seed ${seed.id}: expected isomorphic shapeType to be ${expectedAlternateShape}, got ${iso.shapeType}`
+      `Seed ${seed.id}: expected isomorphic shapeType to be ${expectedAlternateShape}, got ${iso.shapeType}`,
     )
   }
 
@@ -648,5 +609,3 @@ test("NC.2.G.3 Invariant 10: 3-Tier Progressive Scaffolding Ladder Progression L
   assert.notEqual(nextSpec.id, spec.id)
   assert.equal(nextSpec.shapeType, "circle")
 })
-
-

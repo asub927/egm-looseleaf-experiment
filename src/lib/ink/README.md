@@ -1,9 +1,11 @@
 # Looseleaf Ink System
 
 ## Overview
+
 Core procedural sketching and rendering engine that produces organic, hand-drawn vector graphics, paper simulations, textures, strokes, and UI components.
 
 ## Subdirectories & Boundaries
+
 - [art](./art/README.md) - Vector art generation, DSL parsing, typography rendering, and asset registry.
 - [charts](./charts/README.md) - Chart layout calculation, data scaling, downsampling (LTTB), and mathematical layout engines.
 - [paper](./paper/README.md) - Physical paper simulation engine providing edge tearing algorithms, stock definitions, and shadows.
@@ -11,6 +13,7 @@ Core procedural sketching and rendering engine that produces organic, hand-drawn
 - [recipes](./recipes/README.md) - Component drawing recipes providing hand-drawn visual representations for UI widgets.
 
 ## Interface
+
 - [art-draw.ts:dieCut]
 - [art-draw.ts:drawSkeleton]
 - [art-draw.ts:paintSkeleton]
@@ -65,11 +68,14 @@ Core procedural sketching and rendering engine that produces organic, hand-drawn
 - [textures.ts:TEXTURES]
 
 ## Invariants
+
 - Pseudorandom number generators seeded with the same seed yield deterministic numeric sequences [rng.ts:createRng]
 - Generated SVG paths maintain bounded coordinates conforming to the calculated bounding box [builder.ts:Ink]
 
 ## Side Effects
+
 - None
 
 ## Verification
+
 - Run: npm run build

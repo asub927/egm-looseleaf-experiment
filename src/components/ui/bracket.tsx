@@ -32,7 +32,12 @@ function Bracket({
   delay?: number
   seed?: string | number
 }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: bracketRecipe, params: { kind, side, tone, weight, inset, animate }, kind: "bracket", seed })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: bracketRecipe,
+    params: { kind, side, tone, weight, inset, animate },
+    kind: "bracket",
+    seed,
+  })
   const { phaseRef, phaseProps } = useMarkPhase({ animate, show })
   const ready = !!node && show
   return (
@@ -43,8 +48,18 @@ function Bracket({
       ref={useMergedRef<HTMLElement>(hostRef, phaseRef, ref as React.Ref<HTMLElement> | undefined)}
       {...(ready ? hostProps : {})}
       {...phaseProps}
-      style={{ ...(animate ? ({ "--ll-draw-delay": `${delay ?? 0}ms` } as React.CSSProperties) : undefined), ...style }}
-      className={cn("relative isolate outline-none", side === "start" ? "ps-7" : "pe-7", animate && MARK_REVEAL, className)}
+      style={{
+        ...(animate
+          ? ({ "--ll-draw-delay": `${delay ?? 0}ms` } as React.CSSProperties)
+          : undefined),
+        ...style,
+      }}
+      className={cn(
+        "relative isolate outline-none",
+        side === "start" ? "ps-7" : "pe-7",
+        animate && MARK_REVEAL,
+        className,
+      )}
       {...props}
     >
       {ready ? node : null}

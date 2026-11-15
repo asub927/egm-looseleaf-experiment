@@ -10,10 +10,7 @@ import {
   getVineSeedById,
   evaluateVineSubmission,
 } from "@/lib/math/vine-evaluator"
-import {
-  playPluck,
-  playCelebrationChimes,
-} from "@/lib/audio/garden-chimes"
+import { playPluck, playCelebrationChimes } from "@/lib/audio/garden-chimes"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -48,11 +45,7 @@ const NODE_COORDINATES = [
   { node: 10, x: 236, y: 64 },
 ] as const
 
-export function WhisperingVine({
-  initialSeedId,
-  onSolved,
-  className,
-}: WhisperingVineProps) {
+export function WhisperingVine({ initialSeedId, onSolved, className }: WhisperingVineProps) {
   // 1. Problem Seed State (default to CANONICAL_VINE_SEEDS[0]: 10 - 6)
   const [currentSeed, setCurrentSeed] = React.useState<VineProblemSeed>(() => {
     if (initialSeedId) {
@@ -144,7 +137,7 @@ export function WhisperingVine({
         playPluck(targetNodeIndex)
       }
     },
-    [maxAdded, calmMode, currentSeed.known, solved, evaluation]
+    [maxAdded, calmMode, currentSeed.known, solved, evaluation],
   )
 
   // Pointer Drag Handling with Integer Snapping along Y-axis
@@ -287,18 +280,13 @@ export function WhisperingVine({
   }
 
   // Snail position on vine (at node: known + added)
-  const snailNodeIndex = Math.max(
-    1,
-    Math.min(10, currentSeed.known + added)
-  )
+  const snailNodeIndex = Math.max(1, Math.min(10, currentSeed.known + added))
   const snailCoord = NODE_COORDINATES[snailNodeIndex - 1] ?? NODE_COORDINATES[0]
   const isGapUnfilled = added < maxAdded
 
   // Check if reflection is actively requested
   const isMismatchTriggered =
-    solved &&
-    evaluation?.mismatchReflectionNeeded === true &&
-    !hasReflected
+    solved && evaluation?.mismatchReflectionNeeded === true && !hasReflected
 
   return (
     <div
@@ -310,7 +298,7 @@ export function WhisperingVine({
       className={cn(
         "w-full h-full flex flex-col justify-between p-2 sm:p-3 select-none outline-none focus:ring-2 focus:ring-amber-400/50 rounded-xl",
         calmMode ? "bg-amber-50/20" : "bg-transparent",
-        className
+        className,
       )}
     >
       {/* 1. Header Bar: Problem Selector Pills & Sensory Calm Mode Toggle */}
@@ -332,7 +320,7 @@ export function WhisperingVine({
                   "px-2.5 py-1 rounded-full text-xs font-bold transition-all cursor-pointer border shadow-2xs",
                   isSelected
                     ? "bg-amber-400 text-stone-900 border-amber-600 scale-105"
-                    : "bg-white/90 text-stone-700 border-stone-300 hover:bg-amber-50 hover:border-amber-400"
+                    : "bg-white/90 text-stone-700 border-stone-300 hover:bg-amber-50 hover:border-amber-400",
                 )}
                 aria-pressed={isSelected}
               >
@@ -366,7 +354,7 @@ export function WhisperingVine({
               "h-7 text-xs px-2.5 transition-all cursor-pointer font-bold flex items-center gap-1",
               calmMode
                 ? "bg-emerald-100 text-emerald-900 border-emerald-400 shadow-2xs"
-                : "bg-white/90 text-stone-700 border-stone-300 hover:bg-emerald-50"
+                : "bg-white/90 text-stone-700 border-stone-300 hover:bg-emerald-50",
             )}
             title="Toggle gentle sensory mode"
             aria-pressed={calmMode}
@@ -387,8 +375,20 @@ export function WhisperingVine({
           className="h-full w-full p-2 flex flex-col justify-between items-center relative overflow-hidden border-2 border-stone-300 bg-[#FCFBF7]"
         >
           {/* Washi Tape Fasteners */}
-          <Tape kind="washi-dots" color="grass" length={50} height={16} className="absolute -top-2 left-6 z-10" />
-          <Tape kind="masking" color="lemon" length={50} height={16} className="absolute -top-2 right-6 z-10" />
+          <Tape
+            kind="washi-dots"
+            color="grass"
+            length={50}
+            height={16}
+            className="absolute -top-2 left-6 z-10"
+          />
+          <Tape
+            kind="masking"
+            color="lemon"
+            length={50}
+            height={16}
+            className="absolute -top-2 right-6 z-10"
+          />
 
           {/* Socratic Story Narrative Banner */}
           <div className="w-full shrink-0 px-3 py-1.5 bg-amber-50/90 border border-amber-200/90 rounded-lg shadow-2xs flex items-center justify-between gap-2 z-10 mb-1">
@@ -438,14 +438,46 @@ export function WhisperingVine({
 
               {/* Garden Trellis at Top */}
               <g id="trellis" opacity={0.85}>
-                <line x1="160" y1="45" x2="310" y2="45" stroke="#DDB892" strokeWidth="6" strokeLinecap="round" />
-                <line x1="180" y1="75" x2="290" y2="75" stroke="#DDB892" strokeWidth="5" strokeLinecap="round" />
+                <line
+                  x1="160"
+                  y1="45"
+                  x2="310"
+                  y2="45"
+                  stroke="#DDB892"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                />
+                <line
+                  x1="180"
+                  y1="75"
+                  x2="290"
+                  y2="75"
+                  stroke="#DDB892"
+                  strokeWidth="5"
+                  strokeLinecap="round"
+                />
                 <line x1="190" y1="35" x2="190" y2="85" stroke="#C89F77" strokeWidth="4" />
                 <line x1="235" y1="35" x2="235" y2="85" stroke="#C89F77" strokeWidth="4" />
                 <line x1="280" y1="35" x2="280" y2="85" stroke="#C89F77" strokeWidth="4" />
                 {/* Trellis top banner text */}
-                <rect x="175" y="24" width="120" height="18" rx="9" fill="#FFF9E6" stroke="#DDB892" strokeWidth="1" />
-                <text x="235" y="37" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#8C5C2E">
+                <rect
+                  x="175"
+                  y="24"
+                  width="120"
+                  height="18"
+                  rx="9"
+                  fill="#FFF9E6"
+                  stroke="#DDB892"
+                  strokeWidth="1"
+                />
+                <text
+                  x="235"
+                  y="37"
+                  textAnchor="middle"
+                  fontSize="10"
+                  fontWeight="bold"
+                  fill="#8C5C2E"
+                >
                   🌿 10 BLOSSOMS GOAL
                 </text>
               </g>
@@ -487,7 +519,16 @@ export function WhisperingVine({
               {/* Terracotta Planter Pot at Bottom */}
               <g id="pot">
                 {/* Pot Rim */}
-                <rect x="165" y="552" width="110" height="16" rx="6" fill="url(#potGrad)" stroke="#8C381E" strokeWidth="1.5" />
+                <rect
+                  x="165"
+                  y="552"
+                  width="110"
+                  height="16"
+                  rx="6"
+                  fill="url(#potGrad)"
+                  stroke="#8C381E"
+                  strokeWidth="1.5"
+                />
                 {/* Pot Soil */}
                 <ellipse cx="220" cy="554" rx="46" ry="6" fill="#42281D" />
                 {/* Pot Body */}
@@ -498,8 +539,23 @@ export function WhisperingVine({
                   strokeWidth="1.5"
                 />
                 {/* Pot Highlights and Texture */}
-                <path d="M 190 575 Q 196 615 200 622" stroke="#E58D70" strokeWidth="2" strokeLinecap="round" fill="none" opacity={0.6} />
-                <text x="220" y="604" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#6A220E" opacity={0.75}>
+                <path
+                  d="M 190 575 Q 196 615 200 622"
+                  stroke="#E58D70"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  fill="none"
+                  opacity={0.6}
+                />
+                <text
+                  x="220"
+                  y="604"
+                  textAnchor="middle"
+                  fontSize="11"
+                  fontWeight="bold"
+                  fill="#6A220E"
+                  opacity={0.75}
+                >
                   GARDEN POT
                 </text>
               </g>
@@ -541,11 +597,32 @@ export function WhisperingVine({
                               strokeWidth="1"
                             />
                           ))}
-                          <circle cx="0" cy="0" r="5" fill="#F4A261" stroke="#E76F51" strokeWidth="1" />
+                          <circle
+                            cx="0"
+                            cy="0"
+                            r="5"
+                            fill="#F4A261"
+                            stroke="#E76F51"
+                            strokeWidth="1"
+                          />
                         </g>
                         {/* Node Number Badge */}
-                        <circle cx={c.x + 16} cy={c.y} r="8.5" fill="#FFF2EC" stroke="#EAA592" strokeWidth="1" />
-                        <text x={c.x + 16} y={c.y + 3.5} textAnchor="middle" fontSize="9" fontWeight="bold" fill="#A85743">
+                        <circle
+                          cx={c.x + 16}
+                          cy={c.y}
+                          r="8.5"
+                          fill="#FFF2EC"
+                          stroke="#EAA592"
+                          strokeWidth="1"
+                        />
+                        <text
+                          x={c.x + 16}
+                          y={c.y + 3.5}
+                          textAnchor="middle"
+                          fontSize="9"
+                          fontWeight="bold"
+                          fill="#A85743"
+                        >
                           {nodeNum}
                         </text>
                       </g>
@@ -582,11 +659,32 @@ export function WhisperingVine({
                               strokeWidth="1"
                             />
                           ))}
-                          <circle cx="0" cy="0" r="5" fill="#52B788" stroke="#2D6A4F" strokeWidth="1" />
+                          <circle
+                            cx="0"
+                            cy="0"
+                            r="5"
+                            fill="#52B788"
+                            stroke="#2D6A4F"
+                            strokeWidth="1"
+                          />
                         </g>
                         {/* Node Number Badge */}
-                        <circle cx={c.x + 16} cy={c.y} r="8.5" fill="#E8F8F0" stroke="#70C1B3" strokeWidth="1" />
-                        <text x={c.x + 16} y={c.y + 3.5} textAnchor="middle" fontSize="9" fontWeight="bold" fill="#2D6A4F">
+                        <circle
+                          cx={c.x + 16}
+                          cy={c.y}
+                          r="8.5"
+                          fill="#E8F8F0"
+                          stroke="#70C1B3"
+                          strokeWidth="1"
+                        />
+                        <text
+                          x={c.x + 16}
+                          y={c.y + 3.5}
+                          textAnchor="middle"
+                          fontSize="9"
+                          fontWeight="bold"
+                          fill="#2D6A4F"
+                        >
                           {nodeNum}
                         </text>
                       </g>
@@ -640,8 +738,22 @@ export function WhisperingVine({
                       </g>
 
                       {/* Node Number Badge */}
-                      <circle cx={c.x + 16} cy={c.y} r="8.5" fill="#FFFDEB" stroke="#E0A96D" strokeWidth="1" />
-                      <text x={c.x + 16} y={c.y + 3.5} textAnchor="middle" fontSize="9" fontWeight="bold" fill="#8C5C2E">
+                      <circle
+                        cx={c.x + 16}
+                        cy={c.y}
+                        r="8.5"
+                        fill="#FFFDEB"
+                        stroke="#E0A96D"
+                        strokeWidth="1"
+                      />
+                      <text
+                        x={c.x + 16}
+                        y={c.y + 3.5}
+                        textAnchor="middle"
+                        fontSize="9"
+                        fontWeight="bold"
+                        fill="#8C5C2E"
+                      >
                         {nodeNum}
                       </text>
 
@@ -659,7 +771,7 @@ export function WhisperingVine({
                 onPointerDown={handlePointerDown}
                 className={cn(
                   "cursor-grab active:cursor-grabbing transition-transform",
-                  isDragging && "scale-105"
+                  isDragging && "scale-105",
                 )}
               >
                 {/* Snail Slime Shimmer Trail */}
@@ -674,18 +786,36 @@ export function WhisperingVine({
                 />
 
                 {/* Eye Stalk 1 */}
-                <path d="M 12 6 Q 16 -4 14 -12" fill="none" stroke="#E8A598" strokeWidth="1.6" strokeLinecap="round" />
+                <path
+                  d="M 12 6 Q 16 -4 14 -12"
+                  fill="none"
+                  stroke="#E8A598"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                />
                 <circle cx="14" cy="-12" r="3" fill="#4A3E3D" />
                 <circle cx="13" cy="-13" r="1" fill="#FFFFFF" />
 
                 {/* Eye Stalk 2 */}
-                <path d="M 6 5 Q 7 -5 5 -13" fill="none" stroke="#E8A598" strokeWidth="1.6" strokeLinecap="round" />
+                <path
+                  d="M 6 5 Q 7 -5 5 -13"
+                  fill="none"
+                  stroke="#E8A598"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                />
                 <circle cx="5" cy="-13" r="3" fill="#4A3E3D" />
                 <circle cx="4" cy="-14" r="1" fill="#FFFFFF" />
 
                 {/* Rosy Cheek & Smile */}
                 <circle cx="16" cy="10" r="2.2" fill="#FF8BA7" opacity={0.7} />
-                <path d="M 14 12 Q 17 14 19 11" fill="none" stroke="#B85D6C" strokeWidth="1.2" strokeLinecap="round" />
+                <path
+                  d="M 14 12 Q 17 14 19 11"
+                  fill="none"
+                  stroke="#B85D6C"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                />
 
                 {/* Translucent Glass Shell (#F4ACB7) */}
                 <circle
@@ -707,7 +837,15 @@ export function WhisperingVine({
                   strokeLinecap="round"
                 />
                 {/* Glass Gloss Shine */}
-                <ellipse cx="-11" cy="-2" rx="4" ry="2" transform="rotate(-30 -11 -2)" fill="#FFFFFF" opacity={0.7} />
+                <ellipse
+                  cx="-11"
+                  cy="-2"
+                  rx="4"
+                  ry="2"
+                  transform="rotate(-30 -11 -2)"
+                  fill="#FFFFFF"
+                  opacity={0.7}
+                />
 
                 {/* Draggable Question Pill Handle */}
                 <g transform="translate(18, -26)">
@@ -722,7 +860,14 @@ export function WhisperingVine({
                     strokeWidth="1.4"
                     filter="drop-shadow(0 1px 2px rgba(0,0,0,0.1))"
                   />
-                  <text x="21" y="14" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#8C5C2E">
+                  <text
+                    x="21"
+                    y="14"
+                    textAnchor="middle"
+                    fontSize="11"
+                    fontWeight="bold"
+                    fill="#8C5C2E"
+                  >
                     ? ↕
                   </text>
                 </g>
@@ -740,7 +885,14 @@ export function WhisperingVine({
                     strokeWidth="1.5"
                     filter="drop-shadow(0 2px 4px rgba(0,0,0,0.18))"
                   />
-                  <text x="23" y="15" textAnchor="middle" fontSize="12" fontWeight="bold" fill="#FFFFFF">
+                  <text
+                    x="23"
+                    y="15"
+                    textAnchor="middle"
+                    fontSize="12"
+                    fontWeight="bold"
+                    fill="#FFFFFF"
+                  >
                     {currentSeed.known + added}
                   </text>
                 </g>
@@ -752,7 +904,14 @@ export function WhisperingVine({
                   transform={`translate(${snailCoord.x + 65}, ${snailCoord.y - 4})`}
                   className="transition-all duration-300 ease-out"
                 >
-                  <circle cx="0" cy="0" r="16" fill="#FFD166" opacity={0.4} className="animate-ping" />
+                  <circle
+                    cx="0"
+                    cy="0"
+                    r="16"
+                    fill="#FFD166"
+                    opacity={0.4}
+                    className="animate-ping"
+                  />
                   <text x="-10" y="8" fontSize="22">
                     👆
                   </text>
@@ -764,18 +923,21 @@ export function WhisperingVine({
           {/* Socratic Mathematical Summary at Bottom of Canvas */}
           <div className="w-full shrink-0 py-1.5 px-3 rounded-lg bg-stone-100/90 border border-stone-300 flex items-center justify-between gap-2 mt-1 z-10">
             <div className="text-xs sm:text-sm font-bold flex items-center gap-1.5 flex-wrap">
-              <span className="text-[11px] uppercase text-ink-soft hidden sm:inline">Equation:</span>
+              <span className="text-[11px] uppercase text-ink-soft hidden sm:inline">
+                Equation:
+              </span>
               <Handwritten className="text-base text-amber-950 font-bold">
                 {currentSeed.known} + {added} = {currentSeed.known + added}
               </Handwritten>
-              <span className="text-xs text-stone-500 font-bold">
-                (Need: {currentSeed.whole})
-              </span>
+              <span className="text-xs text-stone-500 font-bold">(Need: {currentSeed.whole})</span>
             </div>
 
             <div className="flex items-center gap-1.5">
               {solved && (
-                <Badge variant="outline" className="text-[10px] h-5 bg-emerald-100 text-emerald-800 border-emerald-300 font-bold">
+                <Badge
+                  variant="outline"
+                  className="text-[10px] h-5 bg-emerald-100 text-emerald-800 border-emerald-300 font-bold"
+                >
                   Full 10 Reached! ✔
                 </Badge>
               )}
@@ -813,7 +975,7 @@ export function WhisperingVine({
                       "size-8 rounded-full font-bold text-sm transition-all cursor-pointer border flex items-center justify-center shadow-2xs",
                       isSelected
                         ? "bg-amber-400 text-stone-900 border-amber-600 scale-110 ring-2 ring-amber-400/50"
-                        : "bg-amber-50/80 text-stone-700 border-stone-300 hover:bg-amber-100 hover:border-amber-400"
+                        : "bg-amber-50/80 text-stone-700 border-stone-300 hover:bg-amber-100 hover:border-amber-400",
                     )}
                     aria-pressed={isSelected}
                     title={`Guess ${chipVal}`}
@@ -843,8 +1005,8 @@ export function WhisperingVine({
                 <span>Metacognitive Reflection</span>
               </div>
               <p className="text-xs text-amber-900 font-bold leading-snug">
-                You guessed <span className="underline">{predictedGuess}</span> and slid the snail to{" "}
-                <span className="underline">{added}</span>. What did you notice?
+                You guessed <span className="underline">{predictedGuess}</span> and slid the snail
+                to <span className="underline">{added}</span>. What did you notice?
               </p>
               <div className="flex flex-col gap-1 mt-1">
                 <Button
@@ -874,7 +1036,7 @@ export function WhisperingVine({
                 "shrink-0 border-2 shadow-xs p-2 flex flex-col gap-1 animate-in fade-in duration-200",
                 evaluation.verdict === "correct"
                   ? "bg-emerald-50 border-emerald-400 text-emerald-950"
-                  : "bg-amber-50 border-amber-300 text-amber-950"
+                  : "bg-amber-50 border-amber-300 text-amber-950",
               )}
             >
               <div className="flex items-center gap-1 text-xs font-bold">
@@ -889,7 +1051,10 @@ export function WhisperingVine({
           <Card className="shrink-0 bg-paper/90 border-2 border-stone-300 shadow-xs p-2.5 flex flex-col gap-2">
             <div className="flex items-center justify-between text-xs">
               <span className="font-bold text-stone-700">Slid by Snail:</span>
-              <Badge variant="outline" className="text-xs font-bold bg-amber-100 border-amber-300 text-amber-950">
+              <Badge
+                variant="outline"
+                className="text-xs font-bold bg-amber-100 border-amber-300 text-amber-950"
+              >
                 +{added} buds
               </Badge>
             </div>
@@ -902,7 +1067,7 @@ export function WhisperingVine({
                 "w-full h-9 font-bold text-sm shadow-xs cursor-pointer transition-all",
                 solved
                   ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-                  : "bg-amber-500 hover:bg-amber-600 text-stone-900"
+                  : "bg-amber-500 hover:bg-amber-600 text-stone-900",
               )}
             >
               {solved ? "✨ Locked In & Solved!" : "🔒 Lock it In"}

@@ -23,13 +23,14 @@ export function PairingMat({
   return (
     <div className="flex-1 min-h-0 flex items-center justify-center py-1 overflow-hidden select-none">
       <div className="w-full max-w-md bg-stone-200/90 p-3 sm:p-4 rounded-2xl border-4 border-stone-400 shadow-md flex flex-col items-center">
-        
         {/* Mat Header */}
         <div className="w-full flex items-center justify-between pb-1.5 mb-2 border-b border-stone-300 text-xs font-bold text-stone-800">
           <span className="flex items-center gap-1.5">
             <span>🌰</span>
             <span>Buddy Pairing Mat</span>
-            <span className="text-[10px] text-stone-500 font-normal">({totalTokens} acorns to pair)</span>
+            <span className="text-[10px] text-stone-500 font-normal">
+              ({totalTokens} acorns to pair)
+            </span>
           </span>
           <span className="text-stone-600 font-mono text-[11px] bg-stone-300/80 px-2 py-0.5 rounded">
             {placedCount} / {totalTokens} Placed
@@ -59,14 +60,18 @@ export function PairingMat({
                   isPaired
                     ? "bg-emerald-50/90 border-emerald-400 shadow-2xs"
                     : hasLeftover
-                    ? "bg-amber-100/90 border-amber-500 shadow-xs ring-1 ring-amber-400"
-                    : "bg-stone-100/80 border-dashed border-stone-300"
+                      ? "bg-amber-100/90 border-amber-500 shadow-xs ring-1 ring-amber-400"
+                      : "bg-stone-100/80 border-dashed border-stone-300"
                 }`}
               >
                 <div className="flex flex-col items-center justify-center">
                   <span className="text-xs font-bold text-stone-700">Pair {r + 1}</span>
-                  {isPaired && <span className="text-[9px] text-emerald-700 font-bold">Matched!</span>}
-                  {hasLeftover && <span className="text-[9px] text-amber-800 font-bold">Alone!</span>}
+                  {isPaired && (
+                    <span className="text-[9px] text-emerald-700 font-bold">Matched!</span>
+                  )}
+                  {hasLeftover && (
+                    <span className="text-[9px] text-amber-800 font-bold">Alone!</span>
+                  )}
                 </div>
 
                 {/* Buddy 1 Slot */}
@@ -78,8 +83,8 @@ export function PairingMat({
                     slot.left
                       ? "border-amber-600 bg-amber-100 shadow-xs"
                       : isLeftGhost
-                      ? "border-amber-500 bg-amber-100/60 animate-pulse border-dashed shadow-xs ring-1 ring-amber-400"
-                      : "border-2 border-dashed border-amber-400/90 bg-amber-50/90 shadow-2xs hover:border-amber-600 hover:bg-amber-100/90 hover:scale-102"
+                        ? "border-amber-500 bg-amber-100/60 animate-pulse border-dashed shadow-xs ring-1 ring-amber-400"
+                        : "border-2 border-dashed border-amber-400/90 bg-amber-50/90 shadow-2xs hover:border-amber-600 hover:bg-amber-100/90 hover:scale-102"
                   }`}
                 >
                   {slot.left ? (
@@ -87,7 +92,10 @@ export function PairingMat({
                       <Sticker name="acorn-pair" size={32} rotate="auto" />
                     </div>
                   ) : isLeftGhost ? (
-                    <span className="text-amber-800 font-bold text-xs animate-bounce" title="Hint: Place acorn here">
+                    <span
+                      className="text-amber-800 font-bold text-xs animate-bounce"
+                      title="Hint: Place acorn here"
+                    >
                       🌰
                     </span>
                   ) : (
@@ -106,8 +114,8 @@ export function PairingMat({
                     slot.right
                       ? "border-amber-600 bg-amber-100 shadow-xs"
                       : isRightGhost
-                      ? "border-amber-500 bg-amber-100/60 animate-pulse border-dashed shadow-xs ring-1 ring-amber-400"
-                      : "border-2 border-dashed border-amber-400/90 bg-amber-50/90 shadow-2xs hover:border-amber-600 hover:bg-amber-100/90 hover:scale-102"
+                        ? "border-amber-500 bg-amber-100/60 animate-pulse border-dashed shadow-xs ring-1 ring-amber-400"
+                        : "border-2 border-dashed border-amber-400/90 bg-amber-50/90 shadow-2xs hover:border-amber-600 hover:bg-amber-100/90 hover:scale-102"
                   }`}
                 >
                   {slot.right ? (
@@ -115,7 +123,10 @@ export function PairingMat({
                       <Sticker name="acorn-pair" size={32} rotate="auto" />
                     </div>
                   ) : isRightGhost ? (
-                    <span className="text-amber-800 font-bold text-xs animate-bounce" title="Hint: Place acorn here">
+                    <span
+                      className="text-amber-800 font-bold text-xs animate-bounce"
+                      title="Hint: Place acorn here"
+                    >
                       🌰
                     </span>
                   ) : (

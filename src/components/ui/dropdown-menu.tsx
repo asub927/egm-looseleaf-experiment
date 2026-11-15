@@ -29,11 +29,15 @@ function DropdownMenu({ ...props }: React.ComponentProps<typeof DropdownMenuPrim
   return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />
 }
 
-function DropdownMenuPortal({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Portal>) {
+function DropdownMenuPortal({
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Portal>) {
   return <DropdownMenuPrimitive.Portal data-slot="dropdown-menu-portal" {...props} />
 }
 
-function DropdownMenuTrigger({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) {
+function DropdownMenuTrigger({
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) {
   return <DropdownMenuPrimitive.Trigger data-slot="dropdown-menu-trigger" {...props} />
 }
 
@@ -53,8 +57,21 @@ function DropdownMenuContent({
   return (
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content asChild sideOffset={sideOffset} {...props}>
-        <Paper data-slot="dropdown-menu-content" stock={stock} edge={edge} tilt={tilt} tape={tape} rules="none" seed={seed} {...scope} className={cn(menuContentClass("dropdown-menu"), split.content)}>
-          <div data-slot="dropdown-menu-viewport" className={menuViewportClass("dropdown-menu", split.viewport)}>
+        <Paper
+          data-slot="dropdown-menu-content"
+          stock={stock}
+          edge={edge}
+          tilt={tilt}
+          tape={tape}
+          rules="none"
+          seed={seed}
+          {...scope}
+          className={cn(menuContentClass("dropdown-menu"), split.content)}
+        >
+          <div
+            data-slot="dropdown-menu-viewport"
+            className={menuViewportClass("dropdown-menu", split.viewport)}
+          >
             {children}
           </div>
         </Paper>
@@ -76,14 +93,36 @@ function DropdownMenuItem({
   inset?: boolean
   variant?: "default" | "destructive"
 }) {
-  return <DropdownMenuPrimitive.Item data-slot="dropdown-menu-item" data-inset={inset} data-variant={variant} className={cn(MENU_ITEM, className)} {...props} />
+  return (
+    <DropdownMenuPrimitive.Item
+      data-slot="dropdown-menu-item"
+      data-inset={inset}
+      data-variant={variant}
+      className={cn(MENU_ITEM, className)}
+      {...props}
+    />
+  )
 }
 
-function DropdownMenuCheckboxItem({ className, children, checked, ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.CheckboxItem>) {
+function DropdownMenuCheckboxItem({
+  className,
+  children,
+  checked,
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.CheckboxItem>) {
   return (
-    <DropdownMenuPrimitive.CheckboxItem data-slot="dropdown-menu-checkbox-item" className={cn(MENU_CHOICE_ITEM, className)} checked={checked} {...props}>
+    <DropdownMenuPrimitive.CheckboxItem
+      data-slot="dropdown-menu-checkbox-item"
+      className={cn(MENU_CHOICE_ITEM, className)}
+      checked={checked}
+      {...props}
+    >
       <span data-slot="dropdown-menu-item-indicator" className={MENU_INDICATOR}>
-        <Icon name="square" size={16} className="absolute text-pencil-mark forced-colors:text-[CanvasText]" />
+        <Icon
+          name="square"
+          size={16}
+          className="absolute text-pencil-mark forced-colors:text-[CanvasText]"
+        />
         <DropdownMenuPrimitive.ItemIndicator className={MENU_MARK}>
           <Icon name="check" size={22} className="-translate-y-px" />
         </DropdownMenuPrimitive.ItemIndicator>
@@ -93,15 +132,29 @@ function DropdownMenuCheckboxItem({ className, children, checked, ...props }: Re
   )
 }
 
-function DropdownMenuRadioGroup({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.RadioGroup>) {
+function DropdownMenuRadioGroup({
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.RadioGroup>) {
   return <DropdownMenuPrimitive.RadioGroup data-slot="dropdown-menu-radio-group" {...props} />
 }
 
-function DropdownMenuRadioItem({ className, children, ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.RadioItem>) {
+function DropdownMenuRadioItem({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.RadioItem>) {
   return (
-    <DropdownMenuPrimitive.RadioItem data-slot="dropdown-menu-radio-item" className={cn(MENU_CHOICE_ITEM, className)} {...props}>
+    <DropdownMenuPrimitive.RadioItem
+      data-slot="dropdown-menu-radio-item"
+      className={cn(MENU_CHOICE_ITEM, className)}
+      {...props}
+    >
       <span data-slot="dropdown-menu-item-indicator" className={MENU_INDICATOR}>
-        <Icon name="circle" size={16} className="absolute text-pencil-mark forced-colors:text-[CanvasText]" />
+        <Icon
+          name="circle"
+          size={16}
+          className="absolute text-pencil-mark forced-colors:text-[CanvasText]"
+        />
         <DropdownMenuPrimitive.ItemIndicator className={MENU_MARK}>
           <Icon name="dot" size={26} />
         </DropdownMenuPrimitive.ItemIndicator>
@@ -111,11 +164,25 @@ function DropdownMenuRadioItem({ className, children, ...props }: React.Componen
   )
 }
 
-function DropdownMenuLabel({ className, inset, ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Label> & { inset?: boolean }) {
-  return <DropdownMenuPrimitive.Label data-slot="dropdown-menu-label" data-inset={inset} className={cn(MENU_LABEL, className)} {...props} />
+function DropdownMenuLabel({
+  className,
+  inset,
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Label> & { inset?: boolean }) {
+  return (
+    <DropdownMenuPrimitive.Label
+      data-slot="dropdown-menu-label"
+      data-inset={inset}
+      className={cn(MENU_LABEL, className)}
+      {...props}
+    />
+  )
 }
 
-function DropdownMenuSeparator({ className, ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Separator>) {
+function DropdownMenuSeparator({
+  className,
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Separator>) {
   return (
     <DropdownMenuPrimitive.Separator asChild {...props}>
       <Separator data-slot="dropdown-menu-separator" className={cn(MENU_SEPARATOR, className)} />
@@ -129,7 +196,9 @@ function DropdownMenuShortcut({ className, children, ...props }: React.Component
     <span data-slot="dropdown-menu-shortcut" className={cn(MENU_SHORTCUT, className)} {...props}>
       {keys
         ? keys.map((k, i) => (
-            <Kbd key={i} className={MENU_KEYCAP}>{"icon" in k ? <Icon name={k.icon} label={k.label} /> : k.text}</Kbd>
+            <Kbd key={i} className={MENU_KEYCAP}>
+              {"icon" in k ? <Icon name={k.icon} label={k.label} /> : k.text}
+            </Kbd>
           ))
         : children}
     </span>
@@ -140,9 +209,19 @@ function DropdownMenuSub({ ...props }: React.ComponentProps<typeof DropdownMenuP
   return <DropdownMenuPrimitive.Sub data-slot="dropdown-menu-sub" {...props} />
 }
 
-function DropdownMenuSubTrigger({ className, inset, children, ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.SubTrigger> & { inset?: boolean }) {
+function DropdownMenuSubTrigger({
+  className,
+  inset,
+  children,
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.SubTrigger> & { inset?: boolean }) {
   return (
-    <DropdownMenuPrimitive.SubTrigger data-slot="dropdown-menu-sub-trigger" data-inset={inset} className={cn(MENU_SUB_TRIGGER, className)} {...props}>
+    <DropdownMenuPrimitive.SubTrigger
+      data-slot="dropdown-menu-sub-trigger"
+      data-inset={inset}
+      className={cn(MENU_SUB_TRIGGER, className)}
+      {...props}
+    >
       {children}
       <Icon name="chevron-right" size={16} className="ms-auto" />
     </DropdownMenuPrimitive.SubTrigger>
@@ -164,8 +243,21 @@ function DropdownMenuSubContent({
   const split = splitMenuClass(className)
   return (
     <DropdownMenuPrimitive.SubContent asChild alignOffset={alignOffset} {...props}>
-      <Paper data-slot="dropdown-menu-sub-content" stock={stock} edge={edge} tilt={tilt} tape={tape} rules="none" seed={seed} {...scope} className={cn(menuContentClass("dropdown-menu"), split.content)}>
-        <div data-slot="dropdown-menu-viewport" className={menuViewportClass("dropdown-menu", split.viewport)}>
+      <Paper
+        data-slot="dropdown-menu-sub-content"
+        stock={stock}
+        edge={edge}
+        tilt={tilt}
+        tape={tape}
+        rules="none"
+        seed={seed}
+        {...scope}
+        className={cn(menuContentClass("dropdown-menu"), split.content)}
+      >
+        <div
+          data-slot="dropdown-menu-viewport"
+          className={menuViewportClass("dropdown-menu", split.viewport)}
+        >
           {children}
         </div>
       </Paper>

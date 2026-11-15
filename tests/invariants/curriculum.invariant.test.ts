@@ -37,11 +37,7 @@ test("Curriculum Invariant 1: All NC.2.OA.3 problem seeds strictly pass standard
     assert.equal(seed.context, expectedContexts[idx])
 
     const res = validateNC2OA3Item(seed)
-    assert.equal(
-      res.valid,
-      true,
-      `Seed ${seed.id} failed validation: ${res.errors.join(", ")}`
-    )
+    assert.equal(res.valid, true, `Seed ${seed.id} failed validation: ${res.errors.join(", ")}`)
     assert.equal(res.errors.length, 0)
 
     // Mathematical Invariants
@@ -78,11 +74,7 @@ test("Curriculum Invariant 2: All NC.2.OA.4 problem seeds strictly pass standard
     assert.equal(seed.context, exp.context)
 
     const res = validateNC2OA4Item(seed)
-    assert.equal(
-      res.valid,
-      true,
-      `Seed ${seed.id} failed validation: ${res.errors.join(", ")}`
-    )
+    assert.equal(res.valid, true, `Seed ${seed.id} failed validation: ${res.errors.join(", ")}`)
     assert.equal(res.errors.length, 0)
 
     // Standard Bounds Invariants (up to 5x5)
@@ -153,10 +145,7 @@ test("Curriculum Invariant 3: NC.2.OA.3 bounds validator catches out-of-range, i
   // Non-object or missing standard
   assert.equal(validateNC2OA3Item(null).valid, false)
   assert.equal(validateNC2OA3Item(undefined).valid, false)
-  assert.equal(
-    validateNC2OA3Item({ standard: "NC.2.OA.4" } as unknown).valid,
-    false
-  )
+  assert.equal(validateNC2OA3Item({ standard: "NC.2.OA.4" } as unknown).valid, false)
 })
 
 test("Curriculum Invariant 4: NC.2.OA.4 bounds validator catches dimensions > 5, token mismatches, and equation errors", () => {
@@ -209,7 +198,9 @@ test("Curriculum Invariant 4: NC.2.OA.4 bounds validator catches dimensions > 5,
     equationCol: "3 + 3 + 3 + 3 = 12",
   })
   assert.equal(mismatchTotal.valid, false)
-  assert.ok(mismatchTotal.errors.some((e) => e.includes("totalTokens must equal targetRows * targetCols")))
+  assert.ok(
+    mismatchTotal.errors.some((e) => e.includes("totalTokens must equal targetRows * targetCols")),
+  )
 })
 
 test("Curriculum Invariant 5: Seamless integration with Mathematical Evaluator for all NC.2.OA.4 seeds", () => {
@@ -234,7 +225,7 @@ test("Curriculum Invariant 5: Seamless integration with Mathematical Evaluator f
     assert.equal(
       diag.status,
       "correct",
-      `Expected seed ${item.id} (${item.targetRows}x${item.targetCols}) to evaluate as correct`
+      `Expected seed ${item.id} (${item.targetRows}x${item.targetCols}) to evaluate as correct`,
     )
     if (diag.status === "correct") {
       assert.equal(diag.equationRow, item.equationRow)
@@ -270,7 +261,7 @@ test("Curriculum Invariant 6: Seamless integration with Mathematical Evaluator f
       assert.equal(
         diag.status,
         "correct_even",
-        `Expected ${item.id} (${item.totalTokens}) to evaluate as correct_even`
+        `Expected ${item.id} (${item.totalTokens}) to evaluate as correct_even`,
       )
       if (diag.status === "correct_even") {
         assert.equal(diag.pairs, item.expectedPairs)
@@ -280,7 +271,7 @@ test("Curriculum Invariant 6: Seamless integration with Mathematical Evaluator f
       assert.equal(
         diag.status,
         "correct_odd",
-        `Expected ${item.id} (${item.totalTokens}) to evaluate as correct_odd`
+        `Expected ${item.id} (${item.totalTokens}) to evaluate as correct_odd`,
       )
       if (diag.status === "correct_odd") {
         assert.equal(diag.pairs, item.expectedPairs)
@@ -379,11 +370,7 @@ test("Curriculum Invariant 7: All NC.2.G.3 problem seeds strictly pass standard 
     assert.ok(seed.narrative.length >= 10)
 
     const res = validateNC2GItem(seed)
-    assert.equal(
-      res.valid,
-      true,
-      `Seed ${seed.id} failed validation: ${res.errors.join(", ")}`
-    )
+    assert.equal(res.valid, true, `Seed ${seed.id} failed validation: ${res.errors.join(", ")}`)
     assert.equal(res.errors.length, 0)
 
     assert.doesNotThrow(() => assertValidNC2GItem(seed))
@@ -409,9 +396,7 @@ test("Curriculum Invariant 8: NC.2.G.3 bounds validator catches invalid shares (
     equation: "1 halves = 1 whole",
   })
   assert.equal(underShares.valid, false)
-  assert.ok(
-    underShares.errors.some((e) => e.includes("targetShares must be 2, 3, or 4"))
-  )
+  assert.ok(underShares.errors.some((e) => e.includes("targetShares must be 2, 3, or 4")))
 
   // Invalid shares > 4 (e.g. 5)
   const overShares = validateNC2GItem({
@@ -426,9 +411,7 @@ test("Curriculum Invariant 8: NC.2.G.3 bounds validator catches invalid shares (
     equation: "5 fourths = 1 whole",
   })
   assert.equal(overShares.valid, false)
-  assert.ok(
-    overShares.errors.some((e) => e.includes("targetShares must be 2, 3, or 4"))
-  )
+  assert.ok(overShares.errors.some((e) => e.includes("targetShares must be 2, 3, or 4")))
 
   // Wrong standard (not NC.2.G.3)
   const wrongStandard = validateNC2GItem({
@@ -443,9 +426,7 @@ test("Curriculum Invariant 8: NC.2.G.3 bounds validator catches invalid shares (
     equation: "2 halves = 1 whole",
   })
   assert.equal(wrongStandard.valid, false)
-  assert.ok(
-    wrongStandard.errors.some((e) => e.includes("Standard must be 'NC.2.G.3'"))
-  )
+  assert.ok(wrongStandard.errors.some((e) => e.includes("Standard must be 'NC.2.G.3'")))
 
   // Short narrative (< 10 chars)
   const shortNarrative = validateNC2GItem({
@@ -460,11 +441,7 @@ test("Curriculum Invariant 8: NC.2.G.3 bounds validator catches invalid shares (
     equation: "2 halves = 1 whole",
   })
   assert.equal(shortNarrative.valid, false)
-  assert.ok(
-    shortNarrative.errors.some(
-      (e) => e.includes("narrative") && e.includes("10")
-    )
-  )
+  assert.ok(shortNarrative.errors.some((e) => e.includes("narrative") && e.includes("10")))
 
   // Non-matching verbal names (targetShares 3 with verbalShareName 'halves')
   const mismatchVerbal = validateNC2GItem({
@@ -479,11 +456,7 @@ test("Curriculum Invariant 8: NC.2.G.3 bounds validator catches invalid shares (
     equation: "3 halves = 1 whole",
   })
   assert.equal(mismatchVerbal.valid, false)
-  assert.ok(
-    mismatchVerbal.errors.some((e) =>
-      e.includes("verbalShareName must be 'thirds'")
-    )
-  )
+  assert.ok(mismatchVerbal.errors.some((e) => e.includes("verbalShareName must be 'thirds'")))
 
   // Non-matching equation
   const mismatchEquation = validateNC2GItem({
@@ -499,9 +472,7 @@ test("Curriculum Invariant 8: NC.2.G.3 bounds validator catches invalid shares (
   })
   assert.equal(mismatchEquation.valid, false)
   assert.ok(
-    mismatchEquation.errors.some((e) =>
-      e.includes("equation must be '2 halves = 1 whole'")
-    )
+    mismatchEquation.errors.some((e) => e.includes("equation must be '2 halves = 1 whole'")),
   )
 
   // Invalid shapeType
@@ -518,9 +489,7 @@ test("Curriculum Invariant 8: NC.2.G.3 bounds validator catches invalid shares (
   })
   assert.equal(invalidShape.valid, false)
   assert.ok(
-    invalidShape.errors.some((e) =>
-      e.includes("shapeType must be 'rectangle' or 'circle'")
-    )
+    invalidShape.errors.some((e) => e.includes("shapeType must be 'rectangle' or 'circle'")),
   )
 
   // Non-object / null / undefined / primitive
@@ -549,7 +518,7 @@ test("Curriculum Invariant 9: Functional compatibility with Mathematical Evaluat
     assert.equal(
       diag.status,
       "correct",
-      `Expected seed ${item.id} (${item.shapeType}, ${item.targetShares} shares) to evaluate as correct`
+      `Expected seed ${item.id} (${item.shapeType}, ${item.targetShares} shares) to evaluate as correct`,
     )
     if (diag.status === "correct") {
       assert.equal(diag.shares, item.targetShares)
@@ -559,7 +528,7 @@ test("Curriculum Invariant 9: Functional compatibility with Mathematical Evaluat
       for (const fraction of diag.shareFractions) {
         assert.ok(
           Math.abs(fraction - 1 / k) <= 0.05,
-          `Share fraction ${fraction} should match 1/${k}`
+          `Share fraction ${fraction} should match 1/${k}`,
         )
       }
     }

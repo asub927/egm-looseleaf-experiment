@@ -31,7 +31,9 @@ function ContextMenu({ ...props }: React.ComponentProps<typeof ContextMenuPrimit
   return <ContextMenuPrimitive.Root data-slot="context-menu" {...props} />
 }
 
-function ContextMenuTrigger({ ...props }: React.ComponentProps<typeof ContextMenuPrimitive.Trigger>) {
+function ContextMenuTrigger({
+  ...props
+}: React.ComponentProps<typeof ContextMenuPrimitive.Trigger>) {
   return <ContextMenuPrimitive.Trigger data-slot="context-menu-trigger" {...props} />
 }
 
@@ -47,13 +49,25 @@ function ContextMenuSub({ ...props }: React.ComponentProps<typeof ContextMenuPri
   return <ContextMenuPrimitive.Sub data-slot="context-menu-sub" {...props} />
 }
 
-function ContextMenuRadioGroup({ ...props }: React.ComponentProps<typeof ContextMenuPrimitive.RadioGroup>) {
+function ContextMenuRadioGroup({
+  ...props
+}: React.ComponentProps<typeof ContextMenuPrimitive.RadioGroup>) {
   return <ContextMenuPrimitive.RadioGroup data-slot="context-menu-radio-group" {...props} />
 }
 
-function ContextMenuSubTrigger({ className, inset, children, ...props }: React.ComponentProps<typeof ContextMenuPrimitive.SubTrigger> & { inset?: boolean }) {
+function ContextMenuSubTrigger({
+  className,
+  inset,
+  children,
+  ...props
+}: React.ComponentProps<typeof ContextMenuPrimitive.SubTrigger> & { inset?: boolean }) {
   return (
-    <ContextMenuPrimitive.SubTrigger data-slot="context-menu-sub-trigger" data-inset={inset} className={cn(MENU_SUB_TRIGGER, className)} {...props}>
+    <ContextMenuPrimitive.SubTrigger
+      data-slot="context-menu-sub-trigger"
+      data-inset={inset}
+      className={cn(MENU_SUB_TRIGGER, className)}
+      {...props}
+    >
       {children}
       <Icon name="chevron-right" size={16} className="ms-auto" />
     </ContextMenuPrimitive.SubTrigger>
@@ -75,8 +89,21 @@ function ContextMenuSubContent({
   const split = splitMenuClass(className)
   return (
     <ContextMenuPrimitive.SubContent asChild alignOffset={alignOffset} {...props}>
-      <Paper data-slot="context-menu-sub-content" stock={stock} edge={edge} tilt={tilt} tape={tape} rules="none" seed={seed} {...scope} className={cn(menuContentClass("context-menu"), split.content)}>
-        <div data-slot="context-menu-viewport" className={menuViewportClass("context-menu", split.viewport)}>
+      <Paper
+        data-slot="context-menu-sub-content"
+        stock={stock}
+        edge={edge}
+        tilt={tilt}
+        tape={tape}
+        rules="none"
+        seed={seed}
+        {...scope}
+        className={cn(menuContentClass("context-menu"), split.content)}
+      >
+        <div
+          data-slot="context-menu-viewport"
+          className={menuViewportClass("context-menu", split.viewport)}
+        >
           {children}
         </div>
       </Paper>
@@ -99,8 +126,25 @@ function ContextMenuContent({
   return (
     <ContextMenuPrimitive.Portal>
       <ContextMenuPrimitive.Content asChild {...props}>
-        <Paper data-slot="context-menu-content" stock={stock} edge={edge} tilt={tilt} tape={tape} rules="none" seed={seed} {...scope} className={cn(menuContentClass("context-menu"), "data-[state=open]:animate-pop", split.content)}>
-          <div data-slot="context-menu-viewport" className={menuViewportClass("context-menu", split.viewport)}>
+        <Paper
+          data-slot="context-menu-content"
+          stock={stock}
+          edge={edge}
+          tilt={tilt}
+          tape={tape}
+          rules="none"
+          seed={seed}
+          {...scope}
+          className={cn(
+            menuContentClass("context-menu"),
+            "data-[state=open]:animate-pop",
+            split.content,
+          )}
+        >
+          <div
+            data-slot="context-menu-viewport"
+            className={menuViewportClass("context-menu", split.viewport)}
+          >
             {children}
           </div>
         </Paper>
@@ -118,14 +162,36 @@ function ContextMenuItem({
   inset?: boolean
   variant?: "default" | "destructive"
 }) {
-  return <ContextMenuPrimitive.Item data-slot="context-menu-item" data-inset={inset} data-variant={variant} className={cn(MENU_ITEM, className)} {...props} />
+  return (
+    <ContextMenuPrimitive.Item
+      data-slot="context-menu-item"
+      data-inset={inset}
+      data-variant={variant}
+      className={cn(MENU_ITEM, className)}
+      {...props}
+    />
+  )
 }
 
-function ContextMenuCheckboxItem({ className, children, checked, ...props }: React.ComponentProps<typeof ContextMenuPrimitive.CheckboxItem>) {
+function ContextMenuCheckboxItem({
+  className,
+  children,
+  checked,
+  ...props
+}: React.ComponentProps<typeof ContextMenuPrimitive.CheckboxItem>) {
   return (
-    <ContextMenuPrimitive.CheckboxItem data-slot="context-menu-checkbox-item" className={cn(MENU_CHOICE_ITEM, className)} checked={checked} {...props}>
+    <ContextMenuPrimitive.CheckboxItem
+      data-slot="context-menu-checkbox-item"
+      className={cn(MENU_CHOICE_ITEM, className)}
+      checked={checked}
+      {...props}
+    >
       <span data-slot="context-menu-item-indicator" className={MENU_INDICATOR}>
-        <Icon name="square" size={16} className="absolute text-pencil-mark forced-colors:text-[CanvasText]" />
+        <Icon
+          name="square"
+          size={16}
+          className="absolute text-pencil-mark forced-colors:text-[CanvasText]"
+        />
         <ContextMenuPrimitive.ItemIndicator className={MENU_MARK}>
           <Icon name="check" size={22} className="-translate-y-px" />
         </ContextMenuPrimitive.ItemIndicator>
@@ -135,11 +201,23 @@ function ContextMenuCheckboxItem({ className, children, checked, ...props }: Rea
   )
 }
 
-function ContextMenuRadioItem({ className, children, ...props }: React.ComponentProps<typeof ContextMenuPrimitive.RadioItem>) {
+function ContextMenuRadioItem({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof ContextMenuPrimitive.RadioItem>) {
   return (
-    <ContextMenuPrimitive.RadioItem data-slot="context-menu-radio-item" className={cn(MENU_CHOICE_ITEM, className)} {...props}>
+    <ContextMenuPrimitive.RadioItem
+      data-slot="context-menu-radio-item"
+      className={cn(MENU_CHOICE_ITEM, className)}
+      {...props}
+    >
       <span data-slot="context-menu-item-indicator" className={MENU_INDICATOR}>
-        <Icon name="circle" size={16} className="absolute text-pencil-mark forced-colors:text-[CanvasText]" />
+        <Icon
+          name="circle"
+          size={16}
+          className="absolute text-pencil-mark forced-colors:text-[CanvasText]"
+        />
         <ContextMenuPrimitive.ItemIndicator className={MENU_MARK}>
           <Icon name="dot" size={26} />
         </ContextMenuPrimitive.ItemIndicator>
@@ -149,11 +227,25 @@ function ContextMenuRadioItem({ className, children, ...props }: React.Component
   )
 }
 
-function ContextMenuLabel({ className, inset, ...props }: React.ComponentProps<typeof ContextMenuPrimitive.Label> & { inset?: boolean }) {
-  return <ContextMenuPrimitive.Label data-slot="context-menu-label" data-inset={inset} className={cn(MENU_LABEL, className)} {...props} />
+function ContextMenuLabel({
+  className,
+  inset,
+  ...props
+}: React.ComponentProps<typeof ContextMenuPrimitive.Label> & { inset?: boolean }) {
+  return (
+    <ContextMenuPrimitive.Label
+      data-slot="context-menu-label"
+      data-inset={inset}
+      className={cn(MENU_LABEL, className)}
+      {...props}
+    />
+  )
 }
 
-function ContextMenuSeparator({ className, ...props }: React.ComponentProps<typeof ContextMenuPrimitive.Separator>) {
+function ContextMenuSeparator({
+  className,
+  ...props
+}: React.ComponentProps<typeof ContextMenuPrimitive.Separator>) {
   return (
     <ContextMenuPrimitive.Separator asChild {...props}>
       <Separator data-slot="context-menu-separator" className={cn(MENU_SEPARATOR, className)} />

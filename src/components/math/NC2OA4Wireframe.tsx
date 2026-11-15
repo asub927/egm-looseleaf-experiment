@@ -15,17 +15,8 @@ import { SupplyTray } from "@/components/math/SupplyTray"
 import { MascotCompanion } from "@/components/math/MascotCompanion"
 import { useArrayScaffolding } from "@/hooks/use-socratic-scaffolding"
 import { useAudioNarration } from "@/hooks/use-audio-narration"
-import {
-  playStampThud,
-  playPickupChirp,
-  playNudgeTone,
-  playVictoryFanfare,
-} from "@/lib/audio/sfx"
-import {
-  loadStudentProfile,
-  addStars,
-  markStandardMastered,
-} from "@/lib/storage/profile"
+import { playStampThud, playPickupChirp, playNudgeTone, playVictoryFanfare } from "@/lib/audio/sfx"
+import { loadStudentProfile, addStars, markStandardMastered } from "@/lib/storage/profile"
 import type { DeskTheme } from "@/App"
 
 const ROWS = 5
@@ -65,12 +56,14 @@ export function NC2OA4Wireframe({
   const challenge = ARRAY_CHALLENGES[challengeIdx]
 
   const [grid, setGrid] = React.useState<boolean[][]>(() =>
-    Array(ROWS).fill(null).map(() => Array(COLS).fill(false))
+    Array(ROWS)
+      .fill(null)
+      .map(() => Array(COLS).fill(false)),
   )
   const [supplyCount, setSupplyCount] = React.useState<number>(challenge.totalCookies)
   const [activeLens, setActiveLens] = React.useState<"none" | "row" | "col">("none")
   const [speech, setSpeech] = React.useState<string>(
-    `Hi Kit! Can you bake ${challenge.totalCookies} cookies into ${challenge.targetRows} equal rows? Tap a cookie to place it!`
+    `Hi Kit! Can you bake ${challenge.totalCookies} cookies into ${challenge.targetRows} equal rows? Tap a cookie to place it!`,
   )
   const [isCorrectArray, setIsCorrectArray] = React.useState<boolean>(false)
   const [discoveredCommutative, setDiscoveredCommutative] = React.useState<boolean>(false)
@@ -107,12 +100,16 @@ export function NC2OA4Wireframe({
         (c) =>
           c.targetRows === newSpec.targetRows &&
           c.targetCols === newSpec.targetCols &&
-          c.totalCookies === newSpec.totalTokens
+          c.totalCookies === newSpec.totalTokens,
       )
       const targetIdx = matchIdx !== -1 ? matchIdx : 0
       setChallengeIdx(targetIdx)
       const nextChal = ARRAY_CHALLENGES[targetIdx]
-      setGrid(Array(ROWS).fill(null).map(() => Array(COLS).fill(false)))
+      setGrid(
+        Array(ROWS)
+          .fill(null)
+          .map(() => Array(COLS).fill(false)),
+      )
       setSupplyCount(nextChal.totalCookies)
       setActiveLens("none")
       setIsCorrectArray(false)
@@ -134,7 +131,11 @@ export function NC2OA4Wireframe({
   const switchChallenge = (idx: number) => {
     const nextChal = ARRAY_CHALLENGES[idx]
     setChallengeIdx(idx)
-    setGrid(Array(ROWS).fill(null).map(() => Array(COLS).fill(false)))
+    setGrid(
+      Array(ROWS)
+        .fill(null)
+        .map(() => Array(COLS).fill(false)),
+    )
     setSupplyCount(nextChal.totalCookies)
     setActiveLens("none")
     setIsCorrectArray(false)
@@ -152,7 +153,7 @@ export function NC2OA4Wireframe({
     if (isOccupied) {
       if (soundEnabled) playPickupChirp()
       const newGrid = grid.map((row, ri) =>
-        row.map((cell, ci) => (ri === r && ci === c ? false : cell))
+        row.map((cell, ci) => (ri === r && ci === c ? false : cell)),
       )
       setGrid(newGrid)
       setSupplyCount((prev) => Math.min(challenge.totalCookies, prev + 1))
@@ -171,7 +172,7 @@ export function NC2OA4Wireframe({
       }
       if (soundEnabled) playStampThud()
       const newGrid = grid.map((row, ri) =>
-        row.map((cell, ci) => (ri === r && ci === c ? true : cell))
+        row.map((cell, ci) => (ri === r && ci === c ? true : cell)),
       )
       setGrid(newGrid)
       setSupplyCount((prev) => Math.max(0, prev - 1))
@@ -239,7 +240,11 @@ export function NC2OA4Wireframe({
     if (soundEnabled) playNudgeTone()
     setIsCorrectArray(false)
 
-    if (diagnostic.status === "orientation_error" || diagnostic.status === "wrong_row_count" || diagnostic.status === "unequal_rows") {
+    if (
+      diagnostic.status === "orientation_error" ||
+      diagnostic.status === "wrong_row_count" ||
+      diagnostic.status === "unequal_rows"
+    ) {
       setActiveLens("row")
     }
 
@@ -290,7 +295,11 @@ export function NC2OA4Wireframe({
   }
 
   const resetAll = () => {
-    setGrid(Array(ROWS).fill(null).map(() => Array(COLS).fill(false)))
+    setGrid(
+      Array(ROWS)
+        .fill(null)
+        .map(() => Array(COLS).fill(false)),
+    )
     setSupplyCount(challenge.totalCookies)
     setIsCorrectArray(false)
     setDiscoveredCommutative(false)
@@ -304,7 +313,7 @@ export function NC2OA4Wireframe({
   const readPromptAloud = () => {
     narration.speak(
       `Can you arrange ${challenge.totalCookies} cookies into ${challenge.targetRows} equal rows?`,
-      { pose: "point" }
+      { pose: "point" },
     )
   }
 
@@ -313,7 +322,7 @@ export function NC2OA4Wireframe({
     (r: number, c: number) => {
       return scaffolding.isGhostVisible && scaffolding.isGhostCell(r, c) && !grid[r][c]
     },
-    [scaffolding, grid]
+    [scaffolding, grid],
   )
 
   return (
@@ -361,7 +370,9 @@ export function NC2OA4Wireframe({
 
           {/* Theme Switcher Pill */}
           <div className="hidden md:flex items-center gap-1 bg-stone-200/80 p-0.5 rounded-md border border-stone-300 text-xs">
-            <span className="text-[10px] uppercase font-bold text-ink-soft px-1 hidden lg:inline">Desk:</span>
+            <span className="text-[10px] uppercase font-bold text-ink-soft px-1 hidden lg:inline">
+              Desk:
+            </span>
             <button
               type="button"
               title="Honey Birch Desk"
@@ -442,7 +453,12 @@ export function NC2OA4Wireframe({
             {soundEnabled ? "🔊 Sound ON" : "🔇 Sound OFF"}
           </Button>
 
-          <Button variant="ghost" size="xs" onClick={resetAll} className="h-7 text-xs px-2 cursor-pointer">
+          <Button
+            variant="ghost"
+            size="xs"
+            onClick={resetAll}
+            className="h-7 text-xs px-2 cursor-pointer"
+          >
             🔄 Reset
           </Button>
         </div>
@@ -450,7 +466,6 @@ export function NC2OA4Wireframe({
 
       {/* 2. Main Viewport Grid (Zero-Scroll 100dvh) */}
       <main className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-[1fr_280px] lg:grid-cols-[1fr_300px] gap-2.5 items-stretch overflow-hidden">
-        
         {/* Left Column: Clean Baking Sheet Workspace (Zero Perimeter Row/Col (0) Clutter) */}
         <div className="h-full min-h-0 flex flex-col relative overflow-hidden">
           <Paper
@@ -460,16 +475,33 @@ export function NC2OA4Wireframe({
             className="h-full w-full p-3 sm:p-4 flex flex-col justify-between border-2 border-stone-300 relative overflow-hidden bg-amber-50/30"
           >
             {/* Washi Tape Fasteners */}
-            <Tape kind="washi-dots" color="lemon" length={56} height={18} className="absolute -top-2 left-6" />
-            <Tape kind="masking" color="tangerine" length={56} height={18} className="absolute -top-2 right-6" />
+            <Tape
+              kind="washi-dots"
+              color="lemon"
+              length={56}
+              height={18}
+              className="absolute -top-2 left-6"
+            />
+            <Tape
+              kind="masking"
+              color="tangerine"
+              length={56}
+              height={18}
+              className="absolute -top-2 right-6"
+            />
 
             {/* A. Compact Socratic Prompt Strip with Read-Aloud Voice */}
             <div className="w-full shrink-0 px-3 py-2 bg-amber-100/90 border border-amber-300 rounded-lg shadow-xs flex items-center justify-between gap-2 mb-1.5">
               <div className="text-sm sm:text-base font-script leading-tight text-amber-950 font-bold flex items-center gap-1.5 flex-wrap">
                 <span>Can you arrange</span>
-                <Highlight tone="yellow" weight="heavy">{challenge.totalCookies} cookies</Highlight>
+                <Highlight tone="yellow" weight="heavy">
+                  {challenge.totalCookies} cookies
+                </Highlight>
                 <span>into</span>
-                <Highlight tone="yellow" weight="heavy">{challenge.targetRows} equal rows</Highlight>?
+                <Highlight tone="yellow" weight="heavy">
+                  {challenge.targetRows} equal rows
+                </Highlight>
+                ?
               </div>
               <Button
                 variant="ghost"
@@ -512,7 +544,18 @@ export function NC2OA4Wireframe({
                 <div className="flex items-center gap-2">
                   <Seal variant="scallop" text="EXCELLENT!" mark="star" tone="red" size={32} />
                   <div className="text-xs text-emerald-950 font-bold">
-                    <span>🎉 <strong>{challenge.targetRows} rows of {challenge.targetCols}</strong> ({challenge.targetRows} × {challenge.targetCols}) and <strong>{challenge.targetCols} columns of {challenge.targetRows}</strong> ({challenge.targetCols} × {challenge.targetRows}) both make <strong>{challenge.totalCookies} cookies</strong>!</span>
+                    <span>
+                      🎉{" "}
+                      <strong>
+                        {challenge.targetRows} rows of {challenge.targetCols}
+                      </strong>{" "}
+                      ({challenge.targetRows} × {challenge.targetCols}) and{" "}
+                      <strong>
+                        {challenge.targetCols} columns of {challenge.targetRows}
+                      </strong>{" "}
+                      ({challenge.targetCols} × {challenge.targetRows}) both make{" "}
+                      <strong>{challenge.totalCookies} cookies</strong>!
+                    </span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5">
@@ -546,7 +589,8 @@ export function NC2OA4Wireframe({
             ) : isCorrectArray ? (
               <div className="w-full shrink-0 px-3 py-1.5 bg-sky-100 border-2 border-sky-300 rounded-lg shadow-xs flex items-center justify-between gap-2 mb-1.5 animate-pulse">
                 <span className="text-xs font-bold text-sky-900">
-                  🌟 You made {challenge.targetRows} rows of {challenge.targetCols}! Ready to discover what happens when you look up and down?
+                  🌟 You made {challenge.targetRows} rows of {challenge.targetCols}! Ready to
+                  discover what happens when you look up and down?
                 </span>
                 <Button
                   size="xs"
@@ -577,21 +621,28 @@ export function NC2OA4Wireframe({
                 {discoveredCommutative ? (
                   <div className="flex items-center gap-3">
                     <span className="flex items-center gap-1.5 text-xs text-amber-900 font-bold bg-amber-100 px-2 py-0.5 rounded border border-amber-300">
-                      Rows: {Array(challenge.targetRows).fill(challenge.targetCols).join(" + ")} = {challenge.totalCookies}
+                      Rows: {Array(challenge.targetRows).fill(challenge.targetCols).join(" + ")} ={" "}
+                      {challenge.totalCookies}
                     </span>
                     <span className="text-stone-400 font-bold">⇄</span>
                     <span className="flex items-center gap-1.5 text-xs text-sky-900 font-bold bg-sky-100 px-2 py-0.5 rounded border border-sky-300">
-                      Cols: {Array(challenge.targetCols).fill(challenge.targetRows).join(" + ")} = {challenge.totalCookies}
+                      Cols: {Array(challenge.targetCols).fill(challenge.targetRows).join(" + ")} ={" "}
+                      {challenge.totalCookies}
                     </span>
                   </div>
                 ) : activeLens === "row" ? (
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] uppercase text-ink-soft hidden sm:inline">Row Addition:</span>
+                    <span className="text-[11px] uppercase text-ink-soft hidden sm:inline">
+                      Row Addition:
+                    </span>
                     <Handwritten className="text-lg text-amber-900 font-bold">
                       {rowCounts.filter((c) => c > 0).join(" + ") || "0"} = {totalPlaced} cookies
                     </Handwritten>
                     {isCorrectArray && (
-                      <Badge variant="outline" className="text-[10px] h-5 bg-emerald-100 text-emerald-800 border-emerald-300 font-bold">
+                      <Badge
+                        variant="outline"
+                        className="text-[10px] h-5 bg-emerald-100 text-emerald-800 border-emerald-300 font-bold"
+                      >
                         {challenge.targetRows} rows of {challenge.targetCols} ✔
                       </Badge>
                     )}
@@ -659,8 +710,8 @@ export function NC2OA4Wireframe({
               narration.isSpeaking
                 ? narration.mascotPose
                 : scaffolding.mascotPose !== "idle"
-                ? scaffolding.mascotPose
-                : narration.mascotPose
+                  ? scaffolding.mascotPose
+                  : narration.mascotPose
             }
             speech={narration.currentText || speech}
             tierBadge={scaffolding.tierBadge}
@@ -671,8 +722,8 @@ export function NC2OA4Wireframe({
               scaffolding.wasDemonstrated
                 ? "🔄 Try Similar Challenge (Earn ⭐)"
                 : scaffolding.tier === 2
-                ? "💡 Show Me Step 1 (Demonstrate)"
-                : "💡 Ask Pencil Pal for a Hint"
+                  ? "💡 Show Me Step 1 (Demonstrate)"
+                  : "💡 Ask Pencil Pal for a Hint"
             }
             onAskHint={handleAskHint}
           />

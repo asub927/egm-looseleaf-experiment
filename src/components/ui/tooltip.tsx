@@ -9,8 +9,17 @@ import { useDensity, useInkScope, useInkSeed, useInkTier } from "@/lib/ink/react
 import { pointerMark } from "@/lib/ink/recipes/overlay-ink"
 import { cn } from "@/lib/utils"
 
-function TooltipProvider({ delayDuration = 0, ...props }: React.ComponentProps<typeof TooltipPrimitive.Provider>) {
-  return <TooltipPrimitive.Provider data-slot="tooltip-provider" delayDuration={delayDuration} {...props} />
+function TooltipProvider({
+  delayDuration = 0,
+  ...props
+}: React.ComponentProps<typeof TooltipPrimitive.Provider>) {
+  return (
+    <TooltipPrimitive.Provider
+      data-slot="tooltip-provider"
+      delayDuration={delayDuration}
+      {...props}
+    />
+  )
 }
 
 function Tooltip({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Root>) {
@@ -24,7 +33,10 @@ function TooltipTrigger({ ...props }: React.ComponentProps<typeof TooltipPrimiti
 function TooltipPointer({ seed }: { seed: string }) {
   const tier = useInkTier()
   const calm = useDensity() === "calm"
-  const res = React.useMemo(() => pointerMark(`${seed}|pointer`, { tier, calm, w: 18, h: 16 }), [seed, tier, calm])
+  const res = React.useMemo(
+    () => pointerMark(`${seed}|pointer`, { tier, calm, w: 18, h: 16 }),
+    [seed, tier, calm],
+  )
   return (
     <TooltipPrimitive.Arrow asChild>
       <PropSvg
@@ -59,7 +71,12 @@ function TooltipContent({
   const seed = useInkSeed(seedProp)
   return (
     <TooltipPrimitive.Portal>
-      <TooltipPrimitive.Content asChild sideOffset={sideOffset} collisionPadding={collisionPadding} {...props}>
+      <TooltipPrimitive.Content
+        asChild
+        sideOffset={sideOffset}
+        collisionPadding={collisionPadding}
+        {...props}
+      >
         <Paper
           data-slot="tooltip-content"
           stock={stock}
@@ -71,7 +88,7 @@ function TooltipContent({
             "z-(--ll-z-popover) w-fit max-w-[min(22rem,calc(100vw-1rem))] origin-(--radix-tooltip-content-transform-origin) px-2.5 py-1.5 text-sm/snug break-words text-balance text-foreground",
             "duration-(--ll-dur-pop) animate-in fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
             "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
-            className
+            className,
           )}
         >
           {children}

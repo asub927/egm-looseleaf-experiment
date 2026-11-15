@@ -27,7 +27,8 @@ const MISSING: ArtDef = {
 
 const UI_WEIGHT = 1.12
 const UI_WEIGHT_MAX_PX = 20
-const iconNib = (def: ArtDef, px: number): number => Math.min(3.4, Math.max(1.45, px * (def.nibK ?? 0.068)))
+const iconNib = (def: ArtDef, px: number): number =>
+  Math.min(3.4, Math.max(1.45, px * (def.nibK ?? 0.068)))
 
 function Icon({
   name,
@@ -60,7 +61,12 @@ function Icon({
   const px = Math.max(8, Math.round(explicit ?? 16))
   const k = weight ?? (tone === "ui" && px <= UI_WEIGHT_MAX_PX ? UI_WEIGHT : 1)
   const res = memo(`icon|${id}|${px}|${tone}|${accent ?? ""}|${seed ?? ""}|${k}`, () =>
-    drawSkeleton(def, px, seed ?? id, { tone, accent, kind: "icon", ...(k === 1 ? {} : { nib: iconNib(def, px) * k }) })
+    drawSkeleton(def, px, seed ?? id, {
+      tone,
+      accent,
+      kind: "icon",
+      ...(k === 1 ? {} : { nib: iconNib(def, px) * k }),
+    }),
   )
   const axis = flip === true ? "x" : flip
   return (
@@ -82,7 +88,7 @@ function Icon({
         def.rtl === "flip" && "rtl:-scale-x-100",
         def.mirror && axis === "x" && "-scale-x-100",
         def.mirror && axis === "y" && "-scale-y-100",
-        className
+        className,
       )}
       dangerouslySetInnerHTML={{ __html: res.svg }}
       {...props}

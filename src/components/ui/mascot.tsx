@@ -35,7 +35,11 @@ function Mascot({
   const def = flip ?? (mascot as Record<string, ArtDef>)[pose]
   if (!def) return null
   const px = Math.max(16, Math.round(size))
-  const res = memo(`mascot|${pose}|${flip ? frame : ""}|${px}|${tier}|${seed ?? ""}|${uid}`, () => drawMascot(def, px, seed ?? pose, { tier, idPrefix: `ll-${uid}` }), 240)
+  const res = memo(
+    `mascot|${pose}|${flip ? frame : ""}|${px}|${tier}|${seed ?? ""}|${uid}`,
+    () => drawMascot(def, px, seed ?? pose, { tier, idPrefix: `ll-${uid}` }),
+    240,
+  )
   return (
     <svg
       data-slot="mascot"
@@ -50,7 +54,11 @@ function Mascot({
       width={res.w}
       height={res.h}
       style={style}
-      className={cn("pointer-events-none shrink-0 overflow-visible", shadow && "ll-drop-sticker", className)}
+      className={cn(
+        "pointer-events-none shrink-0 overflow-visible",
+        shadow && "ll-drop-sticker",
+        className,
+      )}
       dangerouslySetInnerHTML={{ __html: res.svg }}
       {...props}
     />

@@ -51,8 +51,16 @@ function ToggleGroup({
     seed,
   })
   const ctx = React.useMemo(
-    () => ({ variant, size, spacing, tone, vertical: orientation === "vertical", disabled: !!disabled, invalid }),
-    [variant, size, spacing, tone, orientation, disabled, invalid]
+    () => ({
+      variant,
+      size,
+      spacing,
+      tone,
+      vertical: orientation === "vertical",
+      disabled: !!disabled,
+      invalid,
+    }),
+    [variant, size, spacing, tone, orientation, disabled, invalid],
   )
   return (
     <ToggleGroupPrimitive.Root
@@ -67,7 +75,7 @@ function ToggleGroup({
       orientation={orientation}
       className={cn(
         "group/toggle-group relative isolate flex w-fit items-center gap-[--spacing(var(--gap))] data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch",
-        className
+        className,
       )}
       {...(props as React.ComponentProps<typeof ToggleGroupPrimitive.Root>)}
     >
@@ -100,7 +108,14 @@ function ToggleGroupItem({
   const invalid = own === undefined ? !!context.invalid : own === true || own === "true"
   const { hostRef, hostProps, node } = useInk({
     recipe: toggleRecipe,
-    params: { variant: v, disabled: !!disabled || !!context.disabled, tone: context.tone, joined, vertical: context.vertical, invalid },
+    params: {
+      variant: v,
+      disabled: !!disabled || !!context.disabled,
+      tone: context.tone,
+      joined,
+      vertical: context.vertical,
+      invalid,
+    },
     kind: "toggle",
     seed,
     layers: forced ? "all" : undefined,
@@ -120,7 +135,7 @@ function ToggleGroupItem({
         toggleVariants({ variant: v, size: s }),
         "w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10",
         "data-[spacing=0]:first-of-type:[&>svg_[data-part=seam]]:hidden",
-        className
+        className,
       )}
       {...props}
     >

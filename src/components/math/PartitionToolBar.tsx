@@ -36,7 +36,7 @@ export function PartitionToolBar({
     <div
       className={cn(
         "w-full shrink-0 flex items-center justify-between gap-3 flex-wrap py-2 px-3 bg-stone-100/90 rounded-xl border border-stone-300 shadow-2xs select-none",
-        className
+        className,
       )}
       role="toolbar"
       aria-label="Geometry Partition Tools"
@@ -60,7 +60,7 @@ export function PartitionToolBar({
                 "h-12 min-h-[48px] px-3.5 sm:px-4 rounded-xl text-sm sm:text-base font-bold transition-all cursor-pointer flex items-center gap-2 border-2",
                 isActive
                   ? "bg-amber-400 hover:bg-amber-500 text-stone-900 border-amber-600 shadow-md ring-2 ring-amber-400/80 active:scale-95"
-                  : "bg-stone-50 hover:bg-amber-50 text-stone-700 border-stone-300 hover:border-amber-400 active:scale-95"
+                  : "bg-stone-50 hover:bg-amber-50 text-stone-700 border-stone-300 hover:border-amber-400 active:scale-95",
               )}
               aria-pressed={isActive}
               aria-label={`Select ${label} cutter`}
@@ -73,9 +73,7 @@ export function PartitionToolBar({
                 <span
                   className={cn(
                     "text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider",
-                    isActive
-                      ? "bg-amber-900/20 text-stone-900"
-                      : "bg-amber-200/80 text-amber-900"
+                    isActive ? "bg-amber-900/20 text-stone-900" : "bg-amber-200/80 text-amber-900",
                   )}
                   title="Challenge Target Shares"
                 >
@@ -96,7 +94,7 @@ export function PartitionToolBar({
             "h-12 min-h-[48px] px-5 sm:px-6 rounded-xl font-bold text-sm sm:text-base shadow-md transition-all cursor-pointer flex items-center gap-2 active:scale-95",
             isSolved
               ? "bg-amber-600 hover:bg-amber-700 text-white border-2 border-amber-700"
-              : "bg-emerald-600 hover:bg-emerald-700 text-white border-2 border-emerald-700"
+              : "bg-emerald-600 hover:bg-emerald-700 text-white border-2 border-emerald-700",
           )}
           aria-label={isSolved ? "Check slices again" : "Check my slices"}
         >

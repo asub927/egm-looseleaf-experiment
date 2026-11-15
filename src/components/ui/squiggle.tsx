@@ -33,7 +33,12 @@ function Squiggle({
   delay?: number
   seed?: string | number
 }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: squiggleRecipe, params: { kind, orientation, tone, weight, animate }, kind: "squiggle", seed })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: squiggleRecipe,
+    params: { kind, orientation, tone, weight, animate },
+    kind: "squiggle",
+    seed,
+  })
   const { phaseRef, phaseProps } = useMarkPhase({ animate, show })
   const ready = !!node && show
   return (
@@ -46,8 +51,18 @@ function Squiggle({
       ref={useMergedRef<HTMLElement>(hostRef, phaseRef, ref as React.Ref<HTMLElement> | undefined)}
       {...(ready ? hostProps : {})}
       {...phaseProps}
-      style={{ ...(animate ? ({ "--ll-draw-delay": `${delay ?? 0}ms` } as React.CSSProperties) : undefined), ...style }}
-      className={cn("relative isolate shrink-0 outline-none", orientation === "horizontal" ? "h-4 w-full" : "h-full min-h-8 w-4", animate && MARK_REVEAL, className)}
+      style={{
+        ...(animate
+          ? ({ "--ll-draw-delay": `${delay ?? 0}ms` } as React.CSSProperties)
+          : undefined),
+        ...style,
+      }}
+      className={cn(
+        "relative isolate shrink-0 outline-none",
+        orientation === "horizontal" ? "h-4 w-full" : "h-full min-h-8 w-4",
+        animate && MARK_REVEAL,
+        className,
+      )}
       {...props}
     >
       {ready ? node : null}

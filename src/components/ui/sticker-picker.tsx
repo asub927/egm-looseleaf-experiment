@@ -7,12 +7,20 @@ import { Input } from "@/components/ui/input"
 import { Mascot } from "@/components/ui/mascot"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { useEnsureInkDefs } from "@/lib/ink/react"
-import { categoryLabel, hasSticker, stickerCatalog, stickerFace, stickerLabel, type StickerCatalogEntry } from "@/lib/ink/recipes/sticker-ink"
+import {
+  categoryLabel,
+  hasSticker,
+  stickerCatalog,
+  stickerFace,
+  stickerLabel,
+  type StickerCatalogEntry,
+} from "@/lib/ink/recipes/sticker-ink"
 import { cn } from "@/lib/utils"
 
 type StickerPickerItem = StickerCatalogEntry
 
-type StickerPickerInput = string | { name: string; label?: string; category?: string; tags?: readonly string[] }
+type StickerPickerInput =
+  string | { name: string; label?: string; category?: string; tags?: readonly string[] }
 
 function catalogFrom(list?: readonly StickerPickerInput[]): StickerPickerItem[] {
   const all = stickerCatalog()
@@ -20,11 +28,29 @@ function catalogFrom(list?: readonly StickerPickerInput[]): StickerPickerItem[] 
   const known = new Map(all.map((e) => [e.name, e]))
   return list.flatMap((entry) => {
     const name = typeof entry === "string" ? entry : entry.name
-    const base = known.get(name) ?? (hasSticker(name) ? { name, label: stickerLabel(name), category: "stickers", categoryLabel: "Stickers", tags: [] } : null)
+    const base =
+      known.get(name) ??
+      (hasSticker(name)
+        ? {
+            name,
+            label: stickerLabel(name),
+            category: "stickers",
+            categoryLabel: "Stickers",
+            tags: [],
+          }
+        : null)
     if (!base) return []
     if (typeof entry === "string") return [base]
     const category = entry.category ?? base.category
-    return [{ ...base, label: entry.label ?? base.label, category, categoryLabel: entry.category ? categoryLabel(entry.category) : base.categoryLabel, tags: [...base.tags, ...(entry.tags ?? [])] }]
+    return [
+      {
+        ...base,
+        label: entry.label ?? base.label,
+        category,
+        categoryLabel: entry.category ? categoryLabel(entry.category) : base.categoryLabel,
+        tags: [...base.tags, ...(entry.tags ?? [])],
+      },
+    ]
   })
 }
 
@@ -54,7 +80,18 @@ type StickerPickerProps = React.ComponentProps<typeof Popover> & {
 
 const NO_RECENT: readonly string[] = []
 
-function StickerPicker({ open: openProp, defaultOpen = false, onOpenChange, onSelect, value, stickers, recent = NO_RECENT, closeOnSelect = true, children, ...props }: StickerPickerProps) {
+function StickerPicker({
+  open: openProp,
+  defaultOpen = false,
+  onOpenChange,
+  onSelect,
+  value,
+  stickers,
+  recent = NO_RECENT,
+  closeOnSelect = true,
+  children,
+  ...props
+}: StickerPickerProps) {
   const [inner, setInner] = React.useState(defaultOpen)
   const open = openProp ?? inner
   const setOpen = React.useCallback(
@@ -62,7 +99,7 @@ function StickerPicker({ open: openProp, defaultOpen = false, onOpenChange, onSe
       if (openProp === undefined) setInner(next)
       onOpenChange?.(next)
     },
-    [openProp, onOpenChange]
+    [openProp, onOpenChange],
   )
   const catalog = React.useMemo(() => catalogFrom(stickers), [stickers])
   const uid = React.useId().replace(/[^a-zA-Z0-9]/g, "")
@@ -77,7 +114,7 @@ function StickerPicker({ open: openProp, defaultOpen = false, onOpenChange, onSe
         if (closeOnSelect) setOpen(false)
       },
     }),
-    [catalog, recent, value, uid, onSelect, closeOnSelect, setOpen]
+    [catalog, recent, value, uid, onSelect, closeOnSelect, setOpen],
   )
   return (
     <StickerPickerContext.Provider value={ctx}>
@@ -103,14 +140,31 @@ const matches = (e: StickerPickerItem, words: readonly string[]): boolean => {
   return words.every((w) => hay.includes(w))
 }
 
-function neighbour(sections: readonly Section[], at: { s: number; i: number }, key: string, cols: number): { s: number; i: number } | null {
+function neighbour(
+  sections: readonly Section[],
+  at: { s: number; i: number },
+  key: string,
+  cols: number,
+): { s: number; i: number } | null {
   const last = sections.length - 1
-  if (key === "ArrowRight") return at.i < sections[at.s].items.length - 1 ? { s: at.s, i: at.i + 1 } : at.s < last ? { s: at.s + 1, i: 0 } : null
-  if (key === "ArrowLeft") return at.i > 0 ? { s: at.s, i: at.i - 1 } : at.s > 0 ? { s: at.s - 1, i: sections[at.s - 1].items.length - 1 } : null
+  if (key === "ArrowRight")
+    return at.i < sections[at.s].items.length - 1
+      ? { s: at.s, i: at.i + 1 }
+      : at.s < last
+        ? { s: at.s + 1, i: 0 }
+        : null
+  if (key === "ArrowLeft")
+    return at.i > 0
+      ? { s: at.s, i: at.i - 1 }
+      : at.s > 0
+        ? { s: at.s - 1, i: sections[at.s - 1].items.length - 1 }
+        : null
   const col = at.i % cols
   if (key === "ArrowDown") {
     if (at.i + cols < sections[at.s].items.length) return { s: at.s, i: at.i + cols }
-    return at.s < last ? { s: at.s + 1, i: Math.min(col, sections[at.s + 1].items.length - 1) } : null
+    return at.s < last
+      ? { s: at.s + 1, i: Math.min(col, sections[at.s + 1].items.length - 1) }
+      : null
   }
   if (key === "ArrowUp") {
     if (at.i - cols >= 0) return { s: at.s, i: at.i - cols }
@@ -128,7 +182,13 @@ type StickerPickerContentProps = Omit<React.ComponentProps<typeof PopoverContent
   placeholder?: string
 }
 
-function StickerPickerContent({ className, columns = 5, size = 44, placeholder = "Search stickers", ...props }: StickerPickerContentProps) {
+function StickerPickerContent({
+  className,
+  columns = 5,
+  size = 44,
+  placeholder = "Search stickers",
+  ...props
+}: StickerPickerContentProps) {
   useStickerPicker()
   const perRow = Math.max(1, Math.floor(columns) || 1)
   return (
@@ -144,7 +204,15 @@ function StickerPickerContent({ className, columns = 5, size = 44, placeholder =
   )
 }
 
-function PickerBody({ columns, size, placeholder }: { columns: number; size: number; placeholder: string }) {
+function PickerBody({
+  columns,
+  size,
+  placeholder,
+}: {
+  columns: number
+  size: number
+  placeholder: string
+}) {
   const picker = useStickerPicker()
   useEnsureInkDefs()
   const [query, setQuery] = React.useState("")
@@ -163,12 +231,28 @@ function PickerBody({ columns, size, placeholder }: { columns: number; size: num
 
   const everything = React.useMemo<Section[]>(() => {
     const byName = new Map(picker.catalog.map((e) => [e.name, e]))
-    const found = picker.catalog.filter((e) => (category === "all" || e.category === category) && matches(e, words))
-    if (words.length || category !== "all") return found.length ? [{ key: "found", label: words.length ? `${found.length} found` : (categories.find(([k]) => k === category)?.[1] ?? ""), items: found }] : []
+    const found = picker.catalog.filter(
+      (e) => (category === "all" || e.category === category) && matches(e, words),
+    )
+    if (words.length || category !== "all")
+      return found.length
+        ? [
+            {
+              key: "found",
+              label: words.length
+                ? `${found.length} found`
+                : (categories.find(([k]) => k === category)?.[1] ?? ""),
+              items: found,
+            },
+          ]
+        : []
     const out: Section[] = []
-    const recent = picker.recent.map((n) => byName.get(n)).filter((e): e is StickerPickerItem => !!e)
+    const recent = picker.recent
+      .map((n) => byName.get(n))
+      .filter((e): e is StickerPickerItem => !!e)
     if (recent.length) out.push({ key: "recent", label: "Recent", items: recent })
-    for (const [key, label] of categories) out.push({ key, label, items: picker.catalog.filter((e) => e.category === key) })
+    for (const [key, label] of categories)
+      out.push({ key, label, items: picker.catalog.filter((e) => e.category === key) })
     return out
   }, [picker.catalog, picker.recent, category, categories, query])
 
@@ -183,7 +267,9 @@ function PickerBody({ columns, size, placeholder }: { columns: number; size: num
   const total = everything.reduce((n, s) => n + s.items.length, 0)
 
   const keyOf = (s: Section, e: StickerPickerItem) => `${s.key}:${e.name}`
-  const flat = sections.flatMap((s, si) => s.items.map((e, i) => ({ s: si, i, e, key: keyOf(s, e) })))
+  const flat = sections.flatMap((s, si) =>
+    s.items.map((e, i) => ({ s: si, i, e, key: keyOf(s, e) })),
+  )
   const current = flat.find((f) => f.key === activeKey) ?? flat[0] ?? null
   const optionId = (key: string) => `${listId}-${key.replace(/[^a-zA-Z0-9-]/g, "_")}`
 
@@ -216,7 +302,8 @@ function PickerBody({ columns, size, placeholder }: { columns: number; size: num
     } else if (k === "ArrowLeft" || k === "ArrowRight") {
       const rtl = getComputedStyle(el).direction === "rtl"
       const forward = (k === "ArrowRight") !== rtl
-      const caretFree = el.value === "" || (forward ? el.selectionStart === el.value.length : el.selectionEnd === 0)
+      const caretFree =
+        el.value === "" || (forward ? el.selectionStart === el.value.length : el.selectionEnd === 0)
       if (!caretFree) return
       e.preventDefault()
       goTo(neighbour(sections, at, forward ? "ArrowRight" : "ArrowLeft", columns))
@@ -251,7 +338,12 @@ function PickerBody({ columns, size, placeholder }: { columns: number; size: num
         className="w-full"
       />
       {categories.length > 1 ? (
-        <div data-slot="sticker-picker-categories" role="group" aria-label="Categories" className="-mx-1 mt-2 flex gap-1 overflow-x-auto px-1 pb-1 [mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent)] rtl:[mask-image:linear-gradient(to_left,black_calc(100%-28px),transparent)]">
+        <div
+          data-slot="sticker-picker-categories"
+          role="group"
+          aria-label="Categories"
+          className="-mx-1 mt-2 flex gap-1 overflow-x-auto px-1 pb-1 [mask-image:linear-gradient(to_right,black_calc(100%-28px),transparent)] rtl:[mask-image:linear-gradient(to_left,black_calc(100%-28px),transparent)]"
+        >
           {[["all", "All"] as const, ...categories].map(([key, label]) => (
             <button
               key={key}
@@ -264,7 +356,7 @@ function PickerBody({ columns, size, placeholder }: { columns: number; size: num
               }}
               className={cn(
                 "inline-flex min-h-6 shrink-0 items-center px-2 font-hand text-sm font-bold whitespace-nowrap text-muted-foreground transition-colors duration-(--ll-dur-hover)",
-                "hover:text-foreground aria-pressed:ll-swipe aria-pressed:text-foreground focus-visible:ll-swipe forced-colors:aria-pressed:underline"
+                "hover:text-foreground aria-pressed:ll-swipe aria-pressed:text-foreground focus-visible:ll-swipe forced-colors:aria-pressed:underline",
               )}
             >
               {label}
@@ -282,28 +374,68 @@ function PickerBody({ columns, size, placeholder }: { columns: number; size: num
         className="mt-2 max-h-64 min-h-24 overflow-y-auto overscroll-contain pe-1"
       >
         {sections.map((s) => (
-          <div key={s.key} role="group" aria-labelledby={`${listId}-h-${s.key}`} className="mb-1.5 last:mb-0">
-            <div id={`${listId}-h-${s.key}`} aria-hidden="true" className="px-1 pt-1 pb-0.5 font-script text-lg leading-none text-muted-foreground">
+          <div
+            key={s.key}
+            role="group"
+            aria-labelledby={`${listId}-h-${s.key}`}
+            className="mb-1.5 last:mb-0"
+          >
+            <div
+              id={`${listId}-h-${s.key}`}
+              aria-hidden="true"
+              className="px-1 pt-1 pb-0.5 font-script text-lg leading-none text-muted-foreground"
+            >
               {s.label}
             </div>
-            <div className="grid gap-0.5" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
+            <div
+              className="grid gap-0.5"
+              style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
+            >
               {s.items.map((e) => {
                 const key = keyOf(s, e)
-                return <Option key={key} entry={e} id={optionId(key)} active={current?.key === key} selected={picker.value === e.name} size={size} scope={`${picker.uid}${s.key}`} onActivate={() => setActiveKey(key)} onChoose={() => picker.choose(e)} />
+                return (
+                  <Option
+                    key={key}
+                    entry={e}
+                    id={optionId(key)}
+                    active={current?.key === key}
+                    selected={picker.value === e.name}
+                    size={size}
+                    scope={`${picker.uid}${s.key}`}
+                    onActivate={() => setActiveKey(key)}
+                    onChoose={() => picker.choose(e)}
+                  />
+                )
               })}
             </div>
           </div>
         ))}
       </div>
       {count === 0 ? (
-        <div data-slot="sticker-picker-empty" className="mt-2 grid min-h-24 place-items-center gap-1 px-2 py-5 text-center">
+        <div
+          data-slot="sticker-picker-empty"
+          className="mt-2 grid min-h-24 place-items-center gap-1 px-2 py-5 text-center"
+        >
           <Mascot pose="search" size={64} />
-          <p className="font-script text-xl leading-tight text-muted-foreground">{query.trim() ? <>Nothing looks like &ldquo;{query.trim()}&rdquo;.</> : "No stickers to choose from."}</p>
+          <p className="font-script text-xl leading-tight text-muted-foreground">
+            {query.trim() ? (
+              <>Nothing looks like &ldquo;{query.trim()}&rdquo;.</>
+            ) : (
+              "No stickers to choose from."
+            )}
+          </p>
         </div>
       ) : null}
-      <div className="mt-2 flex min-h-6 items-baseline justify-between gap-2 border-t border-dashed border-pencil-mark/60 pt-1.5" aria-hidden="true">
-        <span className="truncate font-script text-xl leading-none text-foreground">{current?.e.label ?? ""}</span>
-        <span className="shrink-0 text-xs text-muted-foreground">{current ? current.e.categoryLabel : ""}</span>
+      <div
+        className="mt-2 flex min-h-6 items-baseline justify-between gap-2 border-t border-dashed border-pencil-mark/60 pt-1.5"
+        aria-hidden="true"
+      >
+        <span className="truncate font-script text-xl leading-none text-foreground">
+          {current?.e.label ?? ""}
+        </span>
+        <span className="shrink-0 text-xs text-muted-foreground">
+          {current ? current.e.categoryLabel : ""}
+        </span>
       </div>
       <span role="status" className="sr-only">
         {total === 0 ? "No stickers found." : `${total} ${total === 1 ? "sticker" : "stickers"}.`}
@@ -324,7 +456,10 @@ interface OptionProps {
 }
 
 function Option({ entry, id, active, selected, size, scope, onActivate, onChoose }: OptionProps) {
-  const face = stickerFace(entry.name, size, entry.name, { peel: active ? true : undefined, idPrefix: `ll-sp${scope}${entry.name}`.replace(/[^a-zA-Z0-9-]/g, "") })
+  const face = stickerFace(entry.name, size, entry.name, {
+    peel: active ? true : undefined,
+    idPrefix: `ll-sp${scope}${entry.name}`.replace(/[^a-zA-Z0-9-]/g, ""),
+  })
   if (!face) return null
   const cell = size + 12
   return (
@@ -352,7 +487,13 @@ function Option({ entry, id, active, selected, size, scope, onActivate, onChoose
         className="pointer-events-none block overflow-visible transition-[scale,rotate] duration-(--ll-dur-hover) ease-(--ll-ease-settle) group-data-active/option:-rotate-3 group-data-active/option:scale-110 group-data-active/option:ll-drop-sticker"
         dangerouslySetInnerHTML={{ __html: face.svg }}
       />
-      {selected ? <Icon name="check" size={14} className="pointer-events-none absolute end-0.5 top-0.5 text-foreground" /> : null}
+      {selected ? (
+        <Icon
+          name="check"
+          size={14}
+          className="pointer-events-none absolute end-0.5 top-0.5 text-foreground"
+        />
+      ) : null}
     </div>
   )
 }

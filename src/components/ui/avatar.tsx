@@ -30,7 +30,13 @@ function Avatar({
   ring?: AvatarRing | "none"
   seed?: string | number
 }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: avatarRingRecipe, params: { ring: ring === "none" ? "ink" : ring }, kind: "avatar", seed, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: avatarRingRecipe,
+    params: { ring: ring === "none" ? "ink" : ring },
+    kind: "avatar",
+    seed,
+    still: true,
+  })
   const drawn = ring !== "none"
   return (
     <AvatarPrimitive.Root
@@ -41,7 +47,7 @@ function Avatar({
       className={cn(
         "group/avatar relative isolate flex size-8 shrink-0 rounded-full select-none data-[size=lg]:size-10 data-[size=sm]:size-6 data-[size=xl]:size-14 forced-colors:outline-0!",
         CUT,
-        className
+        className,
       )}
       {...props}
     >
@@ -52,7 +58,13 @@ function Avatar({
 }
 
 function AvatarImage({ className, ...props }: React.ComponentProps<typeof AvatarPrimitive.Image>) {
-  return <AvatarPrimitive.Image data-slot="avatar-image" className={cn("aspect-square size-full rounded-full object-cover", className)} {...props} />
+  return (
+    <AvatarPrimitive.Image
+      data-slot="avatar-image"
+      className={cn("aspect-square size-full rounded-full object-cover", className)}
+      {...props}
+    />
+  )
 }
 
 function AvatarFallback({
@@ -70,7 +82,13 @@ function AvatarFallback({
 }) {
   const basis = name ?? (typeof children === "string" ? children : "")
   const t = tone ?? avatarTone(basis)
-  const { hostRef, hostProps, node } = useInk({ recipe: avatarFallbackRecipe, params: { tone: t }, kind: "disc", seed: seed ?? (basis || undefined), still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: avatarFallbackRecipe,
+    params: { tone: t },
+    kind: "disc",
+    seed: seed ?? (basis || undefined),
+    still: true,
+  })
   return (
     <AvatarPrimitive.Fallback
       data-slot="avatar-fallback"
@@ -79,7 +97,7 @@ function AvatarFallback({
       {...(node ? hostProps : {})}
       className={cn(
         "relative isolate flex size-full items-center justify-center rounded-full font-hand text-sm font-bold text-ink forced-colors:outline-0! group-data-[size=sm]/avatar:text-xs group-data-[size=lg]/avatar:text-base group-data-[size=xl]/avatar:text-xl",
-        className
+        className,
       )}
       {...props}
     >
@@ -107,7 +125,13 @@ function AvatarBadge({
   status?: AvatarStatus
   seed?: string | number
 }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: avatarBadgeRecipe, params: { status }, kind: "dot", seed, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: avatarBadgeRecipe,
+    params: { status },
+    kind: "dot",
+    seed,
+    still: true,
+  })
   return (
     <span
       data-slot="avatar-badge"
@@ -120,7 +144,7 @@ function AvatarBadge({
         "group-data-[size=default]/avatar:size-2.5 group-data-[size=default]/avatar:[&>svg:not(.absolute)]:size-2",
         "group-data-[size=lg]/avatar:size-3 group-data-[size=lg]/avatar:[&>svg:not(.absolute)]:size-2",
         "group-data-[size=xl]/avatar:size-3.5 group-data-[size=xl]/avatar:[&>svg:not(.absolute)]:size-2.5",
-        className
+        className,
       )}
       {...props}
     >
@@ -136,15 +160,27 @@ function AvatarGroup({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="avatar-group"
       className={cn(
         "group/avatar-group flex items-center *:data-[slot=avatar]:[--ll-avatar-ring:var(--ll-avatar-group-ring,var(--card))] [&>*+*]:-ms-1.5 has-data-[size=sm]:[&>*+*]:-ms-1 has-data-[size=lg]:[&>*+*]:-ms-2 has-data-[size=xl]:[&>*+*]:-ms-3.5",
-        className
+        className,
       )}
       {...props}
     />
   )
 }
 
-function AvatarGroupCount({ className, seed, ref, children, ...props }: React.ComponentProps<"div"> & { seed?: string | number }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: avatarCountRecipe, params: {}, kind: "disc", seed, still: true })
+function AvatarGroupCount({
+  className,
+  seed,
+  ref,
+  children,
+  ...props
+}: React.ComponentProps<"div"> & { seed?: string | number }) {
+  const { hostRef, hostProps, node } = useInk({
+    recipe: avatarCountRecipe,
+    params: {},
+    kind: "disc",
+    seed,
+    still: true,
+  })
   return (
     <div
       data-slot="avatar-group-count"
@@ -154,7 +190,7 @@ function AvatarGroupCount({ className, seed, ref, children, ...props }: React.Co
         "relative isolate flex size-8 shrink-0 items-center justify-center rounded-full font-hand text-sm font-bold text-ink-soft [--ll-avatar-ring:var(--ll-avatar-group-ring,var(--card))] forced-colors:outline-0!",
         CUT,
         "group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 group-has-data-[size=xl]/avatar-group:size-14 group-has-data-[size=sm]/avatar-group:text-xs [&>svg:not(.absolute)]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg:not(.absolute)]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg:not(.absolute)]:size-3",
-        className
+        className,
       )}
       {...props}
     >

@@ -34,7 +34,7 @@ export interface DeclarativeDragReturn {
 }
 
 const DEFAULT_SNAP_THRESHOLD = 0.05
-const DEFAULT_RELEASE_THRESHOLD = 0.10
+const DEFAULT_RELEASE_THRESHOLD = 0.1
 const SFX_COOLDOWN_MS = 250
 
 /**
@@ -44,7 +44,7 @@ const SFX_COOLDOWN_MS = 250
 export function getSvgPoint(
   svg: SVGSVGElement | null,
   clientX: number,
-  clientY: number
+  clientY: number,
 ): { x: number; y: number } | null {
   if (!svg) return null
 
@@ -104,7 +104,7 @@ export function normalizeAngle(deg: number): number {
 export function computeDistance(
   val: number,
   targetVal: number,
-  mode: "linear-horizontal" | "radial"
+  mode: "linear-horizontal" | "radial",
 ): number {
   if (mode === "radial") {
     const a = normalizeAngle(val)
@@ -119,9 +119,10 @@ export function computeDistance(
  * Resolves snap and release distance thresholds for linear vs radial modes.
  * In radial mode, normalized threshold <= 1 is scaled by 360 to degrees.
  */
-export function getThresholds(
-  options: DeclarativeDragOptions
-): { snapThresh: number; releaseThresh: number } {
+export function getThresholds(options: DeclarativeDragOptions): {
+  snapThresh: number
+  releaseThresh: number
+} {
   const isRadial = options.mode === "radial"
   const rawSnap = options.snapThreshold ?? DEFAULT_SNAP_THRESHOLD
   const rawRelease = options.releaseThreshold ?? DEFAULT_RELEASE_THRESHOLD
@@ -169,61 +170,39 @@ export function useDeclarativeDrag(options: DeclarativeDragOptions): Declarative
   /**
    * Evaluates coordinate projection, Schmitt-trigger hysteresis, and triggers callbacks.
    */
-  const processPointerPosition = React.useCallback(
-    (clientX: number, clientY: number) => {
-      const opts = optionsRef.current
-      const pt = getSvgPoint(opts.svgRef.current, clientX, clientY)
-      if (!pt) return
+  const processPointerPosition = React.useCallback((clientX: number, clientY: number) => {
+    const opts = optionsRef.current
+    const pt = getSvgPoint(opts.svgRef.current, clientX, clientY)
+    if (!pt) return
 
-      let rawVal = 0
-      if (opts.mode === "linear-horizontal") {
-        const min = opts.bounds?.min ?? 0
-        const max = opts.bounds?.max ?? 1
-        const span = max - min
-        const raw = span > 0 ? (pt.x - min) / span : 0
-        rawVal = Math.max(0, Math.min(1, raw))
-      } else {
-        const cx = opts.center?.x ?? 0
-        const cy = opts.center?.y ?? 0
-        const dx = pt.x - cx
-        const dy = pt.y - cy
-        rawVal = ((Math.atan2(dy, dx) * 180 / Math.PI) + 360) % 360
-      }
+    let rawVal = 0
+    if (opts.mode === "linear-horizontal") {
+      const min = opts.bounds?.min ?? 0
+      const max = opts.bounds?.max ?? 1
+      const span = max - min
+      const raw = span > 0 ? (pt.x - min) / span : 0
+      rawVal = Math.max(0, Math.min(1, raw))
+    } else {
+      const cx = opts.center?.x ?? 0
+      const cy = opts.center?.y ?? 0
+      const dx = pt.x - cx
+      const dy = pt.y - cy
+      rawVal = ((Math.atan2(dy, dx) * 180) / Math.PI + 360) % 360
+    }
 
-      const { snapThresh, releaseThresh } = getThresholds(opts)
-      const currentSnapped = snappedTargetRef.current
-      let nextSnapped: SnapTarget | null = currentSnapped
-      let effectiveVal = rawVal
+    const { snapThresh, releaseThresh } = getThresholds(opts)
+    const currentSnapped = snappedTargetRef.current
+    let nextSnapped: SnapTarget | null = currentSnapped
+    let effectiveVal = rawVal
 
-      if (currentSnapped) {
-        const dist = computeDistance(rawVal, currentSnapped.value, opts.mode)
-        if (dist > releaseThresh) {
-          // Release active snap
-          nextSnapped = null
-          opts.onRelease?.()
+    if (currentSnapped) {
+      const dist = computeDistance(rawVal, currentSnapped.value, opts.mode)
+      if (dist > releaseThresh) {
+        // Release active snap
+        nextSnapped = null
+        opts.onRelease?.()
 
-          // Check if another target captures immediately
-          let closest: SnapTarget | null = null
-          let minDist = Infinity
-          for (const t of opts.targets) {
-            const d = computeDistance(rawVal, t.value, opts.mode)
-            if (d < minDist) {
-              minDist = d
-              closest = t
-            }
-          }
-          if (closest && minDist <= snapThresh) {
-            nextSnapped = closest
-            effectiveVal = closest.value
-          } else {
-            effectiveVal = rawVal
-          }
-        } else {
-          // Stay snapped
-          effectiveVal = currentSnapped.value
-        }
-      } else {
-        // Unsnapped: check attraction basin
+        // Check if another target captures immediately
         let closest: SnapTarget | null = null
         let minDist = Infinity
         for (const t of opts.targets) {
@@ -239,38 +218,60 @@ export function useDeclarativeDrag(options: DeclarativeDragOptions): Declarative
         } else {
           effectiveVal = rawVal
         }
+      } else {
+        // Stay snapped
+        effectiveVal = currentSnapped.value
       }
-
-      // Handle onSnap trigger with 250ms tremor cooldown
-      if (nextSnapped && nextSnapped.id !== currentSnapped?.id) {
-        const now = Date.now()
-        if (lastSnappedIdRef.current !== nextSnapped.id || now - lastSnapTimeRef.current >= SFX_COOLDOWN_MS) {
-          lastSnapTimeRef.current = now
-          lastSnappedIdRef.current = nextSnapped.id
-          opts.onSnap?.(nextSnapped)
+    } else {
+      // Unsnapped: check attraction basin
+      let closest: SnapTarget | null = null
+      let minDist = Infinity
+      for (const t of opts.targets) {
+        const d = computeDistance(rawVal, t.value, opts.mode)
+        if (d < minDist) {
+          minDist = d
+          closest = t
         }
       }
-
-      // Discrete snap state synchronization to React
-      if (nextSnapped !== currentSnapped) {
-        setSnappedTarget(nextSnapped)
+      if (closest && minDist <= snapThresh) {
+        nextSnapped = closest
+        effectiveVal = closest.value
+      } else {
+        effectiveVal = rawVal
       }
+    }
 
-      snappedTargetRef.current = nextSnapped
-      activeValueRef.current = effectiveVal
-
-      // Compute pixel offset for imperative transform
-      let pixelOffset = effectiveVal
-      if (opts.mode === "linear-horizontal") {
-        const min = opts.bounds?.min ?? 0
-        const max = opts.bounds?.max ?? 1
-        pixelOffset = min + effectiveVal * (max - min)
+    // Handle onSnap trigger with 250ms tremor cooldown
+    if (nextSnapped && nextSnapped.id !== currentSnapped?.id) {
+      const now = Date.now()
+      if (
+        lastSnappedIdRef.current !== nextSnapped.id ||
+        now - lastSnapTimeRef.current >= SFX_COOLDOWN_MS
+      ) {
+        lastSnapTimeRef.current = now
+        lastSnappedIdRef.current = nextSnapped.id
+        opts.onSnap?.(nextSnapped)
       }
+    }
 
-      opts.onTransform?.(effectiveVal, pixelOffset)
-    },
-    []
-  )
+    // Discrete snap state synchronization to React
+    if (nextSnapped !== currentSnapped) {
+      setSnappedTarget(nextSnapped)
+    }
+
+    snappedTargetRef.current = nextSnapped
+    activeValueRef.current = effectiveVal
+
+    // Compute pixel offset for imperative transform
+    let pixelOffset = effectiveVal
+    if (opts.mode === "linear-horizontal") {
+      const min = opts.bounds?.min ?? 0
+      const max = opts.bounds?.max ?? 1
+      pixelOffset = min + effectiveVal * (max - min)
+    }
+
+    opts.onTransform?.(effectiveVal, pixelOffset)
+  }, [])
 
   /**
    * Schedules an imperative RAF transform update.
@@ -307,7 +308,7 @@ export function useDeclarativeDrag(options: DeclarativeDragOptions): Declarative
 
       processPointerPosition(e.clientX, e.clientY)
     },
-    [processPointerPosition]
+    [processPointerPosition],
   )
 
   const handlePointerMove = React.useCallback(
@@ -316,7 +317,7 @@ export function useDeclarativeDrag(options: DeclarativeDragOptions): Declarative
       latestPointerRef.current = { clientX: e.clientX, clientY: e.clientY }
       scheduleFrame()
     },
-    [scheduleFrame]
+    [scheduleFrame],
   )
 
   const handlePointerUp = React.useCallback(
@@ -334,7 +335,10 @@ export function useDeclarativeDrag(options: DeclarativeDragOptions): Declarative
       }
 
       try {
-        if (pointerIdRef.current !== null && capturedElementRef.current?.hasPointerCapture?.(pointerIdRef.current)) {
+        if (
+          pointerIdRef.current !== null &&
+          capturedElementRef.current?.hasPointerCapture?.(pointerIdRef.current)
+        ) {
           capturedElementRef.current.releasePointerCapture(pointerIdRef.current)
         }
       } catch {
@@ -357,7 +361,7 @@ export function useDeclarativeDrag(options: DeclarativeDragOptions): Declarative
 
       optionsRef.current.onCommit?.(finalValue, finalSnapped)
     },
-    [processPointerPosition]
+    [processPointerPosition],
   )
 
   /**

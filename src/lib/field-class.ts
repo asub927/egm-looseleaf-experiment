@@ -1,4 +1,5 @@
-const CONTROL_VARIANT = /^(?:placeholder|file|selection|autofill|read-only|disabled|enabled|focus|focus-visible|aria-invalid|user-invalid|invalid|required|optional)$/
+const CONTROL_VARIANT =
+  /^(?:placeholder|file|selection|autofill|read-only|disabled|enabled|focus|focus-visible|aria-invalid|user-invalid|invalid|required|optional)$/
 const PADDING = /^-?p[xytblrse]?-/
 const CONTROL_UTILITY = /^(?:resize|field-sizing)(?:-|$)/
 
@@ -24,7 +25,9 @@ export function splitFieldClass(className?: string): { frame: string; control: s
   for (const token of className?.split(/\s+/) ?? []) {
     if (!token) continue
     const [variants, utility] = parse(token)
-    const own = variants.some((v) => CONTROL_VARIANT.test(v.replace(/[-_]?\[.*$/, "").replace(/\/.*$/, "")))
+    const own = variants.some((v) =>
+      CONTROL_VARIANT.test(v.replace(/[-_]?\[.*$/, "").replace(/\/.*$/, "")),
+    )
     ;(own || PADDING.test(utility) || CONTROL_UTILITY.test(utility) ? control : frame).push(token)
   }
   return { frame: frame.join(" "), control: control.join(" ") }

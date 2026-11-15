@@ -2,11 +2,7 @@ import * as React from "react"
 import { NC2OA4Wireframe } from "@/components/math/NC2OA4Wireframe"
 import { NC2OA3Wireframe } from "@/components/math/NC2OA3Wireframe"
 import { NC2GWireframe } from "@/components/math/NC2GWireframe"
-import {
-  loadStudentProfile,
-  setThemePreference,
-  type StudentTheme,
-} from "@/lib/storage/profile"
+import { loadStudentProfile, setThemePreference, type StudentTheme } from "@/lib/storage/profile"
 
 export type DeskTheme = StudentTheme
 export type ActiveStandard = "arrays" | "parity" | "geometry"

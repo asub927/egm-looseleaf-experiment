@@ -19,11 +19,7 @@ import { useGeometryScaffolding } from "@/hooks/use-geometry-scaffolding"
 import { useAudioNarration } from "@/hooks/use-audio-narration"
 import { NC2_G_SEEDS } from "@/curriculum/items/nc2-g"
 import type { NC2GItem } from "@/curriculum/invariants"
-import {
-  playSliceThud,
-  playNudgeTone,
-  playVictoryFanfare,
-} from "@/lib/audio/sfx"
+import { playSliceThud, playNudgeTone, playVictoryFanfare } from "@/lib/audio/sfx"
 import {
   loadStudentProfile,
   addStars,
@@ -53,7 +49,8 @@ export function NC2GWireframe({
   const currentSeed: NC2GItem = NC2_G_SEEDS[seedIdx] ?? NC2_G_SEEDS[0]
 
   // Top Tool Selector State: Artisan Pan, Tart Plate, Whispering Vine
-  const [activeManipulative, setActiveManipulative] = React.useState<ManipulativeType>("artisan-pan")
+  const [activeManipulative, setActiveManipulative] =
+    React.useState<ManipulativeType>("artisan-pan")
 
   // Partition divider cuts or radial angles
   const [cuts, setCuts] = React.useState<number[]>([])
@@ -279,7 +276,9 @@ export function NC2GWireframe({
 
           {/* Theme Switcher Pill */}
           <div className="hidden md:flex items-center gap-1 bg-stone-200/80 p-0.5 rounded-md border border-stone-300 text-xs">
-            <span className="text-[10px] uppercase font-bold text-ink-soft px-1 hidden lg:inline">Desk:</span>
+            <span className="text-[10px] uppercase font-bold text-ink-soft px-1 hidden lg:inline">
+              Desk:
+            </span>
             <button
               type="button"
               title="Honey Birch Desk"
@@ -361,7 +360,12 @@ export function NC2GWireframe({
             {soundEnabled ? "🔊 Sound ON" : "🔇 Sound OFF"}
           </Button>
 
-          <Button variant="ghost" size="xs" onClick={resetAll} className="h-7 text-xs px-2 cursor-pointer">
+          <Button
+            variant="ghost"
+            size="xs"
+            onClick={resetAll}
+            className="h-7 text-xs px-2 cursor-pointer"
+          >
             🔄 Reset
           </Button>
         </div>
@@ -387,12 +391,14 @@ export function NC2GWireframe({
                 "px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer flex items-center gap-1 text-xs",
                 activeManipulative === "artisan-pan"
                   ? "bg-amber-400 text-stone-900 shadow-2xs border border-amber-500"
-                  : "text-stone-700 hover:text-stone-900 hover:bg-stone-100"
+                  : "text-stone-700 hover:text-stone-900 hover:bg-stone-100",
               )}
             >
               <span>🥖</span>
               <span>Artisan Pan</span>
-              <span className="text-[10px] text-stone-600 font-normal hidden lg:inline">(Rectangular 1/2, 1/3, 1/4)</span>
+              <span className="text-[10px] text-stone-600 font-normal hidden lg:inline">
+                (Rectangular 1/2, 1/3, 1/4)
+              </span>
             </button>
 
             <button
@@ -408,12 +414,14 @@ export function NC2GWireframe({
                 "px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer flex items-center gap-1 text-xs",
                 activeManipulative === "tart-plate"
                   ? "bg-amber-400 text-stone-900 shadow-2xs border border-amber-500"
-                  : "text-stone-700 hover:text-stone-900 hover:bg-stone-100"
+                  : "text-stone-700 hover:text-stone-900 hover:bg-stone-100",
               )}
             >
               <span>🥧</span>
               <span>Tart Plate</span>
-              <span className="text-[10px] text-stone-600 font-normal hidden lg:inline">(Circular 1/2, 1/3, 1/4)</span>
+              <span className="text-[10px] text-stone-600 font-normal hidden lg:inline">
+                (Circular 1/2, 1/3, 1/4)
+              </span>
             </button>
 
             <button
@@ -423,17 +431,22 @@ export function NC2GWireframe({
                 "px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer flex items-center gap-1 text-xs",
                 activeManipulative === "whispering-vine"
                   ? "bg-emerald-400 text-stone-900 shadow-2xs border border-emerald-500"
-                  : "text-stone-700 hover:text-stone-900 hover:bg-stone-100"
+                  : "text-stone-700 hover:text-stone-900 hover:bg-stone-100",
               )}
             >
               <span>🌿</span>
               <span>Whispering Vine</span>
-              <span className="text-[10px] text-stone-600 font-normal hidden lg:inline">(10 − ? Tactile Subtraction)</span>
+              <span className="text-[10px] text-stone-600 font-normal hidden lg:inline">
+                (10 − ? Tactile Subtraction)
+              </span>
             </button>
           </div>
         </div>
 
-        <Badge variant="outline" className="text-[10px] h-5 bg-amber-50 border-amber-300 font-bold hidden sm:flex">
+        <Badge
+          variant="outline"
+          className="text-[10px] h-5 bg-amber-50 border-amber-300 font-bold hidden sm:flex"
+        >
           {activeManipulative === "whispering-vine" ? "NC.2.OA.2 Subtraction" : "NC.2.G.3 Geometry"}
         </Badge>
       </div>
@@ -450,212 +463,236 @@ export function NC2GWireframe({
           />
         </main>
       ) : (
-      <main className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-[1fr_280px] lg:grid-cols-[1fr_320px] gap-2.5 items-stretch overflow-hidden">
-        {/* Left Column (~70%): Manipulative Workspace */}
-        <div className="h-full min-h-0 flex flex-col relative overflow-hidden">
-          <Paper
-            stock="card"
-            rules="graph"
-            shadow="card"
-            className="h-full w-full p-2.5 sm:p-3 flex flex-col justify-between border-2 border-stone-300 relative overflow-hidden bg-amber-50/20"
-          >
-            {/* Washi Tape Fasteners */}
-            <Tape kind="washi-dots" color="lemon" length={56} height={18} className="absolute -top-2 left-6" />
-            <Tape kind="masking" color="tangerine" length={56} height={18} className="absolute -top-2 right-6" />
+        <main className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-[1fr_280px] lg:grid-cols-[1fr_320px] gap-2.5 items-stretch overflow-hidden">
+          {/* Left Column (~70%): Manipulative Workspace */}
+          <div className="h-full min-h-0 flex flex-col relative overflow-hidden">
+            <Paper
+              stock="card"
+              rules="graph"
+              shadow="card"
+              className="h-full w-full p-2.5 sm:p-3 flex flex-col justify-between border-2 border-stone-300 relative overflow-hidden bg-amber-50/20"
+            >
+              {/* Washi Tape Fasteners */}
+              <Tape
+                kind="washi-dots"
+                color="lemon"
+                length={56}
+                height={18}
+                className="absolute -top-2 left-6"
+              />
+              <Tape
+                kind="masking"
+                color="tangerine"
+                length={56}
+                height={18}
+                className="absolute -top-2 right-6"
+              />
 
-            {/* A. Socratic Challenge Banner with Read-Aloud Voice Button */}
-            <div className="w-full shrink-0 px-3 py-1.5 bg-amber-100/90 border border-amber-300 rounded-lg shadow-xs flex items-center justify-between gap-2 mb-1.5">
-              <div className="text-sm sm:text-base font-script leading-tight text-amber-950 font-bold flex items-center gap-1.5 flex-wrap">
-                <span>{currentSeed.icon}</span>
-                <span>{currentSeed.narrative}</span>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                onClick={readPromptAloud}
-                className="shrink-0 bg-amber-200/80 hover:bg-amber-300 rounded-full size-7 cursor-pointer"
-                title="Hear prompt aloud"
-                aria-label="Hear prompt aloud"
-              >
-                🗣️
-              </Button>
-            </div>
-
-            {/* In-Place Celebratory Success Banner (No full-screen modal) */}
-            {isSolved && (
-              <div className="w-full shrink-0 px-3 py-1.5 bg-emerald-100 border-2 border-emerald-400 rounded-lg shadow-xs flex items-center justify-between gap-2 mb-1.5 animate-in fade-in duration-200">
-                <div className="flex items-center gap-2">
-                  <Seal variant="scallop" text="PERFECT!" mark="star" tone="red" size={32} />
-                  <div className="text-xs text-emerald-950 font-bold">
-                    <span>🎉 Great job! You partitioned the {currentSeed.context} into {currentSeed.targetShares} equal {currentSeed.verbalShareName}!</span>
-                  </div>
+              {/* A. Socratic Challenge Banner with Read-Aloud Voice Button */}
+              <div className="w-full shrink-0 px-3 py-1.5 bg-amber-100/90 border border-amber-300 rounded-lg shadow-xs flex items-center justify-between gap-2 mb-1.5">
+                <div className="text-sm sm:text-base font-script leading-tight text-amber-950 font-bold flex items-center gap-1.5 flex-wrap">
+                  <span>{currentSeed.icon}</span>
+                  <span>{currentSeed.narrative}</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <Button
-                    size="xs"
-                    variant="outline"
-                    onClick={resetAll}
-                    className="h-7 text-xs px-2.5 bg-white hover:bg-stone-100 cursor-pointer font-bold"
-                  >
-                    Try Again
-                  </Button>
-                  {scaffolding.wasDemonstrated && (
+                <Button
+                  variant="ghost"
+                  size="icon-xs"
+                  onClick={readPromptAloud}
+                  className="shrink-0 bg-amber-200/80 hover:bg-amber-300 rounded-full size-7 cursor-pointer"
+                  title="Hear prompt aloud"
+                  aria-label="Hear prompt aloud"
+                >
+                  🗣️
+                </Button>
+              </div>
+
+              {/* In-Place Celebratory Success Banner (No full-screen modal) */}
+              {isSolved && (
+                <div className="w-full shrink-0 px-3 py-1.5 bg-emerald-100 border-2 border-emerald-400 rounded-lg shadow-xs flex items-center justify-between gap-2 mb-1.5 animate-in fade-in duration-200">
+                  <div className="flex items-center gap-2">
+                    <Seal variant="scallop" text="PERFECT!" mark="star" tone="red" size={32} />
+                    <div className="text-xs text-emerald-950 font-bold">
+                      <span>
+                        🎉 Great job! You partitioned the {currentSeed.context} into{" "}
+                        {currentSeed.targetShares} equal {currentSeed.verbalShareName}!
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5">
                     <Button
                       size="xs"
-                      onClick={() => scaffolding.triggerIsomorphicRetry()}
-                      className="h-7 text-xs px-3 bg-amber-600 hover:bg-amber-700 text-white font-bold cursor-pointer"
+                      variant="outline"
+                      onClick={resetAll}
+                      className="h-7 text-xs px-2.5 bg-white hover:bg-stone-100 cursor-pointer font-bold"
                     >
-                      🔄 Similar Challenge (Earn ⭐)
+                      Try Again
+                    </Button>
+                    {scaffolding.wasDemonstrated && (
+                      <Button
+                        size="xs"
+                        onClick={() => scaffolding.triggerIsomorphicRetry()}
+                        className="h-7 text-xs px-3 bg-amber-600 hover:bg-amber-700 text-white font-bold cursor-pointer"
+                      >
+                        🔄 Similar Challenge (Earn ⭐)
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* B. Tactile Geometry Manipulative Canvas */}
+              <div className="flex-1 min-h-0 w-full flex items-center justify-center relative overflow-hidden py-1">
+                {currentSeed.shapeType === "rectangle" ? (
+                  <BakingPan
+                    cuts={cuts}
+                    targetShares={activeShares}
+                    isGhostVisible={scaffolding.isGhostVisible}
+                    onCutsChange={(newCuts) => {
+                      setCuts(newCuts)
+                      if (isSolved) setIsSolved(false)
+                    }}
+                    svgRef={svgRef}
+                    context={currentSeed.context}
+                    icon={currentSeed.icon}
+                    className="w-full h-full max-h-[380px] object-contain drop-shadow-sm"
+                  />
+                ) : (
+                  <TartPlate
+                    radialAngles={cuts}
+                    targetShares={activeShares}
+                    isGhostVisible={scaffolding.isGhostVisible}
+                    onAnglesChange={(newAngles) => {
+                      setCuts(newAngles)
+                      if (isSolved) setIsSolved(false)
+                    }}
+                    svgRef={svgRef}
+                    context={currentSeed.context}
+                    icon={currentSeed.icon}
+                    className="w-full h-full max-h-[380px] object-contain drop-shadow-sm"
+                  />
+                )}
+              </div>
+
+              {/* C. Partition Toolbar with Single-Tap Cutters & Answer Check */}
+              <div className="w-full shrink-0 mt-1">
+                <PartitionToolBar
+                  activeShares={activeShares}
+                  targetShares={currentSeed.targetShares}
+                  onSelectShares={handleSelectShares}
+                  onCheckAnswer={handleCheckAnswer}
+                  isSolved={isSolved}
+                />
+              </div>
+
+              {/* D. Bottom Mathematical Equation Banner */}
+              <div className="w-full shrink-0 py-2 px-3 rounded-lg bg-stone-100/90 border border-stone-300 flex items-center justify-between gap-3 mt-1.5">
+                <div className="text-sm font-bold flex items-center gap-2 flex-wrap">
+                  <span className="text-[11px] uppercase text-ink-soft hidden sm:inline">
+                    Fraction Concept:
+                  </span>
+                  <Handwritten className="text-lg text-amber-900 font-bold">
+                    {currentSeed.targetShares} {currentSeed.verbalShareName} = 1 whole{" "}
+                    {contextWholeName}
+                  </Handwritten>
+                  {isSolved && (
+                    <Badge
+                      variant="outline"
+                      className="text-[10px] h-5 bg-emerald-100 text-emerald-800 border-emerald-300 font-bold"
+                    >
+                      {currentSeed.targetShares} equal {currentSeed.verbalShareName} ✔
+                    </Badge>
+                  )}
+                  {scaffolding.tier > 0 && !isSolved && (
+                    <span className="text-xs text-amber-800 font-bold hidden sm:inline">
+                      ({scaffolding.tierBadge})
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {scaffolding.wasDemonstrated && !isSolved && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => scaffolding.triggerIsomorphicRetry()}
+                      className="font-bold text-xs h-8 px-3 bg-amber-50 hover:bg-amber-100 border-amber-300 text-amber-950 cursor-pointer"
+                    >
+                      🔄 Isomorphic Retry
                     </Button>
                   )}
                 </div>
               </div>
-            )}
+            </Paper>
+          </div>
 
-            {/* B. Tactile Geometry Manipulative Canvas */}
-            <div className="flex-1 min-h-0 w-full flex items-center justify-center relative overflow-hidden py-1">
-              {currentSeed.shapeType === "rectangle" ? (
-                <BakingPan
-                  cuts={cuts}
-                  targetShares={activeShares}
-                  isGhostVisible={scaffolding.isGhostVisible}
-                  onCutsChange={(newCuts) => {
-                    setCuts(newCuts)
-                    if (isSolved) setIsSolved(false)
-                  }}
-                  svgRef={svgRef}
-                  context={currentSeed.context}
-                  icon={currentSeed.icon}
-                  className="w-full h-full max-h-[380px] object-contain drop-shadow-sm"
-                />
-              ) : (
-                <TartPlate
-                  radialAngles={cuts}
-                  targetShares={activeShares}
-                  isGhostVisible={scaffolding.isGhostVisible}
-                  onAnglesChange={(newAngles) => {
-                    setCuts(newAngles)
-                    if (isSolved) setIsSolved(false)
-                  }}
-                  svgRef={svgRef}
-                  context={currentSeed.context}
-                  icon={currentSeed.icon}
-                  className="w-full h-full max-h-[380px] object-contain drop-shadow-sm"
-                />
-              )}
-            </div>
-
-            {/* C. Partition Toolbar with Single-Tap Cutters & Answer Check */}
-            <div className="w-full shrink-0 mt-1">
-              <PartitionToolBar
-                activeShares={activeShares}
-                targetShares={currentSeed.targetShares}
-                onSelectShares={handleSelectShares}
-                onCheckAnswer={handleCheckAnswer}
-                isSolved={isSolved}
-              />
-            </div>
-
-            {/* D. Bottom Mathematical Equation Banner */}
-            <div className="w-full shrink-0 py-2 px-3 rounded-lg bg-stone-100/90 border border-stone-300 flex items-center justify-between gap-3 mt-1.5">
-              <div className="text-sm font-bold flex items-center gap-2 flex-wrap">
-                <span className="text-[11px] uppercase text-ink-soft hidden sm:inline">Fraction Concept:</span>
-                <Handwritten className="text-lg text-amber-900 font-bold">
-                  {currentSeed.targetShares} {currentSeed.verbalShareName} = 1 whole {contextWholeName}
-                </Handwritten>
-                {isSolved && (
-                  <Badge variant="outline" className="text-[10px] h-5 bg-emerald-100 text-emerald-800 border-emerald-300 font-bold">
-                    {currentSeed.targetShares} equal {currentSeed.verbalShareName} ✔
-                  </Badge>
-                )}
-                {scaffolding.tier > 0 && !isSolved && (
-                  <span className="text-xs text-amber-800 font-bold hidden sm:inline">
-                    ({scaffolding.tierBadge})
-                  </span>
-                )}
+          {/* Right Column (~30%): Challenge Seed Selector Tray & Mascot Companion */}
+          <div className="h-full min-h-0 flex flex-col justify-between gap-2.5 overflow-hidden">
+            {/* Challenge Seed Selector Tray */}
+            <Card className="shrink-0 bg-paper/90 border-2 border-stone-300 shadow-xs p-2 sm:p-2.5 flex flex-col gap-1.5 select-none">
+              <div className="flex items-center justify-between pb-1 border-b border-stone-200">
+                <span className="text-xs font-bold flex items-center gap-1.5 text-stone-800">
+                  <span>🍱</span>
+                  <span>Bakery Challenges</span>
+                </span>
+                <Badge
+                  variant="outline"
+                  className="text-[10px] h-4.5 px-1.5 bg-amber-100/60 border-amber-300 font-bold"
+                >
+                  NC.2.G.3
+                </Badge>
               </div>
 
-              <div className="flex items-center gap-2">
-                {scaffolding.wasDemonstrated && !isSolved && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => scaffolding.triggerIsomorphicRetry()}
-                    className="font-bold text-xs h-8 px-3 bg-amber-50 hover:bg-amber-100 border-amber-300 text-amber-950 cursor-pointer"
-                  >
-                    🔄 Isomorphic Retry
-                  </Button>
-                )}
+              <div className="grid grid-cols-2 gap-1 sm:gap-1.5">
+                {NC2_G_SEEDS.map((seed, idx) => {
+                  const isCurrent = idx === seedIdx
+                  return (
+                    <Button
+                      key={seed.id}
+                      type="button"
+                      variant={isCurrent ? "default" : "outline"}
+                      size="xs"
+                      onClick={() => switchSeed(idx)}
+                      className={cn(
+                        "h-7 sm:h-8 px-1.5 sm:px-2 justify-start text-left font-bold truncate flex items-center gap-1.5 cursor-pointer border text-[11px]",
+                        isCurrent
+                          ? "bg-amber-400 hover:bg-amber-500 text-stone-900 border-amber-600 shadow-2xs ring-1 ring-amber-500/50"
+                          : "bg-white/80 hover:bg-amber-50 text-stone-700 border-stone-300 hover:border-amber-400",
+                      )}
+                      title={seed.label}
+                    >
+                      <span className="text-sm shrink-0">{seed.icon}</span>
+                      <span className="truncate">{seed.label}</span>
+                    </Button>
+                  )
+                })}
               </div>
-            </div>
-          </Paper>
-        </div>
+            </Card>
 
-        {/* Right Column (~30%): Challenge Seed Selector Tray & Mascot Companion */}
-        <div className="h-full min-h-0 flex flex-col justify-between gap-2.5 overflow-hidden">
-          {/* Challenge Seed Selector Tray */}
-          <Card className="shrink-0 bg-paper/90 border-2 border-stone-300 shadow-xs p-2 sm:p-2.5 flex flex-col gap-1.5 select-none">
-            <div className="flex items-center justify-between pb-1 border-b border-stone-200">
-              <span className="text-xs font-bold flex items-center gap-1.5 text-stone-800">
-                <span>🍱</span>
-                <span>Bakery Challenges</span>
-              </span>
-              <Badge variant="outline" className="text-[10px] h-4.5 px-1.5 bg-amber-100/60 border-amber-300 font-bold">
-                NC.2.G.3
-              </Badge>
-            </div>
-
-            <div className="grid grid-cols-2 gap-1 sm:gap-1.5">
-              {NC2_G_SEEDS.map((seed, idx) => {
-                const isCurrent = idx === seedIdx
-                return (
-                  <Button
-                    key={seed.id}
-                    type="button"
-                    variant={isCurrent ? "default" : "outline"}
-                    size="xs"
-                    onClick={() => switchSeed(idx)}
-                    className={cn(
-                      "h-7 sm:h-8 px-1.5 sm:px-2 justify-start text-left font-bold truncate flex items-center gap-1.5 cursor-pointer border text-[11px]",
-                      isCurrent
-                        ? "bg-amber-400 hover:bg-amber-500 text-stone-900 border-amber-600 shadow-2xs ring-1 ring-amber-500/50"
-                        : "bg-white/80 hover:bg-amber-50 text-stone-700 border-stone-300 hover:border-amber-400"
-                    )}
-                    title={seed.label}
-                  >
-                    <span className="text-sm shrink-0">{seed.icon}</span>
-                    <span className="truncate">{seed.label}</span>
-                  </Button>
-                )
-              })}
-            </div>
-          </Card>
-
-          {/* Mascot Companion (Pencil Pal) with Real-Time Synchronized Subtitles */}
-          <MascotCompanion
-            pose={
-              narration.isSpeaking
-                ? narration.mascotPose
-                : scaffolding.mascotPose !== "idle"
-                ? scaffolding.mascotPose
-                : narration.mascotPose
-            }
-            speech={narration.currentText || speech}
-            tierBadge={scaffolding.tierBadge}
-            words={narration.words}
-            currentWordIndex={narration.currentWordIndex}
-            isSpeaking={narration.isSpeaking}
-            hintButtonLabel={
-              scaffolding.wasDemonstrated
-                ? "🔄 Try Similar Challenge (Earn ⭐)"
-                : scaffolding.tier === 2
-                ? "💡 Show Me (Demonstrate)"
-                : "💡 Ask Pencil Pal for a Hint"
-            }
-            onAskHint={handleAskHint}
-          />
-        </div>
-      </main>
+            {/* Mascot Companion (Pencil Pal) with Real-Time Synchronized Subtitles */}
+            <MascotCompanion
+              pose={
+                narration.isSpeaking
+                  ? narration.mascotPose
+                  : scaffolding.mascotPose !== "idle"
+                    ? scaffolding.mascotPose
+                    : narration.mascotPose
+              }
+              speech={narration.currentText || speech}
+              tierBadge={scaffolding.tierBadge}
+              words={narration.words}
+              currentWordIndex={narration.currentWordIndex}
+              isSpeaking={narration.isSpeaking}
+              hintButtonLabel={
+                scaffolding.wasDemonstrated
+                  ? "🔄 Try Similar Challenge (Earn ⭐)"
+                  : scaffolding.tier === 2
+                    ? "💡 Show Me (Demonstrate)"
+                    : "💡 Ask Pencil Pal for a Hint"
+              }
+              onAskHint={handleAskHint}
+            />
+          </div>
+        </main>
       )}
     </Desk>
   )

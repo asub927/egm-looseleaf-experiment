@@ -4,7 +4,12 @@ import * as React from "react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Sketchpad, SketchpadCanvas, type SketchColor, type SketchStroke } from "@/components/ui/sketchpad"
+import {
+  Sketchpad,
+  SketchpadCanvas,
+  type SketchColor,
+  type SketchStroke,
+} from "@/components/ui/sketchpad"
 import { useInk, useMergedRef } from "@/lib/ink/react"
 import { signatureBaselineRecipe, typedSignature } from "@/lib/ink/recipes/signature-pad-ink"
 import { strokesToSvg, svgDataUrl } from "@/lib/ink/recipes/sketchpad-ink"
@@ -49,7 +54,10 @@ function useSignaturePad(): SignaturePadContextValue {
   return ctx
 }
 
-type SignaturePadProps = Omit<React.ComponentProps<"div">, "onChange" | "defaultValue" | "color"> & {
+type SignaturePadProps = Omit<
+  React.ComponentProps<"div">,
+  "onChange" | "defaultValue" | "color"
+> & {
   name?: string
   value?: string
   defaultValue?: string
@@ -111,14 +119,17 @@ function SignaturePad({
 
   const resolve = React.useCallback((n: string) => {
     const el = rootRef.current
-    return el && typeof getComputedStyle !== "undefined" ? getComputedStyle(el).getPropertyValue(n).trim() || undefined : undefined
+    return el && typeof getComputedStyle !== "undefined"
+      ? getComputedStyle(el).getPropertyValue(n).trim() || undefined
+      : undefined
   }, [])
 
   const compose = React.useCallback(
     (m: SignatureMode, s: SketchStroke[], t: string): string => {
       const pad = 6
       let svg = ""
-      if (m === "draw" && s.length) svg = strokesToSvg(s, { width, height, resolve, margin: pad, title: "Signature" })
+      if (m === "draw" && s.length)
+        svg = strokesToSvg(s, { width, height, resolve, margin: pad, title: "Signature" })
       else if (m === "type" && t.trim()) {
         const sig = typedSignature(t, width, height, `${uid}${seed ?? ""}`)
         svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-pad} ${-pad} ${width + 2 * pad} ${height + 2 * pad}" width="${width + 2 * pad}" height="${height + 2 * pad}" role="img"><title>Signature</title>${sig.svg}</svg>`
@@ -217,7 +228,8 @@ function SignaturePad({
     typedFallback,
     seed: `${uid}${seed ?? ""}`,
     penColor,
-    focusTyped: () => rootRef.current?.querySelector<HTMLElement>('[data-slot="signature-typed"] input')?.focus(),
+    focusTyped: () =>
+      rootRef.current?.querySelector<HTMLElement>('[data-slot="signature-typed"] input')?.focus(),
   }
 
   return (
@@ -267,7 +279,13 @@ function SignaturePad({
             onInvalid={(e) => {
               e.preventDefault()
               setInvalidForm(true)
-              rootRef.current?.querySelector<HTMLElement>(mode === "type" ? '[data-slot="signature-typed"] input' : '[data-slot="signature-canvas"]')?.focus()
+              rootRef.current
+                ?.querySelector<HTMLElement>(
+                  mode === "type"
+                    ? '[data-slot="signature-typed"] input'
+                    : '[data-slot="signature-canvas"]',
+                )
+                ?.focus()
             }}
             className="sr-only"
           />
@@ -284,20 +302,53 @@ function SignaturePad({
 
 function Guides() {
   const ctx = useSignaturePad()
-  const { hostRef, hostProps, node } = useInk({ recipe: signatureBaselineRecipe, params: { invalid: ctx.invalid }, kind: "signature-baseline", size: [ctx.width, ctx.height], seed: `${ctx.seed}|line` })
-  const typedSvg = React.useMemo(() => (ctx.mode === "type" ? typedSignature(ctx.typed, ctx.width, ctx.height, ctx.seed).svg : ""), [ctx.mode, ctx.typed, ctx.width, ctx.height, ctx.seed])
+  const { hostRef, hostProps, node } = useInk({
+    recipe: signatureBaselineRecipe,
+    params: { invalid: ctx.invalid },
+    kind: "signature-baseline",
+    size: [ctx.width, ctx.height],
+    seed: `${ctx.seed}|line`,
+  })
+  const typedSvg = React.useMemo(
+    () =>
+      ctx.mode === "type" ? typedSignature(ctx.typed, ctx.width, ctx.height, ctx.seed).svg : "",
+    [ctx.mode, ctx.typed, ctx.width, ctx.height, ctx.seed],
+  )
   const empty = !ctx.strokes.length && !ctx.typed.trim() && !ctx.value
   return (
     <>
-      <div ref={hostRef} {...hostProps} data-slot="signature-baseline" className="pointer-events-none absolute inset-0 isolate">
+      <div
+        ref={hostRef}
+        {...hostProps}
+        data-slot="signature-baseline"
+        className="pointer-events-none absolute inset-0 isolate"
+      >
         {node}
       </div>
-      {typedSvg ? <svg aria-hidden="true" focusable="false" viewBox={`0 0 ${ctx.width} ${ctx.height}`} preserveAspectRatio="none" className="pointer-events-none absolute inset-0 size-full forced-color-adjust-none" dangerouslySetInnerHTML={{ __html: typedSvg }} /> : null}
+      {typedSvg ? (
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          viewBox={`0 0 ${ctx.width} ${ctx.height}`}
+          preserveAspectRatio="none"
+          className="pointer-events-none absolute inset-0 size-full forced-color-adjust-none"
+          dangerouslySetInnerHTML={{ __html: typedSvg }}
+        />
+      ) : null}
       {ctx.value && !ctx.strokes.length && !ctx.typed.trim() ? (
-        <img data-slot="signature-image" src={ctx.value} alt="Signature" className="pointer-events-none absolute inset-0 size-full object-contain" />
+        <img
+          data-slot="signature-image"
+          src={ctx.value}
+          alt="Signature"
+          className="pointer-events-none absolute inset-0 size-full object-contain"
+        />
       ) : null}
       {empty ? (
-        <span aria-hidden="true" className="pointer-events-none absolute start-[12%] font-script text-2xl leading-none text-pencil-text" style={{ top: "calc(72% - 2.4rem)" }}>
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute start-[12%] font-script text-2xl leading-none text-pencil-text"
+          style={{ top: "calc(72% - 2.4rem)" }}
+        >
           {ctx.mode === "type" ? "Type your name below" : "Sign here"}
         </span>
       ) : null}
@@ -305,9 +356,17 @@ function Guides() {
   )
 }
 
-function SignaturePadCanvas({ className, ...props }: Omit<React.ComponentProps<typeof SketchpadCanvas>, "children" | "label">) {
+function SignaturePadCanvas({
+  className,
+  ...props
+}: Omit<React.ComponentProps<typeof SketchpadCanvas>, "children" | "label">) {
   const ctx = useSignaturePad()
-  const label = ctx.mode === "type" ? (ctx.typed.trim() ? `Signature, typed: ${ctx.typed.trim()}` : "Signature, typed") : "Signature"
+  const label =
+    ctx.mode === "type"
+      ? ctx.typed.trim()
+        ? `Signature, typed: ${ctx.typed.trim()}`
+        : "Signature, typed"
+      : "Signature"
   return (
     <SketchpadCanvas
       data-slot="signature-canvas"
@@ -331,7 +390,9 @@ function SignaturePadClear({ children, onClick, ...props }: React.ComponentProps
       type="button"
       variant="ghost"
       size="sm"
-      disabled={ctx.disabled || ctx.readOnly || !(ctx.mode === "type" ? ctx.typed : ctx.strokes.length)}
+      disabled={
+        ctx.disabled || ctx.readOnly || !(ctx.mode === "type" ? ctx.typed : ctx.strokes.length)
+      }
       onClick={(e) => {
         onClick?.(e)
         if (e.defaultPrevented) return
@@ -345,7 +406,11 @@ function SignaturePadClear({ children, onClick, ...props }: React.ComponentProps
   )
 }
 
-function SignaturePadModeToggle({ children, onClick, ...props }: React.ComponentProps<typeof Button>) {
+function SignaturePadModeToggle({
+  children,
+  onClick,
+  ...props
+}: React.ComponentProps<typeof Button>) {
   const ctx = useSignaturePad()
   return (
     <Button
@@ -366,7 +431,10 @@ function SignaturePadModeToggle({ children, onClick, ...props }: React.Component
   )
 }
 
-function SignaturePadTyped({ className, ...props }: Omit<React.ComponentProps<typeof Input>, "value" | "defaultValue">) {
+function SignaturePadTyped({
+  className,
+  ...props
+}: Omit<React.ComponentProps<typeof Input>, "value" | "defaultValue">) {
   const ctx = useSignaturePad()
   if (ctx.mode !== "type") return null
   return (
@@ -386,5 +454,12 @@ function SignaturePadTyped({ className, ...props }: Omit<React.ComponentProps<ty
   )
 }
 
-export { SignaturePad, SignaturePadCanvas, SignaturePadClear, SignaturePadModeToggle, SignaturePadTyped, useSignaturePad }
+export {
+  SignaturePad,
+  SignaturePadCanvas,
+  SignaturePadClear,
+  SignaturePadModeToggle,
+  SignaturePadTyped,
+  useSignaturePad,
+}
 export type { SignaturePadProps, SignatureDetail, SignatureMode }

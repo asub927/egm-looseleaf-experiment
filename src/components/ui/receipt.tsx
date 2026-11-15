@@ -17,18 +17,39 @@ function Receipt({ className, ends = "zig", ...props }: ReceiptProps) {
       stock="receipt"
       rules="none"
       edge={{ top: ends, bottom: ends }}
-      className={cn("mx-auto flex w-72 flex-col gap-3 px-5 py-8 font-type text-[13px] leading-5 text-ink", className)}
+      className={cn(
+        "mx-auto flex w-72 flex-col gap-3 px-5 py-8 font-type text-[13px] leading-5 text-ink",
+        className,
+      )}
       {...props}
     />
   )
 }
 
 function ReceiptHeader({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="receipt-header" className={cn("flex flex-col items-center gap-0.5 text-center [&>:first-child]:text-base [&>:first-child]:font-bold", className)} {...props} />
+  return (
+    <div
+      data-slot="receipt-header"
+      className={cn(
+        "flex flex-col items-center gap-0.5 text-center [&>:first-child]:text-base [&>:first-child]:font-bold",
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 function ReceiptLines({ className, ...props }: React.ComponentProps<"dl">) {
-  return <dl data-slot="receipt-lines" className={cn("flex flex-col gap-1 border-y border-dashed border-pencil-mark py-2.5", className)} {...props} />
+  return (
+    <dl
+      data-slot="receipt-lines"
+      className={cn(
+        "flex flex-col gap-1 border-y border-dashed border-pencil-mark py-2.5",
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 type ReceiptLineProps = Omit<React.ComponentProps<"div">, "children"> & {
@@ -56,14 +77,38 @@ type ReceiptTotalProps = Omit<React.ComponentProps<"dl">, "children"> & {
   seed?: string | number
 }
 
-function ReceiptTotal({ className, label = "TOTAL", children, circled = false, seed, ...props }: ReceiptTotalProps) {
+function ReceiptTotal({
+  className,
+  label = "TOTAL",
+  children,
+  circled = false,
+  seed,
+  ...props
+}: ReceiptTotalProps) {
   const pen = circled === "blue" ? "blue" : circled === "ink" ? "ink" : "redfelt"
-  const { hostRef, hostProps, node } = useInk({ recipe: receiptCircleRecipe, params: { pen }, kind: "circle", seed, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: receiptCircleRecipe,
+    params: { pen },
+    kind: "circle",
+    seed,
+    still: true,
+  })
   const merged = useMergedRef<HTMLElement>(circled ? hostRef : undefined)
   return (
-    <dl data-slot="receipt-total" className={cn("flex flex-wrap items-baseline justify-between gap-x-3 text-base font-bold", className)} {...props}>
+    <dl
+      data-slot="receipt-total"
+      className={cn(
+        "flex flex-wrap items-baseline justify-between gap-x-3 text-base font-bold",
+        className,
+      )}
+      {...props}
+    >
       <dt>{label}</dt>
-      <dd ref={merged as React.Ref<HTMLElement>} {...(circled && node ? hostProps : {})} className="ll-num relative isolate ms-auto px-1">
+      <dd
+        ref={merged as React.Ref<HTMLElement>}
+        {...(circled && node ? hostProps : {})}
+        className="ll-num relative isolate ms-auto px-1"
+      >
         {circled ? node : null}
         {children}
       </dd>
@@ -72,7 +117,14 @@ function ReceiptTotal({ className, label = "TOTAL", children, circled = false, s
 }
 
 function ReceiptDivider({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="receipt-divider" role="separator" className={cn("h-0 w-full border-t border-dashed border-pencil-mark", className)} {...props} />
+  return (
+    <div
+      data-slot="receipt-divider"
+      role="separator"
+      className={cn("h-0 w-full border-t border-dashed border-pencil-mark", className)}
+      {...props}
+    />
+  )
 }
 
 type ReceiptBarcodeProps = Omit<React.ComponentProps<"figure">, "children"> & {
@@ -83,8 +135,20 @@ type ReceiptBarcodeProps = Omit<React.ComponentProps<"figure">, "children"> & {
 function ReceiptBarcode({ className, value, height = 44, ...props }: ReceiptBarcodeProps) {
   const code = React.useMemo(() => barcode(value, 220, height), [value, height])
   return (
-    <figure data-slot="receipt-barcode" className={cn("flex flex-col items-center gap-1.5", className)} {...props}>
-      <svg role="img" aria-label={`Barcode ${value}`} viewBox={`0 0 220 ${height}`} preserveAspectRatio="none" className="w-full" style={{ height }} focusable="false">
+    <figure
+      data-slot="receipt-barcode"
+      className={cn("flex flex-col items-center gap-1.5", className)}
+      {...props}
+    >
+      <svg
+        role="img"
+        aria-label={`Barcode ${value}`}
+        viewBox={`0 0 220 ${height}`}
+        preserveAspectRatio="none"
+        className="w-full"
+        style={{ height }}
+        focusable="false"
+      >
         <path d={code.d} fill="currentColor" />
       </svg>
       <figcaption className="ll-num text-xs tracking-[0.3em]">{value}</figcaption>
@@ -93,8 +157,23 @@ function ReceiptBarcode({ className, value, height = 44, ...props }: ReceiptBarc
 }
 
 function ReceiptFooter({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="receipt-footer" className={cn("text-center text-xs text-muted-foreground", className)} {...props} />
+  return (
+    <div
+      data-slot="receipt-footer"
+      className={cn("text-center text-xs text-muted-foreground", className)}
+      {...props}
+    />
+  )
 }
 
-export { Receipt, ReceiptHeader, ReceiptLines, ReceiptLine, ReceiptTotal, ReceiptDivider, ReceiptBarcode, ReceiptFooter }
+export {
+  Receipt,
+  ReceiptHeader,
+  ReceiptLines,
+  ReceiptLine,
+  ReceiptTotal,
+  ReceiptDivider,
+  ReceiptBarcode,
+  ReceiptFooter,
+}
 export type { ReceiptProps, ReceiptLineProps, ReceiptTotalProps, ReceiptBarcodeProps }

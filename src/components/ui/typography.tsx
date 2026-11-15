@@ -2,7 +2,13 @@
 
 import * as React from "react"
 
-import { TYPOGRAPHY_QUOTE_BAR, TYPOGRAPHY_RULE_1, TYPOGRAPHY_RULE_2, TYPOGRAPHY_TABLE_HEAD, TYPOGRAPHY_TABLE_RULE } from "@/lib/ink/typography-tiles.generated"
+import {
+  TYPOGRAPHY_QUOTE_BAR,
+  TYPOGRAPHY_RULE_1,
+  TYPOGRAPHY_RULE_2,
+  TYPOGRAPHY_TABLE_HEAD,
+  TYPOGRAPHY_TABLE_RULE,
+} from "@/lib/ink/typography-tiles.generated"
 import { hashSeed } from "@/lib/ink/rng"
 import { useInkSeed } from "@/lib/ink/react"
 import { cn } from "@/lib/utils"
@@ -56,7 +62,12 @@ function H1({ rule = true, seed, className, children, ...props }: HeadingProps) 
   return (
     <h1
       data-slot="typography-h1"
-      className={cn("scroll-m-20 font-script text-5xl leading-[1.02] font-bold tracking-tight text-balance text-ink", rule && RULE, rule && RULE_1[hashSeed(s) % 3], className)}
+      className={cn(
+        "scroll-m-20 font-script text-5xl leading-[1.02] font-bold tracking-tight text-balance text-ink",
+        rule && RULE,
+        rule && RULE_1[hashSeed(s) % 3],
+        className,
+      )}
       {...props}
     >
       {rule ? <RuleStyle /> : null}
@@ -70,7 +81,12 @@ function H2({ rule = true, seed, className, children, ...props }: HeadingProps) 
   return (
     <h2
       data-slot="typography-h2"
-      className={cn("scroll-m-20 font-script text-4xl leading-[1.08] font-bold tracking-tight text-balance text-ink", rule && RULE, rule && RULE_2[hashSeed(s) % 3], className)}
+      className={cn(
+        "scroll-m-20 font-script text-4xl leading-[1.08] font-bold tracking-tight text-balance text-ink",
+        rule && RULE,
+        rule && RULE_2[hashSeed(s) % 3],
+        className,
+      )}
       {...props}
     >
       {rule ? <RuleStyle /> : null}
@@ -80,41 +96,91 @@ function H2({ rule = true, seed, className, children, ...props }: HeadingProps) 
 }
 
 function H3({ className, ...props }: React.ComponentProps<"h3">) {
-  return <h3 data-slot="typography-h3" className={cn("scroll-m-20 font-script text-3xl leading-tight font-bold tracking-tight text-balance text-ink", className)} {...props} />
+  return (
+    <h3
+      data-slot="typography-h3"
+      className={cn(
+        "scroll-m-20 font-script text-3xl leading-tight font-bold tracking-tight text-balance text-ink",
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 function H4({ className, ...props }: React.ComponentProps<"h4">) {
-  return <h4 data-slot="typography-h4" className={cn("scroll-m-20 font-hand text-xl leading-snug font-bold tracking-tight text-balance text-ink", className)} {...props} />
+  return (
+    <h4
+      data-slot="typography-h4"
+      className={cn(
+        "scroll-m-20 font-hand text-xl leading-snug font-bold tracking-tight text-balance text-ink",
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 function P({ className, ...props }: React.ComponentProps<"p">) {
-  return <p data-slot="typography-p" className={cn("text-[17px] leading-[1.7] text-pretty [&:not(:first-child)]:mt-5", className)} {...props} />
+  return (
+    <p
+      data-slot="typography-p"
+      className={cn("text-[17px] leading-[1.7] text-pretty [&:not(:first-child)]:mt-5", className)}
+      {...props}
+    />
+  )
 }
 
 function Lead({ className, ...props }: React.ComponentProps<"p">) {
-  return <p data-slot="typography-lead" className={cn("text-xl leading-[1.55] text-muted-foreground", className)} {...props} />
+  return (
+    <p
+      data-slot="typography-lead"
+      className={cn("text-xl leading-[1.55] text-muted-foreground", className)}
+      {...props}
+    />
+  )
 }
 
 function Large({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="typography-large" className={cn("text-lg font-bold", className)} {...props} />
+  return (
+    <div data-slot="typography-large" className={cn("text-lg font-bold", className)} {...props} />
+  )
 }
 
 function Small({ className, ...props }: React.ComponentProps<"small">) {
-  return <small data-slot="typography-small" className={cn("text-sm leading-none font-bold", className)} {...props} />
+  return (
+    <small
+      data-slot="typography-small"
+      className={cn("text-sm leading-none font-bold", className)}
+      {...props}
+    />
+  )
 }
 
 function Muted({ className, ...props }: React.ComponentProps<"p">) {
-  return <p data-slot="typography-muted" className={cn("text-sm text-muted-foreground", className)} {...props} />
+  return (
+    <p
+      data-slot="typography-muted"
+      className={cn("text-sm text-muted-foreground", className)}
+      {...props}
+    />
+  )
 }
 
-function List({ ordered = false, className, ...props }: React.ComponentProps<"ul"> & { ordered?: boolean }) {
+function List({
+  ordered = false,
+  className,
+  ...props
+}: React.ComponentProps<"ul"> & { ordered?: boolean }) {
   const Comp = (ordered ? "ol" : "ul") as "ul"
   return (
     <Comp
       data-slot="typography-list"
       className={cn(
         "my-5 ms-6 text-[17px] leading-[1.6] marker:text-marker [&>li]:mt-2 [&>li]:ps-1",
-        ordered ? "list-decimal marker:font-script marker:text-xl marker:font-bold" : "list-disc marker:text-xl",
+        ordered
+          ? "list-decimal marker:font-script marker:text-xl marker:font-bold"
+          : "list-disc marker:text-xl",
         className,
       )}
       {...props}
@@ -126,18 +192,35 @@ function InlineCode({ className, ...props }: React.ComponentProps<"code">) {
   return (
     <code
       data-slot="typography-inline-code"
-      className={cn("relative bg-muted box-decoration-clone px-[0.35rem] py-[0.15rem] font-mono text-[0.85em] font-medium text-ink wrap-anywhere [border-radius:2px_6px_3px_5px/5px_2px_6px_3px]", className)}
+      className={cn(
+        "relative bg-muted box-decoration-clone px-[0.35rem] py-[0.15rem] font-mono text-[0.85em] font-medium text-ink wrap-anywhere [border-radius:2px_6px_3px_5px/5px_2px_6px_3px]",
+        className,
+      )}
       {...props}
     />
   )
 }
 
-function Blockquote({ className, seed, children, ...props }: React.ComponentProps<"blockquote"> & {
+function Blockquote({
+  className,
+  seed,
+  children,
+  ...props
+}: React.ComponentProps<"blockquote"> & {
   seed?: string | number
 }) {
   const s = useInkSeed(seed)
   return (
-    <blockquote data-slot="typography-blockquote" className={cn("mt-6 ps-5 font-script text-2xl leading-[1.35] text-ink-soft", BAR, BARS[hashSeed(s) % 3], className)} {...props}>
+    <blockquote
+      data-slot="typography-blockquote"
+      className={cn(
+        "mt-6 ps-5 font-script text-2xl leading-[1.35] text-ink-soft",
+        BAR,
+        BARS[hashSeed(s) % 3],
+        className,
+      )}
+      {...props}
+    >
       <RuleStyle />
       {children}
     </blockquote>

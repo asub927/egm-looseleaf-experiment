@@ -27,7 +27,7 @@ export interface VineProblemSeed {
   coplayPrompt: string
 }
 
-export type VineSubmissionVia = 'drag' | 'tap' | 'keyboard'
+export type VineSubmissionVia = "drag" | "tap" | "keyboard"
 
 export interface VineSubmission {
   /** The id of the problem seed being answered */
@@ -40,7 +40,7 @@ export interface VineSubmission {
   via: VineSubmissionVia
 }
 
-export type VineVerdict = 'correct' | 'underfilled' | 'overfilled'
+export type VineVerdict = "correct" | "underfilled" | "overfilled"
 
 export interface VineEvaluationResult {
   /** Structured verdict assessing whether the vine reached exactly whole */
@@ -63,51 +63,52 @@ export interface VineEvaluationResult {
 
 export const CANONICAL_VINE_SEEDS: readonly VineProblemSeed[] = [
   {
-    id: 'vine-10-6',
+    id: "vine-10-6",
     whole: 10,
     known: 6,
-    prompt: 'How many more flowers until the vine is full?',
+    prompt: "How many more flowers until the vine is full?",
     story: "Barnaby's vine already has 6 open blossoms, but needs 10 to reach the garden trellis!",
     coplayPrompt: "Ask your learner: 'How did you count the sleeping buds in the gap?'",
   },
   {
-    id: 'vine-10-3',
+    id: "vine-10-3",
     whole: 10,
     known: 3,
-    prompt: 'How many more flowers until the vine is full?',
-    story: '3 little flowers popped open this morning. 10 flowers make a full vine!',
-    coplayPrompt: "Ask your learner: 'Can you see how many more to make 5, and then 5 more to make 10?'",
+    prompt: "How many more flowers until the vine is full?",
+    story: "3 little flowers popped open this morning. 10 flowers make a full vine!",
+    coplayPrompt:
+      "Ask your learner: 'Can you see how many more to make 5, and then 5 more to make 10?'",
   },
   {
-    id: 'vine-10-8',
+    id: "vine-10-8",
     whole: 10,
     known: 8,
-    prompt: 'How many more flowers until the vine is full?',
-    story: '8 glowing flowers are already awake! The top of the vine is almost reached.',
+    prompt: "How many more flowers until the vine is full?",
+    story: "8 glowing flowers are already awake! The top of the vine is almost reached.",
     coplayPrompt: "Ask your learner: 'Is 8 close to 10? How many steps away is it?'",
   },
   {
-    id: 'vine-10-4',
+    id: "vine-10-4",
     whole: 10,
     known: 4,
-    prompt: 'How many more flowers until the vine is full?',
-    story: '4 blossoms are smiling in the sun. How many more are waiting to bloom?',
+    prompt: "How many more flowers until the vine is full?",
+    story: "4 blossoms are smiling in the sun. How many more are waiting to bloom?",
     coplayPrompt: "Ask your learner: 'What number partners with 4 to make 10?'",
   },
   {
-    id: 'vine-10-7',
+    id: "vine-10-7",
     whole: 10,
     known: 7,
-    prompt: 'How many more flowers until the vine is full?',
-    story: '7 blossoms are dancing on the vine. How many sleeping buds are left?',
+    prompt: "How many more flowers until the vine is full?",
+    story: "7 blossoms are dancing on the vine. How many sleeping buds are left?",
     coplayPrompt: "Ask your learner: 'If you count up from 7 to 10, what numbers do you say?'",
   },
   {
-    id: 'vine-10-5',
+    id: "vine-10-5",
     whole: 10,
     known: 5,
-    prompt: 'How many more flowers until the vine is full?',
-    story: '5 blossoms are open—halfway there! How many more to make the full 10?',
+    prompt: "How many more flowers until the vine is full?",
+    story: "5 blossoms are open—halfway there! How many more to make the full 10?",
     coplayPrompt: "Ask your learner: 'Do you know your doubles? 5 plus what makes 10?'",
   },
 ]
@@ -125,14 +126,15 @@ export function getVineSeedById(id: string): VineProblemSeed | undefined {
  * Validate that a problem seed conforms to NC.2.OA.2 structural requirements.
  */
 export function validateVineProblemSeed(seed: unknown): VineProblemSeed | null {
-  if (!seed || typeof seed !== 'object') return null
+  if (!seed || typeof seed !== "object") return null
   const s = seed as Partial<VineProblemSeed>
-  if (typeof s.id !== 'string' || s.id.trim().length === 0) return null
-  if (typeof s.whole !== 'number' || !Number.isFinite(s.whole) || s.whole <= 0) return null
-  if (typeof s.known !== 'number' || !Number.isFinite(s.known) || s.known < 0 || s.known > s.whole) return null
-  if (typeof s.prompt !== 'string' || s.prompt.trim().length === 0) return null
-  if (typeof s.story !== 'string' || s.story.trim().length === 0) return null
-  if (typeof s.coplayPrompt !== 'string' || s.coplayPrompt.trim().length === 0) return null
+  if (typeof s.id !== "string" || s.id.trim().length === 0) return null
+  if (typeof s.whole !== "number" || !Number.isFinite(s.whole) || s.whole <= 0) return null
+  if (typeof s.known !== "number" || !Number.isFinite(s.known) || s.known < 0 || s.known > s.whole)
+    return null
+  if (typeof s.prompt !== "string" || s.prompt.trim().length === 0) return null
+  if (typeof s.story !== "string" || s.story.trim().length === 0) return null
+  if (typeof s.coplayPrompt !== "string" || s.coplayPrompt.trim().length === 0) return null
 
   return {
     id: s.id,
@@ -164,7 +166,7 @@ export function validateVineProblemSeed(seed: unknown): VineProblemSeed | null {
  */
 export function evaluateVineSubmission(
   seed: VineProblemSeed,
-  submission: VineSubmission
+  submission: VineSubmission,
 ): VineEvaluationResult {
   // 1. Sanitize seed inputs (Zero NaN, non-negative, valid bounds)
   const safeWhole = Number.isFinite(seed?.whole) ? Math.max(0, Math.round(seed.whole)) : 10
@@ -191,17 +193,17 @@ export function evaluateVineSubmission(
   let hint: string
 
   if (diff === 0) {
-    verdict = 'correct'
+    verdict = "correct"
     hint = `${safeKnown} blossoms + ${expected} new flowers = ${safeWhole} total blossoms. So ${safeWhole} − ${safeKnown} = ${expected}.`
   } else if (diff < 0) {
-    verdict = 'underfilled'
+    verdict = "underfilled"
     const remaining = expected - safeDragged
     hint =
       remaining === 1
-        ? 'There is still 1 sleeping bud glowing in the gap. Slide higher to wake it!'
+        ? "There is still 1 sleeping bud glowing in the gap. Slide higher to wake it!"
         : `There are still ${remaining} sleeping buds glowing in the gap. Slide higher to wake them!`
   } else {
-    verdict = 'overfilled'
+    verdict = "overfilled"
     const extra = safeDragged - expected
     hint =
       extra === 1
@@ -212,7 +214,7 @@ export function evaluateVineSubmission(
   // 5. Metacognitive mismatch reflection trigger
   // Spark thoughtful reflection when prediction was non-null and differed from the correct tactile count
   const mismatchReflectionNeeded =
-    verdict === 'correct' && safeGuess !== null && safeGuess !== safeDragged
+    verdict === "correct" && safeGuess !== null && safeGuess !== safeDragged
 
   return {
     verdict,
@@ -220,6 +222,6 @@ export function evaluateVineSubmission(
     expected,
     mismatchReflectionNeeded,
     hint,
-    strategyName: 'Think Addition (10 − ?)',
+    strategyName: "Think Addition (10 − ?)",
   }
 }

@@ -14,7 +14,13 @@ function Kbd({
 }: React.ComponentProps<"kbd"> & {
   seed?: string | number
 }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: kbdRecipe, params: {}, kind: "keycap", seed, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: kbdRecipe,
+    params: {},
+    kind: "keycap",
+    seed,
+    still: true,
+  })
   const { children, ...rest } = props
   return (
     <IconSizeContext value={14}>
@@ -29,7 +35,7 @@ function Kbd({
           "[&_svg]:pointer-events-none [&_svg:not(.absolute):not([class*='size-'])]:size-3.5",
           "calm:h-5 calm:pr-1 calm:pb-0",
           "[[data-slot=tooltip-content]_&]:text-inherit",
-          className
+          className,
         )}
         {...rest}
       >
@@ -41,7 +47,13 @@ function Kbd({
 }
 
 function KbdGroup({ className, ...props }: React.ComponentProps<"kbd">) {
-  return <kbd data-slot="kbd-group" className={cn("inline-flex items-center gap-1", className)} {...props} />
+  return (
+    <kbd
+      data-slot="kbd-group"
+      className={cn("inline-flex items-center gap-1", className)}
+      {...props}
+    />
+  )
 }
 
 export { Kbd, KbdGroup }

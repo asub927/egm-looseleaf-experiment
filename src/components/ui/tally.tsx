@@ -53,8 +53,19 @@ function Tally({
       ref={useMergedRef<HTMLElement>(hostRef, phaseRef, ref as React.Ref<HTMLElement> | undefined)}
       {...(show ? hostProps : {})}
       {...phaseProps}
-      style={{ width: box.w, height: box.h, ...(animate ? ({ "--ll-draw-delay": `${delay ?? 0}ms` } as React.CSSProperties) : undefined), ...style }}
-      className={cn("relative isolate inline-block shrink-0 align-middle outline-none", animate && MARK_WIPE, className)}
+      style={{
+        width: box.w,
+        height: box.h,
+        ...(animate
+          ? ({ "--ll-draw-delay": `${delay ?? 0}ms` } as React.CSSProperties)
+          : undefined),
+        ...style,
+      }}
+      className={cn(
+        "relative isolate inline-block shrink-0 align-middle outline-none",
+        animate && MARK_WIPE,
+        className,
+      )}
       {...props}
     >
       {show && frame ? <BlockSvg kind="tally" frame={frame} keep /> : null}

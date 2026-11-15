@@ -46,12 +46,7 @@ export function TartPlate({
   const equalStep = 360 / targetShares
 
   const targets = React.useMemo<SnapTarget[]>(() => {
-    const label =
-      targetShares === 2
-        ? "2 Halves"
-        : targetShares === 3
-          ? "3 Thirds"
-          : "4 Fourths"
+    const label = targetShares === 2 ? "2 Halves" : targetShares === 3 ? "3 Thirds" : "4 Fourths"
     return [
       {
         id: `equal-${targetShares}`,
@@ -68,7 +63,7 @@ export function TartPlate({
     center: { x: CENTER_X, y: CENTER_Y },
     targets,
     snapThreshold: 0.05, // 5% of 360 = 18 degrees
-    releaseThreshold: 0.10,
+    releaseThreshold: 0.1,
     onSnap: () => {
       playSliceThud()
     },
@@ -88,25 +83,19 @@ export function TartPlate({
   })
 
   const isDragging = dragAngle !== null
-  const activeAngle = isDragging
-    ? dragAngle
-    : radialAngles.length > 1
-      ? radialAngles[1]
-      : 0
+  const activeAngle = isDragging ? dragAngle : radialAngles.length > 1 ? radialAngles[1] : 0
 
   // Active spoke angles
   const activeSpokes = React.useMemo(() => {
     if (isDragging) {
       const angles: number[] = []
       for (let i = 0; i < targetShares; i++) {
-        angles.push(((i * activeAngle) % 360 + 360) % 360)
+        angles.push((((i * activeAngle) % 360) + 360) % 360)
       }
       return angles.sort((a, b) => a - b)
     }
     if (radialAngles.length === 0) return []
-    return radialAngles
-      .map((a) => ((a % 360) + 360) % 360)
-      .sort((a, b) => a - b)
+    return radialAngles.map((a) => ((a % 360) + 360) % 360).sort((a, b) => a - b)
   }, [isDragging, activeAngle, targetShares, radialAngles])
 
   // Ghost spoke angles
@@ -119,8 +108,7 @@ export function TartPlate({
     return angles
   }, [isGhostVisible, targetShares])
 
-  const singularShareName =
-    targetShares === 2 ? "half" : targetShares === 3 ? "third" : "fourth"
+  const singularShareName = targetShares === 2 ? "half" : targetShares === 3 ? "third" : "fourth"
 
   // Primary handle position on the rim
   const handleRad = (activeAngle * Math.PI) / 180
@@ -351,7 +339,7 @@ export function TartPlate({
           {activeSpokes.map((startAngle, idx) => {
             const nextIdx = (idx + 1) % activeSpokes.length
             const endAngle = activeSpokes[nextIdx]
-            const deltaTheta = ((endAngle - startAngle + 360) % 360) || 360
+            const deltaTheta = (endAngle - startAngle + 360) % 360 || 360
 
             const rad1 = (startAngle * Math.PI) / 180
             const rad2 = (endAngle * Math.PI) / 180
@@ -364,14 +352,13 @@ export function TartPlate({
             const wedgePath = `M ${CENTER_X} ${CENTER_Y} L ${x1.toFixed(1)} ${y1.toFixed(1)} A ${FILLING_RADIUS} ${FILLING_RADIUS} 0 ${largeArcFlag} 1 ${x2.toFixed(1)} ${y2.toFixed(1)} Z`
 
             // Mid angle for verbal badge placement
-            const midAngle = ((startAngle + deltaTheta / 2) % 360)
+            const midAngle = (startAngle + deltaTheta / 2) % 360
             const midRad = (midAngle * Math.PI) / 180
             const badgeRadius = 88
             const bx = CENTER_X + badgeRadius * Math.cos(midRad)
             const by = CENTER_Y + badgeRadius * Math.sin(midRad)
 
-            const fillColor =
-              WEDGE_WATERCOLOR_FILLS[idx % WEDGE_WATERCOLOR_FILLS.length]
+            const fillColor = WEDGE_WATERCOLOR_FILLS[idx % WEDGE_WATERCOLOR_FILLS.length]
 
             return (
               <g key={`wedge-${idx}`}>
@@ -440,14 +427,7 @@ export function TartPlate({
                   opacity={0.85}
                 />
                 {/* Ghost Rim Dot */}
-                <circle
-                  cx={gx}
-                  cy={gy}
-                  r={8}
-                  fill="#eff6ff"
-                  stroke="#2563eb"
-                  strokeWidth={2}
-                />
+                <circle cx={gx} cy={gy} r={8} fill="#eff6ff" stroke="#2563eb" strokeWidth={2} />
               </g>
             )
           })}
@@ -529,14 +509,7 @@ export function TartPlate({
           />
 
           {/* Pastel Rotary Cutter Wheel (Visual boundary ~36px diameter) */}
-          <circle
-            cx={0}
-            cy={0}
-            r={17}
-            fill="url(#cutter-wheel)"
-            stroke="#f472b6"
-            strokeWidth={2}
-          />
+          <circle cx={0} cy={0} r={17} fill="url(#cutter-wheel)" stroke="#f472b6" strokeWidth={2} />
 
           {/* Wheel Serration Bevel Ring */}
           <circle cx={0} cy={0} r={12} fill="none" stroke="#fbcfe8" strokeWidth={1} />

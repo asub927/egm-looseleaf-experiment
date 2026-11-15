@@ -12,22 +12,16 @@ import {
 } from "../lib/math/evaluator.ts"
 import type { MascotPose } from "../lib/ink/art/mascots/index.ts"
 
-export type {
-  ArrayProblemSpec,
-  ArrayDiagnostic,
-  ParityProblemSpec,
-  ParityDiagnostic,
-  PairingSlot,
-}
+export type { ArrayProblemSpec, ArrayDiagnostic, ParityProblemSpec, ParityDiagnostic, PairingSlot }
 
 export type ScaffoldingTier = 0 | 1 | 2 | 3
 
 export type ScaffoldingStatus =
-  | "constructing"      // Student actively placing/moving tokens
-  | "tier1_prompt"      // 1st failure: Socratic prompt delivered
-  | "tier2_ghost"       // 2nd failure: Visual ghost assist active
+  | "constructing" // Student actively placing/moving tokens
+  | "tier1_prompt" // 1st failure: Socratic prompt delivered
+  | "tier2_ghost" // 2nd failure: Visual ghost assist active
   | "tier3_demonstrate" // 3rd failure or student asked for help: Step demonstrated
-  | "validated"         // Problem successfully solved
+  | "validated" // Problem successfully solved
 
 export interface GhostCoordinate {
   row: number
@@ -66,19 +60,24 @@ export const ISOMORPHIC_PARITY_SEEDS: readonly ParityProblemSpec[] = [
 export function getIsomorphicArraySpec(current: ArrayProblemSpec): ArrayProblemSpec {
   // First attempt: commutative transposition (e.g. 3x4 -> 4x3)
   const transposed = ISOMORPHIC_ARRAY_SEEDS.find(
-    (s) => s.totalTokens === current.totalTokens && s.targetRows === current.targetCols && s.targetCols === current.targetRows
+    (s) =>
+      s.totalTokens === current.totalTokens &&
+      s.targetRows === current.targetCols &&
+      s.targetCols === current.targetRows,
   )
   if (transposed) return transposed
 
   // Second attempt: different spec with same token count
   const sameTotal = ISOMORPHIC_ARRAY_SEEDS.find(
-    (s) => s.totalTokens === current.totalTokens && (s.targetRows !== current.targetRows || s.targetCols !== current.targetCols)
+    (s) =>
+      s.totalTokens === current.totalTokens &&
+      (s.targetRows !== current.targetRows || s.targetCols !== current.targetCols),
   )
   if (sameTotal) return sameTotal
 
   // Fallback: cycle to next spec in seed bank
   const currentIndex = ISOMORPHIC_ARRAY_SEEDS.findIndex(
-    (s) => s.targetRows === current.targetRows && s.targetCols === current.targetCols
+    (s) => s.targetRows === current.targetRows && s.targetCols === current.targetCols,
   )
   const nextIndex = (currentIndex + 1) % ISOMORPHIC_ARRAY_SEEDS.length
   return ISOMORPHIC_ARRAY_SEEDS[nextIndex]
@@ -90,13 +89,15 @@ export function getIsomorphicArraySpec(current: ArrayProblemSpec): ArrayProblemS
 export function getIsomorphicParitySpec(current: ParityProblemSpec): ParityProblemSpec {
   const isOdd = current.totalTokens % 2 !== 0
   const siblings = ISOMORPHIC_PARITY_SEEDS.filter(
-    (s) => (s.totalTokens % 2 !== 0) === isOdd && s.totalTokens !== current.totalTokens
+    (s) => (s.totalTokens % 2 !== 0) === isOdd && s.totalTokens !== current.totalTokens,
   )
   if (siblings.length > 0) {
     const nextIdx = Math.floor(Math.random() * siblings.length)
     return siblings[nextIdx]
   }
-  const nextCount = isOdd ? ((current.totalTokens + 2) % 19) || 7 : ((current.totalTokens + 2) % 20) || 8
+  const nextCount = isOdd
+    ? (current.totalTokens + 2) % 19 || 7
+    : (current.totalTokens + 2) % 20 || 8
   return {
     totalTokens: nextCount,
     strategy: current.strategy,
@@ -112,7 +113,7 @@ export function getIsomorphicParitySpec(current: ParityProblemSpec): ParityProbl
  */
 export function computeGhostCoordinates(
   spec: ArrayProblemSpec | ParityProblemSpec,
-  type: "array" | "parity"
+  type: "array" | "parity",
 ): GhostCoordinate[] {
   const coords: GhostCoordinate[] = []
   if (type === "array") {
@@ -141,7 +142,7 @@ export function isGhostCell(
   row: number,
   col: number,
   spec: ArrayProblemSpec | ParityProblemSpec,
-  type: "array" | "parity"
+  type: "array" | "parity",
 ): boolean {
   if (type === "array") {
     const arraySpec = spec as ArrayProblemSpec
@@ -157,7 +158,7 @@ export function isGhostCell(
 export function demonstrateArrayStep(
   spec: ArrayProblemSpec,
   maxRows: number = 5,
-  maxCols: number = 5
+  maxCols: number = 5,
 ): boolean[][] {
   const grid: boolean[][] = Array(maxRows)
     .fill(null)
@@ -174,7 +175,7 @@ export function demonstrateArrayStep(
  */
 export function demonstrateParityStep(
   spec: ParityProblemSpec,
-  maxPairs: number = 10
+  maxPairs: number = 10,
 ): PairingSlot[] {
   const slots: PairingSlot[] = Array(maxPairs)
     .fill(null)
@@ -300,7 +301,7 @@ export function useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaff
 
   const checkGhostCell = React.useCallback(
     (row: number, col: number) => isGhostCell(row, col, spec, type),
-    [spec, type]
+    [spec, type],
   )
 
   // ==========================================================================
@@ -393,7 +394,7 @@ export function useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaff
       const demonstrated = demonstrateArrayStep(arraySpec, rows, cols)
       config.onGridChange?.(demonstrated)
       setFeedback(
-        `Pencil Pal placed Row 1 with ${arraySpec.targetCols} cookies! Now can you finish Rows 2 and ${arraySpec.targetRows}?`
+        `Pencil Pal placed Row 1 with ${arraySpec.targetCols} cookies! Now can you finish Rows 2 and ${arraySpec.targetRows}?`,
       )
     } else {
       const paritySpec = config.spec
@@ -465,7 +466,7 @@ export function useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaff
           setMascotPose(
             diagnostic.status === "incomplete_inventory" || diagnostic.status === "empty"
               ? "point"
-              : "think"
+              : "think",
           )
           setFeedback(diagnostic.feedback)
         } else if (nextFail === 2) {
@@ -476,7 +477,7 @@ export function useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaff
           setMascotPose("sketch")
           setTierBadge("Step 2: Ghost Assist")
           setFeedback(
-            `Pencil Pal drew dotted ghost boxes for ${config.spec.targetRows} rows of ${config.spec.targetCols}! Can you fill the ghost boxes?`
+            `Pencil Pal drew dotted ghost boxes for ${config.spec.targetRows} rows of ${config.spec.targetCols}! Can you fill the ghost boxes?`,
           )
         } else {
           // Tier 3: Step Demonstration with Isomorphic Retry
@@ -512,7 +513,7 @@ export function useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaff
           setMascotPose(
             diagnostic.status === "incomplete_inventory" || diagnostic.status === "empty"
               ? "point"
-              : "think"
+              : "think",
           )
           setFeedback(diagnostic.feedback)
         } else if (nextFail === 2) {
@@ -523,7 +524,7 @@ export function useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaff
           setMascotPose("sketch")
           setTierBadge("Step 2: Ghost Assist")
           setFeedback(
-            "Pencil Pal drew dotted ghost boxes for your pairs! Can you place your counters into the buddy boxes?"
+            "Pencil Pal drew dotted ghost boxes for your pairs! Can you place your counters into the buddy boxes?",
           )
         } else {
           // Tier 3: Step Demonstration with Isomorphic Retry
@@ -533,7 +534,7 @@ export function useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaff
         return diagnostic
       }
     },
-    [config, failureCount, autoPlaceStep]
+    [config, failureCount, autoPlaceStep],
   )
 
   const resetScaffolding = React.useCallback(() => {
@@ -574,9 +575,10 @@ export function useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaff
 /**
  * Specialized scaffolding hook for NC.2.OA.4 Rectangular Arrays.
  */
-export function useArrayScaffolding(
-  config: Omit<ArrayScaffoldingConfig, "type">
-): Omit<SocraticScaffoldingReturn, "checkAnswer"> & {
+export function useArrayScaffolding(config: Omit<ArrayScaffoldingConfig, "type">): Omit<
+  SocraticScaffoldingReturn,
+  "checkAnswer"
+> & {
   checkAnswer: (overrideGrid?: boolean[][]) => ArrayDiagnostic
 } {
   const result = useSocraticScaffolding({ ...config, type: "array" })
@@ -590,9 +592,10 @@ export function useArrayScaffolding(
 /**
  * Specialized scaffolding hook for NC.2.OA.3 Parity Pairing.
  */
-export function useParityScaffolding(
-  config: Omit<ParityScaffoldingConfig, "type">
-): Omit<SocraticScaffoldingReturn, "checkAnswer"> & {
+export function useParityScaffolding(config: Omit<ParityScaffoldingConfig, "type">): Omit<
+  SocraticScaffoldingReturn,
+  "checkAnswer"
+> & {
   checkAnswer: (overrideSlots?: PairingSlot[]) => ParityDiagnostic
 } {
   const result = useSocraticScaffolding({ ...config, type: "parity" })

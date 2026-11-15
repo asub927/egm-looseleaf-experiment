@@ -1,15 +1,18 @@
 # Core Library
 
 ## Overview
+
 Shared client utilities, message scroller primitives, syntax highlighting, menu styles, sketch raster export, and the core looseleaf procedural ink rendering engine.
 
 ## Subdirectories & Boundaries
+
 - [audio](./audio) - Web Audio procedural sound effect synthesizer and speech synthesis helpers. [audio-bus.ts](./audio/audio-bus.ts), [sfx.ts](./audio/sfx.ts)
 - [ink](./ink/README.md) - Core procedural sketching and rendering engine producing organic, hand-drawn vector graphics, paper simulations, and UI components.
 - [math](./math) - Headless mathematical diagnostic evaluators for NC.2.OA.3 parity and NC.2.OA.4 rectangular array standards. [evaluator.ts](./math/evaluator.ts)
 - [storage](./storage) - COPPA-compliant anonymous local student profile storage. [profile.ts](./storage/profile.ts)
 
 ## Interface
+
 - [audio/audio-bus.ts:audioBus]
 - [audio/audio-bus.ts:AudioBusController]
 - [audio/audio-bus.ts:VoiceBus]
@@ -60,11 +63,14 @@ Shared client utilities, message scroller primitives, syntax highlighting, menu 
 - [utils.ts:cn]
 
 ## Invariants
+
 - Code tokenizer normalizes unrecognized languages to plain text representation [code-highlight.ts:tokenize]
 - SVG-to-PNG export times out gracefully after 4000ms if image rasterization hangs [sketch-export.ts:svgToPngDataUrl]
 
 ## Side Effects
+
 - Asynchronously creates DOM Image and Canvas elements to perform client-side raster image conversion [sketch-export.ts:svgToPngDataUrl]
 
 ## Verification
+
 - Run: npm run build

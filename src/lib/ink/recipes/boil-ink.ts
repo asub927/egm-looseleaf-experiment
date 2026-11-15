@@ -1,4 +1,4 @@
-import type { Knobs } from '@/lib/ink/builder'
+import type { Knobs } from "@/lib/ink/builder"
 
 const TABLE: readonly Knobs[] = [
   { wobble: 1, misreg: 1, bleed: 1, width: 1 },

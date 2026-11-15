@@ -6,7 +6,11 @@ import { Accordion as AccordionPrimitive } from "radix-ui"
 import { Icon } from "@/components/ui/icon"
 import { useInk, useMergedRef } from "@/lib/ink/react"
 import { accordionRuleRecipe, accordionTriggerRecipe } from "@/lib/ink/recipes/accordion-ink"
-import { MARGIN_BRACKET_DRAW, marginBracketRecipe, type MarginBracketParams } from "@/lib/ink/recipes/margin-bracket-ink"
+import {
+  MARGIN_BRACKET_DRAW,
+  marginBracketRecipe,
+  type MarginBracketParams,
+} from "@/lib/ink/recipes/margin-bracket-ink"
 import { markTouched } from "@/lib/ink/recipes/draw-on-ink"
 import { cn } from "@/lib/utils"
 
@@ -16,10 +20,16 @@ const BracketContext = React.createContext<BracketKind>("curly")
 const FOLD = `@keyframes ll-accordion-down { from { height: 0; clip-path: inset(0); } to { height: var(--radix-accordion-content-height); clip-path: inset(0); } }
 @keyframes ll-accordion-up { from { height: var(--radix-accordion-content-height); clip-path: inset(0); } to { height: 0; clip-path: inset(0); } }`
 
-const SWIPE = "hover:[&>svg_[data-part=swipe]]:animate-[ll-wipe_var(--ll-dur-sheet)_var(--ll-ease-out)_both]"
+const SWIPE =
+  "hover:[&>svg_[data-part=swipe]]:animate-[ll-wipe_var(--ll-dur-sheet)_var(--ll-ease-out)_both]"
 
 function Rule() {
-  const { hostRef, hostProps, node } = useInk({ recipe: accordionRuleRecipe, params: {}, kind: "rule", still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: accordionRuleRecipe,
+    params: {},
+    kind: "rule",
+    still: true,
+  })
   return (
     <span
       data-slot="accordion-rule"
@@ -34,14 +44,22 @@ function Rule() {
 }
 
 function Bracket({ kind }: { kind: Exclude<BracketKind, false> }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: marginBracketRecipe, params: { kind }, kind: "bracket", still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: marginBracketRecipe,
+    params: { kind },
+    kind: "bracket",
+    still: true,
+  })
   return (
     <span
       data-slot="accordion-bracket"
       aria-hidden="true"
       ref={hostRef}
       {...(node ? hostProps : {})}
-      className={cn("pointer-events-none absolute inset-y-0 start-0 block w-3.5 forced-colors:hidden", MARGIN_BRACKET_DRAW)}
+      className={cn(
+        "pointer-events-none absolute inset-y-0 start-0 block w-3.5 forced-colors:hidden",
+        MARGIN_BRACKET_DRAW,
+      )}
     >
       {node}
     </span>
@@ -72,11 +90,18 @@ function Accordion({
   )
 }
 
-function AccordionItem({ className, children, ...props }: React.ComponentProps<typeof AccordionPrimitive.Item>) {
+function AccordionItem({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof AccordionPrimitive.Item>) {
   return (
     <AccordionPrimitive.Item
       data-slot="accordion-item"
-      className={cn("group/accordion-item relative pb-2 last:[&>[data-slot=accordion-rule]]:hidden", className)}
+      className={cn(
+        "group/accordion-item relative pb-2 last:[&>[data-slot=accordion-rule]]:hidden",
+        className,
+      )}
       {...props}
     >
       {children}
@@ -94,7 +119,13 @@ function AccordionTrigger({
 }: React.ComponentProps<typeof AccordionPrimitive.Trigger> & {
   seed?: string | number
 }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: accordionTriggerRecipe, params: { disabled: !!props.disabled }, kind: "row", seed, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: accordionTriggerRecipe,
+    params: { disabled: !!props.disabled },
+    kind: "row",
+    seed,
+    still: true,
+  })
   return (
     <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger
@@ -105,13 +136,18 @@ function AccordionTrigger({
           "group/accordion-trigger relative isolate -mx-2 flex flex-1 items-start justify-between gap-4 px-2 py-3.5 text-start font-hand text-base font-bold transition-[color] disabled:pointer-events-none disabled:text-pencil-text compact:py-2.5 calm:py-2 calm:text-[15px]",
           "[&_svg:not(.absolute):not([class*='size-'])]:size-4 [&[data-state=open]>[data-chevron]]:rotate-180",
           SWIPE,
-          className
+          className,
         )}
         {...props}
       >
         {node}
         {children}
-        <Icon name="chevron-down" data-chevron="" size={16} className="pointer-events-none mt-1 shrink-0 transition-transform duration-(--ll-dur-sheet) ease-settle" />
+        <Icon
+          name="chevron-down"
+          data-chevron=""
+          size={16}
+          className="pointer-events-none mt-1 shrink-0 transition-transform duration-(--ll-dur-sheet) ease-settle"
+        />
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   )
@@ -129,7 +165,11 @@ function splitContentClass(className?: string) {
   return { outer: outer.join(" "), inner: inner.join(" ") }
 }
 
-function AccordionContent({ className, children, ...props }: React.ComponentProps<typeof AccordionPrimitive.Content>) {
+function AccordionContent({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof AccordionPrimitive.Content>) {
   const bracket = React.useContext(BracketContext)
   const split = splitContentClass(className)
   return (
@@ -139,7 +179,13 @@ function AccordionContent({ className, children, ...props }: React.ComponentProp
       {...props}
     >
       <div className={cn("pt-0 pb-4", split.outer)}>
-        <div className={cn("relative in-data-touched:group-data-[state=open]/accordion-content:animate-soak", bracket && "ps-5", split.inner)}>
+        <div
+          className={cn(
+            "relative in-data-touched:group-data-[state=open]/accordion-content:animate-soak",
+            bracket && "ps-5",
+            split.inner,
+          )}
+        >
           {bracket ? <Bracket kind={bracket} /> : null}
           {children}
         </div>

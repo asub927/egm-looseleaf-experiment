@@ -181,9 +181,9 @@ export class VoiceBus {
         if (event.name === "word") {
           const charIndex = event.charIndex
           const charLength = event.charLength || 1
-          const rawWord = cleanText
-            .substring(charIndex, charIndex + (event.charLength || 15))
-            .split(/\s+/)[0] || ""
+          const rawWord =
+            cleanText.substring(charIndex, charIndex + (event.charLength || 15)).split(/\s+/)[0] ||
+            ""
           options?.onWord?.(rawWord, charIndex, charLength)
         }
       }

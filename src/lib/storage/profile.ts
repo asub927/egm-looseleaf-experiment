@@ -67,7 +67,8 @@ function sanitizeProfile(raw: unknown): StudentProfile {
   const validThemes: readonly StudentTheme[] = ["honey", "sky", "cork", "meadow", "studio"]
 
   const avatar: AvatarType =
-    typeof candidate.avatar === "string" && (validAvatars as readonly string[]).includes(candidate.avatar)
+    typeof candidate.avatar === "string" &&
+    (validAvatars as readonly string[]).includes(candidate.avatar)
       ? (candidate.avatar as AvatarType)
       : DEFAULT_STUDENT_PROFILE.avatar
 
@@ -77,7 +78,8 @@ function sanitizeProfile(raw: unknown): StudentProfile {
       : DEFAULT_STUDENT_PROFILE.stars
 
   const theme: StudentTheme =
-    typeof candidate.theme === "string" && (validThemes as readonly string[]).includes(candidate.theme)
+    typeof candidate.theme === "string" &&
+    (validThemes as readonly string[]).includes(candidate.theme)
       ? (candidate.theme as StudentTheme)
       : DEFAULT_STUDENT_PROFILE.theme
 

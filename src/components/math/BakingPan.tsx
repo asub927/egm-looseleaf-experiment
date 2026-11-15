@@ -45,12 +45,7 @@ export function BakingPan({
   const targetValue = 1 / targetShares
 
   const targets = React.useMemo<SnapTarget[]>(() => {
-    const label =
-      targetShares === 2
-        ? "2 Halves"
-        : targetShares === 3
-          ? "3 Thirds"
-          : "4 Fourths"
+    const label = targetShares === 2 ? "2 Halves" : targetShares === 3 ? "3 Thirds" : "4 Fourths"
     return [
       {
         id: `equal-${targetShares}`,
@@ -67,7 +62,7 @@ export function BakingPan({
     bounds: { min: PAN_X, max: PAN_MAX_X },
     targets,
     snapThreshold: 0.05,
-    releaseThreshold: 0.10,
+    releaseThreshold: 0.1,
     onSnap: () => {
       playSliceThud()
     },
@@ -87,11 +82,7 @@ export function BakingPan({
 
   // Determine current active cut positions
   const isDragging = dragVal !== null
-  const activeSpacing = isDragging
-    ? dragVal
-    : cuts.length > 0
-      ? cuts[0]
-      : 0
+  const activeSpacing = isDragging ? dragVal : cuts.length > 0 ? cuts[0] : 0
 
   const activeCuts = React.useMemo(() => {
     if (isDragging) {
@@ -120,8 +111,7 @@ export function BakingPan({
     return positions
   }, [isGhostVisible, targetShares])
 
-  const singularShareName =
-    targetShares === 2 ? "half" : targetShares === 3 ? "third" : "fourth"
+  const singularShareName = targetShares === 2 ? "half" : targetShares === 3 ? "third" : "fourth"
 
   // Primary handle position
   const handleX = PAN_X + activeSpacing * PAN_W

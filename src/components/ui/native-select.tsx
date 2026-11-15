@@ -40,7 +40,7 @@ function NativeSelect({
       style={style}
       className={cn(
         "group/native-select relative isolate flex h-9 w-fit items-center font-hand text-base text-(--ll-input-ink) caret-(--ll-caret) has-[select[multiple]]:h-auto data-[size=sm]:h-8 data-[size=sm]:text-[15px] compact:h-8 calm:h-7 calm:text-[15px] compact:data-[size=sm]:h-7",
-        split.frame
+        split.frame,
       )}
     >
       {node}
@@ -50,7 +50,7 @@ function NativeSelect({
         ref={ref}
         className={cn(
           "h-full w-full min-w-0 appearance-none bg-transparent ps-3 pe-10 aria-invalid:pe-14 outline-none text-[length:inherit] disabled:cursor-not-allowed disabled:text-pencil-text has-[option[value='']:checked]:text-(--ll-placeholder) forced-colors:aria-invalid:underline forced-colors:aria-invalid:decoration-wavy",
-          split.control
+          split.control,
         )}
         {...props}
       >
@@ -67,11 +67,23 @@ function NativeSelect({
 }
 
 function NativeSelectOption({ className, ...props }: React.ComponentProps<"option">) {
-  return <option data-slot="native-select-option" className={cn("bg-popover text-popover-foreground", className)} {...props} />
+  return (
+    <option
+      data-slot="native-select-option"
+      className={cn("bg-popover text-popover-foreground", className)}
+      {...props}
+    />
+  )
 }
 
 function NativeSelectOptGroup({ className, ...props }: React.ComponentProps<"optgroup">) {
-  return <optgroup data-slot="native-select-optgroup" className={cn("bg-popover text-popover-foreground", className)} {...props} />
+  return (
+    <optgroup
+      data-slot="native-select-optgroup"
+      className={cn("bg-popover text-popover-foreground", className)}
+      {...props}
+    />
+  )
 }
 
 export { NativeSelect, NativeSelectOptGroup, NativeSelectOption }

@@ -97,7 +97,7 @@ function StickerSheet({
       if (!controlled) setInner(next)
       onPeeledChange?.(next)
     },
-    [controlled, onPeeledChange]
+    [controlled, onPeeledChange],
   )
   const ctx = React.useMemo<StickerSheetContextValue>(
     () => ({
@@ -119,14 +119,21 @@ function StickerSheet({
         setStatus(`${item.label} stuck back on.`)
       },
     }),
-    [peeled, size, restorable, disabled, uid, change, onPeel, onStick]
+    [peeled, size, restorable, disabled, uid, change, onPeel, onStick],
   )
 
   const cell = cellOf(size)
   const B = BACKINGS[backing]
   const header = title ? 34 : 0
-  const print = useInk({ recipe: stickerSheetRecipe, params: { top: header }, kind: "print", seed: `${seed}|print` })
-  const items = React.Children.count(children) ? children : (stickers ?? []).map((n) => <StickerSheetItem key={n} name={n} />)
+  const print = useInk({
+    recipe: stickerSheetRecipe,
+    params: { top: header },
+    kind: "print",
+    seed: `${seed}|print`,
+  })
+  const items = React.Children.count(children)
+    ? children
+    : (stickers ?? []).map((n) => <StickerSheetItem key={n} name={n} />)
   const here = new Set<string>()
   let unknown = 0
   React.Children.toArray(items).forEach((child) => {
@@ -150,11 +157,21 @@ function StickerSheet({
         stock={B.stock}
         tilt={tilt}
         seed={seed}
-        className={cn("w-fit max-w-full p-4 pt-4 has-[[data-dragging]]:z-(--ll-z-raised)", disabled && "opacity-70", className)}
+        className={cn(
+          "w-fit max-w-full p-4 pt-4 has-[[data-dragging]]:z-(--ll-z-raised)",
+          disabled && "opacity-70",
+          className,
+        )}
         style={{ ...(B.tint ? { "--ll-stock": B.tint } : null), ...style } as React.CSSProperties}
         {...props}
       >
-        <div ref={print.hostRef} {...print.hostProps} data-slot="sticker-sheet-print" aria-hidden="true" className="pointer-events-none absolute inset-1.5 isolate">
+        <div
+          ref={print.hostRef}
+          {...print.hostProps}
+          data-slot="sticker-sheet-print"
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-1.5 isolate"
+        >
           {print.node}
         </div>
         {backing === "glassine" ? (
@@ -169,10 +186,16 @@ function StickerSheet({
             <p id={titleId} className="truncate font-type text-sm text-pencil-text">
               {title}
             </p>
-            <p className="shrink-0 font-type text-xs text-pencil-text ll-num">{Math.max(0, left)} left</p>
+            <p className="shrink-0 font-type text-xs text-pencil-text ll-num">
+              {Math.max(0, left)} left
+            </p>
           </div>
         ) : null}
-        <div data-slot="sticker-sheet-grid" className="relative grid justify-center gap-1 p-2" style={{ gridTemplateColumns: `repeat(${Math.max(1, columns)}, ${cell}px)` }}>
+        <div
+          data-slot="sticker-sheet-grid"
+          className="relative grid justify-center gap-1 p-2"
+          style={{ gridTemplateColumns: `repeat(${Math.max(1, columns)}, ${cell}px)` }}
+        >
           {items}
         </div>
         <span role="status" className="sr-only">
@@ -183,7 +206,10 @@ function StickerSheet({
   )
 }
 
-type StickerSheetItemProps = Omit<React.ComponentProps<"button">, "name" | "id" | "onPointerDown" | "onPointerMove" | "onPointerUp" | "onPointerCancel"> & {
+type StickerSheetItemProps = Omit<
+  React.ComponentProps<"button">,
+  "name" | "id" | "onPointerDown" | "onPointerMove" | "onPointerUp" | "onPointerCancel"
+> & {
   name: string
   id?: string
   label?: string
@@ -193,7 +219,16 @@ type StickerSheetItemProps = Omit<React.ComponentProps<"button">, "name" | "id" 
 const DRAG_AT = 6
 const DRAG_OFF = 18
 
-function StickerSheetItem({ name, id: idProp, label: labelProp, size: sizeProp, className, onClick, disabled: disabledProp, ...props }: StickerSheetItemProps) {
+function StickerSheetItem({
+  name,
+  id: idProp,
+  label: labelProp,
+  size: sizeProp,
+  className,
+  onClick,
+  disabled: disabledProp,
+  ...props
+}: StickerSheetItemProps) {
   const sheet = useStickerSheet()
   useEnsureInkDefs()
   const id = idProp ?? name
@@ -206,7 +241,9 @@ function StickerSheetItem({ name, id: idProp, label: labelProp, size: sizeProp, 
   const [warm, setWarm] = React.useState(false)
   const flap = warm ? stickerFace(name, px, id, { peel: true, idPrefix: `${prefix}p` }) : null
   const slot = useInk({ recipe: stickerSlotRecipe, params: {}, kind: "frame", seed: `${prefix}` })
-  const drag = React.useRef<{ pointer: number; sx: number; sy: number; started: boolean } | null>(null)
+  const drag = React.useRef<{ pointer: number; sx: number; sy: number; started: boolean } | null>(
+    null,
+  )
   const held = React.useRef<HTMLSpanElement | null>(null)
   const slotEl = React.useRef<HTMLDivElement | null>(null)
   const suppress = React.useRef(false)
@@ -214,7 +251,14 @@ function StickerSheetItem({ name, id: idProp, label: labelProp, size: sizeProp, 
   peeledNow.current = peeled
   const disabled = disabledProp || sheet.disabled
   const spent = peeled && !sheet.restorable
-  const item = (dragged: boolean, e?: { clientX: number; clientY: number }): StickerSheetPeel => ({ id, name, label, dragged, x: e?.clientX, y: e?.clientY })
+  const item = (dragged: boolean, e?: { clientX: number; clientY: number }): StickerSheetPeel => ({
+    id,
+    name,
+    label,
+    dragged,
+    x: e?.clientX,
+    y: e?.clientY,
+  })
 
   const carry = (dx: number, dy: number) => {
     if (!held.current) return
@@ -245,13 +289,13 @@ function StickerSheetItem({ name, id: idProp, label: labelProp, size: sizeProp, 
     drag.current = { pointer: e.pointerId, sx: e.clientX, sy: e.clientY, started: false }
     try {
       e.currentTarget.setPointerCapture(e.pointerId)
-    } catch {
-    }
+    } catch {}
   }
   const move = (e: React.PointerEvent<HTMLButtonElement>) => {
     const d = drag.current
     if (!d || d.pointer !== e.pointerId) return
-    const dx = e.clientX - d.sx, dy = e.clientY - d.sy
+    const dx = e.clientX - d.sx,
+      dy = e.clientY - d.sy
     if (!d.started && Math.hypot(dx, dy) < DRAG_AT) return
     if (!d.started) {
       d.started = true
@@ -279,7 +323,13 @@ function StickerSheetItem({ name, id: idProp, label: labelProp, size: sizeProp, 
   }
 
   return (
-    <div ref={slotEl} data-slot="sticker-sheet-slot" data-state={peeled ? "peeled" : "stuck"} className="group/slot relative shrink-0" style={{ width: cell, height: cell }}>
+    <div
+      ref={slotEl}
+      data-slot="sticker-sheet-slot"
+      data-state={peeled ? "peeled" : "stuck"}
+      className="group/slot relative shrink-0"
+      style={{ width: cell, height: cell }}
+    >
       <svg
         data-ink="prop"
         aria-hidden="true"
@@ -295,7 +345,13 @@ function StickerSheetItem({ name, id: idProp, label: labelProp, size: sizeProp, 
         type="button"
         data-slot="sticker-sheet-item"
         data-sticker={name}
-        aria-label={peeled ? (sheet.restorable ? `Put ${label} sticker back` : `${label} sticker, peeled`) : `Peel ${label} sticker`}
+        aria-label={
+          peeled
+            ? sheet.restorable
+              ? `Put ${label} sticker back`
+              : `${label} sticker, peeled`
+            : `Peel ${label} sticker`
+        }
         aria-disabled={spent ? true : undefined}
         disabled={disabled}
         ref={slot.hostRef}
@@ -320,7 +376,7 @@ function StickerSheetItem({ name, id: idProp, label: labelProp, size: sizeProp, 
           "absolute inset-0 touch-manipulation select-none not-focus-visible:outline-none",
           "enabled:cursor-grab enabled:active:cursor-grabbing disabled:cursor-default aria-disabled:cursor-default!",
           "group-data-[dragging]/slot:z-(--ll-z-raised)",
-          className
+          className,
         )}
         {...props}
       >
@@ -330,11 +386,17 @@ function StickerSheetItem({ name, id: idProp, label: labelProp, size: sizeProp, 
           className={cn(
             "pointer-events-none absolute block transition-[translate,rotate,scale,opacity] duration-(--ll-dur-sheet) ease-(--ll-ease-settle)",
             "group-data-[state=peeled]/slot:translate-x-4 group-data-[state=peeled]/slot:-translate-y-6 group-data-[state=peeled]/slot:-rotate-12 group-data-[state=peeled]/slot:scale-110 group-data-[state=peeled]/slot:opacity-0",
-            "group-data-[drop]/slot:translate-x-0! group-data-[drop]/slot:translate-y-0! group-data-[drop]/slot:rotate-0! group-data-[drop]/slot:scale-100! group-data-[drop]/slot:duration-(--ll-dur-fade)!"
+            "group-data-[drop]/slot:translate-x-0! group-data-[drop]/slot:translate-y-0! group-data-[drop]/slot:rotate-0! group-data-[drop]/slot:scale-100! group-data-[drop]/slot:duration-(--ll-dur-fade)!",
           )}
           style={{ ...at, width: face.w, height: face.h }}
           onTransitionEnd={(e) => {
-            if (e.target !== e.currentTarget || e.propertyName !== "opacity" || !peeled || !slotEl.current?.hasAttribute("data-drop")) return
+            if (
+              e.target !== e.currentTarget ||
+              e.propertyName !== "opacity" ||
+              !peeled ||
+              !slotEl.current?.hasAttribute("data-drop")
+            )
+              return
             slotEl.current.removeAttribute("data-drop")
             putDown()
           }}

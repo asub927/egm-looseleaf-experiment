@@ -31,7 +31,10 @@ function DialogClose({ ...props }: React.ComponentProps<typeof DialogPrimitive.C
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />
 }
 
-function DialogOverlay({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Overlay>) {
+function DialogOverlay({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Overlay>) {
   const scope = useInkScope()
   return (
     <DialogPrimitive.Overlay
@@ -40,7 +43,7 @@ function DialogOverlay({ className, ...props }: React.ComponentProps<typeof Dial
       className={cn(
         "fixed inset-0 z-(--ll-z-overlay) flex overflow-y-auto overscroll-contain p-4 [background:var(--ll-overlay-dim)] [scrollbar-gutter:stable_both-edges] max-sm:p-0",
         "duration-(--ll-dur-sheet) data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0",
-        className
+        className,
       )}
       {...props}
     />
@@ -61,17 +64,29 @@ function DialogFrame({ children }: { children: React.ReactNode }) {
 }
 
 function DialogCloseMark({ className, seed }: { className?: string; seed?: string | number }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: closeMarkRecipe, params: {}, kind: "close", size: [32, 32], seed })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: closeMarkRecipe,
+    params: {},
+    kind: "close",
+    size: [32, 32],
+    seed,
+  })
   return (
     <DialogPrimitive.Close
       data-slot="dialog-close"
       data-part="x"
       ref={hostRef}
       {...hostProps}
-      className={cn("absolute end-3 top-3 z-(--ll-z-raised) grid size-8 place-items-center text-ink", className)}
+      className={cn(
+        "absolute end-3 top-3 z-(--ll-z-raised) grid size-8 place-items-center text-ink",
+        className,
+      )}
     >
       {node}
-      <span aria-hidden="true" className="hidden font-hand text-xl leading-none forced-colors:block">
+      <span
+        aria-hidden="true"
+        className="hidden font-hand text-xl leading-none forced-colors:block"
+      >
         ×
       </span>
       <span className="sr-only">Close</span>
@@ -79,7 +94,19 @@ function DialogCloseMark({ className, seed }: { className?: string; seed?: strin
   )
 }
 
-type DialogPaperProps = Pick<PaperProps, "stock" | "edge" | "tilt" | "tape" | "tapeKind" | "fastener" | "fastenerTone" | "rules" | "shadow" | "seed">
+type DialogPaperProps = Pick<
+  PaperProps,
+  | "stock"
+  | "edge"
+  | "tilt"
+  | "tape"
+  | "tapeKind"
+  | "fastener"
+  | "fastenerTone"
+  | "rules"
+  | "shadow"
+  | "seed"
+>
 
 function DialogContent({
   className,
@@ -133,11 +160,13 @@ function DialogContent({
               "max-sm:mb-0 max-sm:max-w-none max-sm:pb-[max(1.5rem,env(safe-area-inset-bottom))] max-sm:compact:pb-[max(1.25rem,env(safe-area-inset-bottom))] max-sm:calm:pb-[max(1rem,env(safe-area-inset-bottom))] max-sm:[--ll-tilt:0deg]!",
               "data-[state=open]:animate-sheet-drop max-sm:data-[state=open]:animate-in max-sm:data-[state=open]:slide-in-from-bottom-16 max-sm:data-[state=open]:fade-in-0",
               "duration-(--ll-dur-fade) data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 max-sm:data-[state=closed]:slide-out-to-bottom-8",
-              className
+              className,
             )}
           >
             {children}
-            {showCloseButton && <DialogCloseMark seed={seed === undefined ? undefined : `${seed}|x`} />}
+            {showCloseButton && (
+              <DialogCloseMark seed={seed === undefined ? undefined : `${seed}|x`} />
+            )}
           </Paper>
         </DialogPrimitive.Content>
       </Frame>
@@ -149,7 +178,10 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex flex-col gap-2 text-center group-has-[[data-part=x]]/dialog:sm:pe-8 sm:text-start", className)}
+      className={cn(
+        "flex flex-col gap-2 text-center group-has-[[data-part=x]]/dialog:sm:pe-8 sm:text-start",
+        className,
+      )}
       {...props}
     />
   )
@@ -160,7 +192,10 @@ function DialogBody({ className, tabIndex = 0, ...props }: React.ComponentProps<
     <div
       data-slot="dialog-body"
       tabIndex={tabIndex}
-      className={cn("-mx-2 max-h-[min(60dvh,32rem)] min-h-0 overflow-y-auto px-2 py-1 text-[15px] outline-hidden focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring", className)}
+      className={cn(
+        "-mx-2 max-h-[min(60dvh,32rem)] min-h-0 overflow-y-auto px-2 py-1 text-[15px] outline-hidden focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring",
+        className,
+      )}
       {...props}
     />
   )
@@ -175,7 +210,11 @@ function DialogFooter({
   showCloseButton?: boolean
 }) {
   return (
-    <div data-slot="dialog-footer" className={cn("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", className)} {...props}>
+    <div
+      data-slot="dialog-footer"
+      className={cn("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", className)}
+      {...props}
+    >
       {children}
       {showCloseButton && (
         <DialogPrimitive.Close asChild>
@@ -187,11 +226,26 @@ function DialogFooter({
 }
 
 function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {
-  return <DialogPrimitive.Title data-slot="dialog-title" className={cn("font-script text-[1.7rem] leading-none font-semibold", className)} {...props} />
+  return (
+    <DialogPrimitive.Title
+      data-slot="dialog-title"
+      className={cn("font-script text-[1.7rem] leading-none font-semibold", className)}
+      {...props}
+    />
+  )
 }
 
-function DialogDescription({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Description>) {
-  return <DialogPrimitive.Description data-slot="dialog-description" className={cn("text-sm text-muted-foreground", className)} {...props} />
+function DialogDescription({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Description>) {
+  return (
+    <DialogPrimitive.Description
+      data-slot="dialog-description"
+      className={cn("text-sm text-muted-foreground", className)}
+      {...props}
+    />
+  )
 }
 
 export {

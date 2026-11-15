@@ -15,7 +15,9 @@ const SPEC_SQUARE_3x3: ArrayProblemSpec = {
 }
 
 function emptyGrid(): boolean[][] {
-  return Array(5).fill(null).map(() => Array(5).fill(false))
+  return Array(5)
+    .fill(null)
+    .map(() => Array(5).fill(false))
 }
 
 test("Pedagogical Invariant 1: Valid 3x4 Array Must PASS", () => {
@@ -47,7 +49,11 @@ test("Pedagogical Invariant 2 (Crucial Orientation Regress): 4x3 Array Must FAIL
   }
 
   const result = evaluateArrayGrid(grid, SPEC_3x4)
-  assert.notEqual(result.status, "correct", "4x3 array must never be awarded correct for '3 equal rows'")
+  assert.notEqual(
+    result.status,
+    "correct",
+    "4x3 array must never be awarded correct for '3 equal rows'",
+  )
   assert.equal(result.status, "orientation_error")
   if (result.status === "orientation_error") {
     assert.equal(result.actualRows, 4)
@@ -129,7 +135,7 @@ test("Pedagogical Invariant 8 (Adversarial Permutation Matrix / RubFake Oracle)"
     let count = 0
     for (let r = 0; r < 5; r++) {
       for (let c = 0; c < 5; c++) {
-        if (((seed * 31 + r * 7 + c * 13) % 5) === 0 && count < 12) {
+        if ((seed * 31 + r * 7 + c * 13) % 5 === 0 && count < 12) {
           grid[r][c] = true
           count++
         }

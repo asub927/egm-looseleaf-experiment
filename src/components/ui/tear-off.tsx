@@ -38,7 +38,19 @@ type TearOffProps = Omit<React.ComponentProps<"div">, "onChange"> & {
   tornMessage?: string
 }
 
-function TearOff({ className, children, ref, torn: tornProp, defaultTorn = false, onTornChange, onTear, orientation = "horizontal", disabled = false, tornMessage = "Torn off.", ...props }: TearOffProps) {
+function TearOff({
+  className,
+  children,
+  ref,
+  torn: tornProp,
+  defaultTorn = false,
+  onTornChange,
+  onTear,
+  orientation = "horizontal",
+  disabled = false,
+  tornMessage = "Torn off.",
+  ...props
+}: TearOffProps) {
   const [inner, setInner] = React.useState(defaultTorn)
   const [gone, setGone] = React.useState(defaultTorn)
   const [restored, setRestored] = React.useState(false)
@@ -89,7 +101,11 @@ function TearOff({ className, children, ref, torn: tornProp, defaultTorn = false
         data-orientation={orientation}
         ref={useMergedRef<HTMLDivElement>(root, ref)}
         tabIndex={torn ? -1 : undefined}
-        className={cn("group/tear relative isolate inline-flex outline-none", orientation === "vertical" ? "flex-col" : "flex-row", className)}
+        className={cn(
+          "group/tear relative isolate inline-flex outline-none",
+          orientation === "vertical" ? "flex-col" : "flex-row",
+          className,
+        )}
         {...props}
       >
         {children}
@@ -104,18 +120,31 @@ function TearOff({ className, children, ref, torn: tornProp, defaultTorn = false
   )
 }
 
-function sides(o: Orientation, rtl: boolean): { body: "right" | "left" | "bottom"; stub: "left" | "right" | "top" } {
+function sides(
+  o: Orientation,
+  rtl: boolean,
+): { body: "right" | "left" | "bottom"; stub: "left" | "right" | "top" } {
   if (o === "vertical") return { body: "bottom", stub: "top" }
   return rtl ? { body: "left", stub: "right" } : { body: "right", stub: "left" }
 }
 
-type PieceProps = Omit<PaperProps, "ref" | "stock" | "edge"> & { ref?: React.Ref<HTMLElement>; stock?: PaperProps["stock"] }
+type PieceProps = Omit<PaperProps, "ref" | "stock" | "edge"> & {
+  ref?: React.Ref<HTMLElement>
+  stock?: PaperProps["stock"]
+}
 
 function TearOffBody({ className, children, stock = "paper", ...props }: PieceProps) {
   const { torn, orientation, rtl } = useTearOff()
   const s = sides(orientation, rtl)
   return (
-    <Paper data-slot="tear-off-body" stock={stock} edge={{ [s.body]: torn ? "torn" : "perf" }} tilt={false} className={cn("min-w-0 flex-1 p-4", className)} {...props}>
+    <Paper
+      data-slot="tear-off-body"
+      stock={stock}
+      edge={{ [s.body]: torn ? "torn" : "perf" }}
+      tilt={false}
+      className={cn("min-w-0 flex-1 p-4", className)}
+      {...props}
+    >
       {children}
     </Paper>
   )
@@ -126,27 +155,61 @@ type StubProps = PieceProps & {
   seed?: string | number
 }
 
-function TearOffStub({ className, children, stock = "index-card", label, seed, style, ref, onKeyDown, ...props }: StubProps) {
+function TearOffStub({
+  className,
+  children,
+  stock = "index-card",
+  label,
+  seed,
+  style,
+  ref,
+  onKeyDown,
+  ...props
+}: StubProps) {
   const ctx = useTearOff()
   const { orientation, rtl } = ctx
   const s = sides(orientation, rtl)
   const vertical = orientation === "vertical"
   const sign = rtl ? -1 : 1
   const el = React.useRef<HTMLDivElement | null>(null)
-  const drag = React.useRef<{ pointer: number; x: number; y: number; size: number; p: number; moved: boolean } | null>(null)
+  const drag = React.useRef<{
+    pointer: number
+    x: number
+    y: number
+    size: number
+    p: number
+    moved: boolean
+  } | null>(null)
   const host = useInk({ recipe: tearStubRecipe, params: {}, kind: "tear-off-stub", seed })
-  const seam = useInk({ recipe: tearSeamRecipe, params: { scissors: true, inset: rtl ? -5 : 5 }, kind: "tear-off-seam", seed: seed === undefined ? undefined : `${seed}|seam` })
-  const hint = useInk({ recipe: tearHintRecipe, params: { toward: vertical ? "down" : rtl ? "left" : "right" }, kind: "tear-off-hint", size: [36, 28], seed: seed === undefined ? undefined : `${seed}|hint` })
+  const seam = useInk({
+    recipe: tearSeamRecipe,
+    params: { scissors: true, inset: rtl ? -5 : 5 },
+    kind: "tear-off-seam",
+    seed: seed === undefined ? undefined : `${seed}|seam`,
+  })
+  const hint = useInk({
+    recipe: tearHintRecipe,
+    params: { toward: vertical ? "down" : rtl ? "left" : "right" },
+    kind: "tear-off-hint",
+    size: [36, 28],
+    seed: seed === undefined ? undefined : `${seed}|hint`,
+  })
 
   const progress = (p: number) => el.current?.style.setProperty("--tear", String(p))
   const down = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.defaultPrevented || ctx.disabled || ctx.torn || (e.button ?? 0) !== 0) return
     const box = e.currentTarget
-    drag.current = { pointer: e.pointerId, x: e.clientX, y: e.clientY, size: (vertical ? box.offsetHeight : box.offsetWidth) || 100, p: 0, moved: false }
+    drag.current = {
+      pointer: e.pointerId,
+      x: e.clientX,
+      y: e.clientY,
+      size: (vertical ? box.offsetHeight : box.offsetWidth) || 100,
+      p: 0,
+      moved: false,
+    }
     try {
       box.setPointerCapture(e.pointerId)
-    } catch {
-    }
+    } catch {}
     box.dataset.dragging = ""
   }
   const move = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -226,7 +289,10 @@ function TearOffStub({ className, children, stock = "index-card", label, seed, s
         edge={{ [s.stub]: ctx.torn ? "torn" : "perf" }}
         tilt={false}
         ref={ref}
-        className={cn("flex min-w-0 flex-1 flex-col items-center justify-center gap-1 p-4 text-center", className)}
+        className={cn(
+          "flex min-w-0 flex-1 flex-col items-center justify-center gap-1 p-4 text-center",
+          className,
+        )}
         {...props}
       >
         {children}
@@ -238,7 +304,11 @@ function TearOffStub({ className, children, stock = "index-card", label, seed, s
         style={{ outline: "none" }}
         className={cn(
           "pointer-events-none absolute z-(--ll-z-raised) isolate",
-          vertical ? "inset-x-3 -top-2 h-4" : rtl ? "inset-y-3 -end-2 w-4" : "inset-y-3 -start-2 w-4",
+          vertical
+            ? "inset-x-3 -top-2 h-4"
+            : rtl
+              ? "inset-y-3 -end-2 w-4"
+              : "inset-y-3 -start-2 w-4",
         )}
       >
         {seam.node}
@@ -247,7 +317,14 @@ function TearOffStub({ className, children, stock = "index-card", label, seed, s
         aria-hidden="true"
         ref={hint.hostRef}
         {...hint.hostProps}
-        className={cn("pointer-events-none absolute z-(--ll-z-raised) isolate h-7 w-9", vertical ? "left-1/2 bottom-1 -translate-x-1/2" : rtl ? "start-1 bottom-1" : "end-1 bottom-1")}
+        className={cn(
+          "pointer-events-none absolute z-(--ll-z-raised) isolate h-7 w-9",
+          vertical
+            ? "left-1/2 bottom-1 -translate-x-1/2"
+            : rtl
+              ? "start-1 bottom-1"
+              : "end-1 bottom-1",
+        )}
       >
         {hint.node}
       </span>

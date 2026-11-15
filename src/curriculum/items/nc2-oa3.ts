@@ -1,7 +1,4 @@
-import {
-  createNC2OA3Item,
-  type NC2OA3Item,
-} from "../invariants.ts"
+import { createNC2OA3Item, type NC2OA3Item } from "../invariants.ts"
 
 /**
  * Verified NCDPI & OER problem seeds for standard NC.2.OA.3:

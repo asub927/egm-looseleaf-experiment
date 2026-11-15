@@ -6,7 +6,13 @@ import { Button } from "@/components/ui/button"
 import { Icon } from "@/components/ui/icon"
 import { Paper, type PaperProps } from "@/components/ui/paper"
 import { useEnsureInkDefs, useInk, useInkSeed, useMergedRef } from "@/lib/ink/react"
-import { HANDLE, composeBoardSvg, stickerBoardItemRecipe, wholeItems, type StickerBoardItem } from "@/lib/ink/recipes/sticker-board-ink"
+import {
+  HANDLE,
+  composeBoardSvg,
+  stickerBoardItemRecipe,
+  wholeItems,
+  type StickerBoardItem,
+} from "@/lib/ink/recipes/sticker-board-ink"
 import { stickerFace, stickerLabel } from "@/lib/ink/recipes/sticker-ink"
 import { clamp, hashSeed } from "@/lib/ink/rng"
 import { cn } from "@/lib/utils"
@@ -21,20 +27,31 @@ const DEFAULT_MIN = 0.3
 const DEFAULT_MAX = 3
 
 const turnTo = (deg: number): number => {
-  const a = Math.round((((deg + 180) % 360) + 360) % 360 * 10) / 10 - 180
+  const a = Math.round(((((deg + 180) % 360) + 360) % 360) * 10) / 10 - 180
   return a === -180 ? 180 : Math.round(a * 10) / 10
 }
 const round2 = (v: number): number => Math.round(v * 100) / 100
 
 type Reorder = "front" | "back" | "forward" | "backward"
 
-function reorderSticker(items: readonly StickerBoardItem[], id: string, how: Reorder): StickerBoardItem[] {
+function reorderSticker(
+  items: readonly StickerBoardItem[],
+  id: string,
+  how: Reorder,
+): StickerBoardItem[] {
   const zOf = (s: StickerBoardItem) => (Number.isFinite(s.z) ? s.z : 0)
   const sorted = [...items].sort((a, b) => zOf(a) - zOf(b))
   const i = sorted.findIndex((s) => s.id === id)
   if (i < 0) return items as StickerBoardItem[]
   const [it] = sorted.splice(i, 1)
-  const to = how === "front" ? sorted.length : how === "back" ? 0 : how === "forward" ? Math.min(i + 1, sorted.length) : Math.max(i - 1, 0)
+  const to =
+    how === "front"
+      ? sorted.length
+      : how === "back"
+        ? 0
+        : how === "forward"
+          ? Math.min(i + 1, sorted.length)
+          : Math.max(i - 1, 0)
   if (to === i && how !== "front" && how !== "back") return items as StickerBoardItem[]
   sorted.splice(to, 0, it)
   const rank = new Map(sorted.map((s, k) => [s.id, k]))
@@ -51,7 +68,11 @@ interface AddOptions {
   canvas?: { width: number; height: number }
 }
 
-function addSticker(items: readonly StickerBoardItem[], name: string, o: AddOptions = {}): StickerBoardItem[] {
+function addSticker(
+  items: readonly StickerBoardItem[],
+  name: string,
+  o: AddOptions = {},
+): StickerBoardItem[] {
   const used = new Set(items.map((s) => s.id))
   let k = 1
   while (used.has(`${name}-${k}`)) k++
@@ -63,20 +84,41 @@ function addSticker(items: readonly StickerBoardItem[], name: string, o: AddOpti
   return [...items, { id, name, x: Math.round(cx), y: Math.round(cy), rot, scale: o.scale ?? 1, z }]
 }
 
-function boardPoint(root: Element | null | undefined, clientX: number, clientY: number): { x: number; y: number; inside: boolean } | null {
-  const canvas = root?.matches?.('[data-slot="sticker-board-canvas"]') ? root : root?.querySelector?.('[data-slot="sticker-board-canvas"]')
+function boardPoint(
+  root: Element | null | undefined,
+  clientX: number,
+  clientY: number,
+): { x: number; y: number; inside: boolean } | null {
+  const canvas = root?.matches?.('[data-slot="sticker-board-canvas"]')
+    ? root
+    : root?.querySelector?.('[data-slot="sticker-board-canvas"]')
   if (!canvas) return null
   const r = canvas.getBoundingClientRect()
-  return { x: Math.round(clientX - r.left), y: Math.round(clientY - r.top), inside: clientX >= r.left && clientX <= r.left + r.width && clientY >= r.top && clientY <= r.top + r.height }
+  return {
+    x: Math.round(clientX - r.left),
+    y: Math.round(clientY - r.top),
+    inside:
+      clientX >= r.left &&
+      clientX <= r.left + r.width &&
+      clientY >= r.top &&
+      clientY <= r.top + r.height,
+  }
 }
 
 type BoundsMode = "center" | "inside" | "none"
 
-function keepIn(x: number, y: number, art: { w: number; h: number; rot: number; scale: number }, canvas: { w: number; h: number }, mode: BoundsMode): [number, number] {
+function keepIn(
+  x: number,
+  y: number,
+  art: { w: number; h: number; rot: number; scale: number },
+  canvas: { w: number; h: number },
+  mode: BoundsMode,
+): [number, number] {
   if (mode === "none" || !canvas.w || !canvas.h) return [x, y]
   if (mode === "center") return [clamp(x, 0, canvas.w), clamp(y, 0, canvas.h)]
   const a = (art.rot * Math.PI) / 180
-  const c = Math.abs(Math.cos(a)), s = Math.abs(Math.sin(a))
+  const c = Math.abs(Math.cos(a)),
+    s = Math.abs(Math.sin(a))
   const ex = Math.min(canvas.w / 2, (art.w * art.scale * c + art.h * art.scale * s) / 2)
   const ey = Math.min(canvas.h / 2, (art.w * art.scale * s + art.h * art.scale * c) / 2)
   return [clamp(x, ex, canvas.w - ex), clamp(y, ey, canvas.h - ey)]
@@ -136,7 +178,10 @@ interface StickerBoardExport {
 function resolveTokens(svg: string, el: Element): string {
   if (typeof getComputedStyle !== "function") return svg
   const cs = getComputedStyle(el)
-  return svg.replace(/var\((--[a-z0-9-]+)\)/gi, (whole, name: string) => cs.getPropertyValue(name).trim() || whole)
+  return svg.replace(
+    /var\((--[a-z0-9-]+)\)/gi,
+    (whole, name: string) => cs.getPropertyValue(name).trim() || whole,
+  )
 }
 
 function rasterise(svg: string, width: number, height: number, scale: number): Promise<Blob> {
@@ -151,7 +196,10 @@ function rasterise(svg: string, width: number, height: number, scale: number): P
       if (!g) return reject(new Error("No 2d canvas"))
       g.drawImage(img, 0, 0, canvas.width, canvas.height)
       URL.revokeObjectURL(url)
-      canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("The canvas gave no image"))), "image/png")
+      canvas.toBlob(
+        (b) => (b ? resolve(b) : reject(new Error("The canvas gave no image"))),
+        "image/png",
+      )
     }
     img.onerror = () => {
       URL.revokeObjectURL(url)
@@ -224,7 +272,7 @@ function StickerBoard({
       if (!selControlled) setInnerSel(id)
       onSelectedIdChange?.(id)
     },
-    [selControlled, onSelectedIdChange]
+    [selControlled, onSelectedIdChange],
   )
   const commit = React.useCallback(
     (next: StickerBoardItem[], message?: string) => {
@@ -233,7 +281,7 @@ function StickerBoard({
       onValueChange?.(next)
       if (message) say(message)
     },
-    [controlled, onValueChange, say]
+    [controlled, onValueChange, say],
   )
   const find = (id: string) => latest.current.find((s) => s.id === id)
   const nameOf = (id: string) => {
@@ -241,17 +289,31 @@ function StickerBoard({
     return it ? stickerLabel(it.name) : id
   }
   const patch = React.useCallback(
-    (id: string, change: Partial<StickerBoardItem>, message?: string) => commit(latest.current.map((s) => (s.id === id ? { ...s, ...change } : s)), message),
-    [commit]
+    (id: string, change: Partial<StickerBoardItem>, message?: string) =>
+      commit(
+        latest.current.map((s) => (s.id === id ? { ...s, ...change } : s)),
+        message,
+      ),
+    [commit],
   )
 
   const api = React.useMemo<StickerBoardContextValue>(() => {
-    const canvas = () => ({ w: canvasEl.current?.offsetWidth ?? 0, h: canvasEl.current?.offsetHeight ?? 0 })
+    const canvas = () => ({
+      w: canvasEl.current?.offsetWidth ?? 0,
+      h: canvasEl.current?.offsetHeight ?? 0,
+    })
     const doExport = () => {
       const el = canvasEl.current
       const { w, h } = canvas()
-      const width = w || 640, height = h || 400
-      const build = () => composeBoardSvg(latest.current, { width, height, size, resolve: el ? (s) => resolveTokens(s, el) : undefined })
+      const width = w || 640,
+        height = h || 400
+      const build = () =>
+        composeBoardSvg(latest.current, {
+          width,
+          height,
+          size,
+          resolve: el ? (s) => resolveTokens(s, el) : undefined,
+        })
       const svg = build()
       const data: StickerBoardExport = {
         items: latest.current,
@@ -282,20 +344,36 @@ function StickerBoard({
         const at = latest.current.findIndex((s) => s.id === id)
         if (at < 0) return
         const name = nameOf(id)
-        commit(latest.current.filter((s) => s.id !== id), `${name} removed.`)
+        commit(
+          latest.current.filter((s) => s.id !== id),
+          `${name} removed.`,
+        )
         select(null)
       },
       duplicate(id) {
         const it = find(id)
         if (!it) return
-        const next = addSticker(latest.current, it.name, { x: it.x + 20, y: it.y + 20, rot: it.rot, scale: it.scale })
+        const next = addSticker(latest.current, it.name, {
+          x: it.x + 20,
+          y: it.y + 20,
+          rot: it.rot,
+          scale: it.scale,
+        })
         commit(next, `${nameOf(id)} duplicated.`)
         select(next[next.length - 1].id)
       },
       reorder(id, how) {
         const next = reorderSticker(latest.current, id, how)
-        if (next === latest.current) return say(`${nameOf(id)} is already ${how === "forward" || how === "front" ? "on top" : "at the back"}.`)
-        const word = { front: "brought to the front", back: "sent to the back", forward: "brought forward", backward: "sent backward" }[how]
+        if (next === latest.current)
+          return say(
+            `${nameOf(id)} is already ${how === "forward" || how === "front" ? "on top" : "at the back"}.`,
+          )
+        const word = {
+          front: "brought to the front",
+          back: "sent to the back",
+          forward: "brought forward",
+          backward: "sent backward",
+        }[how]
         commit(next, `${nameOf(id)} ${word}.`)
       },
       turn(id, deg) {
@@ -308,7 +386,8 @@ function StickerBoard({
         const it = find(id)
         if (!it) return
         const scale = clamp(round2(it.scale * factor), minScale, maxScale)
-        if (scale === it.scale) return say(`${nameOf(id)} is as ${factor > 1 ? "big" : "small"} as it goes.`)
+        if (scale === it.scale)
+          return say(`${nameOf(id)} is as ${factor > 1 ? "big" : "small"} as it goes.`)
         patch(id, { scale }, `${nameOf(id)} at ${Math.round(scale * 100)} percent.`)
       },
       exportBoard: doExport,
@@ -326,11 +405,34 @@ function StickerBoard({
       canvasId,
       label,
     }
-  }, [items, selectedId, select, commit, patch, say, size, minScale, maxScale, bounds, readOnly, disabled, help, canvasId, label, onExport])
+  }, [
+    items,
+    selectedId,
+    select,
+    commit,
+    patch,
+    say,
+    size,
+    minScale,
+    maxScale,
+    bounds,
+    readOnly,
+    disabled,
+    help,
+    canvasId,
+    label,
+    onExport,
+  ])
 
   return (
     <StickerBoardContext.Provider value={api}>
-      <div data-slot="sticker-board" data-disabled={disabled ? "" : undefined} ref={ref} className={cn("flex min-w-0 flex-col gap-3", disabled && "opacity-70", className)} {...props}>
+      <div
+        data-slot="sticker-board"
+        data-disabled={disabled ? "" : undefined}
+        ref={ref}
+        className={cn("flex min-w-0 flex-col gap-3", disabled && "opacity-70", className)}
+        {...props}
+      >
         {children ?? (
           <>
             <StickerBoardCanvas className="flex-1" />
@@ -339,8 +441,10 @@ function StickerBoard({
         )}
         {!readOnly && !disabled ? (
           <span id={help} className="sr-only">
-            Stickers can be dragged. Focus one, then the arrow keys move it, Shift makes the steps bigger and Alt makes them one pixel. Left and right square brackets (or R and Shift R) turn it, plus and minus
-            size it, Page Up and Page Down move it through the stack, Delete removes it and Escape lets go.
+            Stickers can be dragged. Focus one, then the arrow keys move it, Shift makes the steps
+            bigger and Alt makes them one pixel. Left and right square brackets (or R and Shift R)
+            turn it, plus and minus size it, Page Up and Page Down move it through the stack, Delete
+            removes it and Escape lets go.
           </span>
         ) : null}
         <span role="status" className="sr-only">
@@ -356,7 +460,14 @@ type StickerBoardCanvasProps = Omit<PaperProps, "children" | "ref"> & {
   empty?: React.ReactNode
 }
 
-function StickerBoardCanvas({ className, ref, stock = "dot-grid", tilt = false, empty, ...props }: StickerBoardCanvasProps) {
+function StickerBoardCanvas({
+  className,
+  ref,
+  stock = "dot-grid",
+  tilt = false,
+  empty,
+  ...props
+}: StickerBoardCanvasProps) {
   const board = useStickerBoard()
   useEnsureInkDefs()
   const setRef = useMergedRef<HTMLElement>(board.registerCanvas, ref)
@@ -385,7 +496,10 @@ function StickerBoardCanvas({ className, ref, stock = "dot-grid", tilt = false, 
           <BoardItem key={it.id} item={it} />
         ))}
         {board.items.length === 0 ? (
-          <div data-slot="sticker-board-empty" className="pointer-events-none absolute inset-0 grid place-items-center p-6 text-center font-script text-2xl text-pencil-text">
+          <div
+            data-slot="sticker-board-empty"
+            className="pointer-events-none absolute inset-0 grid place-items-center p-6 text-center font-script text-2xl text-pencil-text"
+          >
             {empty ?? "Nothing stuck down yet."}
           </div>
         ) : null}
@@ -430,7 +544,12 @@ function BoardItem({ item }: { item: StickerBoardItem }) {
   const h = face?.box.h ?? 0
   const bx = face?.box.x ?? 0
   const by = face?.box.y ?? 0
-  const host = useInk({ recipe: stickerBoardItemRecipe, params: { selected, handles: editable }, kind: "frame", seed })
+  const host = useInk({
+    recipe: stickerBoardItemRecipe,
+    params: { selected, handles: editable },
+    kind: "frame",
+    seed,
+  })
   const name = stickerLabel(item.name)
 
   const place = (x: number, y: number) => {
@@ -469,7 +588,8 @@ function BoardItem({ item }: { item: StickerBoardItem }) {
     board.select(item.id)
     const node = e.currentTarget
     const r = node.getBoundingClientRect()
-    const cx = r.left + r.width / 2, cy = r.top + r.height / 2
+    const cx = r.left + r.width / 2,
+      cy = r.top + r.height / 2
     drag.current = {
       pointer: e.pointerId,
       mode: handle === "rotate" ? "rotate" : handle === "scale" ? "scale" : "move",
@@ -491,8 +611,7 @@ function BoardItem({ item }: { item: StickerBoardItem }) {
     }
     try {
       node.setPointerCapture(e.pointerId)
-    } catch {
-    }
+    } catch {}
     node.dataset.dragging = ""
     node.style.zIndex = "1000000"
     node.focus({ preventScroll: true })
@@ -501,11 +620,18 @@ function BoardItem({ item }: { item: StickerBoardItem }) {
   const move = (e: React.PointerEvent<HTMLDivElement>) => {
     const d = drag.current
     if (!d || d.pointer !== e.pointerId) return
-    const dx = e.clientX - d.sx, dy = e.clientY - d.sy
+    const dx = e.clientX - d.sx,
+      dy = e.clientY - d.sy
     if (!d.moved && Math.hypot(dx, dy) < 3) return
     d.moved = true
     if (d.mode === "move") {
-      const [x, y] = keepIn(d.x0 + dx, d.y0 + dy, { w, h, rot: d.rot, scale: d.scale }, board.canvas(), board.bounds)
+      const [x, y] = keepIn(
+        d.x0 + dx,
+        d.y0 + dy,
+        { w, h, rot: d.rot, scale: d.scale },
+        board.canvas(),
+        board.bounds,
+      )
       d.x = x
       d.y = y
       place(x, y)
@@ -529,8 +655,18 @@ function BoardItem({ item }: { item: StickerBoardItem }) {
     delete e.currentTarget.dataset.dragging
     e.currentTarget.style.zIndex = String(1 + latest.current.z)
     if (cancel || !d.moved) return settle()
-    const change = d.mode === "move" ? { x: Math.round(d.x), y: Math.round(d.y) } : d.mode === "rotate" ? { rot: d.rot } : { scale: d.scale }
-    const said = d.mode === "move" ? `${name} moved to ${change.x}, ${change.y}.` : d.mode === "rotate" ? `${name} turned to ${d.rot} degrees.` : `${name} at ${Math.round(d.scale * 100)} percent.`
+    const change =
+      d.mode === "move"
+        ? { x: Math.round(d.x), y: Math.round(d.y) }
+        : d.mode === "rotate"
+          ? { rot: d.rot }
+          : { scale: d.scale }
+    const said =
+      d.mode === "move"
+        ? `${name} moved to ${change.x}, ${change.y}.`
+        : d.mode === "rotate"
+          ? `${name} turned to ${d.rot} degrees.`
+          : `${name} at ${Math.round(d.scale * 100)} percent.`
     board.patch(item.id, change, said)
     setTimeout(settle, 0)
   }
@@ -556,7 +692,13 @@ function BoardItem({ item }: { item: StickerBoardItem }) {
     const dy = k === "ArrowDown" ? step : k === "ArrowUp" ? -step : 0
     if (dx || dy) {
       e.preventDefault()
-      const [x, y] = keepIn(cur.x + dx, cur.y + dy, { w, h, rot: cur.rot, scale: cur.scale }, board.canvas(), board.bounds)
+      const [x, y] = keepIn(
+        cur.x + dx,
+        cur.y + dy,
+        { w, h, rot: cur.rot, scale: cur.scale },
+        board.canvas(),
+        board.bounds,
+      )
       board.patch(item.id, { x, y }, `${name} at ${x}, ${y}.`)
     } else if (k === "[" || k === "{" || k === "]" || k === "}" || k === "r" || k === "R") {
       e.preventDefault()
@@ -572,13 +714,19 @@ function BoardItem({ item }: { item: StickerBoardItem }) {
       board.patch(item.id, { rot: 0, scale: 1 }, `${name} set upright at full size.`)
     } else if (k === "PageUp" || k === "PageDown") {
       e.preventDefault()
-      board.reorder(item.id, k === "PageUp" ? (e.shiftKey ? "front" : "forward") : e.shiftKey ? "back" : "backward")
+      board.reorder(
+        item.id,
+        k === "PageUp" ? (e.shiftKey ? "front" : "forward") : e.shiftKey ? "back" : "backward",
+      )
     } else if (k === "Delete" || k === "Backspace") {
       e.preventDefault()
       const sibling = e.currentTarget.nextElementSibling ?? e.currentTarget.previousElementSibling
       board.remove(item.id)
       const surface = e.currentTarget.parentElement
-      ;(sibling instanceof HTMLElement && sibling.dataset.slot === "sticker-board-item" ? sibling : surface)?.focus?.({ preventScroll: true })
+      ;(sibling instanceof HTMLElement && sibling.dataset.slot === "sticker-board-item"
+        ? sibling
+        : surface
+      )?.focus?.({ preventScroll: true })
     } else if (k === "Escape") {
       e.preventDefault()
       board.select(null)
@@ -614,27 +762,35 @@ function BoardItem({ item }: { item: StickerBoardItem }) {
       className={cn(
         "absolute top-0 left-0 isolate touch-none select-none not-focus-visible:outline-none",
         "[transition:scale_var(--ll-dur-hover)_var(--ll-ease-settle)]",
-        editable && "cursor-grab data-dragging:cursor-grabbing hover:scale-[1.03] data-dragging:scale-[1.06] calm:hover:scale-100",
+        editable &&
+          "cursor-grab data-dragging:cursor-grabbing hover:scale-[1.03] data-dragging:scale-[1.06] calm:hover:scale-100",
         "[--sb-lift:0] data-dragging:[--sb-lift:1]",
-        "forced-colors:data-selected:outline-2 forced-colors:data-selected:outline-[Highlight]"
+        "forced-colors:data-selected:outline-2 forced-colors:data-selected:outline-[Highlight]",
       )}
-      style={{
-        width: w * item.scale,
-        height: h * item.scale,
-        translate: `calc(${item.x}px - 50%) calc(${item.y}px - 50%)`,
-        rotate: `${item.rot}deg`,
-        zIndex: 1 + item.z,
-        "--sb-dx": down(item.rot).dx,
-        "--sb-dy": down(item.rot).dy,
-        "--ll-drop-sticker": DROP,
-      } as React.CSSProperties}
+      style={
+        {
+          width: w * item.scale,
+          height: h * item.scale,
+          translate: `calc(${item.x}px - 50%) calc(${item.y}px - 50%)`,
+          rotate: `${item.rot}deg`,
+          zIndex: 1 + item.z,
+          "--sb-dx": down(item.rot).dx,
+          "--sb-dy": down(item.rot).dy,
+          "--ll-drop-sticker": DROP,
+        } as React.CSSProperties
+      }
     >
       {host.node}
       <span
         ref={art}
         data-slot="sticker-board-item-art"
         className="pointer-events-none absolute top-0 left-0 origin-top-left"
-        style={{ width: fw, height: fh, translate: `${-bx * item.scale}px ${-by * item.scale}px`, scale: item.scale }}
+        style={{
+          width: fw,
+          height: fh,
+          translate: `${-bx * item.scale}px ${-by * item.scale}px`,
+          scale: item.scale,
+        }}
       >
         <svg
           data-ink="sticker"
@@ -653,13 +809,25 @@ function BoardItem({ item }: { item: StickerBoardItem }) {
             data-handle="rotate"
             aria-hidden="true"
             className="absolute cursor-grab"
-            style={{ left: "50%", top: -(out + HANDLE.rotateUp), width: HANDLE.hit, height: HANDLE.hit, translate: "-50% -50%" }}
+            style={{
+              left: "50%",
+              top: -(out + HANDLE.rotateUp),
+              width: HANDLE.hit,
+              height: HANDLE.hit,
+              translate: "-50% -50%",
+            }}
           />
           <span
             data-handle="scale"
             aria-hidden="true"
             className="absolute cursor-nwse-resize"
-            style={{ left: `calc(100% + ${out + HANDLE.scaleOut - HANDLE.scaleSize / 2}px)`, top: `calc(100% + ${out + HANDLE.scaleOut - HANDLE.scaleSize / 2}px)`, width: HANDLE.hit, height: HANDLE.hit, translate: "-50% -50%" }}
+            style={{
+              left: `calc(100% + ${out + HANDLE.scaleOut - HANDLE.scaleSize / 2}px)`,
+              top: `calc(100% + ${out + HANDLE.scaleOut - HANDLE.scaleSize / 2}px)`,
+              width: HANDLE.hit,
+              height: HANDLE.hit,
+              translate: "-50% -50%",
+            }}
           />
         </>
       ) : null}
@@ -673,9 +841,21 @@ type StickerBoardToolbarProps = Omit<React.ComponentProps<"div">, "children"> & 
   actions?: readonly ToolbarAction[]
 }
 
-const ALL_ACTIONS: readonly ToolbarAction[] = ["turn", "size", "layer", "duplicate", "delete", "export"]
+const ALL_ACTIONS: readonly ToolbarAction[] = [
+  "turn",
+  "size",
+  "layer",
+  "duplicate",
+  "delete",
+  "export",
+]
 
-function StickerBoardToolbar({ className, actions = ALL_ACTIONS, onKeyDown, ...props }: StickerBoardToolbarProps) {
+function StickerBoardToolbar({
+  className,
+  actions = ALL_ACTIONS,
+  onKeyDown,
+  ...props
+}: StickerBoardToolbarProps) {
   const board = useStickerBoard()
   const id = board.selectedId
   const off = !id || !board.editable
@@ -687,23 +867,33 @@ function StickerBoardToolbar({ className, actions = ALL_ACTIONS, onKeyDown, ...p
     if (e.defaultPrevented) return
     const k = e.key
     if (k !== "ArrowRight" && k !== "ArrowLeft" && k !== "Home" && k !== "End") return
-    const list = [...(row.current?.querySelectorAll<HTMLButtonElement>("button:not(:disabled)") ?? [])]
+    const list = [
+      ...(row.current?.querySelectorAll<HTMLButtonElement>("button:not(:disabled)") ?? []),
+    ]
     const at = list.indexOf(document.activeElement as HTMLButtonElement)
     if (at < 0) return
     e.preventDefault()
     const rtl = getComputedStyle(row.current as Element).direction === "rtl"
     const dir = (k === "ArrowRight" ? 1 : -1) * (rtl ? -1 : 1)
-    const to = k === "Home" ? 0 : k === "End" ? list.length - 1 : (at + dir + list.length) % list.length
+    const to =
+      k === "Home" ? 0 : k === "End" ? list.length - 1 : (at + dir + list.length) % list.length
     list[to].focus()
   }
 
   const removeAndMoveOn = (gone: string) => {
-    const surface = document.getElementById(board.canvasId)?.querySelector<HTMLElement>('[data-slot="sticker-board-surface"]')
+    const surface = document
+      .getElementById(board.canvasId)
+      ?.querySelector<HTMLElement>('[data-slot="sticker-board-surface"]')
     board.remove(gone)
     surface?.focus({ preventScroll: true })
   }
 
-  const tool = (label: string, icon: string, run: () => void, o: { text?: string; disabled?: boolean; always?: boolean; mirror?: boolean } = {}) => (
+  const tool = (
+    label: string,
+    icon: string,
+    run: () => void,
+    o: { text?: string; disabled?: boolean; always?: boolean; mirror?: boolean } = {},
+  ) => (
     <Button
       key={label}
       type="button"
@@ -715,7 +905,9 @@ function StickerBoardToolbar({ className, actions = ALL_ACTIONS, onKeyDown, ...p
       onClick={run}
       data-tool={label}
     >
-      {icon ? <Icon name={icon} size={16} className={o.mirror ? "-scale-x-100" : undefined} /> : null}
+      {icon ? (
+        <Icon name={icon} size={16} className={o.mirror ? "-scale-x-100" : undefined} />
+      ) : null}
       {o.text}
     </Button>
   )
@@ -725,13 +917,21 @@ function StickerBoardToolbar({ className, actions = ALL_ACTIONS, onKeyDown, ...p
     groups.push(
       <div key={key} role="presentation" className="flex items-center gap-1.5">
         {children}
-      </div>
+      </div>,
     )
-  if (has("turn")) group("turn", [tool("Turn left", "rotate-cw", () => id && board.turn(id, -TURN), { mirror: true }), tool("Turn right", "rotate-cw", () => id && board.turn(id, TURN))])
+  if (has("turn"))
+    group("turn", [
+      tool("Turn left", "rotate-cw", () => id && board.turn(id, -TURN), { mirror: true }),
+      tool("Turn right", "rotate-cw", () => id && board.turn(id, TURN)),
+    ])
   if (has("size"))
     group("size", [
-      tool("Smaller", "minus", () => id && board.resize(id, 1 / ZOOM), { disabled: off || (item ? item.scale <= board.minScale : false) }),
-      tool("Larger", "plus", () => id && board.resize(id, ZOOM), { disabled: off || (item ? item.scale >= board.maxScale : false) }),
+      tool("Smaller", "minus", () => id && board.resize(id, 1 / ZOOM), {
+        disabled: off || (item ? item.scale <= board.minScale : false),
+      }),
+      tool("Larger", "plus", () => id && board.resize(id, ZOOM), {
+        disabled: off || (item ? item.scale >= board.maxScale : false),
+      }),
     ])
   if (has("layer"))
     group("layer", [
@@ -745,7 +945,10 @@ function StickerBoardToolbar({ className, actions = ALL_ACTIONS, onKeyDown, ...p
       has("duplicate") && tool("Duplicate", "copy", () => id && board.duplicate(id)),
       has("delete") && tool("Delete", "trash", () => id && removeAndMoveOn(id)),
     ])
-  if (has("export")) group("export", [tool("Export", "download", board.exportBoard, { text: "Export", always: true })])
+  if (has("export"))
+    group("export", [
+      tool("Export", "download", board.exportBoard, { text: "Export", always: true }),
+    ])
 
   return (
     <Paper
@@ -767,5 +970,20 @@ function StickerBoardToolbar({ className, actions = ALL_ACTIONS, onKeyDown, ...p
   )
 }
 
-export { StickerBoard, StickerBoardCanvas, StickerBoardToolbar, useStickerBoard, addSticker, reorderSticker, boardPoint }
-export type { StickerBoardItem, StickerBoardProps, StickerBoardCanvasProps, StickerBoardToolbarProps, StickerBoardExport, BoundsMode as StickerBoardBounds }
+export {
+  StickerBoard,
+  StickerBoardCanvas,
+  StickerBoardToolbar,
+  useStickerBoard,
+  addSticker,
+  reorderSticker,
+  boardPoint,
+}
+export type {
+  StickerBoardItem,
+  StickerBoardProps,
+  StickerBoardCanvasProps,
+  StickerBoardToolbarProps,
+  StickerBoardExport,
+  BoundsMode as StickerBoardBounds,
+}

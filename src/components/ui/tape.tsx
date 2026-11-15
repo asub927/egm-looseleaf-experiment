@@ -18,11 +18,25 @@ type TapeProps = Omit<React.ComponentProps<"svg">, "children"> & {
   seed?: string | number
 }
 
-function Tape({ kind = "masking", length = 72, height = 22, angle, ends, color, seed: seedProp, className, style, ...props }: TapeProps) {
+function Tape({
+  kind = "masking",
+  length = 72,
+  height = 22,
+  angle,
+  ends,
+  color,
+  seed: seedProp,
+  className,
+  style,
+  ...props
+}: TapeProps) {
   const seed = useInkSeed(seedProp)
   const tier = useInkTier()
   const calm = useDensity() === "calm"
-  const res = React.useMemo(() => tape(`${seed}|tape`, { kind, length, height, ends, color, tier, calm }), [seed, kind, length, height, ends, color, tier, calm])
+  const res = React.useMemo(
+    () => tape(`${seed}|tape`, { kind, length, height, ends, color, tier, calm }),
+    [seed, kind, length, height, ends, color, tier, calm],
+  )
   const deg = angle ?? tiltFor(`${seed}|tape`, 4)
   return (
     <PropSvg

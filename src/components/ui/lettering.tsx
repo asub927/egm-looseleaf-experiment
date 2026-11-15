@@ -46,13 +46,21 @@ function Lettering({
   seed?: string | number
   ref?: React.Ref<HTMLElement>
 }) {
-  const second = duotone ? ({ "--ll-riso-b": `var(--ll-${duotone})` } as React.CSSProperties) : undefined
+  const second = duotone
+    ? ({ "--ll-riso-b": `var(--ll-${duotone})` } as React.CSSProperties)
+    : undefined
   return (
     <Comp
       data-slot="lettering"
       data-size={size}
       style={{ ...second, ...style }}
-      className={cn("ll-riso font-script leading-[0.95] font-bold tracking-tight text-balance text-ink", SIZE[size], TONE[tone], duotone && DUOTONE, className)}
+      className={cn(
+        "ll-riso font-script leading-[0.95] font-bold tracking-tight text-balance text-ink",
+        SIZE[size],
+        TONE[tone],
+        duotone && DUOTONE,
+        className,
+      )}
       {...props}
     >
       {wobble > 0 ? (

@@ -14,7 +14,20 @@ type IndexCardProps = Omit<PaperProps, "stock" | "rules"> & {
   stack?: 0 | 1 | 2 | 3
 }
 
-function IndexCard({ className, children, ref, hole = false, flag = false, stack = 0, as = "div", seed, tilt, size, style, ...props }: IndexCardProps) {
+function IndexCard({
+  className,
+  children,
+  ref,
+  hole = false,
+  flag = false,
+  stack = 0,
+  as = "div",
+  seed,
+  tilt,
+  size,
+  style,
+  ...props
+}: IndexCardProps) {
   const o = usePaperDecor({
     recipe: indexCardRecipe,
     params: { hole, flag: flag || "none", stack },
@@ -35,7 +48,11 @@ function IndexCard({ className, children, ref, hole = false, flag = false, stack
       size={size}
       {...o.paper}
       {...props}
-      className={cn(o.paper.className, "flex min-h-56 w-full max-w-md flex-col px-5 pb-[25px] text-[17px] leading-[30px] rtl:[&>[data-slot=paper-rules]]:-scale-x-100", className)}
+      className={cn(
+        o.paper.className,
+        "flex min-h-56 w-full max-w-md flex-col px-5 pb-[25px] text-[17px] leading-[30px] rtl:[&>[data-slot=paper-rules]]:-scale-x-100",
+        className,
+      )}
       style={{ ...o.paper.style, ...style }}
     >
       {o.decor}
@@ -45,11 +62,26 @@ function IndexCard({ className, children, ref, hole = false, flag = false, stack
 }
 
 function IndexCardHeader({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="index-card-header" className={cn("flex h-[49px] shrink-0 items-end justify-between gap-3 pb-1.5", className)} {...props} />
+  return (
+    <div
+      data-slot="index-card-header"
+      className={cn("flex h-[49px] shrink-0 items-end justify-between gap-3 pb-1.5", className)}
+      {...props}
+    />
+  )
 }
 
 function IndexCardTitle({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="index-card-title" className={cn("min-w-0 truncate pe-[0.2em] -me-[0.2em] pb-[0.2em] -mb-[0.2em] font-script text-[1.65rem] leading-none font-bold", className)} {...props} />
+  return (
+    <div
+      data-slot="index-card-title"
+      className={cn(
+        "min-w-0 truncate pe-[0.2em] -me-[0.2em] pb-[0.2em] -mb-[0.2em] font-script text-[1.65rem] leading-none font-bold",
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 function IndexCardContent({ className, ...props }: React.ComponentProps<"div">) {
@@ -57,7 +89,16 @@ function IndexCardContent({ className, ...props }: React.ComponentProps<"div">) 
 }
 
 function IndexCardFooter({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="index-card-footer" className={cn("mt-auto flex items-center justify-between gap-3 text-sm leading-[30px] text-muted-foreground", className)} {...props} />
+  return (
+    <div
+      data-slot="index-card-footer"
+      className={cn(
+        "mt-auto flex items-center justify-between gap-3 text-sm leading-[30px] text-muted-foreground",
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 export { IndexCard, IndexCardHeader, IndexCardTitle, IndexCardContent, IndexCardFooter }

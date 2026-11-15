@@ -6,8 +6,14 @@ import { ensureInkDefs } from "@/lib/ink/react/defs"
 import { inkFrame, type Frame } from "@/lib/ink/react/cache"
 import { InkSvg } from "@/lib/ink/react/svg"
 import {
-  DEFAULT_KNOBS, bucketBox, stableStringify,
-  type Box, type Density, type Dir, type InkLayerName, type Recipe,
+  DEFAULT_KNOBS,
+  bucketBox,
+  stableStringify,
+  type Box,
+  type Density,
+  type Dir,
+  type InkLayerName,
+  type Recipe,
 } from "@/lib/ink/recipes"
 
 export interface InkScopeProps {
@@ -107,8 +113,13 @@ function readSize(el: Element): [number, number] {
   return [r.width, r.height]
 }
 
-export function useInkBox(o: { size?: readonly [number, number] } = {}): { ref: React.RefCallback<Element>; box: Box | null } {
-  const [box, setBox] = React.useState<Box | null>(() => (o.size ? bucketBox(o.size[0], o.size[1]) : null))
+export function useInkBox(o: { size?: readonly [number, number] } = {}): {
+  ref: React.RefCallback<Element>
+  box: Box | null
+} {
+  const [box, setBox] = React.useState<Box | null>(() =>
+    o.size ? bucketBox(o.size[0], o.size[1]) : null,
+  )
   const ref = React.useCallback((el: Element | null) => {
     if (!el) return
     const update = () => {
@@ -167,7 +178,8 @@ function focusVisible(target: EventTarget | null): boolean {
 }
 
 function detectDir(el: Element): Dir | null {
-  const d = el.closest("[dir]")?.getAttribute("dir") ?? el.ownerDocument.documentElement.getAttribute("dir")
+  const d =
+    el.closest("[dir]")?.getAttribute("dir") ?? el.ownerDocument.documentElement.getAttribute("dir")
   return d === "rtl" || d === "ltr" ? d : null
 }
 
@@ -181,7 +193,10 @@ export function useInkCore<P>(o: UseInkOptions<P>): UseInkCore {
   const [seen, setSeen] = React.useState<{ dir: Dir; under: Dir } | null>(null)
   const dir = seen && (!ctx.hasProvider || seen.under === ctx.dir) ? seen.dir : ctx.dir
 
-  const want = React.useCallback((layer: InkLayerName) => setLazyOn((cur) => (cur.includes(layer) ? cur : [...cur, layer])), [])
+  const want = React.useCallback(
+    (layer: InkLayerName) => setLazyOn((cur) => (cur.includes(layer) ? cur : [...cur, layer])),
+    [],
+  )
   const lazyDecl = recipe.lazy
 
   const hostRef = React.useCallback(
@@ -196,14 +211,24 @@ export function useInkCore<P>(o: UseInkOptions<P>): UseInkCore {
         for (const type of TRIGGERS[layer] ?? []) {
           const on = (e: Event) => {
             if (layer === "focus" && !focusVisible(e.target)) return
-            if (e.type === "keydown" && (e as KeyboardEvent).key !== "Enter" && (e as KeyboardEvent).key !== " ") return
+            if (
+              e.type === "keydown" &&
+              (e as KeyboardEvent).key !== "Enter" &&
+              (e as KeyboardEvent).key !== " "
+            )
+              return
             want(layer)
           }
           el.addEventListener(type, on, { passive: true })
           cleanups.push(() => el.removeEventListener(type, on))
         }
       }
-      if (lazyDecl.includes("focus") && el.contains(el.ownerDocument.activeElement) && focusVisible(el.ownerDocument.activeElement)) want("focus")
+      if (
+        lazyDecl.includes("focus") &&
+        el.contains(el.ownerDocument.activeElement) &&
+        focusVisible(el.ownerDocument.activeElement)
+      )
+        want("focus")
       if (!ctx.hasProvider) ensureInkDefs()
       return () => {
         for (const c of cleanups) c()
@@ -213,21 +238,35 @@ export function useInkCore<P>(o: UseInkOptions<P>): UseInkCore {
   )
 
   const eager: readonly InkLayerName[] =
-    o.layers === "all" || (o.layers === undefined && tier === "hi") ? lazyDecl : Array.isArray(o.layers) ? (o.layers as readonly InkLayerName[]) : EMPTY
+    o.layers === "all" || (o.layers === undefined && tier === "hi")
+      ? lazyDecl
+      : Array.isArray(o.layers)
+        ? (o.layers as readonly InkLayerName[])
+        : EMPTY
   const lazyKey = [...new Set([...eager, ...lazyOn])].sort().join(",")
   const paramsKey = stableStringify(o.params)
   const frame = React.useMemo(
     () =>
       box
         ? inkFrame(recipe, {
-            box, params: o.params, seed, tier, density: ctx.density, dir, knobs: ctx.knobs, pad: o.pad, paramsKey,
+            box,
+            params: o.params,
+            seed,
+            tier,
+            density: ctx.density,
+            dir,
+            knobs: ctx.knobs,
+            pad: o.pad,
+            paramsKey,
             lazy: lazyKey ? (lazyKey.split(",") as InkLayerName[]) : undefined,
           })
         : null,
     [recipe, box, seed, tier, ctx.density, dir, ctx.knobs, o.pad, paramsKey, lazyKey],
   )
   const still = o.still ?? (ctx.density === "calm" || ctx.motion === "reduced")
-  const hostProps: InkHostProps = frame ? { "data-ink-host": "", "data-ink-ready": "" } : { "data-ink-host": "" }
+  const hostProps: InkHostProps = frame
+    ? { "data-ink-host": "", "data-ink-ready": "" }
+    : { "data-ink-host": "" }
   return { hostRef, hostProps, frame, box, seed, still }
 }
 
@@ -241,6 +280,8 @@ export interface UseInkResult {
 
 export function useInk<P>(o: UseInkOptions<P>): UseInkResult {
   const { hostRef, hostProps, frame, box, seed, still } = useInkCore(o)
-  const node = frame ? React.createElement(InkSvg, { key: "ink", kind: o.kind ?? o.recipe.kind, frame, still }) : null
+  const node = frame
+    ? React.createElement(InkSvg, { key: "ink", kind: o.kind ?? o.recipe.kind, frame, still })
+    : null
   return { hostRef, hostProps, node, box, seed }
 }

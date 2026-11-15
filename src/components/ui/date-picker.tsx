@@ -35,15 +35,24 @@ const TWO_DIGIT_YEAR_PIVOT = new Date(2000, 0, 1)
 
 const isDate = (d: Date | undefined): d is Date => !!d && isValid(d)
 
-function parseDateInput(text: string, o: { format?: string; locale?: Locale; reference?: Date } = {}): Date | undefined {
+function parseDateInput(
+  text: string,
+  o: { format?: string; locale?: Locale; reference?: Date } = {},
+): Date | undefined {
   const s = text.trim()
   if (!s) return undefined
   const reference = o.reference ?? TWO_DIGIT_YEAR_PIVOT
   const word = s.toLowerCase()
   if (o.reference) {
     if (word === "today") return startOfDay(reference)
-    if (word === "tomorrow") return startOfDay(new Date(reference.getFullYear(), reference.getMonth(), reference.getDate() + 1))
-    if (word === "yesterday") return startOfDay(new Date(reference.getFullYear(), reference.getMonth(), reference.getDate() - 1))
+    if (word === "tomorrow")
+      return startOfDay(
+        new Date(reference.getFullYear(), reference.getMonth(), reference.getDate() + 1),
+      )
+    if (word === "yesterday")
+      return startOfDay(
+        new Date(reference.getFullYear(), reference.getMonth(), reference.getDate() - 1),
+      )
   }
   for (const f of [o.format, ...FALLBACK_FORMATS]) {
     if (!f) continue
@@ -57,7 +66,12 @@ const toIsoDate = (d: Date): string => (isValid(d) ? formatDate(d, "yyyy-MM-dd")
 
 const RANGE_SEPARATOR = /\s+(?:–|—|-|to)\s+|\s*[–—]\s*/
 
-function useControllable<T>(props: object, key: string, defaultValue: T, onChange?: (v: T) => void): [T, (v: T) => void, () => void] {
+function useControllable<T>(
+  props: object,
+  key: string,
+  defaultValue: T,
+  onChange?: (v: T) => void,
+): [T, (v: T) => void, () => void] {
   const controlled = key in props
   const [inner, setInner] = React.useState<T>(defaultValue)
   const value = controlled ? (props as Record<string, T>)[key] : inner
@@ -66,7 +80,7 @@ function useControllable<T>(props: object, key: string, defaultValue: T, onChang
       if (!controlled) setInner(v)
       onChange?.(v)
     },
-    [controlled, onChange]
+    [controlled, onChange],
   )
   const reset = () => {
     if (!controlled) setInner(defaultValue)
@@ -155,10 +169,20 @@ function DatePickerPresets<P extends { label: string }>({
       data-slot="date-picker-presets"
       role="group"
       aria-label={label}
-      className={cn("flex flex-wrap gap-1 border-b border-pencil-mark/40 p-3 pb-2 sm:w-36 sm:flex-col sm:flex-nowrap sm:border-e sm:border-b-0 sm:pb-3", className)}
+      className={cn(
+        "flex flex-wrap gap-1 border-b border-pencil-mark/40 p-3 pb-2 sm:w-36 sm:flex-col sm:flex-nowrap sm:border-e sm:border-b-0 sm:pb-3",
+        className,
+      )}
     >
       {presets.map((p) => (
-        <Button key={p.label} type="button" variant="ghost" size="sm" className="justify-start" onClick={() => onPick(p)}>
+        <Button
+          key={p.label}
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="justify-start"
+          onClick={() => onPick(p)}
+        >
           {p.label}
         </Button>
       ))}
@@ -169,7 +193,10 @@ function DatePickerPresets<P extends { label: string }>({
 const FIELD =
   "relative isolate flex h-9 w-full min-w-0 items-center font-hand text-base text-(--ll-input-ink) caret-(--ll-caret) compact:h-8 calm:h-7 calm:text-[15px]"
 
-interface ShellProps extends Omit<PickerBaseProps, "format" | "locale" | "min" | "max" | "disabledDates" | "calendarProps"> {
+interface ShellProps extends Omit<
+  PickerBaseProps,
+  "format" | "locale" | "min" | "max" | "disabledDates" | "calendarProps"
+> {
   text: string
   onCommitText: (typed: string) => boolean
   hidden?: React.ReactNode
@@ -208,7 +235,11 @@ function PickerShell({
   "aria-labelledby": ariaLabelledby,
   "aria-describedby": ariaDescribedby,
 }: ShellProps) {
-  const aria = { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, "aria-describedby": ariaDescribedby }
+  const aria = {
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledby,
+    "aria-describedby": ariaDescribedby,
+  }
   const controlledOpen = openProp !== undefined
   const [innerOpen, setInnerOpen] = React.useState(defaultOpen ?? false)
   const open = controlledOpen ? openProp : innerOpen
@@ -217,12 +248,13 @@ function PickerShell({
       if (!controlledOpen) setInnerOpen(next)
       onOpenChange?.(next)
     },
-    [controlledOpen, onOpenChange]
+    [controlledOpen, onOpenChange],
   )
   const [draft, setDraft] = React.useState<{ text: string; base: string } | null>(null)
   const [bad, setBad] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement | null>(null)
-  const setReadable = (ok: boolean): void => inputRef.current?.setCustomValidity(ok ? "" : invalidMessage)
+  const setReadable = (ok: boolean): void =>
+    inputRef.current?.setCustomValidity(ok ? "" : invalidMessage)
   const shown = draft && draft.base === text ? draft.text : text
   React.useEffect(() => {
     setBad(false)
@@ -247,7 +279,7 @@ function PickerShell({
       setBad(false)
       setReadable(true)
       onFormReset()
-    }
+    },
   )
 
   const commitDraft = (): boolean => {
@@ -316,7 +348,14 @@ function PickerShell({
               {...aria}
             />
             <PopoverTrigger asChild>
-              <Button type="button" variant="ghost" size="icon-sm" disabled={inert} aria-label={calendarLabel} className="me-0.5 size-7 shrink-0 calm:size-6">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                disabled={inert}
+                aria-label={calendarLabel}
+                className="me-0.5 size-7 shrink-0 calm:size-6"
+              >
                 <Icon name="calendar" size={16} />
               </Button>
             </PopoverTrigger>
@@ -334,18 +373,32 @@ function PickerShell({
             ref={boxMerged}
             {...hostProps}
             {...aria}
-            className={cn(field, "cursor-default justify-between gap-2 ps-3 text-start whitespace-nowrap disabled:cursor-not-allowed disabled:text-pencil-text", !text && "text-(--ll-placeholder)")}
+            className={cn(
+              field,
+              "cursor-default justify-between gap-2 ps-3 text-start whitespace-nowrap disabled:cursor-not-allowed disabled:text-pencil-text",
+              !text && "text-(--ll-placeholder)",
+            )}
           >
             {node}
             <span className="min-w-0 flex-1 truncate">{text || ph}</span>
-            <span aria-hidden="true" className="grid h-full w-8 shrink-0 place-items-center text-ink-soft">
+            <span
+              aria-hidden="true"
+              className="grid h-full w-8 shrink-0 place-items-center text-ink-soft"
+            >
               <Icon name="calendar" size={16} />
             </span>
             {hidden}
           </button>
         </PopoverTrigger>
       )}
-      <PopoverContent aria-label={calendarLabel} align="start" tilt={false} collisionPadding={8} {...contentProps} className={cn("w-auto max-w-[calc(100vw-1rem)] p-0", contentProps?.className)}>
+      <PopoverContent
+        aria-label={calendarLabel}
+        align="start"
+        tilt={false}
+        collisionPadding={8}
+        {...contentProps}
+        className={cn("w-auto max-w-[calc(100vw-1rem)] p-0", contentProps?.className)}
+      >
         <div className="flex flex-col sm:flex-row">
           {presets?.(close)}
           {children(close)}
@@ -373,11 +426,33 @@ interface DatePickerProps extends PickerBaseProps {
 }
 
 function DatePicker(props: DatePickerProps) {
-  const { value: _v, defaultValue, onValueChange, name, presets, closeOnSelect = true, format = "PP", locale, min, max, disabledDates, calendarProps, ...rest } = props
+  const {
+    value: _v,
+    defaultValue,
+    onValueChange,
+    name,
+    presets,
+    closeOnSelect = true,
+    format = "PP",
+    locale,
+    min,
+    max,
+    disabledDates,
+    calendarProps,
+    ...rest
+  } = props
   void _v
-  const [given, setDate, resetDate] = useControllable<Date | undefined>(props, "value", defaultValue, onValueChange)
+  const [given, setDate, resetDate] = useControllable<Date | undefined>(
+    props,
+    "value",
+    defaultValue,
+    onValueChange,
+  )
   const date = isDate(given) ? given : undefined
-  const matchers = React.useMemo(() => toMatchers(min, max, disabledDates), [min, max, disabledDates])
+  const matchers = React.useMemo(
+    () => toMatchers(min, max, disabledDates),
+    [min, max, disabledDates],
+  )
   const text = date ? formatDate(date, format, { locale }) : ""
 
   const handleCommit = (typed: string): boolean => {
@@ -447,13 +522,42 @@ interface DateRangePickerProps extends PickerBaseProps {
 }
 
 function DateRangePicker(props: DateRangePickerProps) {
-  const { value: _v, defaultValue, onValueChange, name, nameTo, presets, closeOnSelect = true, format = "PP", locale, min, max, disabledDates, calendarProps, ...rest } = props
+  const {
+    value: _v,
+    defaultValue,
+    onValueChange,
+    name,
+    nameTo,
+    presets,
+    closeOnSelect = true,
+    format = "PP",
+    locale,
+    min,
+    max,
+    disabledDates,
+    calendarProps,
+    ...rest
+  } = props
   void _v
-  const [given, setRange, resetRange] = useControllable<DateRange | undefined>(props, "value", defaultValue, onValueChange)
-  const range = isDate(given?.from) ? { from: given.from, to: isDate(given.to) ? given.to : undefined } : undefined
-  const matchers = React.useMemo(() => toMatchers(min, max, disabledDates), [min, max, disabledDates])
+  const [given, setRange, resetRange] = useControllable<DateRange | undefined>(
+    props,
+    "value",
+    defaultValue,
+    onValueChange,
+  )
+  const range = isDate(given?.from)
+    ? { from: given.from, to: isDate(given.to) ? given.to : undefined }
+    : undefined
+  const matchers = React.useMemo(
+    () => toMatchers(min, max, disabledDates),
+    [min, max, disabledDates],
+  )
   const fmt = (d: Date) => formatDate(d, format, { locale })
-  const text = range?.from ? (range.to ? `${fmt(range.from)} – ${fmt(range.to)}` : `${fmt(range.from)} –`) : ""
+  const text = range?.from
+    ? range.to
+      ? `${fmt(range.from)} – ${fmt(range.to)}`
+      : `${fmt(range.from)} –`
+    : ""
 
   const handleCommit = (typed: string): boolean => {
     if (!typed.trim()) {
@@ -471,7 +575,8 @@ function DateRangePicker(props: DateRangePickerProps) {
     const [a, b] = dates as [Date, Date | undefined]
     const from = b && b < a ? b : a
     const to = b ? (b < a ? a : b) : undefined
-    if (matchers.length > 0 && [from, to].some((d) => d && dateMatchModifiers(d, matchers))) return false
+    if (matchers.length > 0 && [from, to].some((d) => d && dateMatchModifiers(d, matchers)))
+      return false
     setRange({ from, to })
     return true
   }
@@ -488,8 +593,12 @@ function DateRangePicker(props: DateRangePickerProps) {
       hidden={
         name || nameTo ? (
           <>
-            {name ? <input type="hidden" name={name} value={range?.from ? toIsoDate(range.from) : ""} /> : null}
-            {nameTo ? <input type="hidden" name={nameTo} value={range?.to ? toIsoDate(range.to) : ""} /> : null}
+            {name ? (
+              <input type="hidden" name={name} value={range?.from ? toIsoDate(range.from) : ""} />
+            ) : null}
+            {nameTo ? (
+              <input type="hidden" name={nameTo} value={range?.to ? toIsoDate(range.to) : ""} />
+            ) : null}
           </>
         ) : null
       }

@@ -5,9 +5,16 @@ import * as React from "react"
 export type MessageScrollerDefaultScrollPosition = "start" | "end" | "last-anchor"
 export type MessageScrollerButtonDirection = "start" | "end"
 export type MessageScrollerScrollAlign = "start" | "center" | "end" | "nearest"
-export type MessageScrollerScrollOptions = { align?: MessageScrollerScrollAlign; behavior?: ScrollBehavior; scrollMargin?: number }
+export type MessageScrollerScrollOptions = {
+  align?: MessageScrollerScrollAlign
+  behavior?: ScrollBehavior
+  scrollMargin?: number
+}
 export type MessageScrollerScrollable = { start: boolean; end: boolean }
-export type MessageScrollerVisibilityState = { currentAnchorId: string | null; visibleMessageIds: string[] }
+export type MessageScrollerVisibilityState = {
+  currentAnchorId: string | null
+  visibleMessageIds: string[]
+}
 
 type Mode = "following-bottom" | "free-scrolling" | "anchored-to-message" | "settling-jump"
 
@@ -22,8 +29,17 @@ type Options = {
 
 const AUTOSCROLL_MS = 180
 const EPS = 0.5
-const SCROLL_KEYS = new Map<string, "start" | "end">([["ArrowUp", "start"], ["PageUp", "start"], ["Home", "start"], ["ArrowDown", "end"], ["PageDown", "end"], ["End", "end"], [" ", "end"]])
-const isField = (t: EventTarget | null) => t instanceof HTMLElement && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))
+const SCROLL_KEYS = new Map<string, "start" | "end">([
+  ["ArrowUp", "start"],
+  ["PageUp", "start"],
+  ["Home", "start"],
+  ["ArrowDown", "end"],
+  ["PageDown", "end"],
+  ["End", "end"],
+  [" ", "end"],
+])
+const isField = (t: EventTarget | null) =>
+  t instanceof HTMLElement && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))
 
 function createStore<T>(initial: T, equal: (a: T, b: T) => boolean) {
   let value = initial
@@ -43,10 +59,16 @@ function createStore<T>(initial: T, equal: (a: T, b: T) => boolean) {
   }
 }
 
-const NO_VISIBILITY: MessageScrollerVisibilityState = { currentAnchorId: null, visibleMessageIds: [] }
-const sameScrollable = (a: MessageScrollerScrollable, b: MessageScrollerScrollable) => a.start === b.start && a.end === b.end
+const NO_VISIBILITY: MessageScrollerVisibilityState = {
+  currentAnchorId: null,
+  visibleMessageIds: [],
+}
+const sameScrollable = (a: MessageScrollerScrollable, b: MessageScrollerScrollable) =>
+  a.start === b.start && a.end === b.end
 const sameVisibility = (a: MessageScrollerVisibilityState, b: MessageScrollerVisibilityState) =>
-  a.currentAnchorId === b.currentAnchorId && a.visibleMessageIds.length === b.visibleMessageIds.length && a.visibleMessageIds.every((id, i) => id === b.visibleMessageIds[i])
+  a.currentAnchorId === b.currentAnchorId &&
+  a.visibleMessageIds.length === b.visibleMessageIds.length &&
+  a.visibleMessageIds.every((id, i) => id === b.visibleMessageIds[i])
 
 const px = (v: string | undefined) => {
   const n = Number.parseFloat(v ?? "")
@@ -86,7 +108,11 @@ class Controller {
 
   private childItems(): HTMLElement[] {
     const c = this.content
-    return c ? (Array.from(c.children).filter((n) => n instanceof HTMLElement && n !== this.spacer) as HTMLElement[]) : []
+    return c
+      ? (Array.from(c.children).filter(
+          (n) => n instanceof HTMLElement && n !== this.spacer,
+        ) as HTMLElement[])
+      : []
   }
   private top(el: Element): number {
     return el.getBoundingClientRect().top - (this.viewport?.getBoundingClientRect().top ?? 0)
@@ -100,7 +126,10 @@ class Controller {
     const items = this.childItems()
     const last = items[items.length - 1]
     const end = last ? this.offset(last) + last.getBoundingClientRect().height : 0
-    const pad = typeof getComputedStyle === "function" ? px((getComputedStyle(c).paddingBlockEnd || getComputedStyle(c).paddingBottom) as string) : 0
+    const pad =
+      typeof getComputedStyle === "function"
+        ? px((getComputedStyle(c).paddingBlockEnd || getComputedStyle(c).paddingBottom) as string)
+        : 0
     return end + pad
   }
   private firstBelow(items: HTMLElement[], y: number): number {
@@ -181,7 +210,9 @@ class Controller {
       const el = items[i]
       if (el.dataset.messageId && el.dataset.scrollAnchor === "true") current = el.dataset.messageId
     }
-    return visible.length === 0 && current === null ? NO_VISIBILITY : { currentAnchorId: current, visibleMessageIds: visible }
+    return visible.length === 0 && current === null
+      ? NO_VISIBILITY
+      : { currentAnchorId: current, visibleMessageIds: visible }
   }
 
   private flagAutoscrolling(on: boolean): void {
@@ -208,13 +239,22 @@ class Controller {
     this.spacerHeight = h
     s.hidden = h === 0
     s.style.height = `${h}px`
-    const gap = this.content ? px(getComputedStyle(this.content).rowGap === "normal" ? getComputedStyle(this.content).gap : getComputedStyle(this.content).rowGap) : 0
+    const gap = this.content
+      ? px(
+          getComputedStyle(this.content).rowGap === "normal"
+            ? getComputedStyle(this.content).gap
+            : getComputedStyle(this.content).rowGap,
+        )
+      : 0
     s.style.marginTop = h > 0 ? `${-gap}px` : ""
   }
 
   private reducedMotion(): boolean {
     if (typeof window === "undefined") return false
-    return !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches || !!this.viewport?.closest('[data-motion="reduced"]')
+    return (
+      !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ||
+      !!this.viewport?.closest('[data-motion="reduced"]')
+    )
   }
 
   private scrollTo(top: number, behavior: ScrollBehavior = "auto", autoscrolling = false): void {
@@ -228,7 +268,8 @@ class Controller {
     }
     if (autoscrolling) this.flagAutoscrolling(true)
     this.lastSet = t
-    if (behavior === "smooth" && typeof v.scrollTo === "function" && !this.reducedMotion()) v.scrollTo({ top: t, behavior })
+    if (behavior === "smooth" && typeof v.scrollTo === "function" && !this.reducedMotion())
+      v.scrollTo({ top: t, behavior })
     else v.scrollTop = t
     this.scheduleCommit()
   }
@@ -261,14 +302,33 @@ class Controller {
     if (align === "nearest") {
       const from = v.scrollTop
       const to = from + v.clientHeight
-      return off >= from && off + h <= to ? from : off < from ? off - margin : off + h - v.clientHeight + margin
+      return off >= from && off + h <= to
+        ? from
+        : off < from
+          ? off - margin
+          : off + h - v.clientHeight + margin
     }
     return off - margin
   }
-  scrollToElement = (el: HTMLElement, { align = "start", behavior = "auto", scrollMargin = this.opts.scrollMargin }: MessageScrollerScrollOptions = {}, { keepPreviousPeek = false } = {}): boolean => {
+  scrollToElement = (
+    el: HTMLElement,
+    {
+      align = "start",
+      behavior = "auto",
+      scrollMargin = this.opts.scrollMargin,
+    }: MessageScrollerScrollOptions = {},
+    { keepPreviousPeek = false } = {},
+  ): boolean => {
     const v = this.viewport
     if (!v || !this.content?.contains(el)) return false
-    const target = Math.max(0, this.targetFor(el, align, scrollMargin + (keepPreviousPeek ? this.opts.scrollPreviousItemPeek : 0)))
+    const target = Math.max(
+      0,
+      this.targetFor(
+        el,
+        align,
+        scrollMargin + (keepPreviousPeek ? this.opts.scrollPreviousItemPeek : 0),
+      ),
+    )
     this.setSpacer(target + v.clientHeight - this.contentEnd())
     this.mode = keepPreviousPeek ? "anchored-to-message" : "free-scrolling"
     this.anchored = keepPreviousPeek ? el : null
@@ -354,11 +414,14 @@ class Controller {
       this.commit()
       return
     }
-    const fresh = items.slice(before).filter((el) => el.dataset.scrollAnchor === "true" && !this.handled.has(el))
+    const fresh = items
+      .slice(before)
+      .filter((el) => el.dataset.scrollAnchor === "true" && !this.handled.has(el))
     if (fresh.length) {
       for (const el of fresh) this.handled.add(el)
       const newest = fresh[fresh.length - 1]
-      if (this.mode === "following-bottom" && this.opts.autoScroll && fresh.length > 1) this.scrollToEnd()
+      if (this.mode === "following-bottom" && this.opts.autoScroll && fresh.length > 1)
+        this.scrollToEnd()
       else this.scrollToElement(newest, { align: "start" }, { keepPreviousPeek: true })
       return
     }
@@ -375,7 +438,10 @@ class Controller {
     const el = this.anchored
     if (el?.isConnected && this.mode === "anchored-to-message") {
       const v = this.viewport as HTMLElement
-      const target = Math.max(0, this.targetFor(el, "start", this.opts.scrollMargin + this.opts.scrollPreviousItemPeek))
+      const target = Math.max(
+        0,
+        this.targetFor(el, "start", this.opts.scrollMargin + this.opts.scrollPreviousItemPeek),
+      )
       const had = this.spacerHeight
       this.setSpacer(target + v.clientHeight - this.contentEnd())
       if (Math.abs(v.scrollTop - target) > EPS && this.spacerHeight > 0) {
@@ -396,9 +462,26 @@ class Controller {
     const s = this.computeScrollable()
     const up = v.scrollTop < this.lastTop - EPS
     this.lastTop = v.scrollTop
-    if (this.pointerHeld && !(Math.abs(v.scrollTop - this.lastSet) <= 1.5) && (this.mode === "following-bottom" || this.mode === "anchored-to-message")) this.mode = "free-scrolling"
-    if (this.opts.autoScroll && !s.end && this.mode !== "settling-jump" && this.mode !== "anchored-to-message") this.mode = "following-bottom"
-    else if (this.mode === "following-bottom" && s.end && up && !(Math.abs(v.scrollTop - this.lastSet) <= 1.5)) this.mode = "free-scrolling"
+    if (
+      this.pointerHeld &&
+      !(Math.abs(v.scrollTop - this.lastSet) <= 1.5) &&
+      (this.mode === "following-bottom" || this.mode === "anchored-to-message")
+    )
+      this.mode = "free-scrolling"
+    if (
+      this.opts.autoScroll &&
+      !s.end &&
+      this.mode !== "settling-jump" &&
+      this.mode !== "anchored-to-message"
+    )
+      this.mode = "following-bottom"
+    else if (
+      this.mode === "following-bottom" &&
+      s.end &&
+      up &&
+      !(Math.abs(v.scrollTop - this.lastSet) <= 1.5)
+    )
+      this.mode = "free-scrolling"
     this.snapshot()
     this.commit()
     this.scheduleVisibility()
@@ -406,7 +489,8 @@ class Controller {
   userIntent = (toward: "start" | "end" | "any" = "any"): void => {
     if (this.mode === "following-bottom") {
       if (toward !== "end") this.mode = "free-scrolling"
-    } else if (this.mode === "anchored-to-message" || this.mode === "settling-jump") this.mode = "free-scrolling"
+    } else if (this.mode === "anchored-to-message" || this.mode === "settling-jump")
+      this.mode = "free-scrolling"
   }
   holdPointer = (on: boolean): void => {
     this.pointerHeld = on
@@ -424,7 +508,8 @@ class Controller {
   setAutoScroll = (on: boolean): void => {
     this.opts.autoScroll = on
     if (on) {
-      if (this.mode === "free-scrolling" && this.viewport && !this.computeScrollable().end) this.mode = "following-bottom"
+      if (this.mode === "free-scrolling" && this.viewport && !this.computeScrollable().end)
+        this.mode = "following-bottom"
     } else if (this.mode === "following-bottom") this.mode = "free-scrolling"
   }
   dispose = (): void => {
@@ -445,13 +530,23 @@ const ControllerContext = React.createContext<Controller | null>(null)
 
 function useController(): Controller {
   const c = React.useContext(ControllerContext)
-  if (!c) throw new Error("MessageScroller parts and hooks must be used inside <MessageScroller.Provider>")
+  if (!c)
+    throw new Error(
+      "MessageScroller parts and hooks must be used inside <MessageScroller.Provider>",
+    )
   return c
 }
 
 export function useMessageScroller() {
   const c = useController()
-  return React.useMemo(() => ({ scrollToEnd: c.scrollToEnd, scrollToMessage: c.scrollToMessage, scrollToStart: c.scrollToStart }), [c])
+  return React.useMemo(
+    () => ({
+      scrollToEnd: c.scrollToEnd,
+      scrollToMessage: c.scrollToMessage,
+      scrollToStart: c.scrollToStart,
+    }),
+    [c],
+  )
 }
 
 export function useMessageScrollerScrollable(): MessageScrollerScrollable {
@@ -467,7 +562,7 @@ export function useMessageScrollerVisibility(): MessageScrollerVisibilityState {
       c.scheduleVisibility()
       return off
     },
-    [c]
+    [c],
   )
   return React.useSyncExternalStore(subscribe, c.visibility.get, c.visibility.get)
 }
@@ -488,7 +583,14 @@ function MessageScrollerProvider({
   scrollMargin?: number
 }) {
   const ref = React.useRef<Controller | null>(null)
-  ref.current ??= new Controller({ autoScroll, defaultScrollPosition, scrollEdgeThreshold, scrollPreviousItemPeek, scrollMargin, preserveScrollOnPrepend: true })
+  ref.current ??= new Controller({
+    autoScroll,
+    defaultScrollPosition,
+    scrollEdgeThreshold,
+    scrollPreviousItemPeek,
+    scrollMargin,
+    preserveScrollOnPrepend: true,
+  })
   const c = ref.current
   c.opts.defaultScrollPosition = defaultScrollPosition
   c.opts.scrollEdgeThreshold = scrollEdgeThreshold
@@ -512,7 +614,7 @@ function MessageScrollerRoot({ ref, ...props }: React.ComponentProps<"div">) {
       if (typeof ref === "function") ref(el)
       else if (ref) (ref as React.RefObject<HTMLDivElement | null>).current = el
     },
-    [c, ref]
+    [c, ref],
   )
   return <div ref={set} {...props} />
 }
@@ -546,7 +648,7 @@ function MessageScrollerViewport({
         c.handleContentChange()
       }
     },
-    [c, ref]
+    [c, ref],
   )
   React.useEffect(() => {
     const release = () => c.holdPointer(false)
@@ -597,12 +699,21 @@ function MessageScrollerViewport({
         const y = e.touches[0]?.clientY
         const before = touchY.current
         touchY.current = y ?? null
-        c.userIntent(y === undefined || before === null ? "any" : y > before ? "start" : y < before ? "end" : "any")
+        c.userIntent(
+          y === undefined || before === null
+            ? "any"
+            : y > before
+              ? "start"
+              : y < before
+                ? "end"
+                : "any",
+        )
         onTouchMove?.(e)
       }}
       onKeyDown={(e) => {
         const toward = SCROLL_KEYS.get(e.key)
-        if (toward && !e.defaultPrevented && !isField(e.target)) c.userIntent(e.key === " " && e.shiftKey ? "start" : toward)
+        if (toward && !e.defaultPrevented && !isField(e.target))
+          c.userIntent(e.key === " " && e.shiftKey ? "start" : toward)
         onKeyDown?.(e)
       }}
       {...props}
@@ -627,7 +738,7 @@ function MessageScrollerContent({
       if (typeof ref === "function") ref(el)
       else if (ref) (ref as React.RefObject<HTMLDivElement | null>).current = el
     },
-    [c, ref]
+    [c, ref],
   )
   React.useLayoutEffect(() => {
     c.handleContentChange()
@@ -635,13 +746,19 @@ function MessageScrollerContent({
   React.useEffect(() => {
     const el = own.current
     if (!el) return
-    const mo = typeof MutationObserver === "undefined" ? null : new MutationObserver(() => c.handleContentChange())
+    const mo =
+      typeof MutationObserver === "undefined"
+        ? null
+        : new MutationObserver(() => c.handleContentChange())
     mo?.observe(el, { childList: true })
     let f = 0
-    const ro = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(() => {
-      cancelAnimationFrame(f)
-      f = requestAnimationFrame(c.handleResize)
-    })
+    const ro =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(() => {
+            cancelAnimationFrame(f)
+            f = requestAnimationFrame(c.handleResize)
+          })
     ro?.observe(el)
     return () => {
       mo?.disconnect()
@@ -682,14 +799,24 @@ function MessageScrollerItem({
       if (typeof ref === "function") ref(el)
       else if (ref) (ref as React.RefObject<HTMLDivElement | null>).current = el
     },
-    [c, messageId, ref]
+    [c, messageId, ref],
   )
-  return <div ref={set} data-message-id={messageId} data-scroll-anchor={scrollAnchor ? "true" : "false"} {...props} />
+  return (
+    <div
+      ref={set}
+      data-message-id={messageId}
+      data-scroll-anchor={scrollAnchor ? "true" : "false"}
+      {...props}
+    />
+  )
 }
 
 type ButtonRenderState = { active: boolean; direction: MessageScrollerButtonDirection }
 
-function mergeProps(a: Record<string, unknown>, b: Record<string, unknown>): Record<string, unknown> {
+function mergeProps(
+  a: Record<string, unknown>,
+  b: Record<string, unknown>,
+): Record<string, unknown> {
   const out: Record<string, unknown> = { ...a }
   for (const k of Object.keys(b)) {
     const v = b[k]
@@ -697,7 +824,11 @@ function mergeProps(a: Record<string, unknown>, b: Record<string, unknown>): Rec
     const w = out[k]
     if (k === "className") out[k] = [w, v].filter(Boolean).join(" ")
     else if (k === "style") out[k] = { ...(w as object), ...(v as object) }
-    else if (/^on[A-Z]/.test(k) && typeof w === "function" && typeof v === "function") out[k] = (e: { defaultPrevented?: boolean }) => (void (v as (e: unknown) => void)(e), e.defaultPrevented ? undefined : (w as (e: unknown) => void)(e))
+    else if (/^on[A-Z]/.test(k) && typeof w === "function" && typeof v === "function")
+      out[k] = (e: { defaultPrevented?: boolean }) => (
+        void (v as (e: unknown) => void)(e),
+        e.defaultPrevented ? undefined : (w as (e: unknown) => void)(e)
+      )
     else out[k] = v
   }
   return out
@@ -716,7 +847,9 @@ function MessageScrollerButton({
   ref?: React.Ref<HTMLButtonElement>
   behavior?: ScrollBehavior
   direction?: MessageScrollerButtonDirection
-  render?: React.ReactElement | ((props: Record<string, unknown>, state: ButtonRenderState) => React.ReactElement)
+  render?:
+    | React.ReactElement
+    | ((props: Record<string, unknown>, state: ButtonRenderState) => React.ReactElement)
 }) {
   const c = useController()
   const sc = React.useSyncExternalStore(c.scrollable.subscribe, c.scrollable.get, c.scrollable.get)

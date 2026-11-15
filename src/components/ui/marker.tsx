@@ -18,10 +18,20 @@ const markerVariants = cva(
         border: "pb-3",
       },
     },
-  }
+  },
 )
 
-function MarkerRule({ side, tone, seed, wavy }: { side: MarkerSide; tone: MarkerTone; seed?: string | number; wavy?: boolean }) {
+function MarkerRule({
+  side,
+  tone,
+  seed,
+  wavy,
+}: {
+  side: MarkerSide
+  tone: MarkerTone
+  seed?: string | number
+  wavy?: boolean
+}) {
   const { hostRef, hostProps, node } = useInk({
     recipe: markerRuleRecipe,
     params: { side, tone, style: wavy ? "wavy" : "line" },
@@ -37,7 +47,7 @@ function MarkerRule({ side, tone, seed, wavy }: { side: MarkerSide; tone: Marker
       {...hostProps}
       className={cn(
         "relative isolate block h-4 min-w-0 forced-colors:h-2 forced-colors:border-b-2 forced-colors:border-[CanvasText] forced-colors:outline-none!",
-        side === "full" ? "absolute inset-x-0 bottom-0" : "flex-1"
+        side === "full" ? "absolute inset-x-0 bottom-0" : "flex-1",
       )}
     >
       {node}
@@ -76,7 +86,9 @@ function Marker({
       {v === "separator" ? <MarkerRule side="start" tone={t} seed={seed} /> : null}
       {inner}
       {v === "separator" ? <MarkerRule side="end" tone={t} seed={seed} /> : null}
-      {v === "border" ? <MarkerRule side="full" tone={t} seed={seed} wavy={rule === "wavy"} /> : null}
+      {v === "border" ? (
+        <MarkerRule side="full" tone={t} seed={seed} wavy={rule === "wavy"} />
+      ) : null}
     </Comp>
   )
 }
@@ -86,7 +98,10 @@ function MarkerIcon({ className, ...props }: React.ComponentProps<"span">) {
     <span
       data-slot="marker-icon"
       aria-hidden="true"
-      className={cn("size-4 shrink-0 group-data-[tone=new]/marker:text-red [&_svg:not([class*='size-']):not(.absolute)]:size-4", className)}
+      className={cn(
+        "size-4 shrink-0 group-data-[tone=new]/marker:text-red [&_svg:not([class*='size-']):not(.absolute)]:size-4",
+        className,
+      )}
       {...props}
     />
   )
@@ -98,7 +113,7 @@ function MarkerContent({ className, ...props }: React.ComponentProps<"span">) {
       data-slot="marker-content"
       className={cn(
         "min-w-0 wrap-break-word group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center group-data-[variant=separator]/marker:font-script group-data-[variant=separator]/marker:text-xl group-data-[variant=separator]/marker:leading-none group-data-[tone=new]/marker:ll-swipe group-data-[tone=new]/marker:px-2 group-data-[tone=new]/marker:font-bold *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground",
-        className
+        className,
       )}
       {...props}
     />

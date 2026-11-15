@@ -20,11 +20,21 @@ function ItemStyles() {
   )
 }
 
-function ItemGroup({ className, ruled = false, ...props }: React.ComponentProps<"div"> & { ruled?: boolean }) {
+function ItemGroup({
+  className,
+  ruled = false,
+  ...props
+}: React.ComponentProps<"div"> & { ruled?: boolean }) {
   return (
     <InList value>
       <ItemStyles />
-      <div role="list" data-slot="item-group" data-ruled={ruled ? "" : undefined} className={cn("group/item-group flex flex-col", className)} {...props} />
+      <div
+        role="list"
+        data-slot="item-group"
+        data-ruled={ruled ? "" : undefined}
+        className={cn("group/item-group flex flex-col", className)}
+        {...props}
+      />
     </InList>
   )
 }
@@ -41,7 +51,15 @@ function ItemSeparator({
   const frame = hashSeed(useInkSeed(seed)) % ITEM_FRAMES
   if (variant !== "pencil" || orientation !== "horizontal" || children) {
     return (
-      <Separator data-slot="item-separator" orientation={orientation} variant={variant} seed={seed} decorative={decorative} className={cn("my-0", className)} {...props}>
+      <Separator
+        data-slot="item-separator"
+        orientation={orientation}
+        variant={variant}
+        seed={seed}
+        decorative={decorative}
+        className={cn("my-0", className)}
+        {...props}
+      >
         {children}
       </Separator>
     )
@@ -77,7 +95,7 @@ const itemVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 )
 
 function Item({
@@ -88,7 +106,8 @@ function Item({
   seed,
   role,
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof itemVariants> & { asChild?: boolean; seed?: string | number }) {
+}: React.ComponentProps<"div"> &
+  VariantProps<typeof itemVariants> & { asChild?: boolean; seed?: string | number }) {
   const inList = React.useContext(InList)
   const frame = hashSeed(useInkSeed(seed)) % ITEM_FRAMES
   const Comp = asChild ? Slot.Root : "div"
@@ -98,7 +117,11 @@ function Item({
       data-variant={variant}
       data-size={size}
       data-frame={frame}
-      role={inList && asChild && role === "listitem" ? undefined : (role ?? (inList && !asChild ? "listitem" : undefined))}
+      role={
+        inList && asChild && role === "listitem"
+          ? undefined
+          : (role ?? (inList && !asChild ? "listitem" : undefined))
+      }
       className={cn(itemVariants({ variant, size, className }))}
       {...props}
     />
@@ -132,7 +155,7 @@ const itemMediaVariants = cva(
     defaultVariants: {
       variant: "default",
     },
-  }
+  },
 )
 
 function ItemMedia({
@@ -140,17 +163,41 @@ function ItemMedia({
   variant = "default",
   seed,
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof itemMediaVariants> & { seed?: string | number }) {
+}: React.ComponentProps<"div"> &
+  VariantProps<typeof itemMediaVariants> & { seed?: string | number }) {
   const frame = hashSeed(useInkSeed(seed)) % ITEM_FRAMES
-  return <div data-slot="item-media" data-variant={variant} data-frame={frame} className={cn(itemMediaVariants({ variant, className }))} {...props} />
+  return (
+    <div
+      data-slot="item-media"
+      data-variant={variant}
+      data-frame={frame}
+      className={cn(itemMediaVariants({ variant, className }))}
+      {...props}
+    />
+  )
 }
 
 function ItemContent({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="item-content" className={cn("flex min-w-0 flex-1 flex-col gap-1 [&+[data-slot=item-content]]:flex-none", className)} {...props} />
+  return (
+    <div
+      data-slot="item-content"
+      className={cn(
+        "flex min-w-0 flex-1 flex-col gap-1 [&+[data-slot=item-content]]:flex-none",
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 function ItemTitle({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="item-title" className={cn("flex w-fit items-center gap-2 text-base leading-snug font-bold", className)} {...props} />
+  return (
+    <div
+      data-slot="item-title"
+      className={cn("flex w-fit items-center gap-2 text-base leading-snug font-bold", className)}
+      {...props}
+    />
+  )
 }
 
 function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
@@ -160,7 +207,7 @@ function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
       className={cn(
         "line-clamp-2 text-sm leading-normal font-normal text-balance text-muted-foreground",
         "[&>a]:text-link [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-link-hover",
-        className
+        className,
       )}
       {...props}
     />
@@ -168,15 +215,40 @@ function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
 }
 
 function ItemActions({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="item-actions" className={cn("flex items-center gap-2", className)} {...props} />
+  return (
+    <div data-slot="item-actions" className={cn("flex items-center gap-2", className)} {...props} />
+  )
 }
 
 function ItemHeader({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="item-header" className={cn("flex basis-full items-center justify-between gap-2", className)} {...props} />
+  return (
+    <div
+      data-slot="item-header"
+      className={cn("flex basis-full items-center justify-between gap-2", className)}
+      {...props}
+    />
+  )
 }
 
 function ItemFooter({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="item-footer" className={cn("flex basis-full items-center justify-between gap-2", className)} {...props} />
+  return (
+    <div
+      data-slot="item-footer"
+      className={cn("flex basis-full items-center justify-between gap-2", className)}
+      {...props}
+    />
+  )
 }
 
-export { Item, ItemMedia, ItemContent, ItemActions, ItemGroup, ItemSeparator, ItemTitle, ItemDescription, ItemHeader, ItemFooter }
+export {
+  Item,
+  ItemMedia,
+  ItemContent,
+  ItemActions,
+  ItemGroup,
+  ItemSeparator,
+  ItemTitle,
+  ItemDescription,
+  ItemHeader,
+  ItemFooter,
+}

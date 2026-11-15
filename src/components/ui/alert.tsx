@@ -14,7 +14,8 @@ const alertVariants = cva(
     variants: {
       variant: {
         default: "text-card-foreground",
-        destructive: "text-destructive *:data-[slot=alert-description]:text-destructive [&>svg:not(.absolute)]:text-current",
+        destructive:
+          "text-destructive *:data-[slot=alert-description]:text-destructive [&>svg:not(.absolute)]:text-current",
         info: "text-card-foreground [&>svg:not(.absolute)]:text-ink-you",
         success: "text-card-foreground [&>svg:not(.absolute)]:text-green",
         warning: "text-card-foreground",
@@ -24,7 +25,7 @@ const alertVariants = cva(
     defaultVariants: {
       variant: "default",
     },
-  }
+  },
 )
 
 function Alert({
@@ -39,7 +40,13 @@ function Alert({
     seed?: string | number
   }) {
   const tone: AlertTone = variant ?? "default"
-  const { hostRef, hostProps, node } = useInk({ recipe: alertRecipe, params: { tone }, kind: "alert", seed, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: alertRecipe,
+    params: { tone },
+    kind: "alert",
+    seed,
+    still: true,
+  })
   const merged = useMergedRef<HTMLDivElement>(hostRef, ref)
 
   if (tone === "note") {
@@ -76,14 +83,23 @@ function Alert({
 }
 
 function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="alert-title" className={cn("col-start-2 line-clamp-1 min-h-4 font-bold", className)} {...props} />
+  return (
+    <div
+      data-slot="alert-title"
+      className={cn("col-start-2 line-clamp-1 min-h-4 font-bold", className)}
+      {...props}
+    />
+  )
 }
 
 function AlertDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="alert-description"
-      className={cn("col-start-2 grid justify-items-start gap-1 text-sm text-muted-foreground [&_p]:leading-relaxed", className)}
+      className={cn(
+        "col-start-2 grid justify-items-start gap-1 text-sm text-muted-foreground [&_p]:leading-relaxed",
+        className,
+      )}
       {...props}
     />
   )

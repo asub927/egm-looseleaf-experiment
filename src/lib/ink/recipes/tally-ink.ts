@@ -1,6 +1,6 @@
-import { defineRecipe } from '@/lib/ink/recipes'
-import { markPen, type MarkPen, type MarkWeight } from '@/lib/ink/recipes/text-marks-ink'
-import { tallyLines } from '@/lib/ink/shapes'
+import { defineRecipe } from "@/lib/ink/recipes"
+import { markPen, type MarkPen, type MarkWeight } from "@/lib/ink/recipes/text-marks-ink"
+import { tallyLines } from "@/lib/ink/shapes"
 
 export interface TallyParams {
   count: number
@@ -25,19 +25,22 @@ export function tallyBox(count: number, gh: number): { w: number; h: number } {
 }
 
 export const tallyRecipe = defineRecipe<TallyParams>({
-  id: 'tally',
-  kind: 'tally',
-  layers: ['rest'],
+  id: "tally",
+  kind: "tally",
+  layers: ["rest"],
   pad: 8,
   draw(ink, { w }, p, ctx) {
     const n = Math.max(0, Math.min(99, Math.floor(p.count)))
     if (n === 0) return
     const { pen, width } = markPen(p.tone, p.weight, Math.max(14, p.gh * 0.9))
     const x0 = Math.ceil(0.6 * 0.26 * p.gh) + 1
-    const { lines } = tallyLines(ink.next('tally'), x0, 2, n, p.gh)
-    const mirror = p.rtl ?? ctx.dir === 'rtl'
-    ink.layer('rest', () => {
-      if (mirror) ink.group({ transform: `translate(${w} 0) scale(-1 1)` }, () => ink.lines(lines, pen, { width }))
+    const { lines } = tallyLines(ink.next("tally"), x0, 2, n, p.gh)
+    const mirror = p.rtl ?? ctx.dir === "rtl"
+    ink.layer("rest", () => {
+      if (mirror)
+        ink.group({ transform: `translate(${w} 0) scale(-1 1)` }, () =>
+          ink.lines(lines, pen, { width }),
+        )
       else ink.lines(lines, pen, { width })
     })
   },

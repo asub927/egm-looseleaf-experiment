@@ -17,9 +17,32 @@ type StickyNoteProps = Omit<PaperProps, "stock"> & {
   doneLabel?: string
 }
 
-function StickyNote({ className, children, ref, color = "yellow", done, onDoneChange, doneLabel = "Done", seed, tilt, size, style, ...props }: StickyNoteProps) {
+function StickyNote({
+  className,
+  children,
+  ref,
+  color = "yellow",
+  done,
+  onDoneChange,
+  doneLabel = "Done",
+  seed,
+  tilt,
+  size,
+  style,
+  ...props
+}: StickyNoteProps) {
   const tickable = done !== undefined
-  const o = usePaperDecor({ recipe: stickyNoteRecipe, params: {}, kind: "sticky", ref, seed, tilt, tiltMax: 1.6, size, enabled: tickable })
+  const o = usePaperDecor({
+    recipe: stickyNoteRecipe,
+    params: {},
+    kind: "sticky",
+    ref,
+    seed,
+    tilt,
+    tiltMax: 1.6,
+    size,
+    enabled: tickable,
+  })
   const el = React.useRef<HTMLElement | null>(null)
   const seen = React.useRef(done)
   React.useEffect(() => {
@@ -47,7 +70,12 @@ function StickyNote({ className, children, ref, color = "yellow", done, onDoneCh
       className={cn(
         o.paper.className,
         "flex min-h-40 w-44 flex-col gap-1 px-4 pt-6 pb-4 font-script text-[1.35rem] leading-[1.15] text-ink break-words",
-        tickable && ["pt-8", REVEAL_DASH, REVEAL_WHEN_CHECKED, "data-[state=checked]:[&_[data-slot=sticky-note-content]]:line-through data-[state=checked]:[&_[data-slot=sticky-note-content]]:decoration-1"],
+        tickable && [
+          "pt-8",
+          REVEAL_DASH,
+          REVEAL_WHEN_CHECKED,
+          "data-[state=checked]:[&_[data-slot=sticky-note-content]]:line-through data-[state=checked]:[&_[data-slot=sticky-note-content]]:decoration-1",
+        ],
         className,
       )}
       style={{ ...o.paper.style, ...style }}
@@ -72,7 +100,13 @@ function StickyNote({ className, children, ref, color = "yellow", done, onDoneCh
 }
 
 function StickyNoteTitle({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="sticky-note-title" className={cn("text-[1.7rem] leading-none font-bold", className)} {...props} />
+  return (
+    <div
+      data-slot="sticky-note-title"
+      className={cn("text-[1.7rem] leading-none font-bold", className)}
+      {...props}
+    />
+  )
 }
 
 function StickyNoteContent({ className, ...props }: React.ComponentProps<"div">) {
@@ -80,7 +114,13 @@ function StickyNoteContent({ className, ...props }: React.ComponentProps<"div">)
 }
 
 function StickyNoteFooter({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="sticky-note-footer" className={cn("mt-auto pt-2 font-hand text-sm text-ink-soft", className)} {...props} />
+  return (
+    <div
+      data-slot="sticky-note-footer"
+      className={cn("mt-auto pt-2 font-hand text-sm text-ink-soft", className)}
+      {...props}
+    />
+  )
 }
 
 export { StickyNote, StickyNoteTitle, StickyNoteContent, StickyNoteFooter }

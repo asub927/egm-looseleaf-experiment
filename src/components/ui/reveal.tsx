@@ -45,11 +45,33 @@ type RevealProps = Omit<React.ComponentProps<"div">, "onChange"> & {
   as?: "div" | "section" | "article" | "aside" | "figure" | "ul" | "ol" | "li" | "span" | "p"
 }
 
-function Reveal({ className, children, ref, style, effect = "wipe", from = "start", delay = 0, stagger, threshold = 0.25, once = true, onReveal, nib = false, nibColor = "tomato", as = "div", ...props }: RevealProps) {
+function Reveal({
+  className,
+  children,
+  ref,
+  style,
+  effect = "wipe",
+  from = "start",
+  delay = 0,
+  stagger,
+  threshold = 0.25,
+  once = true,
+  onReveal,
+  nib = false,
+  nibColor = "tomato",
+  as = "div",
+  ...props
+}: RevealProps) {
   const Comp = as as React.ElementType
   const nibbed = nib && effect === "wipe" && !stagger && as !== "ul" && as !== "ol"
   const Wrap = as === "p" || as === "span" ? "span" : "div"
-  const pen = useInk({ recipe: revealNibRecipe, params: { color: nibColor }, kind: "reveal-nib", size: [24, 24], seed: "reveal-nib" })
+  const pen = useInk({
+    recipe: revealNibRecipe,
+    params: { color: nibColor },
+    kind: "reveal-nib",
+    size: [24, 24],
+    seed: "reveal-nib",
+  })
   const providerReduced = useInkContext().motion === "reduced"
   const root = React.useRef<HTMLElement | null>(null)
   const [armed, setArmed] = React.useState(false)
@@ -59,13 +81,17 @@ function Reveal({ className, children, ref, style, effect = "wipe", from = "star
 
   React.useLayoutEffect(() => {
     const el = root.current
-    if (!el || motionIsOff(el, providerReduced) || typeof IntersectionObserver === "undefined") return
+    if (!el || motionIsOff(el, providerReduced) || typeof IntersectionObserver === "undefined")
+      return
     setArmed(true)
     setVisible(false)
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
-          const enough = e.isIntersecting && ((e.intersectionRatio ?? 1) >= threshold || (e.intersectionRect?.height ?? 0) >= window.innerHeight * 0.4)
+          const enough =
+            e.isIntersecting &&
+            ((e.intersectionRatio ?? 1) >= threshold ||
+              (e.intersectionRect?.height ?? 0) >= window.innerHeight * 0.4)
           if (enough) {
             setVisible(true)
             seen.current?.()

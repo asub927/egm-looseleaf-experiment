@@ -95,7 +95,7 @@ export function tokenizeWords(text: string): WordToken[] {
  * supporting word-by-word subtitle highlighting and active speaking state.
  */
 export function useAudioNarration(
-  initialOptions: UseAudioNarrationOptions = {}
+  initialOptions: UseAudioNarrationOptions = {},
 ): UseAudioNarrationReturn {
   const {
     enabled: initialEnabled = true,
@@ -182,7 +182,7 @@ export function useAudioNarration(
 
           // Find token matching charIndex
           const idx = currentTokens.findIndex(
-            (t) => charIndex >= t.startIndex && charIndex <= t.endIndex
+            (t) => charIndex >= t.startIndex && charIndex <= t.endIndex,
           )
 
           if (idx !== -1) {
@@ -229,14 +229,14 @@ export function useAudioNarration(
       globalOnStart,
       resetPoseOnEnd,
       stop,
-    ]
+    ],
   )
 
   const isWordActive = React.useCallback(
     (wordIndex: number) => {
       return isSpeaking && currentWordIndex === wordIndex
     },
-    [isSpeaking, currentWordIndex]
+    [isSpeaking, currentWordIndex],
   )
 
   // Cleanup speech synthesis on unmount

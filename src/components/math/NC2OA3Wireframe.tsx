@@ -16,17 +16,8 @@ import { MascotCompanion } from "@/components/math/MascotCompanion"
 import { useParityScaffolding } from "@/hooks/use-socratic-scaffolding"
 import { useAudioNarration } from "@/hooks/use-audio-narration"
 import type { PairingSlot } from "@/lib/math/evaluator"
-import {
-  playStampThud,
-  playPickupChirp,
-  playNudgeTone,
-  playVictoryFanfare,
-} from "@/lib/audio/sfx"
-import {
-  loadStudentProfile,
-  addStars,
-  markStandardMastered,
-} from "@/lib/storage/profile"
+import { playStampThud, playPickupChirp, playNudgeTone, playVictoryFanfare } from "@/lib/audio/sfx"
+import { loadStudentProfile, addStars, markStandardMastered } from "@/lib/storage/profile"
 import type { DeskTheme } from "@/App"
 
 const MAX_PAIRS = 10 // Up to 20 counters max
@@ -63,13 +54,13 @@ export function NC2OA3Wireframe({
   const [slots, setSlots] = React.useState<PairingSlot[]>(() =>
     Array(MAX_PAIRS)
       .fill(null)
-      .map(() => ({ left: false, right: false }))
+      .map(() => ({ left: false, right: false })),
   )
   const [supplyCount, setSupplyCount] = React.useState<number>(7)
 
   // Socratic & Inquiry State
   const [speech, setSpeech] = React.useState<string>(
-    "Hi Kit! Can all 7 acorns find a buddy? Pair them up side-by-side to find out!"
+    "Hi Kit! Can all 7 acorns find a buddy? Pair them up side-by-side to find out!",
   )
   const [solvedParity, setSolvedParity] = React.useState<"even" | "odd" | null>(null)
   const [inquiryPrompt, setInquiryPrompt] = React.useState<boolean>(false)
@@ -103,10 +94,7 @@ export function NC2OA3Wireframe({
     slots,
     onSlotsChange: (newSlots) => {
       setSlots(newSlots)
-      const placed = newSlots.reduce(
-        (acc, s) => acc + (s.left ? 1 : 0) + (s.right ? 1 : 0),
-        0
-      )
+      const placed = newSlots.reduce((acc, s) => acc + (s.left ? 1 : 0) + (s.right ? 1 : 0), 0)
       setSupplyCount(Math.max(0, totalTokens - placed))
       if (soundEnabled) playStampThud()
     },
@@ -134,7 +122,8 @@ export function NC2OA3Wireframe({
   }, [slots, numPairs])
 
   const leftoverCount = React.useMemo(() => {
-    return slots.slice(0, numPairs).filter((s) => (s.left && !s.right) || (!s.left && s.right)).length
+    return slots.slice(0, numPairs).filter((s) => (s.left && !s.right) || (!s.left && s.right))
+      .length
   }, [slots, numPairs])
 
   // Handle slot click (Dual-mode: tap-to-stamp & remove)
@@ -144,9 +133,7 @@ export function NC2OA3Wireframe({
 
     if (isOccupied) {
       if (soundEnabled) playPickupChirp()
-      const newSlots = slots.map((s, idx) =>
-        idx === rowIdx ? { ...s, [side]: false } : { ...s }
-      )
+      const newSlots = slots.map((s, idx) => (idx === rowIdx ? { ...s, [side]: false } : { ...s }))
       setSlots(newSlots)
       setSupplyCount((prev) => Math.min(totalTokens, prev + 1))
       setSolvedParity(null)
@@ -162,9 +149,7 @@ export function NC2OA3Wireframe({
         return
       }
       if (soundEnabled) playStampThud()
-      const newSlots = slots.map((s, idx) =>
-        idx === rowIdx ? { ...s, [side]: true } : { ...s }
-      )
+      const newSlots = slots.map((s, idx) => (idx === rowIdx ? { ...s, [side]: true } : { ...s }))
       setSlots(newSlots)
       setSupplyCount((prev) => Math.max(0, prev - 1))
       setSolvedParity(null)
@@ -234,7 +219,8 @@ export function NC2OA3Wireframe({
     let poseToAdopt = scaffolding.mascotPose
 
     if (scaffolding.failureCount === 1) {
-      speechToDeliver = "Pencil Pal drew dotted ghost boxes for your pairs! Can you place your counters into the buddy boxes?"
+      speechToDeliver =
+        "Pencil Pal drew dotted ghost boxes for your pairs! Can you place your counters into the buddy boxes?"
       poseToAdopt = "sketch"
     } else if (scaffolding.failureCount >= 2) {
       speechToDeliver = "Pencil Pal paired up the first 2 counters! Can you pair up the rest?"
@@ -304,7 +290,7 @@ export function NC2OA3Wireframe({
     setSlots(
       Array(MAX_PAIRS)
         .fill(null)
-        .map(() => ({ left: false, right: false }))
+        .map(() => ({ left: false, right: false })),
     )
     setSupplyCount(totalTokens)
     setSolvedParity(null)
@@ -321,7 +307,7 @@ export function NC2OA3Wireframe({
     setSlots(
       Array(MAX_PAIRS)
         .fill(null)
-        .map(() => ({ left: false, right: false }))
+        .map(() => ({ left: false, right: false })),
     )
     setSupplyCount(total)
     setSolvedParity(null)
@@ -335,7 +321,7 @@ export function NC2OA3Wireframe({
   const readPromptAloud = () => {
     narration.speak(
       `Can you pair up ${totalTokens} acorns to see if ${totalTokens} is Even or Odd?`,
-      { pose: "point" }
+      { pose: "point" },
     )
   }
 
@@ -346,7 +332,7 @@ export function NC2OA3Wireframe({
       const col = side === "left" ? 0 : 1
       return scaffolding.isGhostCell(rowIdx, col)
     },
-    [scaffolding]
+    [scaffolding],
   )
 
   return (
@@ -394,7 +380,9 @@ export function NC2OA3Wireframe({
 
           {/* Theme Switcher Pill */}
           <div className="hidden md:flex items-center gap-1 bg-stone-200/80 p-0.5 rounded-md border border-stone-300 text-xs">
-            <span className="text-[10px] uppercase font-bold text-ink-soft px-1 hidden lg:inline">Desk:</span>
+            <span className="text-[10px] uppercase font-bold text-ink-soft px-1 hidden lg:inline">
+              Desk:
+            </span>
             <button
               type="button"
               title="Honey Birch Desk"
@@ -475,7 +463,12 @@ export function NC2OA3Wireframe({
             {soundEnabled ? "🔊 Sound ON" : "🔇 Sound OFF"}
           </Button>
 
-          <Button variant="ghost" size="xs" onClick={resetAll} className="h-7 text-xs px-2 cursor-pointer">
+          <Button
+            variant="ghost"
+            size="xs"
+            onClick={resetAll}
+            className="h-7 text-xs px-2 cursor-pointer"
+          >
             🔄 Reset
           </Button>
         </div>
@@ -511,9 +504,14 @@ export function NC2OA3Wireframe({
             <div className="w-full shrink-0 px-3 py-2 bg-amber-100/90 border border-amber-300 rounded-lg shadow-xs flex items-center justify-between gap-2 mb-1.5">
               <div className="text-sm sm:text-base font-script leading-tight text-amber-950 font-bold flex items-center gap-1.5 flex-wrap">
                 <span>Can you pair up</span>
-                <Highlight tone="yellow" weight="heavy">{totalTokens} acorns</Highlight>
+                <Highlight tone="yellow" weight="heavy">
+                  {totalTokens} acorns
+                </Highlight>
                 <span>to see if {totalTokens} is</span>
-                <Highlight tone="blue" weight="heavy">Even or Odd</Highlight>?
+                <Highlight tone="blue" weight="heavy">
+                  Even or Odd
+                </Highlight>
+                ?
               </div>
               <Button
                 variant="ghost"
@@ -554,7 +552,10 @@ export function NC2OA3Wireframe({
             {inquiryPrompt ? (
               <div className="w-full shrink-0 px-3 py-2 bg-purple-100 border-2 border-purple-400 rounded-lg shadow-xs flex items-center justify-between gap-2 mb-1.5 animate-pulse">
                 <div className="flex items-center gap-1.5 text-xs text-purple-950 font-bold">
-                  <span>🌰 <strong>{pairedRowsCount} pairs matched</strong>, but 1 acorn has no partner! Is {totalTokens} Even or Odd?</span>
+                  <span>
+                    🌰 <strong>{pairedRowsCount} pairs matched</strong>, but 1 acorn has no partner!
+                    Is {totalTokens} Even or Odd?
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button
@@ -586,9 +587,17 @@ export function NC2OA3Wireframe({
                   />
                   <div className="text-xs text-emerald-950 font-bold">
                     {solvedParity === "even" ? (
-                      <span>🎉 All {totalTokens} acorns have a buddy! <strong>{totalTokens} is EVEN</strong> ({totalTokens / 2} + {totalTokens / 2} = {totalTokens})!</span>
+                      <span>
+                        🎉 All {totalTokens} acorns have a buddy!{" "}
+                        <strong>{totalTokens} is EVEN</strong> ({totalTokens / 2} +{" "}
+                        {totalTokens / 2} = {totalTokens})!
+                      </span>
                     ) : (
-                      <span>🎉 One acorn is left over! <strong>{totalTokens} is ODD</strong> ({Math.floor(totalTokens / 2)} + {Math.floor(totalTokens / 2)} + 1 = {totalTokens})!</span>
+                      <span>
+                        🎉 One acorn is left over! <strong>{totalTokens} is ODD</strong> (
+                        {Math.floor(totalTokens / 2)} + {Math.floor(totalTokens / 2)} + 1 ={" "}
+                        {totalTokens})!
+                      </span>
                     )}
                   </div>
                 </div>
@@ -642,7 +651,9 @@ export function NC2OA3Wireframe({
               <div className="text-sm font-bold flex items-center gap-2">
                 {solvedParity ? (
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] uppercase text-ink-soft hidden sm:inline">Equation:</span>
+                    <span className="text-[11px] uppercase text-ink-soft hidden sm:inline">
+                      Equation:
+                    </span>
                     <Handwritten className="text-lg text-amber-900 font-bold">
                       {solvedParity === "even"
                         ? `${totalTokens / 2} + ${totalTokens / 2} = ${totalTokens} (EVEN)`
@@ -667,7 +678,8 @@ export function NC2OA3Wireframe({
                     </Handwritten>
                     {pairedRowsCount > 0 && (
                       <span className="text-xs text-stone-600 font-mono hidden sm:inline">
-                        ({pairedRowsCount} {pairedRowsCount === 1 ? "pair" : "pairs"}{leftoverCount > 0 ? `, ${leftoverCount} leftover` : ""})
+                        ({pairedRowsCount} {pairedRowsCount === 1 ? "pair" : "pairs"}
+                        {leftoverCount > 0 ? `, ${leftoverCount} leftover` : ""})
                       </span>
                     )}
                     {scaffolding.tier > 0 && (
@@ -727,8 +739,8 @@ export function NC2OA3Wireframe({
               narration.isSpeaking
                 ? narration.mascotPose
                 : scaffolding.mascotPose !== "idle"
-                ? scaffolding.mascotPose
-                : narration.mascotPose
+                  ? scaffolding.mascotPose
+                  : narration.mascotPose
             }
             speech={narration.currentText || speech}
             tierBadge={scaffolding.tierBadge}
@@ -739,8 +751,8 @@ export function NC2OA3Wireframe({
               scaffolding.wasDemonstrated
                 ? "🔄 Try Similar Challenge (Earn ⭐)"
                 : scaffolding.tier === 2
-                ? "💡 Show Me Pair 1 (Demonstrate)"
-                : "💡 Ask Pencil Pal for a Hint"
+                  ? "💡 Show Me Pair 1 (Demonstrate)"
+                  : "💡 Ask Pencil Pal for a Hint"
             }
             onAskHint={handleAskHint}
           />

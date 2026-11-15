@@ -80,7 +80,9 @@ export function evaluateArrayGrid(grid: boolean[][], spec: ArrayProblemSpec): Ar
   }
 
   const rowCounts = grid.map((r) => r.filter(Boolean).length)
-  const populatedRowIndices = rowCounts.map((count, idx) => (count > 0 ? idx : -1)).filter((idx) => idx !== -1)
+  const populatedRowIndices = rowCounts
+    .map((count, idx) => (count > 0 ? idx : -1))
+    .filter((idx) => idx !== -1)
   const activeRowCounts = populatedRowIndices.map((idx) => rowCounts[idx])
 
   // 2. Spatial Contiguity Check
@@ -89,7 +91,8 @@ export function evaluateArrayGrid(grid: boolean[][], spec: ArrayProblemSpec): Ar
     if (populatedRowIndices[i] !== i) {
       return {
         status: "gap_error",
-        feedback: "Keep your rows together starting from the top row without empty rows in between!",
+        feedback:
+          "Keep your rows together starting from the top row without empty rows in between!",
       }
     }
   }
@@ -141,7 +144,9 @@ export function evaluateArrayGrid(grid: boolean[][], spec: ArrayProblemSpec): Ar
 
   // 6. Misconception 3: Unequal rows
   if (actualCols !== spec.targetCols || !activeRowCounts.every((c) => c === spec.targetCols)) {
-    const rowBreakdown = activeRowCounts.map((count, idx) => `Row ${idx + 1} has ${count}`).join(", ")
+    const rowBreakdown = activeRowCounts
+      .map((count, idx) => `Row ${idx + 1} has ${count}`)
+      .join(", ")
     return {
       status: "unequal_rows",
       rowCounts: activeRowCounts,
@@ -232,7 +237,10 @@ export type ParityDiagnostic =
       feedback: string
     }
 
-export function evaluatePairingMat(slots: PairingSlot[], spec: ParityProblemSpec): ParityDiagnostic {
+export function evaluatePairingMat(
+  slots: PairingSlot[],
+  spec: ParityProblemSpec,
+): ParityDiagnostic {
   let placed = 0
   let pairs = 0
   let unpairedSlots = 0

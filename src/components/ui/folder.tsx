@@ -21,18 +21,40 @@ function Folder({ className, stock = "kraft", ...props }: FolderProps) {
   const ctx = React.useMemo(() => ({ stock }), [stock])
   return (
     <FolderContext.Provider value={ctx}>
-      <TabsPrimitive.Root data-slot="folder" className={cn("flex w-full max-w-2xl flex-col", className)} {...props} orientation="horizontal" />
+      <TabsPrimitive.Root
+        data-slot="folder"
+        className={cn("flex w-full max-w-2xl flex-col", className)}
+        {...props}
+        orientation="horizontal"
+      />
     </FolderContext.Provider>
   )
 }
 
 function FolderTabs({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) {
-  return <TabsPrimitive.List data-slot="folder-tabs" className={cn("relative z-10 flex items-end gap-1 ps-4 pe-4", className)} {...props} />
+  return (
+    <TabsPrimitive.List
+      data-slot="folder-tabs"
+      className={cn("relative z-10 flex items-end gap-1 ps-4 pe-4", className)}
+      {...props}
+    />
+  )
 }
 
-function FolderTab({ className, children, ref, disabled, ...props }: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
+function FolderTab({
+  className,
+  children,
+  ref,
+  disabled,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
   const { stock } = React.useContext(FolderContext)
-  const { hostRef, hostProps, node } = useInkFaces({ recipe: folderTabRecipe, params: { stock, disabled: !!disabled }, kind: "folder-tab", still: true })
+  const { hostRef, hostProps, node } = useInkFaces({
+    recipe: folderTabRecipe,
+    params: { stock, disabled: !!disabled },
+    kind: "folder-tab",
+    still: true,
+  })
   const merged = useMergedRef<HTMLButtonElement>(hostRef, ref)
   return (
     <TabsPrimitive.Trigger
@@ -57,14 +79,41 @@ function FolderTab({ className, children, ref, disabled, ...props }: React.Compo
 }
 
 type FolderContentProps = Omit<React.ComponentProps<typeof TabsPrimitive.Content>, "ref"> &
-  Pick<PaperProps, "tilt" | "seed" | "edge" | "tape" | "tapeKind" | "fastener" | "fastenerTone" | "shadow" | "size"> & {
+  Pick<
+    PaperProps,
+    "tilt" | "seed" | "edge" | "tape" | "tapeKind" | "fastener" | "fastenerTone" | "shadow" | "size"
+  > & {
     crease?: boolean
     ref?: React.Ref<HTMLElement>
   }
 
-function FolderContent({ className, children, ref, crease = true, tilt = false, seed, size, edge, tape, tapeKind, fastener, fastenerTone, shadow, ...props }: FolderContentProps) {
+function FolderContent({
+  className,
+  children,
+  ref,
+  crease = true,
+  tilt = false,
+  seed,
+  size,
+  edge,
+  tape,
+  tapeKind,
+  fastener,
+  fastenerTone,
+  shadow,
+  ...props
+}: FolderContentProps) {
   const { stock } = React.useContext(FolderContext)
-  const o = usePaperDecor({ recipe: folderBodyRecipe, params: { crease }, kind: "folder", ref, seed, tilt, size, enabled: crease })
+  const o = usePaperDecor({
+    recipe: folderBodyRecipe,
+    params: { crease },
+    kind: "folder",
+    ref,
+    seed,
+    tilt,
+    size,
+    enabled: crease,
+  })
   return (
     <TabsPrimitive.Content asChild {...props}>
       <Paper

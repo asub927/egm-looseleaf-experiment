@@ -23,7 +23,10 @@ function PopoverAnchor({ ...props }: React.ComponentProps<typeof PopoverPrimitiv
 function PopoverPointer({ seed }: { seed: string }) {
   const tier = useInkTier()
   const calm = useDensity() === "calm"
-  const res = React.useMemo(() => pointerMark(`${seed}|pointer`, { tier, calm }), [seed, tier, calm])
+  const res = React.useMemo(
+    () => pointerMark(`${seed}|pointer`, { tier, calm }),
+    [seed, tier, calm],
+  )
   return (
     <PopoverPrimitive.Arrow asChild>
       <PropSvg
@@ -40,14 +43,25 @@ function PopoverPointer({ seed }: { seed: string }) {
   )
 }
 
-function useOpenerFocus({ onOpenAutoFocus, onCloseAutoFocus, onInteractOutside }: Pick<React.ComponentProps<typeof PopoverPrimitive.Content>, "onOpenAutoFocus" | "onCloseAutoFocus" | "onInteractOutside">) {
+function useOpenerFocus({
+  onOpenAutoFocus,
+  onCloseAutoFocus,
+  onInteractOutside,
+}: Pick<
+  React.ComponentProps<typeof PopoverPrimitive.Content>,
+  "onOpenAutoFocus" | "onCloseAutoFocus" | "onInteractOutside"
+>) {
   const opener = React.useRef<Element | null>(null)
   const outside = React.useRef(false)
   return {
     onOpenAutoFocus(event: Event) {
       outside.current = false
       const id = event.target instanceof HTMLElement ? event.target.id : ""
-      const hasTrigger = !!id && Array.from(document.querySelectorAll("[aria-controls]")).some((el) => el.getAttribute("aria-controls") === id)
+      const hasTrigger =
+        !!id &&
+        Array.from(document.querySelectorAll("[aria-controls]")).some(
+          (el) => el.getAttribute("aria-controls") === id,
+        )
       opener.current = hasTrigger ? null : document.activeElement
       onOpenAutoFocus?.(event)
     },
@@ -62,7 +76,8 @@ function useOpenerFocus({ onOpenAutoFocus, onCloseAutoFocus, onInteractOutside }
       if (event.defaultPrevented || !el || outside.current) return
       const active = document.activeElement
       if (active && active !== document.body && active !== el) return
-      if (el instanceof HTMLElement && el !== document.body && el.isConnected) el.focus({ preventScroll: true })
+      if (el instanceof HTMLElement && el !== document.body && el.isConnected)
+        el.focus({ preventScroll: true })
     },
   }
 }
@@ -96,7 +111,14 @@ function PopoverContent({
   const focus = useOpenerFocus({ onOpenAutoFocus, onCloseAutoFocus, onInteractOutside })
   return (
     <PopoverPrimitive.Portal>
-      <PopoverPrimitive.Content asChild align={align} sideOffset={sideOffset} collisionPadding={collisionPadding} {...props} {...focus}>
+      <PopoverPrimitive.Content
+        asChild
+        align={align}
+        sideOffset={sideOffset}
+        collisionPadding={collisionPadding}
+        {...props}
+        {...focus}
+      >
         <Paper
           data-slot={slot}
           stock={stock}
@@ -113,7 +135,7 @@ function PopoverContent({
             "data-[side]:[--ll-sheet-shadow:var(--ll-shadow-lift)] data-[side]:calm:[--ll-sheet-shadow:var(--ll-shadow-hair)]",
             "duration-(--ll-dur-pop) data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
             "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
-            className
+            className,
           )}
         >
           {children}
@@ -125,15 +147,41 @@ function PopoverContent({
 }
 
 function PopoverHeader({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="popover-header" className={cn("flex flex-col gap-1 text-sm", className)} {...props} />
+  return (
+    <div
+      data-slot="popover-header"
+      className={cn("flex flex-col gap-1 text-sm", className)}
+      {...props}
+    />
+  )
 }
 
 function PopoverTitle({ className, ...props }: React.ComponentProps<"h2">) {
-  return <div data-slot="popover-title" className={cn("font-script text-[1.4rem] leading-none font-semibold", className)} {...props} />
+  return (
+    <div
+      data-slot="popover-title"
+      className={cn("font-script text-[1.4rem] leading-none font-semibold", className)}
+      {...props}
+    />
+  )
 }
 
 function PopoverDescription({ className, ...props }: React.ComponentProps<"p">) {
-  return <p data-slot="popover-description" className={cn("text-muted-foreground", className)} {...props} />
+  return (
+    <p
+      data-slot="popover-description"
+      className={cn("text-muted-foreground", className)}
+      {...props}
+    />
+  )
 }
 
-export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor, PopoverHeader, PopoverTitle, PopoverDescription }
+export {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverAnchor,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverDescription,
+}

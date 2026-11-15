@@ -1,9 +1,11 @@
 # Looseleaf Paper Simulation
 
 ## Overview
+
 Physical paper simulation engine providing edge tearing algorithms, stock definitions, tooth textures, multi-layer drop shadows, desk fasteners (tape, pins, staples, clips), and ruling lines.
 
 ## Interface
+
 - [defs.tsx:ensurePaperDefs]
 - [defs.tsx:PAPER_DEF_TILES]
 - [defs.tsx:PaperDefs]
@@ -38,11 +40,14 @@ Physical paper simulation engine providing edge tearing algorithms, stock defini
 - [stocks.ts:STOCKS]
 
 ## Invariants
+
 - Edge geometry implements 7 physical edge kinds with closed boundary paths [edges.ts:EDGE_KINDS]
 - Paper stocks map deterministically to specific tooth textures and drop shadow profiles [stocks.ts:STOCKS]
 
 ## Side Effects
+
 - Dynamically injects paper texture SVG filter elements into the document DOM body [defs.tsx:ensurePaperDefs]
 
 ## Verification
+
 - Run: npm run build

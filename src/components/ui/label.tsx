@@ -23,7 +23,9 @@ const STAR: ArtDef = {
 }
 
 function RequiredMark({ seed }: { seed: string }) {
-  const res = memo(`label-star|${seed}`, () => drawSkeleton(STAR, 12, seed, { tone: "ui", kind: "icon" }))
+  const res = memo(`label-star|${seed}`, () =>
+    drawSkeleton(STAR, 12, seed, { tone: "ui", kind: "icon" }),
+  )
   return (
     <svg
       data-slot="label-required"
@@ -53,7 +55,7 @@ function Label({
       data-slot="label"
       className={cn(
         "flex items-center gap-1 font-hand text-[15px] leading-none font-bold text-foreground select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:text-pencil-text peer-disabled:cursor-not-allowed peer-disabled:text-pencil-text peer-has-[>input:disabled]:cursor-not-allowed peer-has-[>input:disabled]:text-pencil-text peer-has-[>textarea:disabled]:cursor-not-allowed peer-has-[>textarea:disabled]:text-pencil-text",
-        className
+        className,
       )}
       {...props}
     >

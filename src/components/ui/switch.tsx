@@ -5,8 +5,20 @@ import { useInk, useMergedRef } from "@/lib/ink/react"
 import { switchRecipe, switchThumbRecipe } from "@/lib/ink/recipes/switch-ink"
 import { cn } from "@/lib/utils"
 
-function SwitchThumb({ className, seed, disabled, ref, ...props }: React.ComponentProps<typeof SwitchPrimitive.Thumb> & { seed: string; disabled: boolean }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: switchThumbRecipe, params: { disabled }, kind: "thumb", seed, still: true })
+function SwitchThumb({
+  className,
+  seed,
+  disabled,
+  ref,
+  ...props
+}: React.ComponentProps<typeof SwitchPrimitive.Thumb> & { seed: string; disabled: boolean }) {
+  const { hostRef, hostProps, node } = useInk({
+    recipe: switchThumbRecipe,
+    params: { disabled },
+    kind: "thumb",
+    seed,
+    still: true,
+  })
   return (
     <SwitchPrimitive.Thumb
       data-slot="switch-thumb"
@@ -15,7 +27,7 @@ function SwitchThumb({ className, seed, disabled, ref, ...props }: React.Compone
       className={cn(
         "pointer-events-none relative isolate block shrink-0 transition-transform duration-(--ll-dur-pop) ease-pop forced-colors:rounded-full forced-colors:bg-[ButtonText]",
         "size-(--sw-t) data-[state=unchecked]:translate-x-1 rtl:data-[state=unchecked]:-translate-x-1 data-[state=checked]:translate-x-(--sw-on) rtl:data-[state=checked]:-translate-x-(--sw-on)",
-        className
+        className,
       )}
       {...props}
     >
@@ -36,7 +48,17 @@ function Switch({
   seed?: string | number
 }) {
   const invalid = props["aria-invalid"] === true || props["aria-invalid"] === "true"
-  const { hostRef, hostProps, node, seed: hostSeed } = useInk({ recipe: switchRecipe, params: { disabled: !!disabled, invalid }, kind: "switch", seed })
+  const {
+    hostRef,
+    hostProps,
+    node,
+    seed: hostSeed,
+  } = useInk({
+    recipe: switchRecipe,
+    params: { disabled: !!disabled, invalid },
+    kind: "switch",
+    seed,
+  })
   return (
     <SwitchPrimitive.Root
       data-slot="switch"
@@ -51,7 +73,7 @@ function Switch({
         "group-hover/field:[&>svg_[data-layer=hover]]:visible group-hover/field:[&>svg_[data-layer=hover]]:opacity-100",
         "has-[+[data-slot=label]:hover]:[&>svg_[data-layer=hover]]:visible has-[+[data-slot=label]:hover]:[&>svg_[data-layer=hover]]:opacity-100",
         "has-[+input+[data-slot=label]:hover]:[&>svg_[data-layer=hover]]:visible has-[+input+[data-slot=label]:hover]:[&>svg_[data-layer=hover]]:opacity-100",
-        className
+        className,
       )}
       {...props}
     >

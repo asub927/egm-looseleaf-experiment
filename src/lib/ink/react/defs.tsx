@@ -1,7 +1,15 @@
 import * as React from "react"
 
 import { GRAINS } from "@/lib/ink/builder"
-import { PAPER_TILES, inkDefsSvg, svgMaskDefs, svgPatternDefs, textureCssVars, type GrainMaskKind, type PaperTileName } from "@/lib/ink/textures"
+import {
+  PAPER_TILES,
+  inkDefsSvg,
+  svgMaskDefs,
+  svgPatternDefs,
+  textureCssVars,
+  type GrainMaskKind,
+  type PaperTileName,
+} from "@/lib/ink/textures"
 
 export function InkDefs({
   kinds = GRAINS,
@@ -29,7 +37,14 @@ export function InkDefs({
 
   if (hidden) return null
   return (
-    <svg data-ll-defs="" width={0} height={0} style={{ position: "absolute" }} aria-hidden="true" focusable="false">
+    <svg
+      data-ll-defs=""
+      width={0}
+      height={0}
+      style={{ position: "absolute" }}
+      aria-hidden="true"
+      focusable="false"
+    >
       <defs dangerouslySetInnerHTML={{ __html: html }} />
     </svg>
   )
@@ -66,7 +81,8 @@ function defsMarkup(kinds: readonly GrainMaskKind[], tiles: string): string {
   let s = markupCache.get(key)
   if (s === undefined) {
     s = svgMaskDefs({ kinds })
-    if (tiles) s += svgPatternDefs(tiles === "all" ? {} : { tiles: tiles.split(",") as PaperTileName[] })
+    if (tiles)
+      s += svgPatternDefs(tiles === "all" ? {} : { tiles: tiles.split(",") as PaperTileName[] })
     markupCache.set(key, s)
   }
   return s

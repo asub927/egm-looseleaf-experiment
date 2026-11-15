@@ -39,7 +39,16 @@ function Sticker({
   if (!def) return null
   const px = Math.max(32, Math.round(size))
   const s = `${seed ?? name}`
-  const res = memo(`sticker|${name}|${px}|${peel}|${border ?? ""}|${s}|${uid}`, () => renderSticker(def, px, s, { peel: peel === false ? undefined : peel, border, idPrefix: `ll-${uid}` }), 120)
+  const res = memo(
+    `sticker|${name}|${px}|${peel}|${border ?? ""}|${s}|${uid}`,
+    () =>
+      renderSticker(def, px, s, {
+        peel: peel === false ? undefined : peel,
+        border,
+        idPrefix: `ll-${uid}`,
+      }),
+    120,
+  )
   const tilt = rotate === "auto" ? autoTilt(s) : rotate
   return (
     <svg
@@ -53,8 +62,19 @@ function Sticker({
       viewBox={`0 0 ${res.w} ${res.h}`}
       width={res.w}
       height={res.h}
-      style={rotate === "auto" ? ({ "--ll-tilt": `${tilt}deg`, ...style } as React.CSSProperties) : tilt ? { rotate: `${tilt}deg`, ...style } : style}
-      className={cn("pointer-events-none shrink-0 overflow-visible", shadow && "ll-drop-sticker", rotate === "auto" && "ll-tilt-layer", className)}
+      style={
+        rotate === "auto"
+          ? ({ "--ll-tilt": `${tilt}deg`, ...style } as React.CSSProperties)
+          : tilt
+            ? { rotate: `${tilt}deg`, ...style }
+            : style
+      }
+      className={cn(
+        "pointer-events-none shrink-0 overflow-visible",
+        shadow && "ll-drop-sticker",
+        rotate === "auto" && "ll-tilt-layer",
+        className,
+      )}
       dangerouslySetInnerHTML={{ __html: res.svg }}
       {...props}
     />

@@ -16,13 +16,17 @@ function ScrollArea({
   orientation?: "vertical" | "horizontal" | "both"
 }) {
   return (
-    <ScrollAreaPrimitive.Root data-slot="scroll-area" className={cn("relative", className)} {...props}>
+    <ScrollAreaPrimitive.Root
+      data-slot="scroll-area"
+      className={cn("relative", className)}
+      {...props}
+    >
       <ScrollAreaPrimitive.Viewport
         data-slot="scroll-area-viewport"
         className={cn(
           "size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ll-focus)",
           orientation === "vertical" && "[&>div]:block!",
-          bleed && "p-3"
+          bleed && "p-3",
         )}
       >
         {children}
@@ -43,8 +47,20 @@ function ScrollBar({
 }: React.ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar> & {
   seed?: string | number
 }) {
-  const track = useInk({ recipe: scrollTrackRecipe, params: { orientation }, kind: "track", seed: seed === undefined ? undefined : `${seed}|track`, still: true })
-  const thumb = useInk({ recipe: scrollThumbRecipe, params: { orientation }, kind: "thumb", seed: seed === undefined ? undefined : `${seed}|thumb`, still: true })
+  const track = useInk({
+    recipe: scrollTrackRecipe,
+    params: { orientation },
+    kind: "track",
+    seed: seed === undefined ? undefined : `${seed}|track`,
+    still: true,
+  })
+  const thumb = useInk({
+    recipe: scrollThumbRecipe,
+    params: { orientation },
+    kind: "thumb",
+    seed: seed === undefined ? undefined : `${seed}|thumb`,
+    still: true,
+  })
   return (
     <ScrollAreaPrimitive.ScrollAreaScrollbar
       data-slot="scroll-area-scrollbar"
@@ -55,7 +71,7 @@ function ScrollBar({
         "isolate flex touch-none p-px transition-colors select-none forced-colors:outline-0! data-[state=hidden]:animate-out data-[state=hidden]:fade-out-0 data-[state=visible]:animate-in data-[state=visible]:fade-in-0",
         orientation === "vertical" && "h-full w-2.5 border-l border-l-transparent",
         orientation === "horizontal" && "h-2.5 flex-col border-t border-t-transparent",
-        className
+        className,
       )}
       {...props}
     >

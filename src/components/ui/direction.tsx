@@ -1,7 +1,13 @@
 import * as React from "react"
 import { Direction, Slot } from "radix-ui"
 
-import { InkContext, useInkContext, useMergedRef, type InkContextValue, type InkScopeProps } from "@/lib/ink/react"
+import {
+  InkContext,
+  useInkContext,
+  useMergedRef,
+  type InkContextValue,
+  type InkScopeProps,
+} from "@/lib/ink/react"
 import { cn } from "@/lib/utils"
 
 type Dir = "ltr" | "rtl"
@@ -40,7 +46,11 @@ function DirectionProvider({
     read()
     if (typeof MutationObserver === "undefined") return
     const mo = new MutationObserver(read)
-    mo.observe(host.ownerDocument.documentElement, { attributes: true, attributeFilter: ["dir"], subtree: true })
+    mo.observe(host.ownerDocument.documentElement, {
+      attributes: true,
+      attributeFilter: ["dir"],
+      subtree: true,
+    })
     return () => mo.disconnect()
   }, [explicit])
 
@@ -55,7 +65,13 @@ function DirectionProvider({
   return (
     <Direction.DirectionProvider dir={value}>
       <InkContext.Provider value={inkValue}>
-        <Comp data-slot="direction" ref={useMergedRef(hostRef, ref)} dir={explicit} className={asChild ? className : cn("contents", className)} {...props}>
+        <Comp
+          data-slot="direction"
+          ref={useMergedRef(hostRef, ref)}
+          dir={explicit}
+          className={asChild ? className : cn("contents", className)}
+          {...props}
+        >
           {children}
         </Comp>
       </InkContext.Provider>

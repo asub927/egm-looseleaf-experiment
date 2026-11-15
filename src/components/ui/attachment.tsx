@@ -17,7 +17,12 @@ import { cn } from "@/lib/utils"
 
 type AttachmentSize = "default" | "sm" | "xs"
 
-const AttachmentContext = React.createContext<{ state: AttachmentState; orientation: AttachmentOrientation; size: AttachmentSize; titleId?: string }>({
+const AttachmentContext = React.createContext<{
+  state: AttachmentState
+  orientation: AttachmentOrientation
+  size: AttachmentSize
+  titleId?: string
+}>({
   state: "done",
   orientation: "horizontal",
   size: "default",
@@ -28,7 +33,8 @@ const attachmentVariants = cva(
   {
     variants: {
       size: {
-        default: "gap-2 text-[15px] has-data-[slot=attachment-content]:px-2.5 has-data-[slot=attachment-content]:py-2 has-data-[slot=attachment-media]:p-2.5",
+        default:
+          "gap-2 text-[15px] has-data-[slot=attachment-content]:px-2.5 has-data-[slot=attachment-content]:py-2 has-data-[slot=attachment-media]:p-2.5",
         sm: "gap-2.5 text-sm has-data-[slot=attachment-content]:px-2 has-data-[slot=attachment-content]:py-1.5 has-data-[slot=attachment-media]:p-2",
         xs: "gap-1.5 text-sm has-data-[slot=attachment-content]:px-1.5 has-data-[slot=attachment-content]:py-1 has-data-[slot=attachment-media]:p-1.5",
       },
@@ -37,7 +43,7 @@ const attachmentVariants = cva(
         vertical: "w-28 flex-col pb-4 has-data-[slot=attachment-content]:w-32",
       },
     },
-  }
+  },
 )
 
 function Attachment({
@@ -57,7 +63,12 @@ function Attachment({
   const st = state ?? "done"
   const sz = (size ?? "default") as AttachmentSize
   const or = (orientation ?? "horizontal") as AttachmentOrientation
-  const { hostRef, hostProps, node, seed: s } = useInk({
+  const {
+    hostRef,
+    hostProps,
+    node,
+    seed: s,
+  } = useInk({
     recipe: attachmentRecipe,
     params: { state: st, orientation: or, interactive: true },
     kind: "attachment",
@@ -65,7 +76,10 @@ function Attachment({
     still: true,
   })
   const titleId = React.useId()
-  const ctx = React.useMemo(() => ({ state: st, orientation: or, size: sz, titleId }), [st, or, sz, titleId])
+  const ctx = React.useMemo(
+    () => ({ state: st, orientation: or, size: sz, titleId }),
+    [st, or, sz, titleId],
+  )
   const clipped = st === "done" && or === "horizontal" && sz === "default"
   return (
     <AttachmentContext.Provider value={ctx}>
@@ -76,13 +90,22 @@ function Attachment({
         data-orientation={or}
         data-clip={clipped ? "" : undefined}
         data-ink-focus="within"
-        ref={useMergedRef<HTMLElement>(hostRef, ref as React.Ref<HTMLElement> | undefined) as React.Ref<HTMLDivElement>}
+        ref={
+          useMergedRef<HTMLElement>(
+            hostRef,
+            ref as React.Ref<HTMLElement> | undefined,
+          ) as React.Ref<HTMLDivElement>
+        }
         {...hostProps}
         className={cn(attachmentVariants({ size: sz, orientation: or }), className)}
         {...props}
       >
         {st === "idle" ? null : (
-          <span aria-hidden="true" data-slot="attachment-sheet" className="pointer-events-none absolute inset-0 -z-20">
+          <span
+            aria-hidden="true"
+            data-slot="attachment-sheet"
+            className="pointer-events-none absolute inset-0 -z-20"
+          >
             <Paper
               stock={or === "vertical" ? "photo" : "slip"}
               rules="none"
@@ -93,8 +116,23 @@ function Attachment({
           </span>
         )}
         {node}
-        {st === "done" && or === "vertical" ? <Tape kind="masking" length={52} height={18} seed={`${s}|tape`} className="absolute -top-2.5 left-1/2 -ml-[26px] calm:hidden" /> : null}
-        {clipped ? <Fastener kind="clip" size={30} seed={`${s}|clip`} className="absolute -top-3 end-1.5 z-(--ll-z-prop) calm:hidden" /> : null}
+        {st === "done" && or === "vertical" ? (
+          <Tape
+            kind="masking"
+            length={52}
+            height={18}
+            seed={`${s}|tape`}
+            className="absolute -top-2.5 left-1/2 -ml-[26px] calm:hidden"
+          />
+        ) : null}
+        {clipped ? (
+          <Fastener
+            kind="clip"
+            size={30}
+            seed={`${s}|clip`}
+            className="absolute -top-3 end-1.5 z-(--ll-z-prop) calm:hidden"
+          />
+        ) : null}
         {children}
       </div>
     </AttachmentContext.Provider>
@@ -114,7 +152,7 @@ const attachmentMediaVariants = cva(
     defaultVariants: {
       variant: "icon",
     },
-  }
+  },
 )
 
 function AttachmentMedia({
@@ -124,15 +162,27 @@ function AttachmentMedia({
   ref,
   children,
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof attachmentMediaVariants> & { seed?: string | number }) {
+}: React.ComponentProps<"div"> &
+  VariantProps<typeof attachmentMediaVariants> & { seed?: string | number }) {
   const { state } = React.useContext(AttachmentContext)
   const v = variant ?? "icon"
-  const { hostRef, hostProps, node } = useInk({ recipe: attachmentMediaRecipe, params: { state, variant: v }, kind: "media", seed, still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: attachmentMediaRecipe,
+    params: { state, variant: v },
+    kind: "media",
+    seed,
+    still: true,
+  })
   return (
     <div
       data-slot="attachment-media"
       data-variant={v}
-      ref={useMergedRef<HTMLElement>(hostRef, ref as React.Ref<HTMLElement> | undefined) as React.Ref<HTMLDivElement>}
+      ref={
+        useMergedRef<HTMLElement>(
+          hostRef,
+          ref as React.Ref<HTMLElement> | undefined,
+        ) as React.Ref<HTMLDivElement>
+      }
       {...hostProps}
       className={cn(attachmentMediaVariants({ variant: v }), className)}
       {...props}
@@ -147,7 +197,10 @@ function AttachmentContent({ className, ...props }: React.ComponentProps<"div">)
   return (
     <div
       data-slot="attachment-content"
-      className={cn("max-w-full min-w-0 flex-1 pe-0.5 leading-tight group-data-[orientation=vertical]/attachment:px-1", className)}
+      className={cn(
+        "max-w-full min-w-0 flex-1 pe-0.5 leading-tight group-data-[orientation=vertical]/attachment:px-1",
+        className,
+      )}
       {...props}
     />
   )
@@ -161,7 +214,7 @@ function AttachmentTitle({ className, ...props }: React.ComponentProps<"span">) 
       id={titleId}
       className={cn(
         "ll-ink-room block min-w-0 truncate font-bold group-data-[state=processing]/attachment:animate-pulse group-data-[state=uploading]/attachment:animate-pulse",
-        className
+        className,
       )}
       {...props}
     />
@@ -174,7 +227,7 @@ function AttachmentDescription({ className, ...props }: React.ComponentProps<"sp
       data-slot="attachment-description"
       className={cn(
         "ll-ink-room mt-0.5 block min-w-0 truncate text-sm text-muted-foreground group-data-[state=error]/attachment:text-red",
-        className
+        className,
       )}
       {...props}
     />
@@ -194,13 +247,22 @@ function AttachmentProgress({
   max?: number
   seed?: string | number
 }) {
-  const { hostRef, hostProps, node } = useInk({ recipe: attachmentProgressRecipe, params: { indeterminate: value === undefined }, kind: "progress", seed, size: [120, 10], still: true })
+  const { hostRef, hostProps, node } = useInk({
+    recipe: attachmentProgressRecipe,
+    params: { indeterminate: value === undefined },
+    kind: "progress",
+    seed,
+    size: [120, 10],
+    still: true,
+  })
   const own = React.useRef<HTMLDivElement | null>(null)
   const [titledBy, setTitledBy] = React.useState<string | undefined>()
   const named = props["aria-label"] !== undefined || props["aria-labelledby"] !== undefined
   React.useLayoutEffect(() => {
     if (named) return
-    const title = own.current?.closest('[data-slot="attachment"]')?.querySelector<HTMLElement>('[data-slot="attachment-title"]')
+    const title = own.current
+      ?.closest('[data-slot="attachment"]')
+      ?.querySelector<HTMLElement>('[data-slot="attachment-title"]')
     setTitledBy(title?.id || undefined)
   })
   const pct = value === undefined ? 100 : Math.min(100, Math.max(0, (value / max) * 100))
@@ -213,12 +275,18 @@ function AttachmentProgress({
       aria-valuenow={value === undefined ? undefined : Math.round(value)}
       data-state={value === undefined ? "indeterminate" : pct >= 100 ? "complete" : "loading"}
       aria-labelledby={named ? undefined : titledBy}
-      ref={useMergedRef<HTMLElement>(hostRef, own, ref as React.Ref<HTMLElement> | undefined) as React.Ref<HTMLDivElement>}
+      ref={
+        useMergedRef<HTMLElement>(
+          hostRef,
+          own,
+          ref as React.Ref<HTMLElement> | undefined,
+        ) as React.Ref<HTMLDivElement>
+      }
       {...hostProps}
       style={{ "--ll-progress": `${pct}%`, ...style } as React.CSSProperties}
       className={cn(
         "relative isolate mt-1.5 block h-2.5 w-full min-w-16 [&>svg_[data-part=bar]]:transition-[clip-path] [&>svg_[data-part=bar]]:duration-(--ll-dur-sheet) [&>svg_[data-part=bar]]:[clip-path:inset(-15%_calc(100%-var(--ll-progress))_-15%_-3%)] rtl:[&>svg_[data-part=bar]]:[clip-path:inset(-15%_-3%_-15%_calc(100%-var(--ll-progress)))] data-[state=indeterminate]:[&>svg_[data-part=bar]]:animate-pulse",
-        className
+        className,
       )}
       {...props}
     >
@@ -233,15 +301,28 @@ function AttachmentActions({ className, ...props }: React.ComponentProps<"div">)
       data-slot="attachment-actions"
       className={cn(
         "relative z-20 flex shrink-0 items-center group-data-[orientation=vertical]/attachment:absolute group-data-[orientation=vertical]/attachment:end-2 group-data-[orientation=vertical]/attachment:top-2 group-data-[orientation=vertical]/attachment:gap-1",
-        className
+        className,
       )}
       {...props}
     />
   )
 }
 
-function AttachmentAction({ className, variant, size = "icon-xs", ...props }: React.ComponentProps<typeof Button>) {
-  return <Button data-slot="attachment-action" variant={variant ?? "ghost"} size={size} className={cn(className)} {...props} />
+function AttachmentAction({
+  className,
+  variant,
+  size = "icon-xs",
+  ...props
+}: React.ComponentProps<typeof Button>) {
+  return (
+    <Button
+      data-slot="attachment-action"
+      variant={variant ?? "ghost"}
+      size={size}
+      className={cn(className)}
+      {...props}
+    />
+  )
 }
 
 function AttachmentTrigger({
@@ -269,12 +350,23 @@ function AttachmentGroup({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="attachment-group"
       className={cn(
         "flex min-w-0 snap-x snap-mandatory scroll-px-3 gap-3 overflow-x-auto overscroll-x-contain px-3 pt-4 pb-3 [scrollbar-width:none] *:data-[slot=attachment]:flex-none *:data-[slot=attachment]:snap-start",
-        className
+        className,
       )}
       {...props}
     />
   )
 }
 
-export { Attachment, AttachmentGroup, AttachmentMedia, AttachmentContent, AttachmentTitle, AttachmentDescription, AttachmentProgress, AttachmentActions, AttachmentAction, AttachmentTrigger }
+export {
+  Attachment,
+  AttachmentGroup,
+  AttachmentMedia,
+  AttachmentContent,
+  AttachmentTitle,
+  AttachmentDescription,
+  AttachmentProgress,
+  AttachmentActions,
+  AttachmentAction,
+  AttachmentTrigger,
+}
 export type { AttachmentState, AttachmentSize }

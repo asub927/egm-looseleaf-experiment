@@ -1,9 +1,11 @@
 # Hooks
 
 ## Overview
+
 A collection of React hooks and utilities supporting responsive viewport detection, form reset coordination, accessible animation and reduced motion preferences, paper decoration and tilt styling, and text ink marking with DOM rect measurement.
 
 ## Interface
+
 - `useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaffoldingReturn`: Headless 3-tier progressive hint ladder finite state machine for NC.2.OA.3 and NC.2.OA.4. [src/hooks/use-socratic-scaffolding.ts:useSocraticScaffolding]
 - `useArrayScaffolding(config: Omit<ArrayScaffoldingConfig, "type">)`: Specialized array scaffolding hook with automatic type narrowing for ArrayDiagnostic. [src/hooks/use-socratic-scaffolding.ts:useArrayScaffolding]
 - `useParityScaffolding(config: Omit<ParityScaffoldingConfig, "type">)`: Specialized parity scaffolding hook with automatic type narrowing for ParityDiagnostic. [src/hooks/use-socratic-scaffolding.ts:useParityScaffolding]
@@ -28,6 +30,7 @@ A collection of React hooks and utilities supporting responsive viewport detecti
 - `MarkPhaseState`: Interface returning phase status, element ref callback, and DOM dataset attributes. [src/hooks/use-mark-ink.tsx:MarkPhaseState]
 
 ## Invariants
+
 - `useSocraticScaffolding` triggers Tier 1 on first failure with targeted pedagogical feedback based on diagnostic status, Tier 2 on second failure (`failureCount >= 2`) with `isGhostVisible: true` and ghost coordinates, and Tier 3 on third failure or help request with auto-placement of Row 1 / Pair 1 and revoked mastery eligibility. [src/hooks/use-socratic-scaffolding.ts:useSocraticScaffolding]
 - `useSocraticScaffolding` resets to active construction state (`constructing`) and dismisses validated state whenever token modification occurs (state mutation guard). [src/hooks/use-socratic-scaffolding.ts:onTokenMutated]
 - `useAudioNarration` cancels any active speech synthesis utterance immediately when a new speech request arrives (cancel-on-interrupt) or when unmounted. [src/hooks/use-audio-narration.ts:useAudioNarration]
@@ -43,6 +46,7 @@ A collection of React hooks and utilities supporting responsive viewport detecti
 - `useMarkPhase` assigns phase `"off"` when `show === false`, `"idle"` when animating prior to entering the viewport, and `"in"` upon intersecting or when un-animated. [src/hooks/use-mark-ink.tsx:useMarkPhase]
 
 ## Side Effects
+
 - Attaches and tears down a document-level `reset` event listener. [src/hooks/use-form-reset.ts:useFormReset]
 - Attaches and tears down media query listeners (`(prefers-reduced-motion: reduce)`) and a `MutationObserver` on `document.documentElement`. [src/hooks/use-live-motion.ts:useReducedMotion]
 - Attaches and tears down media query listener for mobile viewport breakpoint change events. [src/hooks/use-mobile.ts:useIsMobile]
@@ -53,4 +57,5 @@ A collection of React hooks and utilities supporting responsive viewport detecti
 - Injects global ink SVG `<defs>` into the document head if no ink provider is detected. [src/hooks/use-mark-ink.tsx:useMarkInk]
 
 ## Verification
+
 - Run: npm run build

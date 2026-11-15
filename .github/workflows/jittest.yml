@@ -1,4 +1,4 @@
-name: JiTTesting Pedagogical Invariants & Build
+name: CI & Invariant Verification Gate
 
 on:
   push:
@@ -6,15 +6,19 @@ on:
   pull_request:
     branches: [ main ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 jobs:
-  jittest-invariants:
-    name: JiTTesting Invariant Verification (Meta Human-on-the-Loop)
+  verify:
+    name: Continuous Integration Gate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js (v22+)
+      - name: Setup Node.js (v22 LTS)
         uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -23,8 +27,26 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: 🛡️ Execute JiTTesting Pedagogical Invariants
+      - name: 🎨 Prettier Format Check
+        run: npm run format:check
+
+      - name: 🔍 Oxlint Linter Check
+        run: npm run lint
+
+      - name: 🔒 Pre-commit Security & Secret Check
+        run: npm run check:security
+
+      - name: 🏷️ TypeScript Typecheck
+        run: npm run typecheck
+
+      - name: 🛡️ Execute Pedagogical Invariants
         run: npm test
+
+      - name: 🧪 Execute Vitest Component Suite
+        run: npm run test:ui
 
       - name: 🏗️ Production Vite Build Verification
         run: npm run build
+
+      - name: 📦 Dependency Vulnerability Audit
+        run: npm run audit:deps

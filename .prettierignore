@@ -4,3 +4,4 @@ dist-ssr
 package-lock.json
 .git
 .github
+.agents

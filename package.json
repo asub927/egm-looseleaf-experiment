@@ -11,6 +11,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "node --experimental-strip-types --test tests/invariants/*.test.ts",
+    "test:ui": "vitest run --passWithNoTests",
+    "test:ui:watch": "vitest",
     "typecheck": "tsc -b",
     "check": "npm run format:check && npm run lint && npm test && npm run build",
     "preview": "vite preview",
@@ -40,15 +42,20 @@
     "vaul": "^1.1.2"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.10",
     "@types/node": "^24.19.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "happy-dom": "^21.0.4",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
     "oxlint": "^1.89.0",
     "prettier": "^3.10.1",
     "typescript": "~7.0.2",
-    "vite": "^8.3.5"
+    "vite": "^8.3.5",
+    "vitest": "^5.1.0"
   }
 }

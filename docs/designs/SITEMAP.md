@@ -1,0 +1,8 @@
+# Design Document Sitemap
+
+Catalog of finalized and active technical design specifications for Elephant-Goldfish.
+
+| Feature / Standard | Specification Document | Status | Date | Author | Core Components |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Tactile 2nd-Grade Math Foundations** (NC.2.OA.3 & NC.2.OA.4) | [`nc2-oa-foundations.md`](./nc2-oa-foundations.md) | Finalized / Implemented | 2026-11-02 | Technical Design Team | `NC2OA4Wireframe`, `NC2OA3Wireframe`, `ArrayBoard`, `PairingMat`, `MascotCompanion`, `evaluator.ts` |
+| **NC.2.G Geometry Lab: Equal Partitioning** (NC.2.G.3) | [`nc2-g-geometry-lab.md`](./nc2-g-geometry-lab.md) | Approved (Drafting Complete) | 2026-11-04 | Technical Design Team & EGM Swarm | `NC2GWireframe`, `BakingPan`, `TartPlate`, `PartitionToolBar`, `declarative-drag.ts`, `geometry-evaluator.ts` |

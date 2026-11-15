@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>The Whispering Vine · Whimsical 10 − ? Math</title>
+  <style>
+    :root {
+      --bg: #FDFBF7;
+      --paper: #FFFFFF;
+      --ink: #2C2A3E;
+      --ink-soft: #636075;
+      --ink-faint: #A6A3B8;
+      
+      /* Botanical Pastel Palette */
+      --terracotta: #E07A5F;
+      --terracotta-soft: #F9EBE7;
+      --stem: #70A08B;
+      --stem-joint: #4F7E6B;
+      --peach: #FFD3C4;
+      --peach-deep: #F29E85;
+      --buttercup: #FFF0BD;
+      --buttercup-deep: #E8C15A;
+      --mint: #C5EED9;
+      --mint-deep: #68BA92;
+      --sky: #D6ECFF;
+      --lavender: #E4DCFF;
+      --rose: #FFD4E2;
+      --gold-glow: rgba(240, 195, 106, 0.45);
+      
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      width: 100vw;
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: ui-rounded, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Rounded", "Comic Sans MS", sans-serif;
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      overflow-x: hidden;
+      padding: 12px 16px 24px;
+    }
+
+    /* Ambient Garden Dust / Firefly layer */
+    .ambient-garden {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .firefly {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #FFEAA7;
+      box-shadow: 0 0 10px #F9CA24, 0 0 20px #F6E58D;
+      opacity: 0.6;
+      animation: floatFirefly 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatFirefly {
+      0% { transform: translate(0, 0) scale(0.8); opacity: 0.3; }
+      50% { transform: translate(25px, -35px) scale(1.3); opacity: 0.85; }
+      100% { transform: translate(-20px, -70px) scale(0.9); opacity: 0.4; }
+    }
+
+    /* Header Nav */
+    header {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 0 14px;
+      border-bottom: 2px dashed rgba(44, 42, 62, 0.08);
+      z-index: 10;
+    }
+
+    .mascot-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mascot-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--buttercup);
+      border: 2.5px solid var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 3px 0 var(--ink);
+    }
+
+    .mascot-info h1 {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+
+    .mascot-info p {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-soft);
+    }
+
+    .problem-pills {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .pill-btn {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 2px solid var(--ink);
+      background: var(--paper);
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--ink);
+      cursor: pointer;
+      box-shadow: 0 2px 0 var(--ink);
+      transition: all 0.15s ease;
+    }
+
+    .pill-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 0 var(--ink);
+    }
+
+    .pill-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 0 var(--ink);
+    }
+
+    .pill-btn.active {
+      background: var(--mint);
+      border-color: var(--ink);
+      box-shadow: 0 0 0 3px var(--lavender), 0 3px 0 var(--ink);
+    }
+
+    .calm-toggle {
+      background: var(--buttercup);
+    }
+    .calm-toggle[aria-pressed="true"] {
+      background: var(--lavender);
+    }
+
+    /* Main Stage Layout */
+    main {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 12px 0;
+      z-index: 10;
+      flex: 1;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        flex-direction: column-reverse;
+        gap: 20px;
+      }
+    }
+
+    /* Left Stage: The Garden Stalk SVG */
+    .garden-stage {
+      position: relative;
+      background: #FFFFFF;
+      border: 3px solid var(--ink);
+      border-radius: 36px;
+      padding: 10px;
+      box-shadow: 0 12px 0 rgba(44, 42, 62, 0.08), 0 20px 40px rgba(44, 42, 62, 0.05);
+      touch-action: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .garden-svg {
+      display: block;
+      overflow: visible;
+      touch-action: none;
+    }
+
+    /* Right Side: Dialogue, Predict Chips, Live Equation */
+    .garden-story-side {
+      flex: 1;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .story-bubble {
+      background: var(--paper);
+      border: 2.5px solid var(--ink);
+      border-radius: 24px;
+      padding: 18px 22px;
+      box-shadow: 0 4px 0 rgba(44, 42, 62, 0.08);
+      position: relative;
+    }
+
+    .story-bubble::after {
+      content: "";
+      position: absolute;
+      left: -12px;
+      top: 26px;
+      width: 20px;
+      height: 20px;
+      background: var(--paper);
+      border-left: 2.5px solid var(--ink);
+      border-bottom: 2.5px solid var(--ink);
+      transform: rotate(45deg);
+      border-radius: 0 0 0 5px;
+    }
+
+    @media (max-width: 720px) {
+      .story-bubble::after {
+        display: none;
+      }
+    }
+
+    .story-equation-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--buttercup);
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .story-prompt {
+      font-size: 21px;
+      font-weight: 800;
+      line-height: 1.35;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .story-subtext {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+
+    /* Prediction Pebble Chips */
+    .pebble-rack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .pebble-label {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ink-soft);
+    }
+
+    .pebble-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pebble-chip {
+      flex: 1;
+      min-width: 60px;
+      height: 60px;
+      border-radius: 20px;
+      border: 2.5px solid var(--ink);
+      font-size: 26px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 0 var(--ink);
+      transition: all 0.15s ease;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .pebble-chip:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 var(--ink);
+    }
+
+    .pebble-chip:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--ink);
+    }
+
+    .chip-c0 { background: var(--peach); }
+    .chip-c1 { background: var(--buttercup); }
+    .chip-c2 { background: var(--mint); }
+    .chip-c3 { background: var(--lavender); }
+
+    .pebble-chip.selected {
+      outline: 3px solid var(--ink);
+      outline-offset: 3px;
+    }
+
+    /* Live Equation & Count Banner */
+    .live-stats-card {
+      background: var(--sky);
+      border: 2.5px solid var(--ink);
+      border-radius: 20px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 0 var(--ink);
+    }
+
+    .live-count-readout {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--ink);
+    }
+
+    .live-eq-readout {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--ink-soft);
+    }
+
+    /* Action Buttons */
+    .actions-rack {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .garden-btn {
+      flex: 1;
+      min-height: 52px;
+      border-radius: 18px;
+      border: 2.5px solid var(--ink);
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 0 var(--ink);
+      transition: all 0.15s ease;
+      padding: 0 18px;
+    }
+
+    .garden-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 var(--ink);
+    }
+    .garden-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--ink);
+    }
+
+    .btn-lock {
+      background: var(--mint);
+      color: #064E3B;
+      font-size: 18px;
+    }
+
+    .btn-watch {
+      background: var(--buttercup);
+      color: #78350F;
+    }
+
+    .btn-reset {
+      background: var(--rose);
+      color: #881337;
+    }
+
+    /* Mismatch Reflection Card */
+    .reflection-card {
+      background: #FFF8E7;
+      border: 2.5px solid #F59E0B;
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 4px 0 #D97706;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: popIn 0.3s var(--ease-spring);
+    }
+
+    .reflection-prompt {
+      font-size: 15px;
+      font-weight: 800;
+      color: #92400E;
+    }
+
+    .reflection-choices {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .reflection-btn {
+      padding: 8px 14px;
+      border-radius: 12px;
+      border: 1.5px solid #D97706;
+      background: #FFFFFF;
+      font-size: 13px;
+      font-weight: 700;
+      color: #78350F;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+    }
+
+    .reflection-btn:hover {
+      background: #FEF3C7;
+      transform: translateX(3px);
+    }
+
+    .reflection-btn.picked {
+      background: var(--mint);
+      border-color: #059669;
+      color: #065F46;
+    }
+
+    /* Success Revelation Card */
+    .success-card {
+      background: var(--mint);
+      border: 2.5px solid var(--ink);
+      border-radius: 20px;
+      padding: 16px 20px;
+      box-shadow: 0 4px 0 var(--ink);
+      animation: popIn 0.35s var(--ease-spring);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .success-tag {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #065F46;
+    }
+
+    .success-title {
+      font-size: 18px;
+      font-weight: 900;
+      color: #064E3B;
+    }
+
+    .success-expl {
+      font-size: 14px;
+      font-weight: 700;
+      color: #047857;
+      line-height: 1.4;
+    }
+
+    /* Grown-Up Co-Play Prompt */
+    footer {
+      width: 100%;
+      max-width: 860px;
+      padding-top: 14px;
+      border-top: 2px dashed rgba(44, 42, 62, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .coplay-card {
+      background: var(--paper);
+      border: 2px solid rgba(44, 42, 62, 0.15);
+      border-radius: 999px;
+      padding: 8px 22px;
+      font-size: 13px;
+      color: var(--ink-soft);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .coplay-card strong {
+      color: var(--terracotta);
+    }
+
+    /* Snail Cursor Ghost for "Watch Me" */
+    .ghost-wand {
+      position: absolute;
+      pointer-events: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(44, 42, 62, 0.25);
+      border: 3px solid #FFF;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 50;
+    }
+
+    /* Confetti Petal Shower */
+    .confetti-petal {
+      position: absolute;
+      width: 12px;
+      height: 16px;
+      border-radius: 50% 50% 50% 0;
+      pointer-events: none;
+      z-index: 100;
+      animation: petalFall 2.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    @keyframes petalFall {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0deg) scale(0.6);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(1.1);
+      }
+    }
+
+    /* Sensory Calm Mode overrides */
+    body.calm .firefly,
+    body.calm .pulse-glow,
+    body.calm .confetti-petal {
+      animation: none !important;
+      opacity: 0.1 !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Garden Light Motes -->
+  <div class="ambient-garden" id="ambient-garden"></div>
+
+  <!-- Top Bar: Mascot + Problem Switcher + Calm Toggle -->
+  <header>
+    <div class="mascot-badge">
+      <div class="mascot-avatar">🐌</div>
+      <div class="mascot-info">
+        <h1>Barnaby's Whispering Vine</h1>
+        <p>Tactile Garden Math · 10 − ?</p>
+      </div>
+    </div>
+
+    <div class="problem-pills">
+      <button class="pill-btn active" data-whole="10" data-known="6">10 − 6</button>
+      <button class="pill-btn" data-whole="10" data-known="3">10 − 3</button>
+      <button class="pill-btn" data-whole="10" data-known="8">10 − 8</button>
+      <button class="pill-btn" data-whole="10" data-known="4">10 − 4</button>
+      <button class="pill-btn" data-whole="10" data-known="7">10 − 7</button>
+      <button class="pill-btn calm-toggle" id="calm-toggle" aria-pressed="false">🌿 Calm</button>
+    </div>
+  </header>
+
+  <!-- Main Whimsical Stage -->
+  <main>
+    
+    <!-- Left: The Interactive Garden Vine Stage -->
+    <div class="garden-stage" id="stage-wrapper">
+      <svg class="garden-svg" id="garden-svg" width="310" height="540" viewBox="0 0 310 540">
+        <defs>
+          <!-- Soft Vine Shadows & Gradients -->
+          <linearGradient id="potGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#F28B6D" />
+            <stop offset="100%" stop-color="#C85A3C" />
+          </linearGradient>
+
+          <linearGradient id="stemGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#8DB8A5" />
+            <stop offset="50%" stop-color="#A2CCA9" />
+            <stop offset="100%" stop-color="#6E9A86" />
+          </linearGradient>
+
+          <filter id="snailShadow" x="-30%" y="-30%" width="160%" height="160%">
+            <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#2C2A3E" flood-opacity="0.18" />
+          </filter>
+
+          <filter id="bloomGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="6" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+        </defs>
+
+        <!-- Garden Ground Paper Mound -->
+        <ellipse cx="140" cy="510" rx="90" ry="14" fill="#EADBC8" opacity="0.45" />
+
+        <!-- Terracotta Pot at Bottom -->
+        <g id="terracotta-pot">
+          <path d="M96 462 L184 462 L172 522 L108 522 Z" fill="url(#potGrad)" stroke="#2C2A3E" stroke-width="3" stroke-linejoin="round" />
+          <rect x="90" y="450" width="100" height="15" rx="5" fill="#E07A5F" stroke="#2C2A3E" stroke-width="3" />
+          <!-- Pot Embossed Leaf Emblem -->
+          <path d="M140 480 Q148 490 140 500 Q132 490 140 480" fill="#FFF" opacity="0.35" />
+        </g>
+
+        <!-- Top Trellis Arch Ring (Target Goal: 10) -->
+        <g id="trellis-target">
+          <ellipse cx="140" cy="46" rx="22" ry="14" fill="none" stroke="#D1C7B7" stroke-width="2.5" stroke-dasharray="4 4" />
+          <text x="140" y="32" text-anchor="middle" font-size="14" font-weight="900" fill="#7D7267">FULL VINE: 10</text>
+        </g>
+
+        <!-- Main Bamboo Stalk Spine -->
+        <path id="vine-spine" d="M140 452 L140 54" stroke="url(#stemGrad)" stroke-width="12" stroke-linecap="round" />
+
+        <!-- Glowing Firefly Gap Aura (Upper Sleeping pod territory) -->
+        <g id="gap-aura-group">
+          <rect id="gap-glow-halo" x="100" y="54" width="80" height="160" rx="24" fill="#FFEAA7" opacity="0.3" class="pulse-glow" />
+          <rect id="gap-glow-dashed" x="104" y="58" width="72" height="152" rx="20" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-dasharray="6 5" opacity="0.8" />
+        </g>
+
+        <!-- 10 Joint Nodes & Leaf/Bud Groups (Rendered by JS) -->
+        <g id="nodes-layer"></g>
+
+        <!-- The Draggable Dewdrop Snail Handle -->
+        <g id="snail-slider" transform="translate(140, 214)" filter="url(#snailShadow)" style="cursor: grab; touch-action: none;">
+          <!-- Hit box for touch -->
+          <circle cx="0" cy="0" r="34" fill="transparent" />
+          
+          <!-- Snail Body (Dewdrop Shape) -->
+          <path d="M-22 10 C-30 10 -32 2 -26 -6 C-20 -14 -10 -16 -4 -12 C2 -8 8 -2 12 6 C16 12 10 16 2 16 C-8 16 -16 14 -22 10 Z" fill="#FFE3D8" stroke="#2C2A3E" stroke-width="2.5" />
+          
+          <!-- Snail Swirl Shell (Translucent Rose Glass) -->
+          <circle cx="10" cy="-2" r="18" fill="#F4ACB7" stroke="#2C2A3E" stroke-width="2.5" />
+          <path d="M10 -2 Q16 -2 16 4 Q16 8 10 8 Q4 8 4 0 Q4 -10 14 -10" fill="none" stroke="#FFF" stroke-width="2.5" stroke-linecap="round" opacity="0.75" />
+          
+          <!-- Cute Eye Stalks & Blush -->
+          <circle cx="-20" cy="-12" r="2.5" fill="#2C2A3E" />
+          <circle cx="-14" cy="-14" r="2.5" fill="#2C2A3E" />
+          <ellipse cx="-18" cy="-4" rx="3" ry="2" fill="#FF8FAB" opacity="0.6" />
+
+          <!-- Draggable Question Pill Handle -->
+          <g transform="translate(36, -8)">
+            <rect x="0" y="-16" width="34" height="32" rx="12" fill="#E4DCFF" stroke="#2C2A3E" stroke-width="2.5" />
+            <text x="17" y="6" text-anchor="middle" font-size="18" font-weight="900" fill="#2C2A3E">?</text>
+          </g>
+
+          <!-- Floating Counter Pill Badge (rides with snail) -->
+          <g id="live-floating-badge" transform="translate(-86, -6)">
+            <rect x="0" y="-15" width="46" height="30" rx="10" fill="#D6ECFF" stroke="#2C2A3E" stroke-width="2" />
+            <text id="live-badge-text" x="23" y="5" text-anchor="middle" font-size="17" font-weight="900" fill="#2C2A3E">6</text>
+          </g>
+        </g>
+      </svg>
+
+      <!-- Ghost Pointer for "Watch Me" Demo -->
+      <div class="ghost-wand" id="ghost-wand"></div>
+    </div>
+
+    <!-- Right: Dialogue, Predict Chips & Equation Bridge -->
+    <div class="garden-story-side">
+      
+      <!-- Mascot Speech Bubble -->
+      <div class="story-bubble">
+        <div class="story-equation-badge" id="equation-badge">
+          <span>🌿</span>
+          <span id="equation-text">10 − 6 = ?</span>
+        </div>
+        <div class="story-prompt" id="prompt-heading">
+          How many more flowers until the vine is full?
+        </div>
+        <div class="story-subtext" id="prompt-subtext">
+          Look at the sleeping buds glowing in the gap.
+        </div>
+      </div>
+
+      <!-- Step 1: Predict First Chips -->
+      <div class="pebble-rack" id="pebble-rack">
+        <div class="pebble-label">First, what do you think?</div>
+        <div class="pebble-row" id="pebble-buttons">
+          <!-- Injected via script -->
+        </div>
+      </div>
+
+      <!-- Step 2: Live Equation Status -->
+      <div class="live-stats-card" id="live-stats-card">
+        <div class="live-count-readout" id="live-count-readout">6 blossoms</div>
+        <div class="live-eq-readout" id="live-eq-readout">6 + 0 = 6</div>
+      </div>
+
+      <!-- Step 3: Mismatch Reflection Box (if prediction was different) -->
+      <div class="reflection-card" id="reflection-card" style="display: none;">
+        <div class="reflection-prompt" id="reflection-prompt">
+          You guessed 3 and slid to 4. What do you notice?
+        </div>
+        <div class="reflection-choices">
+          <button class="reflection-btn" onclick="handleReflectionPick('My guess was really close!')">
+            🌱 My guess was really close!
+          </button>
+          <button class="reflection-btn" onclick="handleReflectionPick('Sliding the snail helped me count the open buds!')">
+            🐌 Sliding the snail helped me see the gap!
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 4: Solved Card -->
+      <div class="success-card" id="success-card" style="display: none;">
+        <div class="success-tag">NCDPI · Think Addition Strategy</div>
+        <div class="success-title">The Vine is in Full Bloom! 🌸</div>
+        <div class="success-expl" id="success-expl">
+          6 blossoms + 4 new flowers = 10 total blossoms.<br/>
+          So <strong>10 − 6 = 4</strong>.
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions-rack">
+        <button class="garden-btn btn-lock" id="btn-lock">Lock it In ✨</button>
+        <button class="garden-btn btn-watch" id="btn-watch">Watch Snail 🐌</button>
+        <button class="garden-btn btn-reset" id="btn-reset">Start Over ↺</button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Bottom Grown-Up Co-Play Prompt -->
+  <footer>
+    <div class="coplay-card">
+      <span>💬</span>
+      <span id="coplay-text"><strong>Grown-Up Prompt:</strong> Ask your learner: <em>"How did you know how many buds were sleeping?"</em></span>
+    </div>
+  </footer>
+
+  <script>
+    // --- Web Audio Kalimba / Woodwind Synthesizer ---
+    let audioCtx = null;
+    function getAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+
+    // Pentatonic Garden Chimes for each node 1 to 10
+    const CHIME_FREQS = [
+      261.63, // 1: C4
+      293.66, // 2: D4
+      329.63, // 3: E4
+      392.00, // 4: G4
+      440.00, // 5: A4
+      523.25, // 6: C5
+      587.33, // 7: D5
+      659.25, // 8: E5
+      783.99, // 9: G5
+      1046.50 // 10: C6 (Top Blossom)
+    ];
+
+    function playPluck(nodeIndex, pitchOffset = 0) {
+      try {
+        const ctx = getAudio();
+        const freq = CHIME_FREQS[Math.min(CHIME_FREQS.length - 1, Math.max(0, nodeIndex))] * Math.pow(2, pitchOffset / 12);
+        
+        // Dual oscillator for rich wood marimba tone
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc1.type = "sine";
+        osc2.type = "triangle";
+        osc1.frequency.setValueAtTime(freq, ctx.currentTime);
+        osc2.frequency.setValueAtTime(freq * 2.01, ctx.currentTime);
+
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc1.start();
+        osc2.start();
+        osc1.stop(ctx.currentTime + 0.36);
+        osc2.stop(ctx.currentTime + 0.36);
+      } catch (e) {}
+    }
+
+    function playCelebrationChimes() {
+      try {
+        const chord = [523.25, 659.25, 783.99, 1046.50];
+        chord.forEach((f, idx) => {
+          setTimeout(() => {
+            const ctx = getAudio();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(f, ctx.currentTime);
+            gain.gain.setValueAtTime(0.2, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.6);
+          }, idx * 110);
+        });
+      } catch (e) {}
+    }
+
+    // --- State Configuration ---
+    let currentProblem = { whole: 10, known: 6 };
+    let predictedGuess = null;
+    let addedBlossoms = 0; // Current slider value (0 to whole - known)
+    let isDragging = false;
+    let dragStartY = 0;
+    let startAdded = 0;
+    let hasReflected = false;
+
+    // Node geometry: 10 nodes along the vertical vine
+    // Node 1 is at bottom (y = 440), Node 10 is at top (y = 80)
+    const NODE_Y = [];
+    const BOTTOM_Y = 440;
+    const TOP_Y = 80;
+    const STEP_Y = (BOTTOM_Y - TOP_Y) / 9; // 40px per node
+
+    for (let i = 0; i < 10; i++) {
+      NODE_Y.push(BOTTOM_Y - i * STEP_Y);
+    }
+
+    // DOM Elements
+    const nodesLayer = document.getElementById("nodes-layer");
+    const gapHalo = document.getElementById("gap-glow-halo");
+    const gapDashed = document.getElementById("gap-glow-dashed");
+    const snailSlider = document.getElementById("snail-slider");
+    const liveBadgeText = document.getElementById("live-badge-text");
+    const liveCountReadout = document.getElementById("live-count-readout");
+    const liveEqReadout = document.getElementById("live-eq-readout");
+    const equationText = document.getElementById("equation-text");
+    const pebbleButtons = document.getElementById("pebble-buttons");
+    const pebbleRack = document.getElementById("pebble-rack");
+    const reflectionCard = document.getElementById("reflection-card");
+    const reflectionPrompt = document.getElementById("reflection-prompt");
+    const successCard = document.getElementById("success-card");
+    const successExpl = document.getElementById("success-expl");
+    const btnLock = document.getElementById("btn-lock");
+    const btnWatch = document.getElementById("btn-watch");
+    const btnReset = document.getElementById("btn-reset");
+    const ghostWand = document.getElementById("ghost-wand");
+    const calmToggle = document.getElementById("calm-toggle");
+    const coplayText = document.getElementById("coplay-text");
+
+    // --- Render Botanical SVG Nodes ---
+    function renderGardenVine() {
+      nodesLayer.innerHTML = "";
+      const gapCount = currentProblem.whole - currentProblem.known;
+      const currentTotal = currentProblem.known + addedBlossoms;
+
+      // Update Gap Glow Dimensions
+      const gapBottomNodeIdx = currentProblem.known; // index of first gap node
+      const gapTopNodeIdx = currentProblem.whole - 1; // index 9 (node 10)
+      const gapStartY = NODE_Y[gapTopNodeIdx] - 22;
+      const gapHeight = (NODE_Y[gapBottomNodeIdx] + 22) - gapStartY;
+
+      if (addedBlossoms < gapCount) {
+        gapHalo.style.display = "block";
+        gapDashed.style.display = "block";
+        gapHalo.setAttribute("y", gapStartY);
+        gapHalo.setAttribute("height", gapHeight);
+        gapDashed.setAttribute("y", gapStartY + 4);
+        gapDashed.setAttribute("height", gapHeight - 8);
+      } else {
+        gapHalo.style.display = "none";
+        gapDashed.style.display = "none";
+      }
+
+      // Render Each of the 10 Growth Nodes
+      for (let i = 0; i < 10; i++) {
+        const nodeNum = i + 1;
+        const cy = NODE_Y[i];
+        const isKnown = nodeNum <= currentProblem.known;
+        const isAdded = !isKnown && nodeNum <= currentTotal;
+        const isAwake = isKnown || isAdded;
+        const isTopBlossom = nodeNum === 10;
+
+        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        g.setAttribute("id", `node-${nodeNum}`);
+        g.setAttribute("transform", `translate(140, ${cy})`);
+        g.style.cursor = (!isKnown && !isAwake) ? "pointer" : "default";
+
+        // Click on sleeping bud to snap snail directly!
+        if (!isKnown) {
+          g.onclick = () => {
+            const targetAdded = nodeNum - currentProblem.known;
+            if (targetAdded >= 0 && targetAdded <= gapCount) {
+              setAddedBlossoms(targetAdded);
+              playPluck(nodeNum - 1);
+            }
+          };
+        }
+
+        // Bamboo Joint Ring
+        const ring = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        ring.setAttribute("x", "-8");
+        ring.setAttribute("y", "-3");
+        ring.setAttribute("width", "16");
+        ring.setAttribute("height", "6");
+        ring.setAttribute("rx", "3");
+        ring.setAttribute("fill", "#4F7E6B");
+        g.appendChild(ring);
+
+        // Node Number Tag (Left side)
+        const numText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        numText.setAttribute("x", "-24");
+        numText.setAttribute("y", "5");
+        numText.setAttribute("text-anchor", "end");
+        numText.setAttribute("font-size", "13");
+        numText.setAttribute("font-weight", "800");
+        numText.setAttribute("fill", isAwake ? "#2C2A3E" : "#A6A3B8");
+        numText.textContent = nodeNum;
+        g.appendChild(numText);
+
+        if (isAwake) {
+          // --- BLOOMING FLOWER / LEAF ---
+          const flower = document.createElementNS("http://www.w3.org/2000/svg", "g");
+          flower.setAttribute("class", "blooming-flower");
+
+          // Alternate left and right petaling
+          const side = (i % 2 === 0) ? 1 : -1;
+          const leafX = side * 22;
+
+          // Soft green leaf sprig
+          const leaf = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          leaf.setAttribute("d", `M0 0 Q${leafX * 0.7} -14 ${leafX} -6 Q${leafX * 0.5} 8 0 0`);
+          leaf.setAttribute("fill", "#A2CCA9");
+          leaf.setAttribute("stroke", "#2C2A3E");
+          leaf.setAttribute("stroke-width", "1.5");
+          flower.appendChild(leaf);
+
+          // Flower Petals (Peach for Known, Mint for Added, Gold for 10)
+          const petalColor = isTopBlossom ? "#FFEAA7" : (isKnown ? "#FFD3C4" : "#C5EED9");
+          const petalStroke = isTopBlossom ? "#E8C15A" : (isKnown ? "#F29E85" : "#68BA92");
+
+          for (let p = 0; p < 5; p++) {
+            const angle = (p * 72) * Math.PI / 180;
+            const px = Math.cos(angle) * 11;
+            const py = Math.sin(angle) * 11;
+            const petal = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            petal.setAttribute("cx", leafX + px);
+            petal.setAttribute("cy", -6 + py);
+            petal.setAttribute("r", "7");
+            petal.setAttribute("fill", petalColor);
+            petal.setAttribute("stroke", petalStroke);
+            petal.setAttribute("stroke-width", "1.5");
+            flower.appendChild(petal);
+          }
+
+          // Center pollen core
+          const core = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          core.setAttribute("cx", leafX);
+          core.setAttribute("cy", "-6");
+          core.setAttribute("r", "4");
+          core.setAttribute("fill", "#FFF0BD");
+          core.setAttribute("stroke", "#2C2A3E");
+          core.setAttribute("stroke-width", "1.5");
+          flower.appendChild(core);
+
+          g.appendChild(flower);
+
+        } else {
+          // --- SLEEPING FIREFLY BUD (Translucent Pod with Glow) ---
+          const bud = document.createElementNS("http://www.w3.org/2000/svg", "g");
+          bud.setAttribute("class", "sleeping-bud");
+
+          const side = (i % 2 === 0) ? 1 : -1;
+          const budX = side * 18;
+
+          // Golden Firefly Glow circle
+          const glow = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          glow.setAttribute("cx", budX);
+          glow.setAttribute("cy", "-2");
+          glow.setAttribute("r", "12");
+          glow.setAttribute("fill", "#FFEAA7");
+          glow.setAttribute("opacity", "0.5");
+          glow.setAttribute("class", "pulse-glow");
+          bud.appendChild(glow);
+
+          // Translucent Cocoon Pod
+          const pod = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+          pod.setAttribute("cx", budX);
+          pod.setAttribute("cy", "-2");
+          pod.setAttribute("rx", "7");
+          pod.setAttribute("ry", "10");
+          pod.setAttribute("fill", "#FFF8F0");
+          pod.setAttribute("stroke", "#D97706");
+          pod.setAttribute("stroke-width", "1.5");
+          pod.setAttribute("stroke-dasharray", "3 2");
+          bud.appendChild(pod);
+
+          // Mini Firefly dot inside
+          const fireflyDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          fireflyDot.setAttribute("cx", budX);
+          fireflyDot.setAttribute("cy", "-2");
+          fireflyDot.setAttribute("r", "3");
+          fireflyDot.setAttribute("fill", "#F59E0B");
+          bud.appendChild(fireflyDot);
+
+          g.appendChild(bud);
+        }
+
+        nodesLayer.appendChild(g);
+      }
+
+      // Update Snail Position to match currentTotal
+      const snailNodeIdx = Math.max(0, Math.min(9, currentTotal - 1));
+      const targetSnailY = NODE_Y[snailNodeIdx];
+      snailSlider.setAttribute("transform", `translate(140, ${targetSnailY})`);
+
+      // Update Live Readouts
+      liveBadgeText.textContent = currentTotal;
+      liveCountReadout.textContent = `${currentTotal} blossoms`;
+      liveEqReadout.textContent = `${currentProblem.known} + ${addedBlossoms} = ${currentTotal}`;
+    }
+
+    // Set Added Value with Bound Clamping
+    function setAddedBlossoms(val) {
+      const maxVal = currentProblem.whole - currentProblem.known;
+      const clamped = Math.max(0, Math.min(maxVal, Math.round(val)));
+      if (clamped !== addedBlossoms) {
+        addedBlossoms = clamped;
+        renderGardenVine();
+      }
+    }
+
+    // --- Generate Shuffled Predict Pebble Chips ---
+    function setupPredictChips() {
+      pebbleButtons.innerHTML = "";
+      const correctDifference = currentProblem.whole - currentProblem.known;
+      const set = new Set([correctDifference]);
+      
+      // Plausible nearby distractors
+      for (const d of [-1, 1, 2, -2, 3]) {
+        const candidate = correctDifference + d;
+        if (candidate >= 1 && candidate < currentProblem.whole) {
+          set.add(candidate);
+          if (set.size >= 4) break;
+        }
+      }
+
+      const chips = Array.from(set).sort(() => Math.random() - 0.5);
+      chips.forEach((num, idx) => {
+        const btn = document.createElement("button");
+        btn.className = `pebble-chip chip-c${idx % 4}`;
+        btn.textContent = num;
+        btn.onclick = () => {
+          predictedGuess = num;
+          document.querySelectorAll(".pebble-chip").forEach(b => b.classList.remove("selected"));
+          btn.classList.add("selected");
+          playPluck(num, 2);
+          
+          // Animate focus towards the vine
+          liveCountReadout.style.transform = "scale(1.1)";
+          setTimeout(() => liveCountReadout.style.transform = "none", 200);
+        };
+        pebbleButtons.appendChild(btn);
+      });
+    }
+
+    // --- Snail Pointer Drag Physics ---
+    function initSnailDrag() {
+      snailSlider.addEventListener("pointerdown", (e) => {
+        e.preventDefault();
+        isDragging = true;
+        dragStartY = e.clientY;
+        startAdded = addedBlossoms;
+        snailSlider.style.cursor = "grabbing";
+        snailSlider.style.transform = `${snailSlider.getAttribute("transform")} scale(1.08)`;
+        window.addEventListener("pointermove", onPointerMove);
+        window.addEventListener("pointerup", onPointerUp);
+      });
+
+      function onPointerMove(e) {
+        if (!isDragging) return;
+        const dy = dragStartY - e.clientY; // Dragging UP increases added count
+        const unitsMoved = dy / STEP_Y;
+        const newAdded = startAdded + unitsMoved;
+        const prev = addedBlossoms;
+        setAddedBlossoms(newAdded);
+        if (addedBlossoms !== prev) {
+          playPluck(currentProblem.known + addedBlossoms - 1);
+        }
+      }
+
+      function onPointerUp(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        snailSlider.style.cursor = "grab";
+        window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("pointerup", onPointerUp);
+        renderGardenVine();
+      }
+    }
+
+    // --- Lock In Answer & Mismatch Reflection ---
+    btnLock.onclick = () => {
+      const correctDifference = currentProblem.whole - currentProblem.known;
+      const isCorrect = (addedBlossoms === correctDifference);
+
+      if (isCorrect) {
+        playCelebrationChimes();
+        triggerPetalConfetti();
+        successCard.style.display = "flex";
+        btnLock.disabled = true;
+
+        // If prediction differed from dragged result, spark thoughtful reflection!
+        if (predictedGuess !== null && predictedGuess !== addedBlossoms && !hasReflected) {
+          reflectionPrompt.textContent = `You guessed ${predictedGuess} and slid the snail to ${addedBlossoms}. What did you notice?`;
+          reflectionCard.style.display = "flex";
+        }
+
+      } else {
+        // Socratic gentle nudge (No Penalty / No buzzers)
+        playPluck(1, -4);
+        liveCountReadout.style.color = "#E07A5F";
+        setTimeout(() => liveCountReadout.style.color = "var(--ink)", 600);
+        
+        if (addedBlossoms < correctDifference) {
+          alertFriendly("There are still sleeping buds glowing in the gap. Slide higher to wake them!");
+        } else {
+          alertFriendly("The vine went past 10! Slide down a bit to fill exactly 10.");
+        }
+      }
+    };
+
+    function alertFriendly(msg) {
+      const sub = document.getElementById("prompt-subtext");
+      const original = sub.textContent;
+      sub.textContent = `🌱 ${msg}`;
+      sub.style.color = "#E07A5F";
+      setTimeout(() => {
+        sub.textContent = original;
+        sub.style.color = "var(--ink-soft)";
+      }, 3200);
+    }
+
+    function handleReflectionPick(text) {
+      hasReflected = true;
+      const sub = document.getElementById("prompt-subtext");
+      sub.textContent = `🌸 Wonderful noticing! Dragging helps see the difference clearly.`;
+      reflectionCard.style.display = "none";
+    }
+
+    // --- "Watch Me" Autonomous Guided Crawl ---
+    btnWatch.onclick = async () => {
+      btnWatch.disabled = true;
+      btnLock.disabled = true;
+      addedBlossoms = 0;
+      renderGardenVine();
+
+      const target = currentProblem.whole - currentProblem.known;
+      ghostWand.style.opacity = "1";
+
+      const stageRect = document.getElementById("stage-wrapper").getBoundingClientRect();
+      const svg = document.getElementById("garden-svg");
+      const pt = svg.createSVGPoint();
+
+      for (let s = 0; s <= target; s++) {
+        setAddedBlossoms(s);
+        playPluck(currentProblem.known + s - 1);
+        
+        // Move ghost dot
+        const cy = NODE_Y[currentProblem.known + s - 1];
+        ghostWand.style.left = `140px`;
+        ghostWand.style.top = `${cy}px`;
+
+        await new Promise(r => setTimeout(r, 340));
+      }
+
+      await new Promise(r => setTimeout(r, 600));
+      ghostWand.style.opacity = "0";
+      btnWatch.disabled = false;
+      btnLock.disabled = false;
+      playCelebrationChimes();
+      triggerPetalConfetti();
+      successCard.style.display = "flex";
+    };
+
+    // Reset button
+    btnReset.onclick = () => {
+      addedBlossoms = 0;
+      predictedGuess = null;
+      hasReflected = false;
+      successCard.style.display = "none";
+      reflectionCard.style.display = "none";
+      btnLock.disabled = false;
+      document.querySelectorAll(".pebble-chip").forEach(b => b.classList.remove("selected"));
+      renderGardenVine();
+    };
+
+    // Problem switch buttons
+    document.querySelectorAll(".problem-pills .pill-btn:not(.calm-toggle)").forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll(".problem-pills .pill-btn:not(.calm-toggle)").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        
+        const whole = parseInt(btn.dataset.whole);
+        const known = parseInt(btn.dataset.known);
+        currentProblem = { whole, known };
+        
+        equationText.textContent = `${whole} − ${known} = ?`;
+        successExpl.innerHTML = `${known} blossoms + ${whole - known} new flowers = ${whole} total blossoms.<br/>So <strong>${whole} − ${known} = ${whole - known}</strong>.`;
+        
+        btnReset.onclick();
+        setupPredictChips();
+      };
+    });
+
+    // Calm Mode Toggle
+    calmToggle.onclick = () => {
+      const isCalm = calmToggle.getAttribute("aria-pressed") === "true";
+      const nextCalm = !isCalm;
+      calmToggle.setAttribute("aria-pressed", nextCalm);
+      if (nextCalm) {
+        document.body.classList.add("calm");
+        calmToggle.textContent = "🌿 Calm ON";
+      } else {
+        document.body.classList.remove("calm");
+        calmToggle.textContent = "🌿 Calm";
+      }
+    };
+
+    // Confetti Petals
+    function triggerPetalConfetti() {
+      if (document.body.classList.contains("calm")) return;
+      const container = document.getElementById("stage-wrapper");
+      const colors = ["#FFCAD4", "#FFEAA7", "#C5EED9", "#E4DCFF", "#FFD3C4"];
+      for (let i = 0; i < 22; i++) {
+        const petal = document.createElement("div");
+        petal.className = "confetti-petal";
+        petal.style.background = colors[i % colors.length];
+        petal.style.left = "140px";
+        petal.style.top = "100px";
+        
+        const angle = (Math.PI * 2 * i) / 22;
+        const dist = 50 + Math.random() * 90;
+        petal.style.setProperty("--dx", `${Math.cos(angle) * dist}px`);
+        petal.style.setProperty("--dy", `${Math.sin(angle) * dist - 20}px`);
+        petal.style.setProperty("--rot", `${Math.random() * 360}deg`);
+        container.appendChild(petal);
+        setTimeout(() => petal.remove(), 2400);
+      }
+    }
+
+    // Ambient floating fireflies
+    function initAmbientFireflies() {
+      const container = document.getElementById("ambient-garden");
+      for (let i = 0; i < 9; i++) {
+        const f = document.createElement("div");
+        f.className = "firefly";
+        f.style.left = `${10 + Math.random() * 80}%`;
+        f.style.top = `${20 + Math.random() * 60}%`;
+        f.style.animationDelay = `${i * 0.8}s`;
+        f.style.animationDuration = `${6 + Math.random() * 5}s`;
+        container.appendChild(f);
+      }
+    }
+
+    // Initialize Everything
+    initAmbientFireflies();
+    setupPredictChips();
+    renderGardenVine();
+    initSnailDrag();
+  </script>
+</body>
+</html>

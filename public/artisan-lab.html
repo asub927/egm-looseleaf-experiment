@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Artisan Bakery Desk — Tactile Math Inset Lab</title>
+  <style>
+    :root {
+      --desk: #f6f1e7;
+      --desk-wood: #ecdcc9;
+      --paper: #fffdfa;
+      --ink: #38312b;
+      --ink-soft: #7a6f65;
+      --ceramic-dish: #e3ede8;
+      --ceramic-rim: #b6cec5;
+      --pan-recess: #d5e4de;
+      --strawberry-cream: #fbcfe8;
+      --strawberry-stroke: #f472b6;
+      --lemon-cream: #fef08a;
+      --lemon-stroke: #eab308;
+      --matcha-cream: #bbf7d0;
+      --matcha-stroke: #4ade80;
+      --lavender-cream: #e9d5ff;
+      --lavender-stroke: #c084fc;
+      --brass: #d97706;
+      --wax-red: #e11d48;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 35%, #faf6ee 0%, #ebe2d2 100%);
+      font-family: ui-rounded, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Desk Header Strip */
+    header {
+      height: 54px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #e0d5c1;
+      background: rgba(255, 253, 250, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge-stamp {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 6px;
+      background: #fef3c7;
+      border: 1.5px solid #fcd34d;
+      font-size: 13px;
+      font-weight: 800;
+      color: #92400e;
+      box-shadow: 1px 1px 0 rgba(0,0,0,0.06);
+    }
+
+    .mode-nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-pill {
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1.5px solid #dcd1be;
+      background: #ffffff;
+      color: var(--ink);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .nav-pill:hover {
+      background: #fdfaf3;
+      border-color: #f59e0b;
+    }
+
+    /* The Main Artisan Desk Surface */
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 320px 1fr 280px;
+      gap: 20px;
+      padding: 16px 24px;
+      position: relative;
+    }
+
+    /* Left Column: Socratic Notepad (Pencil Pal's Notebook) */
+    .notebook-card {
+      background: var(--paper);
+      border-radius: 16px;
+      border: 2px solid #ded3be;
+      box-shadow: 0 8px 24px rgba(70, 50, 30, 0.06);
+      padding: 20px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      background-image: 
+        repeating-linear-gradient(to bottom, transparent, transparent 27px, rgba(140, 120, 100, 0.12) 28px);
+      background-size: 100% 28px;
+    }
+
+    .notepad-clip {
+      position: absolute;
+      top: -10px;
+      left: 32px;
+      width: 48px;
+      height: 20px;
+      border-radius: 4px;
+      background: #b5a593;
+      border: 2px solid #8e7c69;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    .pal-dialogue-heading {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #92400e;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .pal-speech {
+      font-size: 16px;
+      line-height: 1.6;
+      font-weight: 600;
+      color: #3b322a;
+      flex: 1;
+    }
+
+    .pal-speech strong {
+      color: #b45309;
+      background: #fef3c7;
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+
+    .notepad-action-tray {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .notebook-btn {
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: #ffffff;
+      border: 2px solid #ded3be;
+      font-size: 14px;
+      font-weight: 700;
+      color: #443a32;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.15s ease;
+    }
+    .notebook-btn:hover {
+      background: #fff8eb;
+      border-color: #f59e0b;
+      transform: translateY(-1px);
+    }
+    .notebook-btn.active-step {
+      background: #ecfdf5;
+      border-color: #34d399;
+      color: #065f46;
+    }
+
+    /* Center Column: The Ceramic Baking Pan with Inset Mortises */
+    .workbench-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .equation-plaque {
+      background: var(--paper);
+      border: 2px solid #e0d5c1;
+      padding: 6px 18px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #5c4a38;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .equation-highlight {
+      color: #059669;
+      background: #ecfdf5;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1.5px solid #a7f3d0;
+    }
+
+    /* The Artisan Ceramic Baking Pan */
+    .ceramic-pan-housing {
+      position: relative;
+      width: 480px;
+      height: 280px;
+      background: var(--ceramic-dish);
+      border: 6px solid var(--ceramic-rim);
+      border-radius: 28px;
+      box-shadow: 0 16px 36px rgba(70, 50, 30, 0.12), inset 0 2px 6px rgba(255,255,255,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    /* Deep Mortise / Inset Well where slices lock in */
+    .pan-mortise-bed {
+      width: 100%;
+      height: 100%;
+      background: var(--pan-recess);
+      border-radius: 18px;
+      border: 2px dashed rgba(100, 130, 120, 0.4);
+      box-shadow: inset 0 6px 16px rgba(40, 60, 50, 0.15);
+      position: relative;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* Pre-Baked Portion in the Pan (e.g. Kit's share already present) */
+    .baked-portion {
+      height: 100%;
+      background: linear-gradient(135deg, #fef08a 0%, #fde047 100%);
+      border-right: 3px solid #d97706;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 -2px 6px rgba(0,0,0,0.08);
+      transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .baked-portion-label {
+      font-size: 14px;
+      font-weight: 800;
+      color: #854d0e;
+      background: rgba(255,255,255,0.85);
+      padding: 3px 10px;
+      border-radius: 999px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* The Empty Missing Gap Target */
+    .empty-gap-target {
+      flex: 1;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed #93b7aa;
+      border-radius: 0 14px 14px 0;
+      transition: all 0.2s ease;
+    }
+
+    .empty-gap-target.magnet-hover {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: #10b981;
+      box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.2);
+    }
+
+    .gap-guide-label {
+      font-size: 13px;
+      font-weight: 800;
+      color: #6a8c7e;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      pointer-events: none;
+    }
+
+    /* Bottom Shelf: Superposition Stacking & Comparing Mat */
+    .compare-tray-strip {
+      width: 100%;
+      max-width: 520px;
+      background: var(--paper);
+      border: 2px solid #e0d5c1;
+      border-radius: 16px;
+      padding: 10px 18px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .compare-status-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: #5c4a38;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Right Column: Wicker Pastry Basket (Draggable Pieces) */
+    .wicker-basket {
+      background: #fcf8f0;
+      border: 2.5px solid #d9cbaf;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(70, 50, 30, 0.07);
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+    }
+
+    .basket-header {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #7c6853;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1.5px solid #e5d9c2;
+      padding-bottom: 8px;
+    }
+
+    .pieces-rack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+      align-items: center;
+      justify-content: flex-start;
+      overflow-y: auto;
+      padding: 4px;
+    }
+
+    /* Draggable Pastry Tile */
+    .pastry-tile {
+      border-radius: 12px;
+      cursor: grab;
+      touch-action: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 4px 10px rgba(60, 45, 30, 0.1);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .pastry-tile:active, .pastry-tile.dragging {
+      cursor: grabbing;
+      transform: scale(1.05) rotate(-2deg);
+      box-shadow: 0 16px 28px rgba(60, 45, 30, 0.22);
+      z-index: 1000 !important;
+    }
+
+    .tile-label {
+      font-size: 14px;
+      font-weight: 800;
+      color: #5c3b1e;
+      pointer-events: none;
+    }
+    .tile-fraction {
+      font-size: 11px;
+      font-weight: 700;
+      opacity: 0.75;
+      pointer-events: none;
+    }
+
+    /* Stamped Wax Seal Modal */
+    .wax-seal-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(45, 35, 25, 0.7);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      animation: fade-in 0.2s ease;
+    }
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .diploma-card {
+      width: 440px;
+      background: var(--paper);
+      border: 3px solid #ded3be;
+      border-radius: 20px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 14px;
+      position: relative;
+    }
+
+    .brass-stamp-tool {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fde047 0%, #d97706 70%, #92400e 100%);
+      border: 3px solid #fef08a;
+      box-shadow: 0 8px 24px rgba(217, 119, 6, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .brass-stamp-tool:hover {
+      transform: scale(1.1) rotate(5deg);
+    }
+    .brass-stamp-tool:active {
+      transform: scale(0.95);
+    }
+
+    /* Confetti Burst */
+    .confetti {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      pointer-events: none;
+      z-index: 3000;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="brand-cluster">
+      <span class="badge-stamp">🌿 Kit's Artisan Bakery</span>
+      <span style="font-size: 13px; font-weight: 700; color: var(--ink-soft);">Tactile Mortise & Inset Discovery</span>
+    </div>
+
+    <div class="mode-nav">
+      <a href="/quiet-math.html" class="nav-pill" style="background: #fef3c7; border-color: #fcd34d; color: #92400e; font-weight: 800;">🌿 Kit's Quiet Math Story (New)</a>
+      <a href="/demo.html" class="nav-pill">🍰 Freeform Dragology Lab</a>
+      <a href="/sprint.html" class="nav-pill">⚡ Math Sprint</a>
+    </div>
+  </header>
+
+  <!-- Main Artisan Desk Workspace -->
+  <main>
+    <!-- Left Column: Socratic Notebook -->
+    <div class="notebook-card">
+      <div class="notepad-clip"></div>
+      
+      <div>
+        <div class="pal-dialogue-heading">
+          <span>✏️</span>
+          <span>Pencil Pal's Notebook</span>
+        </div>
+        <div class="pal-speech" id="pal-speech">
+          Kit baked a fresh pastry sheet. He took his share: <strong>1 third</strong>.<br><br>
+          Look at the empty pan recess on the right. <strong>What piece fits the remaining gap so Barnaby and Pippa get equal shares?</strong>
+        </div>
+      </div>
+
+      <div class="notepad-action-tray" id="action-tray">
+        <button class="notebook-btn active-step" id="btn-challenge-1" onclick="switchChallenge(1)">
+          <span>Challenge 1: Fill the Thirds</span>
+          <span>🥧</span>
+        </button>
+        <button class="notebook-btn" id="btn-challenge-2" onclick="switchChallenge(2)">
+          <span>Challenge 2: Halves Balance</span>
+          <span>🍰</span>
+        </button>
+        <button class="notebook-btn" id="btn-challenge-3" onclick="switchChallenge(3)">
+          <span>Challenge 3: Fourths Quilt</span>
+          <span>🍓</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Center Column: The Ceramic Pan Mortise & Balance Mat -->
+    <div class="workbench-stage">
+      <div class="equation-plaque" id="equation-plaque">
+        <span>1 whole pan</span>
+        <span>-</span>
+        <span>1 third (Kit)</span>
+        <span>=</span>
+        <span class="equation-highlight" id="equation-answer">? missing gap</span>
+      </div>
+
+      <!-- Ceramic Baking Pan Housing with Inset Mortise Bed -->
+      <div class="ceramic-pan-housing">
+        <div class="pan-mortise-bed" id="mortise-bed">
+          <!-- Pre-Baked Left Portion -->
+          <div class="baked-portion" id="baked-portion" style="width: 33.33%;">
+            <span class="baked-portion-label" id="baked-label">1 third (Kit)</span>
+          </div>
+
+          <!-- Empty Missing Gap (Magnetic Drop Target) -->
+          <div class="empty-gap-target" id="gap-target">
+            <span class="gap-guide-label" id="gap-guide-label">Empty Recess (Drop Matching Piece Here)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Shelf: Superposition Stacking & Comparing Mat -->
+      <div class="compare-tray-strip">
+        <div class="compare-status-text">
+          <span>⚖️</span>
+          <span id="compare-text">Drag a piece over another piece to stack and test equality!</span>
+        </div>
+        <button class="nav-pill" style="font-size: 12px; padding: 4px 10px;" onclick="resetPiecesToBasket()">🧺 Pack Basket</button>
+      </div>
+    </div>
+
+    <!-- Right Column: Wicker Pastry Basket with Movable Slices -->
+    <div class="wicker-basket">
+      <div class="basket-header">
+        <span>🧺 Pastry Pieces Tray</span>
+        <span style="font-size: 11px; opacity: 0.7;">Drag to Fit</span>
+      </div>
+
+      <div class="pieces-rack" id="pieces-rack">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Wax Seal Certification Modal -->
+  <div class="wax-seal-modal" id="seal-modal">
+    <div class="diploma-card">
+      <div style="font-size: 13px; font-weight: 800; color: #92400e; text-transform: uppercase;">📜 Certified Equal Shares</div>
+      <div style="font-size: 24px; font-weight: 900;">The Master Baker Seal</div>
+      <div style="font-size: 14px; color: var(--ink-soft); line-height: 1.4;">
+        You proved that <strong>1 third + 2 thirds make 1 whole</strong>, and verified all shares fit seamlessly without gaps!
+      </div>
+
+      <div class="brass-stamp-tool" onclick="stampWaxCertification()" title="Press to Stamp Wax!">
+        <span>⚜️</span>
+      </div>
+
+      <div style="font-size: 13px; font-weight: 700; color: #b45309;" id="stamp-prompt">
+        Press the Brass Seal to Stamp Your Certificate!
+      </div>
+      <button class="nav-pill" id="btn-next-chal" style="display: none; width: 100%; padding: 10px; background: #ecfdf5; border-color: #34d399; color: #065f46; font-weight: 800;" onclick="closeModalAndAdvance()">Next Challenge ➔</button>
+    </div>
+  </div>
+
+  <!-- Interactive Logic -->
+  <script>
+    // --- AUDIO GENERATOR ---
+    let audioCtx = null;
+    function getAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+
+    function playTone(freq, dur = 0.1, type = "sine", gainVal = 0.25) {
+      try {
+        const ctx = getAudio();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + dur);
+      } catch (e) {}
+    }
+
+    function playWoodClack() {
+      try {
+        const ctx = getAudio();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(320, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.4, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.08);
+      } catch(e) {}
+    }
+
+    function playCeramicSnap() {
+      try {
+        const ctx = getAudio();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(740, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(140, ctx.currentTime + 0.14);
+        gain.gain.setValueAtTime(0.35, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.14);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.14);
+      } catch(e) {}
+    }
+
+    function playHarmonicChime() {
+      try {
+        const ctx = getAudio();
+        const notes = [440, 554.37, 659.25, 880];
+        notes.forEach((f, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(f, ctx.currentTime + i * 0.07);
+          gain.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.07);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.07 + 0.3);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + i * 0.07);
+          osc.stop(ctx.currentTime + i * 0.07 + 0.3);
+        });
+      } catch(e) {}
+    }
+
+    // --- CHALLENGE STATE ---
+    let activeChallengeId = 1;
+    let isSolved = false;
+
+    const CHALLENGES = {
+      1: {
+        title: "Fill the Thirds",
+        targetShares: 3,
+        bakedCount: 1, // 1 third pre-baked (Kit)
+        bakedLabel: "1 third (Kit)",
+        bakedWidthPct: 33.33,
+        targetFraction: 2/3,
+        targetLabel: "2 thirds",
+        equationLeft: "1 whole - 1 third (Kit)",
+        equationAnswer: "2 thirds",
+        palSpeech: "Kit baked a pan of blueberry shortcake. He took his fair share: <strong>1 third</strong>.<br><br>Look at the empty pan recess on the right. <strong>Drag the matching piece from the wicker tray that fits the remaining gap perfectly!</strong>",
+        pieces: [
+          { id: "p1", label: "2 thirds", fraction: 2/3, w: 260, h: 70, color: "#fbcfe8", stroke: "#f472b6", icon: "🍰", isTarget: true },
+          { id: "p2", label: "1 third", fraction: 1/3, w: 130, h: 70, color: "#fef08a", stroke: "#eab308", icon: "🧁", isTarget: false, feedback: "1 third leaves a gap! You need a piece that fills BOTH remaining thirds." },
+          { id: "p3", label: "1 half", fraction: 1/2, w: 195, h: 70, color: "#bbf7d0", stroke: "#4ade80", icon: "🥧", isTarget: false, feedback: "1 half doesn't fit third notches evenly! Thirds must stay in thirds." },
+          { id: "p4", label: "1 fourth", fraction: 1/4, w: 98, h: 70, color: "#e9d5ff", stroke: "#c084fc", icon: "🍓", isTarget: false, feedback: "1 fourth is much too tiny to fill two thirds!" }
+        ]
+      },
+      2: {
+        title: "Halves Balance",
+        targetShares: 2,
+        bakedCount: 1, // 1 half pre-baked
+        bakedLabel: "1 half (Kit)",
+        bakedWidthPct: 50.0,
+        targetFraction: 1/2,
+        targetLabel: "1 half",
+        equationLeft: "1 whole - 1 half (Kit)",
+        equationAnswer: "1 half",
+        palSpeech: "Barnaby and Kit are sharing a golden cornbread tray. Kit took <strong>1 half</strong>.<br><br>Pippa needs the exact matching share. <strong>Which piece completes the half-and-half fair share?</strong>",
+        pieces: [
+          { id: "p5", label: "1 half", fraction: 1/2, w: 200, h: 70, color: "#fef08a", stroke: "#eab308", icon: "🍞", isTarget: true },
+          { id: "p6", label: "1 third", fraction: 1/3, w: 130, h: 70, color: "#fbcfe8", stroke: "#f472b6", icon: "🧁", isTarget: false, feedback: "1 third is smaller than 1 half! Pippa would get less than Kit." },
+          { id: "p7", label: "2 thirds", fraction: 2/3, w: 260, h: 70, color: "#bbf7d0", stroke: "#4ade80", icon: "🍰", isTarget: false, feedback: "2 thirds is bigger than 1 half! It would spill out of the pan." }
+        ]
+      },
+      3: {
+        title: "Fourths Quilt",
+        targetShares: 4,
+        bakedCount: 3, // 3 fourths pre-baked
+        bakedLabel: "3 fourths (Served)",
+        bakedWidthPct: 75.0,
+        targetFraction: 1/4,
+        targetLabel: "1 fourth",
+        equationLeft: "1 whole - 3 fourths",
+        equationAnswer: "1 fourth",
+        palSpeech: "Three fourths of this strawberry galette have been served to guests.<br><br>There is only <strong>one final fourth missing</strong>. Find the matching piece to complete the quilt!",
+        pieces: [
+          { id: "p8", label: "1 fourth", fraction: 1/4, w: 100, h: 70, color: "#e9d5ff", stroke: "#c084fc", icon: "🍓", isTarget: true },
+          { id: "p9", label: "1 half", fraction: 1/2, w: 200, h: 70, color: "#fef08a", stroke: "#eab308", icon: "🥧", isTarget: false, feedback: "1 half equals 2 fourths! It won't fit into just 1 fourth of space." },
+          { id: "p10", label: "1 third", fraction: 1/3, w: 130, h: 70, color: "#fbcfe8", stroke: "#f472b6", icon: "🧁", isTarget: false, feedback: "This tray is in fourths, so a third cannot slot cleanly." }
+        ]
+      }
+    };
+
+    // DOM Elements
+    const palSpeech = document.getElementById("pal-speech");
+    const bakedPortion = document.getElementById("baked-portion");
+    const bakedLabel = document.getElementById("baked-label");
+    const gapTarget = document.getElementById("gap-target");
+    const equationPlaque = document.getElementById("equation-plaque");
+    const equationAnswer = document.getElementById("equation-answer");
+    const piecesRack = document.getElementById("pieces-rack");
+    const compareText = document.getElementById("compare-text");
+    const sealModal = document.getElementById("seal-modal");
+
+    function switchChallenge(id) {
+      activeChallengeId = id;
+      isSolved = false;
+
+      // Update button highlights
+      document.querySelectorAll(".notebook-btn").forEach((btn, idx) => {
+        btn.classList.toggle("active-step", idx + 1 === id);
+      });
+
+      const chal = CHALLENGES[id];
+      palSpeech.innerHTML = chal.palSpeech;
+      bakedPortion.style.width = `${chal.bakedWidthPct}%`;
+      bakedLabel.textContent = chal.bakedLabel;
+      equationPlaque.innerHTML = `
+        <span>1 whole pan</span>
+        <span>-</span>
+        <span>${chal.bakedLabel}</span>
+        <span>=</span>
+        <span class="equation-highlight" id="equation-answer">? missing gap</span>
+      `;
+      gapTarget.innerHTML = `<span class="gap-guide-label">Empty Recess (${chal.targetLabel} needed)</span>`;
+      gapTarget.style.background = "transparent";
+
+      renderPiecesInBasket(chal.pieces);
+    }
+
+    function renderPiecesInBasket(pieces) {
+      piecesRack.innerHTML = "";
+      pieces.forEach(p => {
+        const tile = document.createElement("div");
+        tile.className = "pastry-tile";
+        tile.id = p.id;
+        tile.style.width = `${Math.min(240, p.w)}px`;
+        tile.style.height = `${p.h}px`;
+        tile.style.background = p.color;
+        tile.style.border = `2.5px solid ${p.stroke}`;
+        tile.dataset.isTarget = p.isTarget;
+        tile.dataset.label = p.label;
+        tile.dataset.feedback = p.feedback || "";
+        tile.dataset.color = p.color;
+        tile.dataset.stroke = p.stroke;
+        tile.dataset.icon = p.icon;
+
+        tile.innerHTML = `
+          <span style="font-size: 18px;">${p.icon}</span>
+          <span class="tile-label">${p.label}</span>
+        `;
+
+        attachTactileDrag(tile);
+        piecesRack.appendChild(tile);
+      });
+    }
+
+    function resetPiecesToBasket() {
+      switchChallenge(activeChallengeId);
+      playWoodClack();
+    }
+
+    // --- TACTILE DRAG & INSET MAGNETISM ---
+    function attachTactileDrag(element) {
+      let isDragging = false;
+      let startX, startY;
+      let initialLeft, initialTop;
+      let currentX, currentY;
+
+      element.addEventListener("pointerdown", (e) => {
+        if (isSolved) return;
+        isDragging = true;
+        element.classList.add("dragging");
+        element.setPointerCapture(e.pointerId);
+
+        const rect = element.getBoundingClientRect();
+        // Reparent to body for free 2D spatial drag across all panels
+        initialLeft = rect.left;
+        initialTop = rect.top;
+        element.style.position = "fixed";
+        element.style.left = `${initialLeft}px`;
+        element.style.top = `${initialTop}px`;
+        element.style.zIndex = "1000";
+        document.body.appendChild(element);
+
+        startX = e.clientX - initialLeft;
+        startY = e.clientY - initialTop;
+        playWoodClack();
+      });
+
+      element.addEventListener("pointermove", (e) => {
+        if (!isDragging) return;
+        currentX = e.clientX - startX;
+        currentY = e.clientY - startY;
+        element.style.left = `${currentX}px`;
+        element.style.top = `${currentY}px`;
+
+        // Check Magnetism with Empty Gap Inset
+        checkMagnetismWithGap(element);
+
+        // Check Superposition with other pieces
+        checkSuperpositionOverlap(element);
+      });
+
+      element.addEventListener("pointerup", (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        element.classList.remove("dragging");
+        element.style.transform = "none";
+
+        // Try Drop into Pan Mortise
+        dropIntoMortiseIfNear(element);
+      });
+    }
+
+    function checkMagnetismWithGap(dragged) {
+      const dRect = dragged.getBoundingClientRect();
+      const gRect = gapTarget.getBoundingClientRect();
+
+      const dist = Math.hypot((dRect.x + dRect.width/2) - (gRect.x + gRect.width/2), (dRect.y + dRect.height/2) - (gRect.y + gRect.height/2));
+
+      if (dist < 120) {
+        gapTarget.classList.add("magnet-hover");
+      } else {
+        gapTarget.classList.remove("magnet-hover");
+      }
+    }
+
+    function checkSuperpositionOverlap(dragged) {
+      const dRect = dragged.getBoundingClientRect();
+      const otherTiles = document.querySelectorAll(".pastry-tile");
+      let foundOverlap = false;
+
+      otherTiles.forEach(tile => {
+        if (tile === dragged) return;
+        const tRect = tile.getBoundingClientRect();
+        const dist = Math.hypot((dRect.x + dRect.width/2) - (tRect.x + tRect.width/2), (dRect.y + dRect.height/2) - (tRect.y + tRect.height/2));
+
+        if (dist < 60) {
+          foundOverlap = true;
+          const label1 = dragged.dataset.label;
+          const label2 = tile.dataset.label;
+
+          if (label1 === label2) {
+            compareText.innerHTML = `✨ <strong>Superposition Match!</strong> [${label1}] equals [${label2}] perfectly!`;
+            playTone(660, 0.08);
+          } else {
+            compareText.innerHTML = `⚖️ <strong>Unequal Overlap:</strong> [${label1}] does not match [${label2}].`;
+          }
+        }
+      });
+
+      if (!foundOverlap && !gapTarget.classList.contains("magnet-hover")) {
+        compareText.textContent = "Drag a piece over another piece to stack and test equality!";
+      }
+    }
+
+    function dropIntoMortiseIfNear(dragged) {
+      const dRect = dragged.getBoundingClientRect();
+      const gRect = gapTarget.getBoundingClientRect();
+      const dist = Math.hypot((dRect.x + dRect.width/2) - (gRect.x + gRect.width/2), (dRect.y + dRect.height/2) - (gRect.y + gRect.height/2));
+
+      gapTarget.classList.remove("magnet-hover");
+
+      if (dist < 130) {
+        const isTarget = dragged.dataset.isTarget === "true";
+
+        if (isTarget) {
+          // EUREKA SNAP! The piece fills the mortise perfectly!
+          isSolved = true;
+          playCeramicSnap();
+          playHarmonicChime();
+          spawnConfettiShower();
+
+          dragged.remove();
+          gapTarget.innerHTML = `
+            <div style="width: 100%; height: 100%; background: ${dragged.dataset.color}; border: 2.5px solid ${dragged.dataset.stroke}; border-radius: 0 14px 14px 0; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #5c3b1e; font-size: 15px; animation: snap-grow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
+              ${dragged.dataset.icon} ${dragged.dataset.label} (Fair Share Locked!)
+            </div>
+          `;
+
+          const chal = CHALLENGES[activeChallengeId];
+          palSpeech.innerHTML = `🎉 <strong>Perfect fit!</strong> The piece <strong>${dragged.dataset.label}</strong> locked seamlessly into the recess.<br><br>Because ${chal.bakedLabel} + ${chal.targetLabel} = 1 whole pan!`;
+          
+          document.getElementById("equation-answer").innerHTML = `<span style="color: #059669; font-weight: 900;">${chal.targetLabel} ✔</span>`;
+
+          setTimeout(() => {
+            sealModal.style.display = "flex";
+          }, 900);
+
+        } else {
+          // Misconception Adaptive Feedback!
+          playTone(200, 0.15, "sawtooth");
+          palSpeech.innerHTML = `⚠️ <em>${dragged.dataset.feedback}</em><br><br>The piece bounced back to the desk. Try another!`;
+          // Bounce back to rack
+          resetPiecesToBasket();
+        }
+      } else {
+        // Dropped outside, return to rack
+        resetPiecesToBasket();
+      }
+    }
+
+    // --- WAX STAMP RITUAL ---
+    function stampWaxCertification() {
+      playTone(380, 0.25, "triangle", 0.4);
+      playHarmonicChime();
+      spawnConfettiShower();
+
+      document.getElementById("stamp-prompt").innerHTML = "🌟 <strong>CERTIFIED EQUAL SHARE APPROVED!</strong>";
+      document.getElementById("btn-next-chal").style.display = "block";
+    }
+
+    function closeModalAndAdvance() {
+      sealModal.style.display = "none";
+      const nextId = (activeChallengeId % 3) + 1;
+      switchChallenge(nextId);
+    }
+
+    // --- CONFETTI BURST ---
+    function spawnConfettiShower() {
+      const colors = ["#fbcfe8", "#bbf7d0", "#fef08a", "#bae6fd", "#e9d5ff", "#f59e0b"];
+      for (let i = 0; i < 40; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.left = `${window.innerWidth/2 + (Math.random() - 0.5) * 400}px`;
+        c.style.top = `${window.innerHeight/2 - 80}px`;
+        document.body.appendChild(c);
+
+        const vx = (Math.random() - 0.5) * 16;
+        const vy = -(Math.random() * 12 + 6);
+        let curX = parseFloat(c.style.left);
+        let curY = parseFloat(c.style.top);
+        let grav = 0;
+
+        const anim = setInterval(() => {
+          grav += 0.45;
+          curX += vx;
+          curY += vy + grav;
+          c.style.left = `${curX}px`;
+          c.style.top = `${curY}px`;
+          if (curY > window.innerHeight) {
+            clearInterval(anim);
+            c.remove();
+          }
+        }, 16);
+      }
+    }
+
+    // Init
+    switchChallenge(1);
+  </script>
+</body>
+</html>

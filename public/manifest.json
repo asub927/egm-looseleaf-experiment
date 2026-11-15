@@ -1,0 +1,24 @@
+{
+  "name": "Elephant-Goldfish Math: Tactile Grade 2 Manipulatives",
+  "short_name": "EGM Math",
+  "description": "Tactile, audio-guided 2nd-grade math laboratory for NC.2.OA standards with zero backend and offline PWA capability.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#f3dfba",
+  "theme_color": "#f3dfba",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "48x48 72x72 96x96 128x128 192x192 256x256 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "education",
+    "math",
+    "kids"
+  ]
+}

@@ -1,0 +1,30 @@
+name: JiTTesting Pedagogical Invariants & Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  jittest-invariants:
+    name: JiTTesting Invariant Verification (Meta Human-on-the-Loop)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (v22+)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: 🛡️ Execute JiTTesting Pedagogical Invariants
+        run: npm test
+
+      - name: 🏗️ Production Vite Build Verification
+        run: npm run build

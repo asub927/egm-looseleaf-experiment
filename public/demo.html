@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fluid Dragology Geometry Lab — Pastel Edition</title>
+  <style>
+    :root {
+      --desk-bg: #fbf8f3;
+      --paper-bg: #ffffff;
+      --ink: #332d29;
+      --ink-soft: #7d756d;
+      --dish-bg: #e7f3ef;
+      --dish-stroke: #b8d9cf;
+      --dish-inner: #f2faf7;
+      --coral-accent: #fb7185;
+      --mint-accent: #34d399;
+      --lavender-accent: #c084fc;
+      --lemon-accent: #facc15;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--desk-bg);
+      font-family: ui-rounded, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      transition: background 0.3s ease;
+    }
+
+    /* Top Bar */
+    header {
+      height: 54px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1.5px solid #ece4d8;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-shadow: 0 2px 10px rgba(70, 50, 40, 0.03);
+      z-index: 100;
+    }
+
+    .badge-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      background: #fdf2f8;
+      border: 1.5px solid #fbcfe8;
+      color: #9d174d;
+    }
+
+    .badge-sub {
+      font-size: 13px;
+      color: var(--ink-soft);
+      font-weight: 600;
+    }
+
+    .controls-strip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .palette-selector {
+      display: flex;
+      align-items: center;
+      background: #f5efe6;
+      border-radius: 999px;
+      padding: 3px;
+      gap: 2px;
+      border: 1px solid #e7ded0;
+    }
+
+    .palette-btn {
+      padding: 4px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .palette-btn.active {
+      background: #ffffff;
+      color: var(--ink);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+    }
+
+    .mode-btn {
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1.5px solid #e7ded0;
+      background: #ffffff;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .mode-btn:hover {
+      background: #fff8f6;
+      border-color: #fbcfe8;
+    }
+    .mode-btn.active {
+      background: #fdf2f8;
+      border-color: #f472b6;
+      color: #9d174d;
+      box-shadow: 0 2px 8px rgba(244, 114, 182, 0.2);
+    }
+
+    /* Main Desk */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px 10px;
+      position: relative;
+    }
+
+    /* Instruction / Speech Banner */
+    .mascot-banner {
+      background: rgba(255, 255, 255, 0.96);
+      border: 1.5px solid #ece4d8;
+      border-radius: 16px;
+      padding: 8px 18px;
+      box-shadow: 0 4px 14px rgba(70, 50, 40, 0.04);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 820px;
+      width: 100%;
+      margin-bottom: 6px;
+    }
+    .mascot-avatar {
+      font-size: 26px;
+      animation: gentle-bob 3s ease-in-out infinite;
+    }
+    @keyframes gentle-bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+    .mascot-text {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.35;
+      color: #4a433d;
+    }
+    .mascot-text strong {
+      color: #9d174d;
+    }
+
+    /* Canvas Desk Area */
+    .desk-sheet {
+      position: relative;
+      width: 100%;
+      max-width: 860px;
+      height: 380px;
+      background: #ffffff;
+      border-radius: 20px;
+      border: 1.5px solid #ece4d8;
+      box-shadow: 0 10px 30px rgba(60, 45, 30, 0.04), 0 1px 3px rgba(60, 45, 30, 0.02);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Soft Graph Paper dot-grid background */
+    .desk-sheet::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: 
+        radial-gradient(circle, rgba(120, 100, 90, 0.08) 1.2px, transparent 1.2px);
+      background-size: 20px 20px;
+      pointer-events: none;
+    }
+
+    /* Action bar inside sheet */
+    .sheet-action-bar {
+      position: absolute;
+      top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 20;
+    }
+
+    .pill-btn {
+      padding: 6px 15px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(255,255,255,0.95);
+      border: 1.5px solid #e7ded0;
+      color: #4a433d;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(60, 45, 30, 0.04);
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pill-btn:hover {
+      background: #fdf8f4;
+      border-color: #fbcfe8;
+      transform: translateY(-1px);
+    }
+    .pill-btn.primary {
+      background: #ecfdf5;
+      border-color: #a7f3d0;
+      color: #065f46;
+    }
+    .pill-btn.primary:hover {
+      background: #d1fae5;
+      border-color: #6ee7b7;
+    }
+
+    /* Slicing Surface Container */
+    #manipulative-stage {
+      position: relative;
+      width: 580px;
+      height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Serving Plates Row */
+    .plates-dock {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 8px 30px;
+      gap: 16px;
+      margin-top: 6px;
+    }
+
+    .plate-station {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .plate {
+      width: 118px;
+      height: 118px;
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 6px 16px rgba(70, 50, 40, 0.06), inset 0 2px 6px rgba(255,255,255,0.9);
+    }
+
+    /* Individual pastel ceramic glazes for each friend */
+    .plate-kit {
+      background: radial-gradient(circle at 45% 40%, #ffffff 0%, #fff2ec 75%, #ffe4d6 100%);
+      border: 3.5px solid #fca5a5;
+    }
+    .plate-barnaby {
+      background: radial-gradient(circle at 45% 40%, #ffffff 0%, #f0fdf4 75%, #dcfce7 100%);
+      border: 3.5px solid #86efac;
+    }
+    .plate-pippa {
+      background: radial-gradient(circle at 45% 40%, #ffffff 0%, #faf5ff 75%, #f3e8ff 100%);
+      border: 3.5px solid #c4b5fd;
+    }
+
+    .plate.highlight {
+      transform: scale(1.08);
+      box-shadow: 0 10px 24px rgba(244, 114, 182, 0.25);
+      border-color: #f472b6 !important;
+    }
+
+    .plate-owner {
+      font-size: 13px;
+      font-weight: 700;
+      color: #6b635b;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Draggable Physics Slice */
+    .slice-piece {
+      position: absolute;
+      cursor: grab;
+      touch-action: none;
+      transition: box-shadow 0.15s ease, filter 0.15s ease;
+      filter: drop-shadow(0 4px 10px rgba(60, 45, 30, 0.08));
+    }
+    .slice-piece:active, .slice-piece.dragging {
+      cursor: grabbing;
+      z-index: 1000 !important;
+      filter: drop-shadow(0 14px 26px rgba(60, 45, 30, 0.18));
+    }
+
+    /* Comparison Overlay Card */
+    #comparison-overlay {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 2px solid #fbcfe8;
+      border-radius: 999px;
+      padding: 7px 16px;
+      box-shadow: 0 6px 18px rgba(70, 50, 40, 0.08);
+      font-size: 13px;
+      font-weight: 700;
+      color: #9d174d;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      z-index: 50;
+      animation: pop-in 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes pop-in {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Confetti Burst */
+    .confetti {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      pointer-events: none;
+      z-index: 2000;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <header>
+    <div class="badge-group">
+      <span class="badge">🦊 Kit's Pastel Bakery Lab</span>
+      <span class="badge-sub">Standard NC.2.G.3 (Equal Shares)</span>
+    </div>
+
+    <div class="controls-strip">
+      <!-- Pastel Palette Switcher -->
+      <div class="palette-selector" title="Choose Pastel Flavor Palette">
+        <button class="palette-btn active" id="btn-pal-patisserie" onclick="setPalette('patisserie')">🧁 Patisserie</button>
+        <button class="palette-btn" id="btn-pal-gelato" onclick="setPalette('gelato')">🍨 Gelato</button>
+        <button class="palette-btn" id="btn-pal-meadow" onclick="setPalette('meadow')">🌿 Meadow</button>
+      </div>
+
+      <button class="mode-btn active" id="btn-shape-rect" onclick="switchShape('rectangle')">🍰 Cake Pan</button>
+      <button class="mode-btn" id="btn-shape-circle" onclick="switchShape('circle')">🥧 Fruit Tart</button>
+      <a href="/quiet-math.html" class="mode-btn" style="text-decoration: none; background: #fef3c7; border-color: #fcd34d; color: #92400e; font-weight: 800;">🌿 Kit's Quiet Math Story (New)</a>
+      <a href="/artisan-lab.html" class="mode-btn" style="text-decoration: none;">Artisan Inset Lab</a>
+      <a href="/sprint.html" class="mode-btn" style="text-decoration: none;">⚡ Sprint Mode</a>
+      <button class="mode-btn" style="background: #faf7f2; border-color: #e7ded0;" onclick="resetCurrentShape()">🔄 Reset</button>
+    </div>
+  </header>
+
+  <!-- Main Desk Stage -->
+  <main>
+    <!-- Mascot Instructions -->
+    <div class="mascot-banner">
+      <div class="mascot-avatar">✏️</div>
+      <div class="mascot-text" id="mascot-speech">
+        <strong>Pencil Pal:</strong> Drag the soft pastel cut dividers to partition the cake into <strong>3 equal thirds</strong>. Then click <em>"✂️ Slice & Separate"</em> to serve Kit and friends!
+      </div>
+    </div>
+
+    <!-- Desk Sheet Area -->
+    <div class="desk-sheet" id="desk-sheet">
+      <!-- Sheet Action Bar -->
+      <div class="sheet-action-bar">
+        <button class="pill-btn primary" id="btn-cut-action" onclick="toggleCutOrServe()">
+          <span>✂️ Slice & Separate</span>
+        </button>
+        <button class="pill-btn" onclick="snapToPerfectShares()">
+          <span>✨ Snap to Equal Thirds</span>
+        </button>
+      </div>
+
+      <!-- The Manipulative Stage -->
+      <div id="manipulative-stage">
+        <!-- SVG Canvas rendered dynamically -->
+        <svg id="svg-canvas" width="560" height="260" viewBox="0 0 560 260" style="overflow: visible;"></svg>
+      </div>
+    </div>
+
+    <!-- Friends' Serving Plates -->
+    <div class="plates-dock" id="plates-dock">
+      <div class="plate-station">
+        <div class="plate plate-kit" id="plate-0" data-owner="Kit"></div>
+        <div class="plate-owner">🦊 Kit (Plate 1)</div>
+      </div>
+      <div class="plate-station">
+        <div class="plate plate-barnaby" id="plate-1" data-owner="Barnaby"></div>
+        <div class="plate-owner">🐻 Barnaby (Plate 2)</div>
+      </div>
+      <div class="plate-station">
+        <div class="plate plate-pippa" id="plate-2" data-owner="Pippa"></div>
+        <div class="plate-owner">🦔 Pippa (Plate 3)</div>
+      </div>
+    </div>
+
+    <!-- Live Stack Comparison Card -->
+    <div id="comparison-overlay">
+      <span>⚖️</span>
+      <span id="comparison-text">Comparing Slices...</span>
+    </div>
+  </main>
+
+  <!-- Interactive Logic -->
+  <script>
+    // --- PASTEL PALETTES ---
+    const PASTEL_PALETTES = {
+      patisserie: {
+        name: "Patisserie Macaron",
+        deskBg: "radial-gradient(circle at 50% 30%, #fdfbf7 0%, #f4efeb 100%)",
+        dishFill: "#e7f3ef",
+        dishStroke: "#b8d9cf",
+        dishInner: "#f3faf7",
+        crustFill: "#fde68a",
+        crustStroke: "#fcd34d",
+        handleFill: "#fbcfe8",
+        handleStroke: "#f472b6",
+        dividerLine: "#f472b6",
+        slices: [
+          { name: "Strawberry Macaron", base: "#fbcfe8", top: "#fdf2f8", stroke: "#f472b6", text: "#9d174d", icon: "🍓" },
+          { name: "Lemon Chiffon", base: "#fef08a", top: "#fefce8", stroke: "#eab308", text: "#713f12", icon: "🍋" },
+          { name: "Pistachio Matcha", base: "#bbf7d0", top: "#f0fdf4", stroke: "#4ade80", text: "#14532d", icon: "🍵" },
+          { name: "Lavender Blueberry", base: "#e9d5ff", top: "#faf5ff", stroke: "#c084fc", text: "#581c87", icon: "🫐" },
+        ]
+      },
+      gelato: {
+        name: "Gelato Sorbet",
+        deskBg: "radial-gradient(circle at 50% 30%, #faf5ff 0%, #f0ebf8 100%)",
+        dishFill: "#fce7f3",
+        dishStroke: "#fbcfe8",
+        dishInner: "#fff1f8",
+        crustFill: "#fed7aa",
+        crustStroke: "#fdba74",
+        handleFill: "#bae6fd",
+        handleStroke: "#38bdf8",
+        dividerLine: "#fb7185",
+        slices: [
+          { name: "Raspberry Gelato", base: "#fda4af", top: "#fff1f2", stroke: "#fb7185", text: "#881337", icon: "🍧" },
+          { name: "Peach Mango", base: "#fed7aa", top: "#fff7ed", stroke: "#fb923c", text: "#7c2d12", icon: "🍑" },
+          { name: "Honeydew Mint", base: "#a7f3d0", top: "#f0fdf4", stroke: "#34d399", text: "#064e3b", icon: "🍈" },
+          { name: "Sky Blueberry", base: "#bae6fd", top: "#f0f9ff", stroke: "#38bdf8", text: "#0c4a6e", icon: "🍦" },
+        ]
+      },
+      meadow: {
+        name: "Nordic Meadow",
+        deskBg: "radial-gradient(circle at 50% 30%, #f8faf8 0%, #ebf1ed 100%)",
+        dishFill: "#e2e8f0",
+        dishStroke: "#cbd5e1",
+        dishInner: "#f1f5f9",
+        crustFill: "#fde68a",
+        crustStroke: "#f59e0b",
+        handleFill: "#d1fae5",
+        handleStroke: "#6ee7b7",
+        dividerLine: "#10b981",
+        slices: [
+          { name: "Wild Heather", base: "#fecdd3", top: "#fff1f2", stroke: "#fb7185", text: "#881337", icon: "🌸" },
+          { name: "Buttercup Cream", base: "#fef3c7", top: "#fffbeb", stroke: "#f59e0b", text: "#78350f", icon: "🌼" },
+          { name: "Sage Meadow", base: "#d1fae5", top: "#f0fdf4", stroke: "#34d399", text: "#064e3b", icon: "🌿" },
+          { name: "Misty Periwinkle", base: "#e0e7ff", top: "#eef2ff", stroke: "#818cf8", text: "#312e81", icon: "🪻" },
+        ]
+      }
+    };
+
+    let activePaletteKey = "patisserie";
+    function getPalette() {
+      return PASTEL_PALETTES[activePaletteKey];
+    }
+
+    function setPalette(key) {
+      if (!PASTEL_PALETTES[key]) return;
+      activePaletteKey = key;
+      document.querySelectorAll(".palette-btn").forEach(btn => btn.classList.remove("active"));
+      document.getElementById(`btn-pal-${key}`).classList.add("active");
+      
+      const pal = getPalette();
+      document.body.style.background = pal.deskBg;
+      render();
+    }
+
+    // Audio Synthesizer via Web Audio API
+    let audioCtx = null;
+    function getAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+
+    function playSnapTone(freq = 240) {
+      try {
+        const ctx = getAudio();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(38, ctx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.35, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.1);
+      } catch (e) {}
+    }
+
+    function playPopTone() {
+      try {
+        const ctx = getAudio();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.frequency.setValueAtTime(320, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(560, ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.08);
+      } catch (e) {}
+    }
+
+    function playSuccessFanfare() {
+      try {
+        const ctx = getAudio();
+        const notes = [261.6, 329.6, 392.0, 523.2];
+        notes.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const start = ctx.currentTime + (i * 0.09);
+          osc.frequency.setValueAtTime(freq, start);
+          gain.gain.setValueAtTime(0.25, start);
+          gain.gain.exponentialRampToValueAtTime(0.01, start + 0.25);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(start);
+          osc.stop(start + 0.25);
+        });
+      } catch (e) {}
+    }
+
+    // State
+    let currentShape = "rectangle"; // "rectangle" or "circle"
+    let targetShares = 3;
+    let cuts = [0.333, 0.667]; // Normalized dividers
+    let circleAngles = [0, 120, 240]; // Degrees
+    let isSeparated = false;
+    let placedOnPlates = [null, null, null];
+
+    const stage = document.getElementById("manipulative-stage");
+    const svg = document.getElementById("svg-canvas");
+    const btnCutAction = document.getElementById("btn-cut-action");
+    const mascotSpeech = document.getElementById("mascot-speech");
+    const comparisonOverlay = document.getElementById("comparison-overlay");
+    const comparisonText = document.getElementById("comparison-text");
+
+    function render() {
+      svg.innerHTML = "";
+      // Remove any existing separated DOM slices
+      document.querySelectorAll(".slice-piece").forEach(el => el.remove());
+
+      if (currentShape === "rectangle") {
+        renderRectangle();
+      } else {
+        renderCircle();
+      }
+    }
+
+    // --- RECTANGLE PAN RENDERING ---
+    const PAN = { x: 30, y: 30, w: 500, h: 200, rx: 16 };
+
+    function renderRectangle() {
+      const pal = getPalette();
+
+      // 1. Ceramic Baking Dish Outer Rim
+      const outerPan = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      outerPan.setAttribute("x", PAN.x - 10);
+      outerPan.setAttribute("y", PAN.y - 10);
+      outerPan.setAttribute("width", PAN.w + 20);
+      outerPan.setAttribute("height", PAN.h + 20);
+      outerPan.setAttribute("rx", PAN.rx + 6);
+      outerPan.setAttribute("fill", pal.dishFill);
+      outerPan.setAttribute("stroke", pal.dishStroke);
+      outerPan.setAttribute("stroke-width", "2.5");
+      svg.appendChild(outerPan);
+
+      // Inner Dish Bed
+      const innerBed = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      innerBed.setAttribute("x", PAN.x);
+      innerBed.setAttribute("y", PAN.y);
+      innerBed.setAttribute("width", PAN.w);
+      innerBed.setAttribute("height", PAN.h);
+      innerBed.setAttribute("rx", PAN.rx);
+      innerBed.setAttribute("fill", pal.dishInner);
+      svg.appendChild(innerBed);
+
+      // 2. Pastel Cake Slices
+      const sortedCuts = [0, ...cuts.slice().sort((a,b) => a - b), 1];
+
+      for (let i = 0; i < sortedCuts.length - 1; i++) {
+        const leftFrac = sortedCuts[i];
+        const rightFrac = sortedCuts[i + 1];
+        const sliceX = PAN.x + (leftFrac * PAN.w);
+        const sliceW = (rightFrac - leftFrac) * PAN.w;
+        const percent = Math.round((rightFrac - leftFrac) * 100);
+        const sliceStyle = pal.slices[i % pal.slices.length];
+
+        if (!isSeparated) {
+          // Render in SVG
+          // Slice Base Body
+          const sliceRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+          sliceRect.setAttribute("x", sliceX + 1.5);
+          sliceRect.setAttribute("y", PAN.y + 1.5);
+          sliceRect.setAttribute("width", Math.max(0, sliceW - 3));
+          sliceRect.setAttribute("height", PAN.h - 3);
+          sliceRect.setAttribute("rx", "10");
+          sliceRect.setAttribute("fill", sliceStyle.base);
+          sliceRect.setAttribute("stroke", sliceStyle.stroke);
+          sliceRect.setAttribute("stroke-width", "1.5");
+          svg.appendChild(sliceRect);
+
+          // Top Frosting Shine
+          const frosting = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+          frosting.setAttribute("x", sliceX + 4);
+          frosting.setAttribute("y", PAN.y + 4);
+          frosting.setAttribute("width", Math.max(0, sliceW - 8));
+          frosting.setAttribute("height", 32);
+          frosting.setAttribute("rx", "6");
+          frosting.setAttribute("fill", sliceStyle.top);
+          frosting.setAttribute("opacity", "0.7");
+          svg.appendChild(frosting);
+
+          // Percentage Label & Flavor Icon
+          const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          text.setAttribute("x", sliceX + sliceW / 2);
+          text.setAttribute("y", PAN.y + PAN.h / 2);
+          text.setAttribute("text-anchor", "middle");
+          text.setAttribute("dominant-baseline", "middle");
+          text.setAttribute("fill", sliceStyle.text);
+          text.setAttribute("font-size", "15");
+          text.setAttribute("font-weight", "800");
+          text.textContent = `${sliceStyle.icon} ${percent}%`;
+          svg.appendChild(text);
+        } else {
+          // Create loose draggable HTML/SVG slice
+          createDraggableRectSlice(i, sliceX, PAN.y, sliceW, PAN.h, percent, sliceStyle);
+        }
+      }
+
+      // 3. Cut Dividers (if not separated)
+      if (!isSeparated) {
+        cuts.forEach((cutFrac, idx) => {
+          const cutX = PAN.x + (cutFrac * PAN.w);
+
+          // Pastel Dotted guide line
+          const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          line.setAttribute("x1", cutX);
+          line.setAttribute("y1", PAN.y - 12);
+          line.setAttribute("x2", cutX);
+          line.setAttribute("y2", PAN.y + PAN.h + 12);
+          line.setAttribute("stroke", pal.dividerLine);
+          line.setAttribute("stroke-width", "3");
+          line.setAttribute("stroke-dasharray", "6 4");
+          svg.appendChild(line);
+
+          // Soft Pill Handle on top
+          const handle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+          handle.setAttribute("x", cutX - 16);
+          handle.setAttribute("y", PAN.y - 26);
+          handle.setAttribute("width", 32);
+          handle.setAttribute("height", 22);
+          handle.setAttribute("rx", 11);
+          handle.setAttribute("fill", pal.handleFill);
+          handle.setAttribute("stroke", pal.handleStroke);
+          handle.setAttribute("stroke-width", "2");
+          handle.style.cursor = "ew-resize";
+          handle.style.filter = "drop-shadow(0 2px 4px rgba(0,0,0,0.06))";
+
+          // Mini handle knife grip notch
+          const notch = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          notch.setAttribute("x1", cutX);
+          notch.setAttribute("y1", PAN.y - 20);
+          notch.setAttribute("x2", cutX);
+          notch.setAttribute("y2", PAN.y - 10);
+          notch.setAttribute("stroke", pal.handleStroke);
+          notch.setAttribute("stroke-width", "2");
+          notch.setAttribute("stroke-linecap", "round");
+
+          handle.addEventListener("pointerdown", (e) => startDragDivider(e, idx));
+          svg.appendChild(handle);
+          svg.appendChild(notch);
+        });
+      }
+    }
+
+    // --- CIRCLE TART RENDERING ---
+    const TART = { cx: 280, cy: 130, r: 100 };
+
+    function renderCircle() {
+      const pal = getPalette();
+
+      // 1. Ceramic Plate Outer
+      const outerPlate = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      outerPlate.setAttribute("cx", TART.cx);
+      outerPlate.setAttribute("cy", TART.cy);
+      outerPlate.setAttribute("r", TART.r + 18);
+      outerPlate.setAttribute("fill", pal.dishFill);
+      outerPlate.setAttribute("stroke", pal.dishStroke);
+      outerPlate.setAttribute("stroke-width", "2.5");
+      svg.appendChild(outerPlate);
+
+      // 2. Buttery Sablé Crust
+      const crust = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      crust.setAttribute("cx", TART.cx);
+      crust.setAttribute("cy", TART.cy);
+      crust.setAttribute("r", TART.r);
+      crust.setAttribute("fill", pal.crustFill);
+      crust.setAttribute("stroke", pal.crustStroke);
+      crust.setAttribute("stroke-width", "2");
+      svg.appendChild(crust);
+
+      // 3. Slices
+      const sortedAngles = circleAngles.slice().sort((a,b) => a - b);
+
+      for (let i = 0; i < sortedAngles.length; i++) {
+        const startAngle = sortedAngles[i];
+        const endAngle = (i === sortedAngles.length - 1) ? sortedAngles[0] + 360 : sortedAngles[i + 1];
+        const span = endAngle - startAngle;
+        const percent = Math.round((span / 360) * 100);
+        const sliceStyle = pal.slices[i % pal.slices.length];
+
+        if (!isSeparated) {
+          // Draw wedge in SVG
+          const path = createWedgePath(TART.cx, TART.cy, TART.r - 8, startAngle, endAngle);
+          const wedge = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          wedge.setAttribute("d", path);
+          wedge.setAttribute("fill", sliceStyle.base);
+          wedge.setAttribute("stroke", "#ffffff");
+          wedge.setAttribute("stroke-width", "2");
+          svg.appendChild(wedge);
+
+          // Percent badge at midpoint
+          const midA = (startAngle + span / 2) * (Math.PI / 180);
+          const tx = TART.cx + Math.cos(midA) * (TART.r * 0.55);
+          const ty = TART.cy + Math.sin(midA) * (TART.r * 0.55);
+          const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          text.setAttribute("x", tx);
+          text.setAttribute("y", ty);
+          text.setAttribute("text-anchor", "middle");
+          text.setAttribute("dominant-baseline", "middle");
+          text.setAttribute("fill", sliceStyle.text);
+          text.setAttribute("font-size", "14");
+          text.setAttribute("font-weight", "800");
+          text.textContent = `${sliceStyle.icon} ${percent}%`;
+          svg.appendChild(text);
+        } else {
+          createDraggableCircleSlice(i, TART.cx, TART.cy, TART.r - 8, startAngle, endAngle, percent, sliceStyle);
+        }
+      }
+
+      // Cut Spokes if not separated
+      if (!isSeparated) {
+        circleAngles.forEach((deg, idx) => {
+          const rad = deg * (Math.PI / 180);
+          const x2 = TART.cx + Math.cos(rad) * (TART.r + 15);
+          const y2 = TART.cy + Math.sin(rad) * (TART.r + 15);
+
+          const spoke = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          spoke.setAttribute("x1", TART.cx);
+          spoke.setAttribute("y1", TART.cy);
+          spoke.setAttribute("x2", x2);
+          spoke.setAttribute("y2", y2);
+          spoke.setAttribute("stroke", pal.dividerLine);
+          spoke.setAttribute("stroke-width", "3");
+          spoke.setAttribute("stroke-dasharray", "6 4");
+          svg.appendChild(spoke);
+
+          // Handle button on rim
+          const handle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          handle.setAttribute("cx", x2);
+          handle.setAttribute("cy", y2);
+          handle.setAttribute("r", 12);
+          handle.setAttribute("fill", pal.handleFill);
+          handle.setAttribute("stroke", pal.handleStroke);
+          handle.setAttribute("stroke-width", "2");
+          handle.style.cursor = "grab";
+          handle.style.filter = "drop-shadow(0 2px 5px rgba(0,0,0,0.06))";
+          handle.addEventListener("pointerdown", (e) => startDragRadialHandle(e, idx));
+          svg.appendChild(handle);
+        });
+      }
+    }
+
+    function createWedgePath(cx, cy, r, startDeg, endDeg) {
+      const startRad = (startDeg * Math.PI) / 180;
+      const endRad = (endDeg * Math.PI) / 180;
+      const x1 = cx + r * Math.cos(startRad);
+      const y1 = cy + r * Math.sin(startRad);
+      const x2 = cx + r * Math.cos(endRad);
+      const y2 = cy + r * Math.sin(endRad);
+      const largeArc = (endDeg - startDeg > 180) ? 1 : 0;
+      return `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z`;
+    }
+
+    // --- DIVIDER DRAGGING WITH ELASTIC SNAP WELLS ---
+    function startDragDivider(e, idx) {
+      e.stopPropagation();
+      const rect = svg.getBoundingClientRect();
+      const targetSnapPoints = [0.333, 0.667];
+
+      function onPointerMove(moveEvent) {
+        const clientX = moveEvent.clientX - rect.left;
+        let frac = (clientX - PAN.x) / PAN.w;
+        frac = Math.max(0.1, Math.min(0.9, frac));
+
+        // Elastic Magnetic Well: if within +/- 0.05, gently attract
+        targetSnapPoints.forEach(target => {
+          const diff = Math.abs(frac - target);
+          if (diff < 0.05) {
+            frac = target + (frac - target) * 0.25; // Ease towards target
+            if (diff < 0.015) {
+              frac = target;
+              playSnapTone(280);
+            }
+          }
+        });
+
+        cuts[idx] = frac;
+        render();
+      }
+
+      function onPointerUp() {
+        window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("pointerup", onPointerUp);
+        playSnapTone(340);
+      }
+
+      window.addEventListener("pointermove", onPointerMove);
+      window.addEventListener("pointerup", onPointerUp);
+    }
+
+    function startDragRadialHandle(e, idx) {
+      e.stopPropagation();
+      const rect = svg.getBoundingClientRect();
+
+      function onPointerMove(moveEvent) {
+        const mx = moveEvent.clientX - rect.left - TART.cx;
+        const my = moveEvent.clientY - rect.top - TART.cy;
+        let angle = ((Math.atan2(my, mx) * 180) / Math.PI + 360) % 360;
+
+        // Snap wells at 0, 120, 240
+        [0, 120, 240].forEach(snapA => {
+          const d = Math.abs(angle - snapA);
+          if (d < 12 || Math.abs(d - 360) < 12) {
+            angle = snapA;
+            playSnapTone(300);
+          }
+        });
+
+        circleAngles[idx] = angle;
+        render();
+      }
+
+      function onPointerUp() {
+        window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("pointerup", onPointerUp);
+        playSnapTone(360);
+      }
+
+      window.addEventListener("pointermove", onPointerMove);
+      window.addEventListener("pointerup", onPointerUp);
+    }
+
+    // --- POP & SEPARATE TO LOOSE PIECES ---
+    function toggleCutOrServe() {
+      isSeparated = !isSeparated;
+      if (isSeparated) {
+        playPopTone();
+        btnCutAction.innerHTML = "<span>🧩 Put Whole Cake Back</span>";
+        btnCutAction.classList.remove("primary");
+        mascotSpeech.innerHTML = "<strong>Pencil Pal:</strong> Awesome! The cake popped apart into delicious pastel slices! Drag each slice onto a friend's plate below, or <strong>stack one slice on top of another</strong> to verify equality!";
+      } else {
+        btnCutAction.innerHTML = "<span>✂️ Slice & Separate</span>";
+        btnCutAction.classList.add("primary");
+        placedOnPlates = [null, null, null];
+        document.querySelectorAll(".plate").forEach(p => p.classList.remove("highlight"));
+        mascotSpeech.innerHTML = "<strong>Pencil Pal:</strong> Cake back in dish! Adjust the cut lines to make equal thirds, then slice!";
+      }
+      render();
+    }
+
+    function snapToPerfectShares() {
+      if (currentShape === "rectangle") {
+        cuts = [0.333, 0.667];
+      } else {
+        circleAngles = [0, 120, 240];
+      }
+      playSnapTone(440);
+      render();
+    }
+
+    // --- CREATE DRAGGABLE RECT SLICE ---
+    function createDraggableRectSlice(idx, x, y, w, h, percent, style) {
+      // Offset slightly to demonstrate physical separation
+      const gapOffset = (idx - 1) * 14;
+      const piece = document.createElement("div");
+      piece.className = "slice-piece";
+      piece.style.width = `${w}px`;
+      piece.style.height = `${h}px`;
+      piece.style.left = `${stage.offsetLeft + x + gapOffset}px`;
+      piece.style.top = `${stage.offsetTop + y}px`;
+      piece.style.background = `linear-gradient(145deg, ${style.top} 0%, ${style.base} 100%)`;
+      piece.style.borderRadius = "12px";
+      piece.style.border = `2px solid ${style.stroke}`;
+      piece.style.display = "flex";
+      piece.style.flexDirection = "column";
+      piece.style.alignItems = "center";
+      piece.style.justifyContent = "center";
+      piece.style.color = style.text;
+      piece.style.fontWeight = "800";
+      piece.style.fontSize = "15px";
+      piece.style.gap = "4px";
+      piece.innerHTML = `
+        <span style="font-size: 20px;">${style.icon}</span>
+        <span>${percent}%</span>
+        <span style="font-size: 11px; font-weight: 600; opacity: 0.85;">${style.name}</span>
+      `;
+      piece.dataset.sliceIndex = idx;
+      piece.dataset.percent = percent;
+
+      attachFluidDrag(piece);
+      document.body.appendChild(piece);
+    }
+
+    // --- CREATE DRAGGABLE CIRCLE WEDGE ---
+    function createDraggableCircleSlice(idx, cx, cy, r, startA, endA, percent, style) {
+      const span = endA - startA;
+      const midA = (startA + span / 2) * (Math.PI / 180);
+      const gapX = Math.cos(midA) * 16;
+      const gapY = Math.sin(midA) * 16;
+
+      const piece = document.createElement("div");
+      piece.className = "slice-piece";
+      piece.style.width = `${r * 2}px`;
+      piece.style.height = `${r * 2}px`;
+      piece.style.left = `${stage.offsetLeft + cx - r + gapX}px`;
+      piece.style.top = `${stage.offsetTop + cy - r + gapY}px`;
+      piece.dataset.sliceIndex = idx;
+      piece.dataset.percent = percent;
+
+      // SVG inside piece
+      const wedgeSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      wedgeSvg.setAttribute("width", r * 2);
+      wedgeSvg.setAttribute("height", r * 2);
+      wedgeSvg.setAttribute("viewBox", `0 0 ${r * 2} ${r * 2}`);
+
+      const pathData = createWedgePath(r, r, r - 4, startA, endA);
+      const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      p.setAttribute("d", pathData);
+      p.setAttribute("fill", style.base);
+      p.setAttribute("stroke", "#ffffff");
+      p.setAttribute("stroke-width", "2");
+      wedgeSvg.appendChild(p);
+
+      // Percentage label in center
+      const tx = r + Math.cos(midA) * (r * 0.55);
+      const ty = r + Math.sin(midA) * (r * 0.55);
+      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text.setAttribute("x", tx);
+      text.setAttribute("y", ty);
+      text.setAttribute("text-anchor", "middle");
+      text.setAttribute("dominant-baseline", "middle");
+      text.setAttribute("fill", style.text);
+      text.setAttribute("font-size", "14");
+      text.setAttribute("font-weight", "800");
+      text.textContent = `${style.icon} ${percent}%`;
+      wedgeSvg.appendChild(text);
+
+      piece.appendChild(wedgeSvg);
+      attachFluidDrag(piece);
+      document.body.appendChild(piece);
+    }
+
+    // --- FLUID 2D DRAGGING WITH VELOCITY TILT & STACK-TO-COMPARE ---
+    function attachFluidDrag(element) {
+      let isDragging = false;
+      let startX, startY;
+      let elemX = parseFloat(element.style.left);
+      let elemY = parseFloat(element.style.top);
+      let prevX = elemX, prevY = elemY;
+      let tilt = 0;
+
+      element.addEventListener("pointerdown", (e) => {
+        isDragging = true;
+        element.classList.add("dragging");
+        element.setPointerCapture(e.pointerId);
+        startX = e.clientX - elemX;
+        startY = e.clientY - elemY;
+        playPopTone();
+      });
+
+      element.addEventListener("pointermove", (e) => {
+        if (!isDragging) return;
+        const targetX = e.clientX - startX;
+        const targetY = e.clientY - startY;
+
+        // Velocity tilt physics
+        const vx = targetX - prevX;
+        tilt = Math.max(-12, Math.min(12, vx * 0.45));
+        prevX = targetX;
+        prevY = targetY;
+
+        elemX = targetX;
+        elemY = targetY;
+        element.style.left = `${elemX}px`;
+        element.style.top = `${elemY}px`;
+        element.style.transform = `scale(1.06) rotate(${tilt}deg)`;
+
+        // Check for Stack-to-Compare with other slices
+        checkStackToCompare(element);
+
+        // Check for Plate Proximity
+        checkPlateProximity(element);
+      });
+
+      element.addEventListener("pointerup", (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        element.classList.remove("dragging");
+        element.style.transform = "scale(1) rotate(0deg)";
+        comparisonOverlay.style.display = "none";
+
+        // Try Drop on Plate
+        dropOnPlateIfNear(element);
+      });
+    }
+
+    // --- STACK-TO-COMPARE SUPERPOSITION MECHANIC ---
+    function checkStackToCompare(dragged) {
+      const dRect = dragged.getBoundingClientRect();
+      const allSlices = document.querySelectorAll(".slice-piece");
+      let foundOverlap = false;
+
+      allSlices.forEach(other => {
+        if (other === dragged) return;
+        const oRect = other.getBoundingClientRect();
+        const dist = Math.hypot((dRect.x + dRect.width/2) - (oRect.x + oRect.width/2), (dRect.y + dRect.height/2) - (oRect.y + oRect.height/2));
+
+        if (dist < 60) {
+          foundOverlap = true;
+          const p1 = parseInt(dragged.dataset.percent);
+          const p2 = parseInt(other.dataset.percent);
+          const diff = Math.abs(p1 - p2);
+
+          comparisonOverlay.style.display = "flex";
+          if (diff <= 3) {
+            comparisonOverlay.style.borderColor = "#a7f3d0";
+            comparisonOverlay.style.background = "#ecfdf5";
+            comparisonOverlay.style.color = "#065f46";
+            comparisonText.textContent = `✨ Perfect Match! ${p1}% and ${p2}% are Equal Shares!`;
+          } else {
+            comparisonOverlay.style.borderColor = "#fecdd3";
+            comparisonOverlay.style.background = "#fff1f2";
+            comparisonOverlay.style.color = "#9f1239";
+            comparisonText.textContent = `⚖️ Unequal: One slice is ${p1}%, the other is ${p2}%!`;
+          }
+        }
+      });
+
+      if (!foundOverlap) {
+        comparisonOverlay.style.display = "none";
+      }
+    }
+
+    // --- PLATE SERVING MAGNETISM ---
+    function checkPlateProximity(dragged) {
+      const dRect = dragged.getBoundingClientRect();
+      document.querySelectorAll(".plate").forEach(plate => {
+        const pRect = plate.getBoundingClientRect();
+        const dist = Math.hypot((dRect.x + dRect.width/2) - (pRect.x + pRect.width/2), (dRect.y + dRect.height/2) - (pRect.y + pRect.height/2));
+        if (dist < 80) {
+          plate.classList.add("highlight");
+        } else {
+          plate.classList.remove("highlight");
+        }
+      });
+    }
+
+    function dropOnPlateIfNear(dragged) {
+      const dRect = dragged.getBoundingClientRect();
+      document.querySelectorAll(".plate").forEach((plate, idx) => {
+        const pRect = plate.getBoundingClientRect();
+        const dist = Math.hypot((dRect.x + dRect.width/2) - (pRect.x + pRect.width/2), (dRect.y + dRect.height/2) - (pRect.y + pRect.height/2));
+        plate.classList.remove("highlight");
+
+        if (dist < 90) {
+          // Snap piece right into center of plate
+          dragged.style.left = `${pRect.left + (pRect.width - dRect.width)/2}px`;
+          dragged.style.top = `${pRect.top + (pRect.height - dRect.height)/2}px`;
+          placedOnPlates[idx] = parseInt(dragged.dataset.percent);
+          playSnapTone(480);
+
+          // Check if all plates filled
+          verifyPlatesCompletion();
+        }
+      });
+    }
+
+    function verifyPlatesCompletion() {
+      if (placedOnPlates.every(val => val !== null)) {
+        const [a, b, c] = placedOnPlates;
+        const maxDiff = Math.max(Math.abs(a - b), Math.abs(b - c), Math.abs(a - c));
+
+        if (maxDiff <= 4) {
+          // Equal thirds success!
+          playSuccessFanfare();
+          mascotSpeech.innerHTML = "🎉 <strong>Pencil Pal Fanfare:</strong> Hooray! Kit, Barnaby, and Pippa all got equal thirds (33% each)! That is fair sharing!";
+          spawnPastelConfetti();
+        } else {
+          mascotSpeech.innerHTML = `⚠️ <strong>Pencil Pal:</strong> Oh no! Look at the plates: one has ${a}%, one has ${b}%, and one has ${c}%. That's not fair! Put them back to re-cut into equal shares.`;
+        }
+      }
+    }
+
+    function spawnPastelConfetti() {
+      // Soft pastel confetti colors
+      const colors = ["#fbcfe8", "#bbf7d0", "#bae6fd", "#fef08a", "#e9d5ff", "#fed7aa"];
+      for (let i = 0; i < 40; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.left = `${window.innerWidth/2 + (Math.random() - 0.5) * 400}px`;
+        c.style.top = `${window.innerHeight/2 - 80}px`;
+        document.body.appendChild(c);
+
+        const vx = (Math.random() - 0.5) * 16;
+        const vy = -(Math.random() * 12 + 6);
+        let curX = parseFloat(c.style.left);
+        let curY = parseFloat(c.style.top);
+        let grav = 0;
+
+        const anim = setInterval(() => {
+          grav += 0.45;
+          curX += vx;
+          curY += vy + grav;
+          c.style.left = `${curX}px`;
+          c.style.top = `${curY}px`;
+          if (curY > window.innerHeight) {
+            clearInterval(anim);
+            c.remove();
+          }
+        }, 16);
+      }
+    }
+
+    // --- CONTROLS ---
+    function switchShape(shape) {
+      currentShape = shape;
+      isSeparated = false;
+      placedOnPlates = [null, null, null];
+      btnCutAction.innerHTML = "<span>✂️ Slice & Separate</span>";
+      btnCutAction.classList.add("primary");
+      document.getElementById("btn-shape-rect").classList.toggle("active", shape === "rectangle");
+      document.getElementById("btn-shape-circle").classList.toggle("active", shape === "circle");
+      mascotSpeech.innerHTML = `<strong>Pencil Pal:</strong> Switched to ${shape === 'rectangle' ? 'Cake Pan' : 'Fruit Tart'}! Drag the pastel dividers to partition into 3 equal thirds.`;
+      render();
+    }
+
+    function resetCurrentShape() {
+      isSeparated = false;
+      placedOnPlates = [null, null, null];
+      btnCutAction.innerHTML = "<span>✂️ Slice & Separate</span>";
+      btnCutAction.classList.add("primary");
+      if (currentShape === "rectangle") {
+        cuts = [0.25, 0.70]; // Intentionally slightly off so student can adjust
+      } else {
+        circleAngles = [0, 90, 220];
+      }
+      render();
+    }
+
+    // Init
+    resetCurrentShape();
+  </script>
+</body>
+</html>

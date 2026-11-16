@@ -1,0 +1,1107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Dovetail Joinery · Curriculum Showcase (NC Grade 2)</title>
+    <style>
+      :root {
+        --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+        --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue",
+          sans-serif;
+        background: radial-gradient(circle at 50% 30%, #ede6db 0%, #d8cdbe 100%);
+        color: #383028;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* =========================================
+         TOP CURRICULUM SELECTOR (MINIMALIST BAR)
+         ========================================= */
+      header {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(247, 243, 236, 0.88);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 999px;
+        padding: 6px 8px;
+        box-shadow: 0 16px 36px rgba(56, 48, 40, 0.12);
+      }
+
+      .curriculum-tab {
+        padding: 8px 18px;
+        border-radius: 999px;
+        border: none;
+        background: transparent;
+        color: #7a6a58;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s var(--ease-smooth);
+      }
+
+      .curriculum-tab:hover {
+        color: #383028;
+        transform: translateY(-1px);
+      }
+
+      .curriculum-tab.active {
+        background: #383028;
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(56, 48, 40, 0.25);
+      }
+
+      .curriculum-tab .badge {
+        font-size: 10px;
+        font-weight: 800;
+        padding: 2px 7px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.08);
+      }
+
+      .curriculum-tab.active .badge {
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+      }
+
+      /* =========================================
+         WOODEN WORKBENCH CONTAINER
+         ========================================= */
+      .workbench-card {
+        width: 820px;
+        height: 540px;
+        background: #f7f3ec;
+        border-radius: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        box-shadow:
+          0 30px 80px rgba(56, 48, 40, 0.16),
+          0 4px 12px rgba(56, 48, 40, 0.06),
+          inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 36px 44px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .workbench-header {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .workbench-title {
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #9c8e7e;
+      }
+
+      .reset-btn {
+        padding: 5px 14px;
+        border-radius: 999px;
+        background: transparent;
+        border: 1px solid #d4c8b6;
+        color: #7a6a58;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .reset-btn:hover {
+        background: #ede4d6;
+        border-color: #9c8e7e;
+        color: #383028;
+      }
+
+      /* Viewport Stage Host */
+      .station-host {
+        width: 100%;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .station-view {
+        position: absolute;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .station-view.active {
+        display: flex;
+        opacity: 1;
+      }
+
+      /* Engraved Equation Badge */
+      .engraved-brass-badge {
+        font-family: "SF Pro Rounded", "Georgia", serif;
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        color: #9c8e7e;
+        text-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.9),
+          0 -1px 0 rgba(56, 48, 40, 0.18);
+        transition: all 0.3s ease;
+      }
+
+      .engraved-brass-badge.solved {
+        color: #2e261f;
+        transform: scale(1.05);
+      }
+
+      /* =======================================================
+         STATION 1: 10-FRAME COMPLEMENTS (NC.2.OA.2)
+         ======================================================= */
+      .tray-inset-10 {
+        width: 620px;
+        height: 92px;
+        background: #e2d7c7;
+        border-radius: 26px;
+        box-shadow:
+          inset 0 4px 10px rgba(56, 48, 40, 0.3),
+          inset 0 1px 3px rgba(56, 48, 40, 0.35),
+          0 1px 0 rgba(255, 255, 255, 0.85);
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        gap: 8px;
+        position: relative;
+      }
+
+      .wood-pocket {
+        flex: 1;
+        height: 100%;
+        border-radius: 16px;
+        background: #d4c8b6;
+        box-shadow: inset 0 2px 6px rgba(56, 48, 40, 0.32);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .wood-pocket.known {
+        background: linear-gradient(180deg, #d49a6a 0%, #b87a4c 100%);
+        box-shadow:
+          0 3px 6px rgba(56, 48, 40, 0.25),
+          inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      }
+
+      .wood-pocket.known::after {
+        content: "";
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #8c5732;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+      }
+
+      .tray-snap-zone-10 {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        bottom: 10px;
+        width: 232px; /* 4 slots for 10-6=4 */
+        border-radius: 18px;
+        border: 2px dashed #b87a4c;
+        background: rgba(184, 122, 76, 0.08);
+        transition: all 0.2s ease;
+      }
+
+      .tray-snap-zone-10.hover {
+        background: rgba(184, 122, 76, 0.22);
+        border-color: #8c5732;
+      }
+
+      .drag-block-10 {
+        width: 232px;
+        height: 72px;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #e8b387 0%, #cf8f5e 100%);
+        box-shadow:
+          0 8px 20px rgba(56, 48, 40, 0.22),
+          0 2px 4px rgba(56, 48, 40, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 14px;
+        cursor: grab;
+        position: absolute;
+        bottom: 30px;
+        touch-action: none;
+        transition:
+          transform 0.15s var(--ease-spring),
+          box-shadow 0.15s ease;
+      }
+
+      .drag-block-10.elevated {
+        transform: scale(1.06) translateY(-14px);
+        box-shadow:
+          0 28px 48px rgba(56, 48, 40, 0.32),
+          0 8px 16px rgba(56, 48, 40, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      }
+
+      .drag-block-10.locked {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        bottom: 10px;
+        box-shadow:
+          0 3px 8px rgba(56, 48, 40, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        cursor: default;
+        animation: snapRecoil 0.22s var(--ease-snap);
+      }
+
+      @keyframes snapRecoil {
+        0% {
+          transform: scale(0.96);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .peg-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #965d38;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.35);
+      }
+
+      /* =======================================================
+         STATION 2: INTERLOCKING ARRAYS (NC.2.OA.4)
+         ======================================================= */
+      .array-tray-inset {
+        width: 380px;
+        height: 240px;
+        background: #e2d7c7;
+        border-radius: 28px;
+        box-shadow:
+          inset 0 4px 12px rgba(56, 48, 40, 0.32),
+          0 1px 0 rgba(255, 255, 255, 0.85);
+        display: flex;
+        flex-direction: column;
+        padding: 14px;
+        gap: 12px;
+        position: relative;
+      }
+
+      .array-row-slat {
+        width: 100%;
+        height: 60px;
+        border-radius: 16px;
+        background: linear-gradient(180deg, #d49a6a 0%, #b87a4c 100%);
+        box-shadow:
+          0 3px 6px rgba(56, 48, 40, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 18px;
+      }
+
+      .array-row-target-zone {
+        width: 100%;
+        height: 60px;
+        border-radius: 16px;
+        border: 2px dashed #b87a4c;
+        background: rgba(184, 122, 76, 0.08);
+      }
+
+      .array-row-target-zone.hover {
+        background: rgba(184, 122, 76, 0.22);
+        border-color: #8c5732;
+      }
+
+      .array-drag-slat {
+        width: 352px;
+        height: 60px;
+        border-radius: 16px;
+        background: linear-gradient(180deg, #e8b387 0%, #cf8f5e 100%);
+        box-shadow:
+          0 8px 18px rgba(56, 48, 40, 0.22),
+          inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 18px;
+        position: absolute;
+        bottom: 20px;
+        cursor: grab;
+        touch-action: none;
+        transition: transform 0.15s var(--ease-spring);
+      }
+
+      .array-drag-slat.elevated {
+        transform: scale(1.06) translateY(-14px);
+        box-shadow: 0 28px 48px rgba(56, 48, 40, 0.32);
+      }
+
+      .array-drag-slat.locked {
+        position: absolute;
+        bottom: 14px;
+        left: 14px;
+        right: 14px;
+        width: auto;
+        box-shadow: 0 3px 6px rgba(56, 48, 40, 0.2);
+        cursor: default;
+        animation: snapRecoil 0.22s var(--ease-snap);
+      }
+
+      /* =======================================================
+         STATION 3: ODD & EVEN PARITY (NC.2.OA.3)
+         ======================================================= */
+      .parity-board-inset {
+        width: 440px;
+        height: 250px;
+        background: #e2d7c7;
+        border-radius: 28px;
+        box-shadow:
+          inset 0 4px 12px rgba(56, 48, 40, 0.32),
+          0 1px 0 rgba(255, 255, 255, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        padding: 20px;
+        position: relative;
+      }
+
+      .parity-column-track {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .parity-peg-socket {
+        width: 52px;
+        height: 44px;
+        border-radius: 14px;
+        background: #d4c8b6;
+        box-shadow: inset 0 2px 5px rgba(56, 48, 40, 0.32);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .parity-peg-socket.filled {
+        background: linear-gradient(180deg, #d49a6a 0%, #b87a4c 100%);
+        box-shadow:
+          0 3px 6px rgba(56, 48, 40, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      }
+
+      .parity-peg-socket.filled::after {
+        content: "";
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #8c5732;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+      }
+
+      .parity-target-socket {
+        width: 52px;
+        height: 44px;
+        border-radius: 14px;
+        border: 2px dashed #b87a4c;
+        background: rgba(184, 122, 76, 0.08);
+      }
+
+      .parity-target-socket.hover {
+        background: rgba(184, 122, 76, 0.25);
+        border-color: #8c5732;
+      }
+
+      .parity-drag-peg {
+        width: 52px;
+        height: 44px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #e8b387 0%, #cf8f5e 100%);
+        box-shadow:
+          0 6px 14px rgba(56, 48, 40, 0.25),
+          inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        bottom: 24px;
+        cursor: grab;
+        touch-action: none;
+        transition: transform 0.15s var(--ease-spring);
+      }
+
+      .parity-drag-peg::after {
+        content: "";
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #965d38;
+      }
+
+      .parity-drag-peg.elevated {
+        transform: scale(1.15) translateY(-14px);
+        box-shadow: 0 24px 38px rgba(56, 48, 40, 0.35);
+      }
+
+      .parity-drag-peg.locked {
+        position: static;
+        box-shadow: 0 3px 6px rgba(56, 48, 40, 0.2);
+        cursor: default;
+        animation: snapRecoil 0.22s var(--ease-snap);
+      }
+
+      /* =======================================================
+         STATION 4: GEOMETRY EQUAL PARTITIONING (NC.2.G.3)
+         ======================================================= */
+      .geometry-pan-inset {
+        width: 250px;
+        height: 250px;
+        border-radius: 50%;
+        background: #e2d7c7;
+        box-shadow:
+          inset 0 5px 16px rgba(56, 48, 40, 0.35),
+          0 1px 0 rgba(255, 255, 255, 0.85);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .wedge-svg {
+        width: 250px;
+        height: 250px;
+      }
+
+      .wedge-fixed {
+        fill: #d49a6a;
+        stroke: #8c5732;
+        stroke-width: 2;
+        filter: drop-shadow(0 2px 4px rgba(56, 48, 40, 0.2));
+      }
+
+      .wedge-snap-zone {
+        fill: rgba(184, 122, 76, 0.08);
+        stroke: #b87a4c;
+        stroke-width: 2;
+        stroke-dasharray: 6 4;
+        transition: fill 0.2s ease;
+      }
+
+      .wedge-snap-zone.hover {
+        fill: rgba(184, 122, 76, 0.28);
+      }
+
+      .wedge-drag-container {
+        position: absolute;
+        bottom: 10px;
+        cursor: grab;
+        touch-action: none;
+        transition: transform 0.15s var(--ease-spring);
+      }
+
+      .wedge-drag-container.elevated {
+        transform: scale(1.1) translateY(-12px);
+        filter: drop-shadow(0 20px 30px rgba(56, 48, 40, 0.35));
+      }
+
+      .wedge-drag-container.locked {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        cursor: default;
+        animation: snapRecoil 0.22s var(--ease-snap);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Minimalist Curriculum Nav Bar -->
+    <header>
+      <button class="curriculum-tab active" id="tab-1" onclick="switchStation(1)">
+        <span>1. Making Ten</span>
+        <span class="badge">NC.2.OA.2</span>
+      </button>
+
+      <button class="curriculum-tab" id="tab-2" onclick="switchStation(2)">
+        <span>2. Arrays</span>
+        <span class="badge">NC.2.OA.4</span>
+      </button>
+
+      <button class="curriculum-tab" id="tab-3" onclick="switchStation(3)">
+        <span>3. Odd & Even</span>
+        <span class="badge">NC.2.OA.3</span>
+      </button>
+
+      <button class="curriculum-tab" id="tab-4" onclick="switchStation(4)">
+        <span>4. Geometry Shares</span>
+        <span class="badge">NC.2.G.3</span>
+      </button>
+    </header>
+
+    <!-- Main Workbench Container -->
+    <div class="workbench-card">
+      <div class="workbench-header">
+        <span class="workbench-title" id="workbenchTitle"
+          >Station 1: Ten-Frame Inset (6 + 4 = 10)</span
+        >
+        <button class="reset-btn" onclick="resetCurrentStation()">↺ Reset Piece</button>
+      </div>
+
+      <div class="station-host">
+        <!-- ==============================================
+             STATION 1: MAKING TEN (NC.2.OA.2)
+             ============================================== -->
+        <div class="station-view active" id="station-1">
+          <div class="tray-inset-10" id="tray10">
+            <div class="wood-pocket known"></div>
+            <div class="wood-pocket known"></div>
+            <div class="wood-pocket known"></div>
+            <div class="wood-pocket known"></div>
+            <div class="wood-pocket known"></div>
+            <div class="wood-pocket known"></div>
+            <div class="wood-pocket"></div>
+            <div class="wood-pocket"></div>
+            <div class="wood-pocket"></div>
+            <div class="wood-pocket"></div>
+            <div class="tray-snap-zone-10" id="snapZone10"></div>
+          </div>
+
+          <div class="drag-block-10" id="block10">
+            <div class="peg-dot"></div>
+            <div class="peg-dot"></div>
+            <div class="peg-dot"></div>
+            <div class="peg-dot"></div>
+          </div>
+        </div>
+
+        <!-- ==============================================
+             STATION 2: ARRAYS (NC.2.OA.4)
+             ============================================== -->
+        <div class="station-view" id="station-2">
+          <div class="array-tray-inset" id="arrayTray">
+            <!-- Row 1 (4 pegs) -->
+            <div class="array-row-slat">
+              <div class="peg-dot"></div>
+              <div class="peg-dot"></div>
+              <div class="peg-dot"></div>
+              <div class="peg-dot"></div>
+            </div>
+            <!-- Row 2 (4 pegs) -->
+            <div class="array-row-slat">
+              <div class="peg-dot"></div>
+              <div class="peg-dot"></div>
+              <div class="peg-dot"></div>
+              <div class="peg-dot"></div>
+            </div>
+            <!-- Row 3 Target Drop Zone -->
+            <div class="array-row-target-zone" id="arrayDropZone"></div>
+          </div>
+
+          <!-- Draggable Row 3 Slat -->
+          <div class="array-drag-slat" id="arrayDragSlat">
+            <div class="peg-dot"></div>
+            <div class="peg-dot"></div>
+            <div class="peg-dot"></div>
+            <div class="peg-dot"></div>
+          </div>
+        </div>
+
+        <!-- ==============================================
+             STATION 3: ODD & EVEN PARITY (NC.2.OA.3)
+             ============================================== -->
+        <div class="station-view" id="station-3">
+          <div class="parity-board-inset" id="parityBoard">
+            <!-- Left Column (4 filled sockets) -->
+            <div class="parity-column-track">
+              <div class="parity-peg-socket filled"></div>
+              <div class="parity-peg-socket filled"></div>
+              <div class="parity-peg-socket filled"></div>
+              <div class="parity-peg-socket filled"></div>
+            </div>
+
+            <!-- Right Column (3 filled sockets + 1 empty target socket) -->
+            <div class="parity-column-track">
+              <div class="parity-peg-socket filled"></div>
+              <div class="parity-peg-socket filled"></div>
+              <div class="parity-peg-socket filled"></div>
+              <div class="parity-target-socket" id="parityDropSocket"></div>
+            </div>
+          </div>
+
+          <!-- Draggable Peg -->
+          <div class="parity-drag-peg" id="parityPeg"></div>
+        </div>
+
+        <!-- ==============================================
+             STATION 4: GEOMETRY EQUAL SHARES (NC.2.G.3)
+             ============================================== -->
+        <div class="station-view" id="station-4">
+          <div class="geometry-pan-inset" id="geoPan">
+            <svg class="wedge-svg" viewBox="0 0 250 250">
+              <!-- Wedge 1 (0 to 120 deg) -->
+              <path class="wedge-fixed" d="M 125 125 L 125 15 A 110 110 0 0 1 220.26 180 Z" />
+              <!-- Wedge 2 (120 to 240 deg) -->
+              <path class="wedge-fixed" d="M 125 125 L 220.26 180 A 110 110 0 0 1 29.74 180 Z" />
+              <!-- Target Snap Zone (240 to 360 deg) -->
+              <path
+                class="wedge-snap-zone"
+                id="geoSnapZone"
+                d="M 125 125 L 29.74 180 A 110 110 0 0 1 125 15 Z"
+              />
+            </svg>
+          </div>
+
+          <!-- Draggable 3rd Wedge -->
+          <div class="wedge-drag-container" id="geoWedge">
+            <svg width="130" height="130" viewBox="0 0 130 130">
+              <path
+                d="M 115 115 L 25 165 A 110 110 0 0 1 115 10 Z"
+                fill="url(#wedgeGrad)"
+                stroke="#8c5732"
+                stroke-width="2.5"
+              />
+              <defs>
+                <linearGradient id="wedgeGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#e8b387" />
+                  <stop offset="100%" stop-color="#cf8f5e" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Engraved Dynamic Equation Result -->
+      <div class="engraved-brass-badge" id="engravedBadge">6 + 4 = 10 · Flush Dovetail Joint</div>
+    </div>
+
+    <script>
+      // ==============================================================
+      // PROCEDURAL ACOUSTIC WOOD BLOCK SYNTHESIZER (BINAURAL THOCK)
+      // ==============================================================
+      let audioCtx = null
+      function getAudio() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+        if (audioCtx.state === "suspended") audioCtx.resume()
+        return audioCtx
+      }
+
+      function playWoodThock(pitchMultiplier = 1.0) {
+        try {
+          const ctx = getAudio()
+          const osc = ctx.createOscillator()
+          const filter = ctx.createBiquadFilter()
+          const gain = ctx.createGain()
+
+          osc.type = "sine"
+          const baseFreq = 440 * pitchMultiplier
+          osc.frequency.setValueAtTime(baseFreq, ctx.currentTime)
+          osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.35, ctx.currentTime + 0.07)
+
+          filter.type = "bandpass"
+          filter.frequency.setValueAtTime(560 * pitchMultiplier, ctx.currentTime)
+          filter.Q.setValueAtTime(7.0, ctx.currentTime)
+
+          gain.gain.setValueAtTime(0.75, ctx.currentTime)
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.11)
+
+          osc.connect(filter)
+          filter.connect(gain)
+          gain.connect(ctx.destination)
+
+          osc.start()
+          osc.stop(ctx.currentTime + 0.12)
+        } catch (e) {}
+      }
+
+      function playSequentialThocks() {
+        ;[1.0, 1.15, 1.3].forEach((pitch, i) => {
+          setTimeout(() => playWoodThock(pitch), i * 65)
+        })
+      }
+
+      // ==============================================================
+      // CURRICULUM STATION SWITCHER
+      // ==============================================================
+      const TITLES = {
+        1: "Station 1: Ten-Frame Inset (6 + 4 = 10)",
+        2: "Station 2: Interlocking Arrays (3 Rows × 4 Cols = 12)",
+        3: "Station 3: Odd & Even Parity (8 = 4 + 4 Even Pairs)",
+        4: "Station 4: Geometry Equal Partitioning (3 Thirds = 1 Whole Tart)",
+      }
+
+      const EQUATIONS = {
+        1: {
+          normal: "6 + 4 = 10 · Flush Dovetail Joint",
+          solved: "10 − 6 = 4 · Inset Completed ✓",
+        },
+        2: { normal: "4 + 4 + 4 = 12 · 3 Rows of 4", solved: "3 × 4 = 12 · Solid Array Locked ✓" },
+        3: {
+          normal: "8 Pegs = 4 + 4 · Equal Partner Columns",
+          solved: "8 is EVEN · Symmetrical Pairs ✓",
+        },
+        4: { normal: "1 Whole Tart = 3 Equal Thirds", solved: "1/3 + 1/3 + 1/3 = 1 Whole Pan ✓" },
+      }
+
+      let currentStation = 1
+
+      function switchStation(id) {
+        currentStation = id
+        document.querySelectorAll(".station-view").forEach((v) => v.classList.remove("active"))
+        document.querySelectorAll(".curriculum-tab").forEach((t) => t.classList.remove("active"))
+
+        document.getElementById(`station-${id}`).classList.add("active")
+        document.getElementById(`tab-${id}`).classList.add("active")
+        document.getElementById("workbenchTitle").textContent = TITLES[id]
+        document.getElementById("engravedBadge").textContent = EQUATIONS[id].normal
+        document.getElementById("engravedBadge").classList.remove("solved")
+
+        playWoodThock(0.9)
+      }
+
+      function resetCurrentStation() {
+        if (currentStation === 1) resetStation1()
+        else if (currentStation === 2) resetStation2()
+        else if (currentStation === 3) resetStation3()
+        else if (currentStation === 4) resetStation4()
+      }
+
+      // ==============================================================
+      // 1. STATION 1 LOGIC (MAKING TEN)
+      // ==============================================================
+      const block10 = document.getElementById("block10")
+      const snapZone10 = document.getElementById("snapZone10")
+      let is10Dragging = false,
+        is10Locked = false
+      let start10X, start10Y
+
+      block10.addEventListener("pointerdown", (e) => {
+        if (is10Locked) return
+        is10Dragging = true
+        block10.setPointerCapture(e.pointerId)
+        start10X = e.clientX
+        start10Y = e.clientY
+        block10.classList.add("elevated")
+        playWoodThock(1.1)
+      })
+
+      window.addEventListener("pointermove", (e) => {
+        if (!is10Dragging || is10Locked) return
+        const dx = e.clientX - start10X
+        const dy = e.clientY - start10Y
+        block10.style.transform = `translate(${dx}px, ${dy}px) scale(1.06)`
+
+        const bRect = block10.getBoundingClientRect()
+        const zRect = snapZone10.getBoundingClientRect()
+        const dist = Math.hypot(
+          bRect.left + bRect.width / 2 - (zRect.left + zRect.width / 2),
+          bRect.top + bRect.height / 2 - (zRect.top + zRect.height / 2),
+        )
+        snapZone10.classList.toggle("hover", dist < 100)
+      })
+
+      window.addEventListener("pointerup", () => {
+        if (!is10Dragging || is10Locked) return
+        is10Dragging = false
+        block10.classList.remove("elevated")
+
+        const bRect = block10.getBoundingClientRect()
+        const zRect = snapZone10.getBoundingClientRect()
+        const dist = Math.hypot(
+          bRect.left + bRect.width / 2 - (zRect.left + zRect.width / 2),
+          bRect.top + bRect.height / 2 - (zRect.top + zRect.height / 2),
+        )
+
+        if (dist < 100) {
+          is10Locked = true
+          snapZone10.classList.remove("hover")
+          block10.classList.add("locked")
+          block10.style.transform = ""
+          playWoodThock(0.85)
+          document.getElementById("engravedBadge").textContent = EQUATIONS[1].solved
+          document.getElementById("engravedBadge").classList.add("solved")
+        } else {
+          block10.style.transform = "translate(0, 0)"
+        }
+      })
+
+      function resetStation1() {
+        is10Locked = false
+        block10.classList.remove("locked")
+        block10.style.transform = ""
+        document.getElementById("engravedBadge").textContent = EQUATIONS[1].normal
+        document.getElementById("engravedBadge").classList.remove("solved")
+        playWoodThock(1.2)
+      }
+
+      // ==============================================================
+      // 2. STATION 2 LOGIC (ARRAYS)
+      // ==============================================================
+      const arrayDragSlat = document.getElementById("arrayDragSlat")
+      const arrayDropZone = document.getElementById("arrayDropZone")
+      let isArrayDragging = false,
+        isArrayLocked = false
+      let startArrayX, startArrayY
+
+      arrayDragSlat.addEventListener("pointerdown", (e) => {
+        if (isArrayLocked) return
+        isArrayDragging = true
+        arrayDragSlat.setPointerCapture(e.pointerId)
+        startArrayX = e.clientX
+        startArrayY = e.clientY
+        arrayDragSlat.classList.add("elevated")
+        playWoodThock(1.1)
+      })
+
+      window.addEventListener("pointermove", (e) => {
+        if (!isArrayDragging || isArrayLocked) return
+        const dx = e.clientX - startArrayX
+        const dy = e.clientY - startArrayY
+        arrayDragSlat.style.transform = `translate(${dx}px, ${dy}px) scale(1.06)`
+
+        const bRect = arrayDragSlat.getBoundingClientRect()
+        const zRect = arrayDropZone.getBoundingClientRect()
+        const dist = Math.hypot(
+          bRect.left + bRect.width / 2 - (zRect.left + zRect.width / 2),
+          bRect.top + bRect.height / 2 - (zRect.top + zRect.height / 2),
+        )
+        arrayDropZone.classList.toggle("hover", dist < 90)
+      })
+
+      window.addEventListener("pointerup", () => {
+        if (!isArrayDragging || isArrayLocked) return
+        isArrayDragging = false
+        arrayDragSlat.classList.remove("elevated")
+
+        const bRect = arrayDragSlat.getBoundingClientRect()
+        const zRect = arrayDropZone.getBoundingClientRect()
+        const dist = Math.hypot(
+          bRect.left + bRect.width / 2 - (zRect.left + zRect.width / 2),
+          bRect.top + bRect.height / 2 - (zRect.top + zRect.height / 2),
+        )
+
+        if (dist < 90) {
+          isArrayLocked = true
+          arrayDropZone.classList.remove("hover")
+          arrayDragSlat.classList.add("locked")
+          arrayDragSlat.style.transform = ""
+          playSequentialThocks()
+          document.getElementById("engravedBadge").textContent = EQUATIONS[2].solved
+          document.getElementById("engravedBadge").classList.add("solved")
+        } else {
+          arrayDragSlat.style.transform = "translate(0, 0)"
+        }
+      })
+
+      function resetStation2() {
+        isArrayLocked = false
+        arrayDragSlat.classList.remove("locked")
+        arrayDragSlat.style.transform = ""
+        document.getElementById("engravedBadge").textContent = EQUATIONS[2].normal
+        document.getElementById("engravedBadge").classList.remove("solved")
+        playWoodThock(1.2)
+      }
+
+      // ==============================================================
+      // 3. STATION 3 LOGIC (ODD & EVEN PARITY)
+      // ==============================================================
+      const parityPeg = document.getElementById("parityPeg")
+      const parityDropSocket = document.getElementById("parityDropSocket")
+      let isParityDragging = false,
+        isParityLocked = false
+      let startParityX, startParityY
+
+      parityPeg.addEventListener("pointerdown", (e) => {
+        if (isParityLocked) return
+        isParityDragging = true
+        parityPeg.setPointerCapture(e.pointerId)
+        startParityX = e.clientX
+        startParityY = e.clientY
+        parityPeg.classList.add("elevated")
+        playWoodThock(1.1)
+      })
+
+      window.addEventListener("pointermove", (e) => {
+        if (!isParityDragging || isParityLocked) return
+        const dx = e.clientX - startParityX
+        const dy = e.clientY - startParityY
+        parityPeg.style.transform = `translate(${dx}px, ${dy}px) scale(1.15)`
+
+        const bRect = parityPeg.getBoundingClientRect()
+        const zRect = parityDropSocket.getBoundingClientRect()
+        const dist = Math.hypot(
+          bRect.left + bRect.width / 2 - (zRect.left + zRect.width / 2),
+          bRect.top + bRect.height / 2 - (zRect.top + zRect.height / 2),
+        )
+        parityDropSocket.classList.toggle("hover", dist < 80)
+      })
+
+      window.addEventListener("pointerup", () => {
+        if (!isParityDragging || isParityLocked) return
+        isParityDragging = false
+        parityPeg.classList.remove("elevated")
+
+        const bRect = parityPeg.getBoundingClientRect()
+        const zRect = parityDropSocket.getBoundingClientRect()
+        const dist = Math.hypot(
+          bRect.left + bRect.width / 2 - (zRect.left + zRect.width / 2),
+          bRect.top + bRect.height / 2 - (zRect.top + zRect.height / 2),
+        )
+
+        if (dist < 80) {
+          isParityLocked = true
+          parityDropSocket.classList.remove("hover")
+          parityPeg.classList.add("locked")
+          parityPeg.style.transform = ""
+          parityDropSocket.appendChild(parityPeg)
+          playWoodThock(0.9)
+          document.getElementById("engravedBadge").textContent = EQUATIONS[3].solved
+          document.getElementById("engravedBadge").classList.add("solved")
+        } else {
+          parityPeg.style.transform = "translate(0, 0)"
+        }
+      })
+
+      function resetStation3() {
+        isParityLocked = false
+        parityPeg.classList.remove("locked")
+        parityPeg.style.transform = ""
+        document.getElementById("station-3").appendChild(parityPeg)
+        document.getElementById("engravedBadge").textContent = EQUATIONS[3].normal
+        document.getElementById("engravedBadge").classList.remove("solved")
+        playWoodThock(1.2)
+      }
+
+      // ==============================================================
+      // 4. STATION 4 LOGIC (GEOMETRY EQUAL SHARES)
+      // ==============================================================
+      const geoWedge = document.getElementById("geoWedge")
+      const geoSnapZone = document.getElementById("geoSnapZone")
+      let isGeoDragging = false,
+        isGeoLocked = false
+      let startGeoX, startGeoY
+
+      geoWedge.addEventListener("pointerdown", (e) => {
+        if (isGeoLocked) return
+        isGeoDragging = true
+        geoWedge.setPointerCapture(e.pointerId)
+        startGeoX = e.clientX
+        startGeoY = e.clientY
+        geoWedge.classList.add("elevated")
+        playWoodThock(1.1)
+      })
+
+      window.addEventListener("pointermove", (e) => {
+        if (!isGeoDragging || isGeoLocked) return
+        const dx = e.clientX - startGeoX
+        const dy = e.clientY - startGeoY
+        geoWedge.style.transform = `translate(${dx}px, ${dy}px) scale(1.1)`
+
+        const bRect = geoWedge.getBoundingClientRect()
+        const zRect = geoSnapZone.getBoundingClientRect()
+        const dist = Math.hypot(
+          bRect.left + bRect.width / 2 - (zRect.left + zRect.width / 2),
+          bRect.top + bRect.height / 2 - (zRect.top + zRect.height / 2),
+        )
+        geoSnapZone.classList.toggle("hover", dist < 90)
+      })
+
+      window.addEventListener("pointerup", () => {
+        if (!isGeoDragging || isGeoLocked) return
+        isGeoDragging = false
+        geoWedge.classList.remove("elevated")
+
+        const bRect = geoWedge.getBoundingClientRect()
+        const zRect = geoSnapZone.getBoundingClientRect()
+        const dist = Math.hypot(
+          bRect.left + bRect.width / 2 - (zRect.left + zRect.width / 2),
+          bRect.top + bRect.height / 2 - (zRect.top + zRect.height / 2),
+        )
+
+        if (dist < 90) {
+          isGeoLocked = true
+          geoSnapZone.classList.remove("hover")
+          geoWedge.classList.add("locked")
+          geoWedge.style.transform = ""
+          geoSnapZone.setAttribute("fill", "#d49a6a")
+          geoSnapZone.setAttribute("stroke-dasharray", "none")
+          geoWedge.style.display = "none"
+          playWoodThock(0.8)
+          document.getElementById("engravedBadge").textContent = EQUATIONS[4].solved
+          document.getElementById("engravedBadge").classList.add("solved")
+        } else {
+          geoWedge.style.transform = "translate(0, 0)"
+        }
+      })
+
+      function resetStation4() {
+        isGeoLocked = false
+        geoWedge.classList.remove("locked")
+        geoWedge.style.transform = ""
+        geoWedge.style.display = "block"
+        geoSnapZone.setAttribute("fill", "rgba(184, 122, 76, 0.08)")
+        geoSnapZone.setAttribute("stroke-dasharray", "6 4")
+        document.getElementById("engravedBadge").textContent = EQUATIONS[4].normal
+        document.getElementById("engravedBadge").classList.remove("solved")
+        playWoodThock(1.2)
+      }
+    </script>
+  </body>
+</html>

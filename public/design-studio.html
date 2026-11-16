@@ -1,0 +1,1232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Elephant-Goldfish · Interactive Design Decision Studio</title>
+    <style>
+      :root {
+        --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "SF Pro Rounded", ui-rounded, "Segoe UI", Roboto,
+          sans-serif;
+        display: flex;
+        flex-direction: column;
+        transition:
+          background 0.35s ease,
+          color 0.35s ease;
+      }
+
+      /* =========================================
+         TOP FLOATING DESIGN SELECTOR TOOLBAR
+         ========================================= */
+      .studio-nav {
+        position: fixed;
+        top: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1.5px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        transition: all 0.3s ease;
+      }
+
+      body.theme-kinetic .studio-nav {
+        background: rgba(18, 20, 36, 0.85);
+        border-color: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .nav-tab {
+        padding: 8px 16px;
+        border-radius: 999px;
+        border: none;
+        background: transparent;
+        font-size: 13.5px;
+        font-weight: 800;
+        color: #4b5563;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s var(--ease-spring);
+      }
+
+      body.theme-kinetic .nav-tab {
+        color: #9ca3af;
+      }
+
+      .nav-tab:hover {
+        transform: translateY(-1px);
+        color: #111827;
+      }
+
+      body.theme-kinetic .nav-tab:hover {
+        color: #fff;
+      }
+
+      .nav-tab.active {
+        background: #111827;
+        color: #fff;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+      }
+
+      body.theme-kinetic .nav-tab.active {
+        background: #3b82f6;
+        color: #fff;
+        box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+      }
+
+      .badge-indicator {
+        font-size: 10px;
+        text-transform: uppercase;
+        font-weight: 900;
+        padding: 2px 7px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      /* Viewport Stage Host */
+      .viewport-stage {
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      .stage-view {
+        position: absolute;
+        inset: 0;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .stage-view.active {
+        display: flex;
+        opacity: 1;
+      }
+
+      /* =========================================
+         CANDIDATE A: THE SYNTHESIS KINETIC ARENA
+         ========================================= */
+      .stage-kinetic {
+        background: radial-gradient(circle at 50% 40%, #151828 0%, #0a0b12 100%);
+        color: #f3f4f6;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .kinetic-grid-ambient {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 48px 48px;
+        pointer-events: none;
+      }
+
+      .kinetic-canvas {
+        position: relative;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+      }
+
+      .kinetic-equation-pill {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-family: ui-monospace, "SF Mono", Menlo, monospace;
+        font-size: 28px;
+        font-weight: 800;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 8px 24px;
+        border-radius: 999px;
+        letter-spacing: 0.03em;
+        backdrop-filter: blur(8px);
+      }
+
+      .kinetic-slot-glow {
+        color: #38bdf8;
+        text-shadow: 0 0 16px rgba(56, 189, 248, 0.6);
+      }
+
+      /* Continuous Horizontal Sliding Bar (Synthesis Style) */
+      .kinetic-bar-track {
+        width: 640px;
+        height: 84px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 2px solid rgba(255, 255, 255, 0.12);
+        border-radius: 28px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        box-shadow:
+          0 20px 50px rgba(0, 0, 0, 0.4),
+          inset 0 2px 6px rgba(255, 255, 255, 0.05);
+      }
+
+      .kinetic-known-block {
+        height: 100%;
+        background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        font-weight: 900;
+        color: #fff;
+        box-shadow: 0 4px 16px rgba(225, 29, 72, 0.35);
+        transition: width 0.15s var(--ease-smooth);
+      }
+
+      .kinetic-gap-zone {
+        height: 100%;
+        flex: 1;
+        border-radius: 20px;
+        margin-left: 8px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: 2px dashed rgba(56, 189, 248, 0.5);
+        background: rgba(56, 189, 248, 0.06);
+        animation: kineticPulse 2s ease-in-out infinite;
+      }
+
+      @keyframes kineticPulse {
+        0%,
+        100% {
+          border-color: rgba(56, 189, 248, 0.4);
+          box-shadow:
+            inset 0 0 20px rgba(56, 189, 248, 0.15),
+            0 0 20px rgba(56, 189, 248, 0.2);
+        }
+        50% {
+          border-color: rgba(56, 189, 248, 0.9);
+          box-shadow:
+            inset 0 0 30px rgba(56, 189, 248, 0.35),
+            0 0 35px rgba(56, 189, 248, 0.45);
+        }
+      }
+
+      .kinetic-sliding-slider {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 60px;
+        height: 60px;
+        border-radius: 20px;
+        background: #fff;
+        box-shadow:
+          0 8px 24px rgba(0, 0, 0, 0.35),
+          0 0 20px rgba(56, 189, 248, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 900;
+        color: #0f172a;
+        cursor: grab;
+      }
+
+      .kinetic-sliding-slider:active {
+        cursor: grabbing;
+        transform: translateY(-50%) scale(1.1);
+      }
+
+      .kinetic-controls-row {
+        display: flex;
+        gap: 12px;
+      }
+
+      .kinetic-chip-btn {
+        width: 58px;
+        height: 58px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1.5px solid rgba(255, 255, 255, 0.15);
+        color: #fff;
+        font-size: 20px;
+        font-weight: 800;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s var(--ease-spring);
+      }
+
+      .kinetic-chip-btn:hover {
+        background: rgba(56, 189, 248, 0.2);
+        border-color: #38bdf8;
+        transform: translateY(-3px) scale(1.05);
+      }
+
+      .kinetic-chip-btn.active {
+        background: #38bdf8;
+        color: #0a0b12;
+        border-color: #38bdf8;
+        box-shadow: 0 0 24px rgba(56, 189, 248, 0.6);
+      }
+
+      /* =========================================
+         CANDIDATE B: THE WHIMSICAL LIVING GARDEN
+         ========================================= */
+      .stage-botanical {
+        background: #fbf8f3;
+        background-image:
+          radial-gradient(#e6ded3 1px, transparent 1px), radial-gradient(#e6ded3 1px, #fbf8f3 1px);
+        background-size: 32px 32px;
+        background-position:
+          0 0,
+          16px 16px;
+        color: #2b2735;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .botanical-frame {
+        position: relative;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 40px;
+      }
+
+      .botanical-svg-wrap {
+        width: 320px;
+        height: 540px;
+      }
+
+      .botanical-dialogue-panel {
+        max-width: 380px;
+        background: #ffffff;
+        border: 2px solid #e7dfd3;
+        border-radius: 28px;
+        padding: 26px;
+        box-shadow: 0 16px 40px rgba(43, 39, 53, 0.06);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .botanical-mascot-head {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .botanical-avatar-bubble {
+        width: 54px;
+        height: 54px;
+        border-radius: 20px;
+        background: #fdf5ea;
+        border: 2px solid #e7dfd3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+      }
+
+      .botanical-speech-text {
+        font-size: 15px;
+        line-height: 1.45;
+        font-weight: 600;
+        color: #2b2735;
+      }
+
+      .botanical-speech-text strong {
+        color: #d97757;
+      }
+
+      .botanical-equation-card {
+        background: #fbf7ee;
+        border: 2px dashed #d97757;
+        border-radius: 20px;
+        padding: 14px 20px;
+        font-family: ui-monospace, "SF Mono", Menlo, monospace;
+        font-size: 24px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        color: #9c4125;
+      }
+
+      .botanical-pebble-row {
+        display: flex;
+        gap: 10px;
+      }
+
+      .botanical-pebble {
+        flex: 1;
+        padding: 12px;
+        border-radius: 999px;
+        background: #ffffff;
+        border: 2px solid #e7dfd3;
+        font-size: 16px;
+        font-weight: 800;
+        color: #2b2735;
+        cursor: pointer;
+        transition: all 0.15s var(--ease-spring);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      }
+
+      .botanical-pebble:hover {
+        border-color: #5c8d76;
+        transform: translateY(-2px);
+      }
+
+      .botanical-pebble.selected {
+        background: #5c8d76;
+        color: #fff;
+        border-color: #3d6453;
+        box-shadow: 0 6px 18px rgba(92, 141, 118, 0.35);
+      }
+
+      /* =========================================
+         CANDIDATE C: THE TACTILE LOOSELEAF ATELIER
+         ========================================= */
+      .stage-atelier {
+        background: #f3efe6;
+        color: #201e2b;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .atelier-desk-surface {
+        width: 820px;
+        min-height: 480px;
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow:
+          0 1px 3px rgba(0, 0, 0, 0.05),
+          0 16px 40px rgba(32, 30, 43, 0.08);
+        border: 1px solid #e2dacd;
+        position: relative;
+        display: flex;
+        padding: 30px;
+        gap: 30px;
+      }
+
+      /* Looseleaf Binder Holes */
+      .atelier-binder-holes {
+        position: absolute;
+        left: 14px;
+        top: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        padding: 40px 0;
+      }
+
+      .binder-hole {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #f3efe6;
+        border: 1px solid #d5cbbe;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.12);
+      }
+
+      .atelier-canvas-area {
+        flex: 1.2;
+        background: #fffdf9;
+        border: 2px dashed #dfd5c4;
+        border-radius: 16px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+      }
+
+      .cookie-grid-matrix {
+        display: grid;
+        grid-template-columns: repeat(4, 56px);
+        gap: 10px;
+      }
+
+      .cookie-stamp-slot {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        border: 2px dashed #f59e0b;
+        background: rgba(245, 158, 11, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        cursor: pointer;
+        transition: all 0.15s var(--ease-spring);
+      }
+
+      .cookie-stamp-slot:hover {
+        transform: scale(1.08);
+        border-color: #d97706;
+      }
+
+      .cookie-stamp-slot.stamped {
+        border-style: solid;
+        border-color: #f28b72;
+        background: #ffd6c9;
+      }
+
+      .atelier-sidebar {
+        flex: 0.9;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      /* =========================================
+         MODAL / SCORECARD DRAWER
+         ========================================= */
+      .scorecard-drawer {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%) translateY(100%);
+        width: 100%;
+        max-width: 960px;
+        background: #ffffff;
+        border-top-left-radius: 28px;
+        border-top-right-radius: 28px;
+        box-shadow: 0 -16px 50px rgba(0, 0, 0, 0.18);
+        border: 2px solid #e5e0d4;
+        border-bottom: none;
+        padding: 24px 30px;
+        z-index: 1000;
+        transition: transform 0.3s var(--ease-spring);
+      }
+
+      .scorecard-drawer.open {
+        transform: translateX(-50%) translateY(0%);
+      }
+
+      .drawer-toggle-tab {
+        position: absolute;
+        top: -38px;
+        right: 40px;
+        background: #ffffff;
+        border: 2px solid #e5e0d4;
+        border-bottom: none;
+        padding: 7px 18px;
+        border-top-left-radius: 14px;
+        border-top-right-radius: 14px;
+        font-size: 12.5px;
+        font-weight: 800;
+        cursor: pointer;
+        color: #1f2937;
+        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.04);
+      }
+
+      .scorecard-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .scorecard-table th {
+        text-align: left;
+        padding: 10px;
+        border-bottom: 2px solid #e5e0d4;
+        font-weight: 800;
+        color: #111827;
+      }
+
+      .scorecard-table td {
+        padding: 10px;
+        border-bottom: 1px solid #f3f0e8;
+        color: #4b5563;
+      }
+    </style>
+  </head>
+  <body class="theme-botanical">
+    <!-- Top Floating Switcher -->
+    <nav class="studio-nav">
+      <button class="nav-tab active" id="tabBotanical" onclick="switchCandidate('botanical')">
+        <span>🌿</span>
+        <span>Candidate B: Living Garden</span>
+        <span class="badge-indicator">Whimsical</span>
+      </button>
+
+      <button class="nav-tab" id="tabKinetic" onclick="switchCandidate('kinetic')">
+        <span>🌌</span>
+        <span>Candidate A: Synthesis Kinetic</span>
+        <span class="badge-indicator">Spatial Game</span>
+      </button>
+
+      <button class="nav-tab" id="tabAtelier" onclick="switchCandidate('atelier')">
+        <span>📐</span>
+        <span>Candidate C: Looseleaf Desk</span>
+        <span class="badge-indicator">Stationery</span>
+      </button>
+
+      <button
+        class="nav-tab"
+        style="background: rgba(0, 0, 0, 0.06); margin-left: 6px"
+        onclick="toggleScorecard()"
+      >
+        <span>📊 Comparison</span>
+      </button>
+    </nav>
+
+    <!-- Stage Viewport -->
+    <div class="viewport-stage">
+      <!-- ==============================================
+           VIEW 1: CANDIDATE B (THE WHIMSICAL LIVING GARDEN)
+           ============================================== -->
+      <div class="stage-view stage-botanical active" id="viewBotanical">
+        <div class="botanical-frame">
+          <!-- The Handcrafted Vector Vine SVG -->
+          <div class="botanical-svg-wrap">
+            <svg id="gardenSvg" width="310" height="540" viewBox="0 0 310 540">
+              <defs>
+                <linearGradient id="potGradB" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#F28B6D" />
+                  <stop offset="100%" stop-color="#C85A3C" />
+                </linearGradient>
+                <linearGradient id="stemGradB" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#8DB8A5" />
+                  <stop offset="50%" stop-color="#A2CCA9" />
+                  <stop offset="100%" stop-color="#6E9A86" />
+                </linearGradient>
+                <filter id="snailShadowB" x="-30%" y="-30%" width="160%" height="160%">
+                  <feDropShadow
+                    dx="0"
+                    dy="5"
+                    stdDeviation="4"
+                    flood-color="#2C2A3E"
+                    flood-opacity="0.18"
+                  />
+                </filter>
+              </defs>
+
+              <!-- Pot Mound -->
+              <ellipse cx="140" cy="510" rx="90" ry="14" fill="#EADBC8" opacity="0.45" />
+
+              <!-- Terracotta Pot -->
+              <g id="terracottaPot">
+                <path
+                  d="M96 462 L184 462 L172 522 L108 522 Z"
+                  fill="url(#potGradB)"
+                  stroke="#2C2A3E"
+                  stroke-width="3"
+                  stroke-linejoin="round"
+                />
+                <rect
+                  x="90"
+                  y="450"
+                  width="100"
+                  height="15"
+                  rx="5"
+                  fill="#E07A5F"
+                  stroke="#2C2A3E"
+                  stroke-width="3"
+                />
+                <path d="M140 480 Q148 490 140 500 Q132 490 140 480" fill="#FFF" opacity="0.35" />
+              </g>
+
+              <!-- Top Trellis Goal 10 -->
+              <ellipse
+                cx="140"
+                cy="46"
+                rx="22"
+                ry="14"
+                fill="none"
+                stroke="#D1C7B7"
+                stroke-width="2.5"
+                stroke-dasharray="4 4"
+              />
+              <text
+                x="140"
+                y="32"
+                text-anchor="middle"
+                font-size="13"
+                font-weight="900"
+                fill="#7D7267"
+              >
+                FULL VINE: 10
+              </text>
+
+              <!-- Bamboo Stem -->
+              <line
+                x1="140"
+                y1="452"
+                x2="140"
+                y2="54"
+                stroke="url(#stemGradB)"
+                stroke-width="12"
+                stroke-linecap="round"
+              />
+
+              <!-- Glowing Gap Rect -->
+              <g id="botanicalGapGlow">
+                <rect
+                  x="100"
+                  y="54"
+                  width="80"
+                  height="150"
+                  rx="24"
+                  fill="#FFEAA7"
+                  opacity="0.35"
+                />
+                <rect
+                  x="104"
+                  y="58"
+                  width="72"
+                  height="142"
+                  rx="20"
+                  fill="none"
+                  stroke="#F59E0B"
+                  stroke-width="2.5"
+                  stroke-dasharray="6 5"
+                />
+              </g>
+
+              <!-- Dynamic Joint Nodes Layer -->
+              <g id="botanicalNodesLayer"></g>
+
+              <!-- Snail Slider Handle -->
+              <g
+                id="botanicalSnailSlider"
+                transform="translate(140, 214)"
+                filter="url(#snailShadowB)"
+                style="cursor: grab"
+              >
+                <circle cx="0" cy="0" r="34" fill="transparent" />
+                <path
+                  d="M-22 10 C-30 10 -32 2 -26 -6 C-20 -14 -10 -16 -4 -12 C2 -8 8 -2 12 6 C16 12 10 16 2 16 C-8 16 -16 14 -22 10 Z"
+                  fill="#FFE3D8"
+                  stroke="#2C2A3E"
+                  stroke-width="2.5"
+                />
+                <circle cx="10" cy="-2" r="18" fill="#F4ACB7" stroke="#2C2A3E" stroke-width="2.5" />
+                <circle cx="-20" cy="-12" r="2.5" fill="#2C2A3E" />
+                <circle cx="-14" cy="-14" r="2.5" fill="#2C2A3E" />
+                <ellipse cx="-18" cy="-4" rx="3" ry="2" fill="#FF8FAB" opacity="0.6" />
+                <g transform="translate(36, -8)">
+                  <rect
+                    x="0"
+                    y="-16"
+                    width="34"
+                    height="32"
+                    rx="12"
+                    fill="#E4DCFF"
+                    stroke="#2C2A3E"
+                    stroke-width="2.5"
+                  />
+                  <text
+                    x="17"
+                    y="6"
+                    text-anchor="middle"
+                    font-size="18"
+                    font-weight="900"
+                    fill="#2C2A3E"
+                  >
+                    ?
+                  </text>
+                </g>
+                <g transform="translate(-86, -6)">
+                  <rect
+                    x="0"
+                    y="-15"
+                    width="46"
+                    height="30"
+                    rx="10"
+                    fill="#D6ECFF"
+                    stroke="#2C2A3E"
+                    stroke-width="2"
+                  />
+                  <text
+                    id="botanicalLiveCount"
+                    x="23"
+                    y="5"
+                    text-anchor="middle"
+                    font-size="17"
+                    font-weight="900"
+                    fill="#2C2A3E"
+                  >
+                    6
+                  </text>
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Dialogue & Socratic Companion Card -->
+          <div class="botanical-dialogue-panel">
+            <div class="botanical-mascot-head">
+              <div class="botanical-avatar-bubble">🐌</div>
+              <div>
+                <h3 style="font-size: 16px; font-weight: 800">Barnaby the Snail</h3>
+                <p style="font-size: 12px; color: #78716c">Living Botanical Garden Companion</p>
+              </div>
+            </div>
+
+            <div class="botanical-speech-text" id="botanicalSpeech">
+              The vine has <strong>6 sleeping buds</strong>. Look at the glowing gap above my shell!
+              How many more will blossom to reach 10?
+            </div>
+
+            <div class="botanical-equation-card" id="botanicalEquation">
+              <span>6</span>
+              <span>+</span>
+              <span
+                id="botanicalEqSlot"
+                style="
+                  background: #fff;
+                  padding: 2px 12px;
+                  border-radius: 8px;
+                  border: 1.5px solid #d97757;
+                "
+                >?</span
+              >
+              <span>=</span>
+              <span>10</span>
+            </div>
+
+            <div>
+              <div
+                style="
+                  font-size: 11px;
+                  font-weight: 800;
+                  text-transform: uppercase;
+                  color: #a8a29e;
+                  margin-bottom: 8px;
+                "
+              >
+                Prediction Chips (First: What do you think?)
+              </div>
+              <div class="botanical-pebble-row">
+                <button class="botanical-pebble" onclick="choosePebble(3, this)">3</button>
+                <button class="botanical-pebble" onclick="choosePebble(4, this)">4</button>
+                <button class="botanical-pebble" onclick="choosePebble(5, this)">5</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==============================================
+           VIEW 2: CANDIDATE A (THE SYNTHESIS KINETIC ARENA)
+           ============================================== -->
+      <div class="stage-view stage-kinetic" id="viewKinetic">
+        <div class="kinetic-grid-ambient"></div>
+        <div class="kinetic-canvas">
+          <div class="kinetic-equation-pill">
+            <span>10</span>
+            <span style="color: rgba(255, 255, 255, 0.4)">−</span>
+            <span style="color: #f43f5e">6</span>
+            <span style="color: rgba(255, 255, 255, 0.4)">=</span>
+            <span class="kinetic-slot-glow" id="kineticEquationResult">?</span>
+          </div>
+
+          <!-- Glowing Spatial Gap Bar -->
+          <div class="kinetic-bar-track">
+            <!-- Known Left Block (6 of 10 = 60%) -->
+            <div class="kinetic-known-block" id="kineticKnownBlock" style="width: 60%">
+              <span>6</span>
+            </div>
+
+            <!-- Glowing Missing Gap Zone (40%) -->
+            <div class="kinetic-gap-zone" onclick="snapKineticSolution()">
+              <span
+                style="font-size: 14px; font-weight: 800; color: #38bdf8; letter-spacing: 0.05em"
+              >
+                GLOWING GAP (+4)
+              </span>
+              <div class="kinetic-sliding-slider" id="kineticSlider">➔</div>
+            </div>
+          </div>
+
+          <div class="kinetic-controls-row">
+            <button class="kinetic-chip-btn" onclick="setKineticGuess(3, this)">3</button>
+            <button class="kinetic-chip-btn" onclick="setKineticGuess(4, this)">4</button>
+            <button class="kinetic-chip-btn" onclick="setKineticGuess(5, this)">5</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==============================================
+           VIEW 3: CANDIDATE C (THE TACTILE LOOSELEAF ATELIER)
+           ============================================== -->
+      <div class="stage-view stage-atelier" id="viewAtelier">
+        <div class="atelier-desk-surface">
+          <div class="atelier-binder-holes">
+            <div class="binder-hole"></div>
+            <div class="binder-hole"></div>
+            <div class="binder-hole"></div>
+          </div>
+
+          <!-- Stamping Canvas Area -->
+          <div class="atelier-canvas-area">
+            <h3 style="font-size: 16px; font-weight: 800; color: #201e2b">
+              Stamp Garden: 3 Rows × 4 Columns
+            </h3>
+            <div class="cookie-grid-matrix" id="cookieGrid">
+              <!-- Rendered by JS -->
+            </div>
+            <div style="font-size: 13px; font-weight: 700; color: #857f72">
+              Repeated Addition: <span id="atelierEquationText">4 + 4 + 4 = 12</span>
+            </div>
+          </div>
+
+          <!-- Sidebar -->
+          <div class="atelier-sidebar">
+            <div style="display: flex; align-items: center; gap: 12px">
+              <div style="font-size: 32px">🦊</div>
+              <div>
+                <h4 style="font-size: 15px; font-weight: 800">Kit the Fox</h4>
+                <p style="font-size: 12px; color: #78716c">Desk Companion</p>
+              </div>
+            </div>
+
+            <div
+              style="
+                background: #fbf7ee;
+                border: 1.5px solid #e2dacd;
+                border-radius: 16px;
+                padding: 14px;
+                font-size: 13px;
+                line-height: 1.45;
+              "
+            >
+              Tap the glowing stamp slots to complete the array. Watch how counting by rows reveals
+              the total!
+            </div>
+
+            <button
+              style="
+                padding: 12px;
+                border-radius: 14px;
+                background: #201e2b;
+                color: #fff;
+                border: none;
+                font-size: 13px;
+                font-weight: 800;
+                cursor: pointer;
+              "
+              onclick="resetAtelierStamps()"
+            >
+              Reset Desk Stamps
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison Scorecard Drawer -->
+    <div class="scorecard-drawer" id="scorecardDrawer">
+      <button class="drawer-toggle-tab" onclick="toggleScorecard()">
+        <span>Scorecard & Recommendations ▾</span>
+      </button>
+
+      <table class="scorecard-table">
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th>Candidate A: Synthesis Kinetic</th>
+            <th>Candidate B: Living Garden (Whispering Vine)</th>
+            <th>Candidate C: Tactile Looseleaf Atelier</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Child Engagement (Ages 7–8)</strong></td>
+            <td>High adrenaline, arcade focus</td>
+            <td><strong>Exceptional warmth, zero math anxiety</strong></td>
+            <td>Calm, school-like familiarity</td>
+          </tr>
+          <tr>
+            <td><strong>Zero-Text Spatial Intuition</strong></td>
+            <td><strong>Pure spatial puzzle (10/10)</strong></td>
+            <td>Intuitive climbing metaphor (9.5/10)</td>
+            <td>Relies partly on row instructions (7.5/10)</td>
+          </tr>
+          <tr>
+            <td><strong>Sound Architecture</strong></td>
+            <td>Synthesizer bass thuds</td>
+            <td><strong>Pentatonic wooden kalimba ($C_4-C_6$)</strong></td>
+            <td>Paper stamps & wooden clicks</td>
+          </tr>
+          <tr>
+            <td><strong>Chromebook Viability</strong></td>
+            <td>60fps, low GPU footprint</td>
+            <td>60fps, lightweight SVG paths</td>
+            <td>60fps, DOM-based</td>
+          </tr>
+          <tr>
+            <td><strong>Our Verdict</strong></td>
+            <td>Best for fast-paced math sprints</td>
+            <td><strong>Best overall for 2nd Grade conceptual depth</strong></td>
+            <td>Best for traditional classroom desks</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      // ==========================================
+      // WEB AUDIO KALIMBA SYNTHESIZER
+      // ==========================================
+      let audioCtx = null
+      function getAudio() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+        if (audioCtx.state === "suspended") audioCtx.resume()
+        return audioCtx
+      }
+
+      const PENTATONIC = [
+        261.63, 293.66, 329.63, 392.0, 440.0, 523.25, 587.33, 659.25, 783.99, 1046.5,
+      ]
+
+      function playKalimba(noteIdx, isBass = false) {
+        try {
+          const ctx = getAudio()
+          const freq =
+            PENTATONIC[Math.min(PENTATONIC.length - 1, Math.max(0, noteIdx))] * (isBass ? 0.5 : 1)
+          const osc1 = ctx.createOscillator()
+          const osc2 = ctx.createOscillator()
+          const gain = ctx.createGain()
+
+          osc1.type = "sine"
+          osc2.type = "triangle"
+          osc1.frequency.setValueAtTime(freq, ctx.currentTime)
+          osc2.frequency.setValueAtTime(freq * 2.01, ctx.currentTime)
+
+          gain.gain.setValueAtTime(0.3, ctx.currentTime)
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4)
+
+          osc1.connect(gain)
+          osc2.connect(gain)
+          gain.connect(ctx.destination)
+
+          osc1.start()
+          osc2.start()
+          osc1.stop(ctx.currentTime + 0.42)
+          osc2.stop(ctx.currentTime + 0.42)
+        } catch (e) {}
+      }
+
+      function playVictoryChime() {
+        try {
+          const chord = [523.25, 659.25, 783.99, 1046.5]
+          chord.forEach((f, idx) => {
+            setTimeout(() => {
+              const ctx = getAudio()
+              const osc = ctx.createOscillator()
+              const gain = ctx.createGain()
+              osc.type = "sine"
+              osc.frequency.setValueAtTime(f, ctx.currentTime)
+              gain.gain.setValueAtTime(0.2, ctx.currentTime)
+              gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.7)
+              osc.connect(gain)
+              gain.connect(ctx.destination)
+              osc.start()
+              osc.stop(ctx.currentTime + 0.7)
+            }, idx * 100)
+          })
+        } catch (e) {}
+      }
+
+      // ==========================================
+      // CANDIDATE SWITCHER ENGINE
+      // ==========================================
+      function switchCandidate(type) {
+        document.querySelectorAll(".stage-view").forEach((v) => v.classList.remove("active"))
+        document.querySelectorAll(".nav-tab").forEach((t) => t.classList.remove("active"))
+        document.body.className = "theme-" + type
+
+        if (type === "botanical") {
+          document.getElementById("viewBotanical").classList.add("active")
+          document.getElementById("tabBotanical").classList.add("active")
+          playKalimba(4)
+        } else if (type === "kinetic") {
+          document.getElementById("viewKinetic").classList.add("active")
+          document.getElementById("tabKinetic").classList.add("active")
+          playKalimba(2, true)
+        } else if (type === "atelier") {
+          document.getElementById("viewAtelier").classList.add("active")
+          document.getElementById("tabAtelier").classList.add("active")
+          playKalimba(3)
+        }
+      }
+
+      function toggleScorecard() {
+        document.getElementById("scorecardDrawer").classList.toggle("open")
+      }
+
+      // ==========================================
+      // CANDIDATE B: BOTANICAL GARDEN LOGIC
+      // ==========================================
+      const BOTANICAL_KNOWN = 6
+      let botanicalAdded = 0
+
+      function initBotanicalNodes() {
+        const layer = document.getElementById("botanicalNodesLayer")
+        layer.innerHTML = ""
+
+        for (let i = 1; i <= 10; i++) {
+          const y = 452 - i * 38
+          const isKnown = i <= BOTANICAL_KNOWN
+
+          const g = document.createElementNS("http://www.w3.org/2000/svg", "g")
+          g.id = "bNode-" + i
+          g.onclick = () => onBotanicalNodeClick(i)
+
+          // Node Circle
+          const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle")
+          circle.setAttribute("cx", "140")
+          circle.setAttribute("cy", y)
+          circle.setAttribute("r", isKnown ? "10" : "12")
+          circle.setAttribute("stroke", isKnown ? "#C85A3C" : "#F59E0B")
+          circle.setAttribute("stroke-width", "2.5")
+          circle.setAttribute("fill", isKnown ? "#F4ACB7" : "rgba(245, 158, 11, 0.2)")
+
+          // Node text
+          const txt = document.createElementNS("http://www.w3.org/2000/svg", "text")
+          txt.setAttribute("x", "140")
+          txt.setAttribute("y", y + 4)
+          txt.setAttribute("text-anchor", "middle")
+          txt.setAttribute("font-size", "10")
+          txt.setAttribute("font-weight", "800")
+          txt.setAttribute("fill", isKnown ? "#2C2A3E" : "#78716c")
+          txt.textContent = i
+
+          g.appendChild(circle)
+          g.appendChild(txt)
+          layer.appendChild(g)
+        }
+      }
+
+      function onBotanicalNodeClick(idx) {
+        if (idx <= BOTANICAL_KNOWN) return
+        const added = idx - BOTANICAL_KNOWN
+        botanicalAdded = added
+        playKalimba(added + 3)
+
+        // Update Snail position
+        const y = 452 - idx * 38
+        document
+          .getElementById("botanicalSnailSlider")
+          .setAttribute("transform", `translate(140, ${y})`)
+        document.getElementById("botanicalLiveCount").textContent = idx
+
+        // Update Equation slot
+        document.getElementById("botanicalEqSlot").textContent = added
+        document.getElementById("botanicalEqSlot").style.background = "#d1fae5"
+        document.getElementById("botanicalEqSlot").style.borderColor = "#059669"
+
+        if (idx === 10) {
+          playVictoryChime()
+          document.getElementById("botanicalSpeech").innerHTML =
+            `🌸 <strong>Golden Blossom Unlocked!</strong> You found the exact complement of 10!`
+        }
+      }
+
+      function choosePebble(val, el) {
+        document
+          .querySelectorAll(".botanical-pebble")
+          .forEach((b) => b.classList.remove("selected"))
+        el.classList.add("selected")
+        playKalimba(val)
+      }
+
+      // ==========================================
+      // CANDIDATE A: KINETIC LOGIC
+      // ==========================================
+      function snapKineticSolution() {
+        playKalimba(6)
+        playVictoryChime()
+        document.getElementById("kineticEquationResult").textContent = "4"
+        document.getElementById("kineticSlider").textContent = "✓"
+      }
+
+      function setKineticGuess(val, el) {
+        document.querySelectorAll(".kinetic-chip-btn").forEach((b) => b.classList.remove("active"))
+        el.classList.add("active")
+        playKalimba(val)
+        if (val === 4) {
+          snapKineticSolution()
+        }
+      }
+
+      // ==========================================
+      // CANDIDATE C: ATELIER LOOSELEAF LOGIC
+      // ==========================================
+      function initAtelierGrid() {
+        const grid = document.getElementById("cookieGrid")
+        grid.innerHTML = ""
+        for (let i = 0; i < 12; i++) {
+          const slot = document.createElement("div")
+          slot.className = "cookie-stamp-slot stamped"
+          slot.textContent = "🍪"
+          slot.onclick = () => {
+            slot.classList.toggle("stamped")
+            playKalimba((i % 4) + 2)
+          }
+          grid.appendChild(slot)
+        }
+      }
+
+      function resetAtelierStamps() {
+        document.querySelectorAll(".cookie-stamp-slot").forEach((s) => s.classList.add("stamped"))
+        playKalimba(2)
+      }
+
+      // Boot
+      initBotanicalNodes()
+      initAtelierGrid()
+    </script>
+  </body>
+</html>

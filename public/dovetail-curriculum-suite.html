@@ -6,12 +6,30 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>Dovetail Joinery · Curriculum Showcase (NC Grade 2)</title>
+    <title>Dovetail Joinery · Vibrant Dyed Wood Showcase (NC Grade 2)</title>
     <style>
       :root {
         --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
         --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
         --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+
+        /* Grimm's Vibrant Stained-Wood Palette */
+        --stain-coral: linear-gradient(180deg, #ff6b81 0%, #ee5253 100%);
+        --stain-coral-glow: rgba(238, 82, 83, 0.45);
+        --stain-mint: linear-gradient(180deg, #2ed573 0%, #10ac84 100%);
+        --stain-mint-glow: rgba(16, 172, 132, 0.45);
+        --stain-honey: linear-gradient(180deg, #ffa502 0%, #ff7f50 100%);
+        --stain-honey-glow: rgba(255, 127, 80, 0.45);
+        --stain-sky: linear-gradient(180deg, #70a1ff 0%, #1e90ff 100%);
+        --stain-sky-glow: rgba(30, 144, 255, 0.45);
+        --stain-lavender: linear-gradient(180deg, #a55eea 0%, #8854d0 100%);
+        --stain-lavender-glow: rgba(136, 84, 208, 0.45);
+        --stain-lemon: linear-gradient(180deg, #fed330 0%, #f7b731 100%);
+
+        --birch-bg: radial-gradient(circle at 50% 30%, #fdfbf7 0%, #ece5d8 100%);
+        --bench-surface: #ffffff;
+        --recess-tray: #e4dcce;
+        --recess-shadow: inset 0 4px 12px rgba(60, 48, 36, 0.22);
       }
 
       * {
@@ -28,10 +46,10 @@
         height: 100vh;
         overflow: hidden;
         font-family:
-          -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue",
+          -apple-system, BlinkMacSystemFont, "SF Pro Rounded", ui-rounded, "Segoe UI", Roboto,
           sans-serif;
-        background: radial-gradient(circle at 50% 30%, #ede6db 0%, #d8cdbe 100%);
-        color: #383028;
+        background: var(--birch-bg);
+        color: #2c2724;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -39,7 +57,7 @@
       }
 
       /* =========================================
-         TOP CURRICULUM SELECTOR (MINIMALIST BAR)
+         TOP CURRICULUM SELECTOR (STUDIO NAV)
          ========================================= */
       header {
         position: fixed;
@@ -50,13 +68,13 @@
         display: flex;
         align-items: center;
         gap: 6px;
-        background: rgba(247, 243, 236, 0.88);
+        background: rgba(255, 255, 255, 0.9);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.8);
+        border: 1.5px solid rgba(0, 0, 0, 0.08);
         border-radius: 999px;
-        padding: 6px 8px;
-        box-shadow: 0 16px 36px rgba(56, 48, 40, 0.12);
+        padding: 6px 10px;
+        box-shadow: 0 16px 40px rgba(50, 40, 30, 0.1);
       }
 
       .curriculum-tab {
@@ -64,9 +82,9 @@
         border-radius: 999px;
         border: none;
         background: transparent;
-        color: #7a6a58;
-        font-size: 13px;
-        font-weight: 700;
+        color: #635b54;
+        font-size: 13.5px;
+        font-weight: 800;
         letter-spacing: -0.01em;
         cursor: pointer;
         display: flex;
@@ -76,26 +94,26 @@
       }
 
       .curriculum-tab:hover {
-        color: #383028;
+        color: #111;
         transform: translateY(-1px);
       }
 
       .curriculum-tab.active {
-        background: #383028;
+        background: #201e2b;
         color: #fff;
-        box-shadow: 0 4px 12px rgba(56, 48, 40, 0.25);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
       }
 
       .curriculum-tab .badge {
         font-size: 10px;
-        font-weight: 800;
-        padding: 2px 7px;
-        border-radius: 6px;
-        background: rgba(0, 0, 0, 0.08);
+        font-weight: 900;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.06);
       }
 
       .curriculum-tab.active .badge {
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.22);
         color: #fff;
       }
 
@@ -103,20 +121,19 @@
          WOODEN WORKBENCH CONTAINER
          ========================================= */
       .workbench-card {
-        width: 820px;
-        height: 540px;
-        background: #f7f3ec;
-        border-radius: 40px;
-        border: 1px solid rgba(255, 255, 255, 0.9);
+        width: 840px;
+        height: 550px;
+        background: var(--bench-surface);
+        border-radius: 44px;
+        border: 2px solid #ede5d8;
         box-shadow:
-          0 30px 80px rgba(56, 48, 40, 0.16),
-          0 4px 12px rgba(56, 48, 40, 0.06),
-          inset 0 1px 0 rgba(255, 255, 255, 0.95);
+          0 32px 90px rgba(70, 55, 40, 0.14),
+          0 4px 16px rgba(70, 55, 40, 0.04);
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
-        padding: 36px 44px;
+        padding: 38px 46px;
         position: relative;
         overflow: hidden;
       }
@@ -129,29 +146,33 @@
       }
 
       .workbench-title {
-        font-size: 14px;
+        font-size: 14.5px;
         font-weight: 800;
         letter-spacing: 0.06em;
         text-transform: uppercase;
-        color: #9c8e7e;
+        color: #8c8278;
+        display: flex;
+        align-items: center;
+        gap: 10px;
       }
 
       .reset-btn {
-        padding: 5px 14px;
+        padding: 6px 16px;
         border-radius: 999px;
-        background: transparent;
-        border: 1px solid #d4c8b6;
-        color: #7a6a58;
-        font-size: 12px;
-        font-weight: 700;
+        background: #f7f3ec;
+        border: 1.5px solid #e4dcce;
+        color: #5c534b;
+        font-size: 12.5px;
+        font-weight: 800;
         cursor: pointer;
         transition: all 0.15s ease;
       }
 
       .reset-btn:hover {
-        background: #ede4d6;
-        border-color: #9c8e7e;
-        color: #383028;
+        background: #201e2b;
+        color: #fff;
+        border-color: #201e2b;
+        transform: translateY(-1px);
       }
 
       /* Viewport Stage Host */
@@ -181,34 +202,28 @@
 
       /* Engraved Equation Badge */
       .engraved-brass-badge {
-        font-family: "SF Pro Rounded", "Georgia", serif;
         font-size: 22px;
-        font-weight: 800;
-        letter-spacing: 0.04em;
-        color: #9c8e7e;
-        text-shadow:
-          0 1px 0 rgba(255, 255, 255, 0.9),
-          0 -1px 0 rgba(56, 48, 40, 0.18);
+        font-weight: 900;
+        letter-spacing: 0.02em;
+        color: #7d7266;
         transition: all 0.3s ease;
       }
 
       .engraved-brass-badge.solved {
-        color: #2e261f;
-        transform: scale(1.05);
+        color: #065f46;
+        transform: scale(1.06);
       }
 
       /* =======================================================
          STATION 1: 10-FRAME COMPLEMENTS (NC.2.OA.2)
+         Coral Red (6) + Mint Emerald (4) = 10
          ======================================================= */
       .tray-inset-10 {
-        width: 620px;
-        height: 92px;
-        background: #e2d7c7;
-        border-radius: 26px;
-        box-shadow:
-          inset 0 4px 10px rgba(56, 48, 40, 0.3),
-          inset 0 1px 3px rgba(56, 48, 40, 0.35),
-          0 1px 0 rgba(255, 255, 255, 0.85);
+        width: 640px;
+        height: 96px;
+        background: var(--recess-tray);
+        border-radius: 28px;
+        box-shadow: var(--recess-shadow);
         display: flex;
         align-items: center;
         padding: 10px;
@@ -219,29 +234,30 @@
       .wood-pocket {
         flex: 1;
         height: 100%;
-        border-radius: 16px;
-        background: #d4c8b6;
-        box-shadow: inset 0 2px 6px rgba(56, 48, 40, 0.32);
+        border-radius: 18px;
+        background: #d6ccbe;
+        box-shadow: inset 0 2px 6px rgba(60, 48, 36, 0.25);
         display: flex;
         align-items: center;
         justify-content: center;
         position: relative;
       }
 
-      .wood-pocket.known {
-        background: linear-gradient(180deg, #d49a6a 0%, #b87a4c 100%);
+      /* Known 6 Pegs: Dyed Strawberry Coral */
+      .wood-pocket.known-coral {
+        background: var(--stain-coral);
         box-shadow:
-          0 3px 6px rgba(56, 48, 40, 0.25),
-          inset 0 1px 0 rgba(255, 255, 255, 0.35);
+          0 4px 10px var(--stain-coral-glow),
+          inset 0 1px 1px rgba(255, 255, 255, 0.6);
       }
 
-      .wood-pocket.known::after {
+      .wood-pocket.known-coral::after {
         content: "";
-        width: 14px;
-        height: 14px;
+        width: 16px;
+        height: 16px;
         border-radius: 50%;
-        background: #8c5732;
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+        background: #b33939;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
       }
 
       .tray-snap-zone-10 {
@@ -249,34 +265,35 @@
         right: 10px;
         top: 10px;
         bottom: 10px;
-        width: 232px; /* 4 slots for 10-6=4 */
-        border-radius: 18px;
-        border: 2px dashed #b87a4c;
-        background: rgba(184, 122, 76, 0.08);
+        width: 242px; /* 4 slots */
+        border-radius: 20px;
+        border: 2.5px dashed #10ac84;
+        background: rgba(46, 213, 115, 0.12);
         transition: all 0.2s ease;
       }
 
       .tray-snap-zone-10.hover {
-        background: rgba(184, 122, 76, 0.22);
-        border-color: #8c5732;
+        background: rgba(46, 213, 115, 0.28);
+        border-color: #059669;
+        box-shadow: 0 0 20px var(--stain-mint-glow);
       }
 
+      /* Draggable 4-Peg Block: Dyed Sage Emerald Mint */
       .drag-block-10 {
-        width: 232px;
-        height: 72px;
-        border-radius: 18px;
-        background: linear-gradient(180deg, #e8b387 0%, #cf8f5e 100%);
+        width: 242px;
+        height: 76px;
+        border-radius: 20px;
+        background: var(--stain-mint);
         box-shadow:
-          0 8px 20px rgba(56, 48, 40, 0.22),
-          0 2px 4px rgba(56, 48, 40, 0.15),
-          inset 0 1px 0 rgba(255, 255, 255, 0.45);
+          0 10px 24px var(--stain-mint-glow),
+          inset 0 2px 2px rgba(255, 255, 255, 0.65);
         display: flex;
         align-items: center;
         justify-content: space-around;
-        padding: 0 14px;
+        padding: 0 16px;
         cursor: grab;
         position: absolute;
-        bottom: 30px;
+        bottom: 24px;
         touch-action: none;
         transition:
           transform 0.15s var(--ease-spring),
@@ -284,11 +301,10 @@
       }
 
       .drag-block-10.elevated {
-        transform: scale(1.06) translateY(-14px);
+        transform: scale(1.08) translateY(-16px);
         box-shadow:
-          0 28px 48px rgba(56, 48, 40, 0.32),
-          0 8px 16px rgba(56, 48, 40, 0.15),
-          inset 0 1px 0 rgba(255, 255, 255, 0.6);
+          0 32px 60px rgba(16, 172, 132, 0.5),
+          inset 0 2px 2px rgba(255, 255, 255, 0.8);
       }
 
       .drag-block-10.locked {
@@ -297,43 +313,44 @@
         top: 10px;
         bottom: 10px;
         box-shadow:
-          0 3px 8px rgba(56, 48, 40, 0.2),
-          inset 0 1px 0 rgba(255, 255, 255, 0.3);
+          0 4px 10px var(--stain-mint-glow),
+          inset 0 1px 1px rgba(255, 255, 255, 0.5);
         cursor: default;
         animation: snapRecoil 0.22s var(--ease-snap);
       }
 
       @keyframes snapRecoil {
         0% {
-          transform: scale(0.96);
+          transform: scale(0.95);
         }
         50% {
-          transform: scale(1.03);
+          transform: scale(1.04);
         }
         100% {
           transform: scale(1);
         }
       }
 
-      .peg-dot {
-        width: 16px;
-        height: 16px;
+      .peg-dot-mint {
+        width: 18px;
+        height: 18px;
         border-radius: 50%;
-        background: #965d38;
+        background: #065f46;
         box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.35);
       }
 
       /* =======================================================
          STATION 2: INTERLOCKING ARRAYS (NC.2.OA.4)
+         Row 1: Honey Gold
+         Row 2: Sky Blue
+         Row 3: Strawberry Coral
          ======================================================= */
       .array-tray-inset {
-        width: 380px;
-        height: 240px;
-        background: #e2d7c7;
-        border-radius: 28px;
-        box-shadow:
-          inset 0 4px 12px rgba(56, 48, 40, 0.32),
-          0 1px 0 rgba(255, 255, 255, 0.85);
+        width: 420px;
+        height: 250px;
+        background: var(--recess-tray);
+        border-radius: 30px;
+        box-shadow: var(--recess-shadow);
         display: flex;
         flex-direction: column;
         padding: 14px;
@@ -343,53 +360,82 @@
 
       .array-row-slat {
         width: 100%;
-        height: 60px;
-        border-radius: 16px;
-        background: linear-gradient(180deg, #d49a6a 0%, #b87a4c 100%);
-        box-shadow:
-          0 3px 6px rgba(56, 48, 40, 0.2),
-          inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        height: 64px;
+        border-radius: 18px;
         display: flex;
         align-items: center;
         justify-content: space-around;
-        padding: 0 18px;
+        padding: 0 20px;
+      }
+
+      .array-row-slat.row-honey {
+        background: var(--stain-honey);
+        box-shadow:
+          0 4px 12px var(--stain-honey-glow),
+          inset 0 1px 1px rgba(255, 255, 255, 0.6);
+      }
+      .array-row-slat.row-honey .array-peg {
+        background: #c0392b;
+      }
+
+      .array-row-slat.row-sky {
+        background: var(--stain-sky);
+        box-shadow:
+          0 4px 12px var(--stain-sky-glow),
+          inset 0 1px 1px rgba(255, 255, 255, 0.6);
+      }
+      .array-row-slat.row-sky .array-peg {
+        background: #0c2461;
+      }
+
+      .array-peg {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.35);
       }
 
       .array-row-target-zone {
         width: 100%;
-        height: 60px;
-        border-radius: 16px;
-        border: 2px dashed #b87a4c;
-        background: rgba(184, 122, 76, 0.08);
+        height: 64px;
+        border-radius: 18px;
+        border: 2.5px dashed #ee5253;
+        background: rgba(238, 82, 83, 0.1);
+        transition: all 0.2s ease;
       }
 
       .array-row-target-zone.hover {
-        background: rgba(184, 122, 76, 0.22);
-        border-color: #8c5732;
+        background: rgba(238, 82, 83, 0.25);
+        box-shadow: 0 0 24px var(--stain-coral-glow);
       }
 
+      /* Draggable Row 3: Strawberry Coral */
       .array-drag-slat {
-        width: 352px;
-        height: 60px;
-        border-radius: 16px;
-        background: linear-gradient(180deg, #e8b387 0%, #cf8f5e 100%);
+        width: 392px;
+        height: 64px;
+        border-radius: 18px;
+        background: var(--stain-coral);
         box-shadow:
-          0 8px 18px rgba(56, 48, 40, 0.22),
-          inset 0 1px 0 rgba(255, 255, 255, 0.45);
+          0 10px 24px var(--stain-coral-glow),
+          inset 0 2px 2px rgba(255, 255, 255, 0.6);
         display: flex;
         align-items: center;
         justify-content: space-around;
-        padding: 0 18px;
+        padding: 0 20px;
         position: absolute;
-        bottom: 20px;
+        bottom: 16px;
         cursor: grab;
         touch-action: none;
         transition: transform 0.15s var(--ease-spring);
       }
 
+      .array-drag-slat .array-peg {
+        background: #b33939;
+      }
+
       .array-drag-slat.elevated {
-        transform: scale(1.06) translateY(-14px);
-        box-shadow: 0 28px 48px rgba(56, 48, 40, 0.32);
+        transform: scale(1.08) translateY(-16px);
+        box-shadow: 0 32px 60px var(--stain-coral-glow);
       }
 
       .array-drag-slat.locked {
@@ -398,89 +444,101 @@
         left: 14px;
         right: 14px;
         width: auto;
-        box-shadow: 0 3px 6px rgba(56, 48, 40, 0.2);
+        box-shadow: 0 4px 10px var(--stain-coral-glow);
         cursor: default;
         animation: snapRecoil 0.22s var(--ease-snap);
       }
 
       /* =======================================================
          STATION 3: ODD & EVEN PARITY (NC.2.OA.3)
+         Left Column: Deep Royal Lavender (#8854d0)
+         Right Column: Sunshine Honey (#ffa502)
+         Snapping Peg: Vibrant Sky Blue (#1e90ff)
          ======================================================= */
       .parity-board-inset {
-        width: 440px;
-        height: 250px;
-        background: #e2d7c7;
-        border-radius: 28px;
-        box-shadow:
-          inset 0 4px 12px rgba(56, 48, 40, 0.32),
-          0 1px 0 rgba(255, 255, 255, 0.85);
+        width: 480px;
+        height: 270px;
+        background: var(--recess-tray);
+        border-radius: 30px;
+        box-shadow: var(--recess-shadow);
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 28px;
-        padding: 20px;
+        gap: 36px;
+        padding: 24px;
         position: relative;
       }
 
       .parity-column-track {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 14px;
       }
 
       .parity-peg-socket {
-        width: 52px;
-        height: 44px;
-        border-radius: 14px;
-        background: #d4c8b6;
-        box-shadow: inset 0 2px 5px rgba(56, 48, 40, 0.32);
+        width: 60px;
+        height: 48px;
+        border-radius: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
       }
 
-      .parity-peg-socket.filled {
-        background: linear-gradient(180deg, #d49a6a 0%, #b87a4c 100%);
+      .parity-peg-socket.team-lavender {
+        background: var(--stain-lavender);
         box-shadow:
-          0 3px 6px rgba(56, 48, 40, 0.2),
-          inset 0 1px 0 rgba(255, 255, 255, 0.35);
+          0 4px 10px var(--stain-lavender-glow),
+          inset 0 1px 1px rgba(255, 255, 255, 0.55);
+      }
+      .parity-peg-socket.team-lavender::after {
+        content: "";
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #4a148c;
       }
 
-      .parity-peg-socket.filled::after {
+      .parity-peg-socket.team-honey {
+        background: var(--stain-honey);
+        box-shadow:
+          0 4px 10px var(--stain-honey-glow),
+          inset 0 1px 1px rgba(255, 255, 255, 0.55);
+      }
+      .parity-peg-socket.team-honey::after {
         content: "";
-        width: 16px;
-        height: 16px;
+        width: 18px;
+        height: 18px;
         border-radius: 50%;
-        background: #8c5732;
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+        background: #b71540;
       }
 
       .parity-target-socket {
-        width: 52px;
-        height: 44px;
-        border-radius: 14px;
-        border: 2px dashed #b87a4c;
-        background: rgba(184, 122, 76, 0.08);
+        width: 60px;
+        height: 48px;
+        border-radius: 16px;
+        border: 2.5px dashed #1e90ff;
+        background: rgba(30, 144, 255, 0.12);
+        transition: all 0.2s ease;
       }
 
       .parity-target-socket.hover {
-        background: rgba(184, 122, 76, 0.25);
-        border-color: #8c5732;
+        background: rgba(30, 144, 255, 0.3);
+        box-shadow: 0 0 20px var(--stain-sky-glow);
       }
 
       .parity-drag-peg {
-        width: 52px;
-        height: 44px;
-        border-radius: 14px;
-        background: linear-gradient(180deg, #e8b387 0%, #cf8f5e 100%);
+        width: 60px;
+        height: 48px;
+        border-radius: 16px;
+        background: var(--stain-sky);
         box-shadow:
-          0 6px 14px rgba(56, 48, 40, 0.25),
-          inset 0 1px 0 rgba(255, 255, 255, 0.45);
+          0 8px 20px var(--stain-sky-glow),
+          inset 0 1px 1px rgba(255, 255, 255, 0.65);
         display: flex;
         align-items: center;
         justify-content: center;
         position: absolute;
-        bottom: 24px;
+        bottom: 20px;
         cursor: grab;
         touch-action: none;
         transition: transform 0.15s var(--ease-spring);
@@ -488,35 +546,36 @@
 
       .parity-drag-peg::after {
         content: "";
-        width: 16px;
-        height: 16px;
+        width: 18px;
+        height: 18px;
         border-radius: 50%;
-        background: #965d38;
+        background: #0c2461;
       }
 
       .parity-drag-peg.elevated {
-        transform: scale(1.15) translateY(-14px);
-        box-shadow: 0 24px 38px rgba(56, 48, 40, 0.35);
+        transform: scale(1.18) translateY(-16px);
+        box-shadow: 0 30px 50px var(--stain-sky-glow);
       }
 
       .parity-drag-peg.locked {
         position: static;
-        box-shadow: 0 3px 6px rgba(56, 48, 40, 0.2);
+        box-shadow: 0 4px 10px var(--stain-sky-glow);
         cursor: default;
         animation: snapRecoil 0.22s var(--ease-snap);
       }
 
       /* =======================================================
          STATION 4: GEOMETRY EQUAL PARTITIONING (NC.2.G.3)
+         Wedge 1: Strawberry Coral (#ee5253)
+         Wedge 2: Sky Blue (#1e90ff)
+         Wedge 3: Mint Green (#10ac84)
          ======================================================= */
       .geometry-pan-inset {
-        width: 250px;
-        height: 250px;
+        width: 270px;
+        height: 270px;
         border-radius: 50%;
-        background: #e2d7c7;
-        box-shadow:
-          inset 0 5px 16px rgba(56, 48, 40, 0.35),
-          0 1px 0 rgba(255, 255, 255, 0.85);
+        background: var(--recess-tray);
+        box-shadow: var(--recess-shadow);
         position: relative;
         display: flex;
         align-items: center;
@@ -524,27 +583,21 @@
       }
 
       .wedge-svg {
-        width: 250px;
-        height: 250px;
-      }
-
-      .wedge-fixed {
-        fill: #d49a6a;
-        stroke: #8c5732;
-        stroke-width: 2;
-        filter: drop-shadow(0 2px 4px rgba(56, 48, 40, 0.2));
+        width: 270px;
+        height: 270px;
       }
 
       .wedge-snap-zone {
-        fill: rgba(184, 122, 76, 0.08);
-        stroke: #b87a4c;
-        stroke-width: 2;
-        stroke-dasharray: 6 4;
+        fill: rgba(46, 213, 115, 0.12);
+        stroke: #10ac84;
+        stroke-width: 2.5;
+        stroke-dasharray: 6 5;
         transition: fill 0.2s ease;
       }
 
       .wedge-snap-zone.hover {
-        fill: rgba(184, 122, 76, 0.28);
+        fill: rgba(46, 213, 115, 0.35);
+        filter: drop-shadow(0 0 16px var(--stain-mint-glow));
       }
 
       .wedge-drag-container {
@@ -556,8 +609,8 @@
       }
 
       .wedge-drag-container.elevated {
-        transform: scale(1.1) translateY(-12px);
-        filter: drop-shadow(0 20px 30px rgba(56, 48, 40, 0.35));
+        transform: scale(1.15) translateY(-16px);
+        filter: drop-shadow(0 24px 40px var(--stain-mint-glow));
       }
 
       .wedge-drag-container.locked {
@@ -598,9 +651,10 @@
     <!-- Main Workbench Container -->
     <div class="workbench-card">
       <div class="workbench-header">
-        <span class="workbench-title" id="workbenchTitle"
-          >Station 1: Ten-Frame Inset (6 + 4 = 10)</span
-        >
+        <span class="workbench-title" id="workbenchTitle">
+          <span style="font-size: 18px">🍓</span>
+          <span>Station 1: Ten-Frame Inset (6 + 4 = 10)</span>
+        </span>
         <button class="reset-btn" onclick="resetCurrentStation()">↺ Reset Piece</button>
       </div>
 
@@ -610,24 +664,28 @@
              ============================================== -->
         <div class="station-view active" id="station-1">
           <div class="tray-inset-10" id="tray10">
-            <div class="wood-pocket known"></div>
-            <div class="wood-pocket known"></div>
-            <div class="wood-pocket known"></div>
-            <div class="wood-pocket known"></div>
-            <div class="wood-pocket known"></div>
-            <div class="wood-pocket known"></div>
+            <!-- 6 Known Strawberry Coral Pegs -->
+            <div class="wood-pocket known-coral"></div>
+            <div class="wood-pocket known-coral"></div>
+            <div class="wood-pocket known-coral"></div>
+            <div class="wood-pocket known-coral"></div>
+            <div class="wood-pocket known-coral"></div>
+            <div class="wood-pocket known-coral"></div>
+            <!-- 4 Empty Recessed Pockets -->
             <div class="wood-pocket"></div>
             <div class="wood-pocket"></div>
             <div class="wood-pocket"></div>
             <div class="wood-pocket"></div>
+            <!-- Snap Target Zone -->
             <div class="tray-snap-zone-10" id="snapZone10"></div>
           </div>
 
+          <!-- Draggable 4-Peg Block: Vibrant Sage Mint -->
           <div class="drag-block-10" id="block10">
-            <div class="peg-dot"></div>
-            <div class="peg-dot"></div>
-            <div class="peg-dot"></div>
-            <div class="peg-dot"></div>
+            <div class="peg-dot-mint"></div>
+            <div class="peg-dot-mint"></div>
+            <div class="peg-dot-mint"></div>
+            <div class="peg-dot-mint"></div>
           </div>
         </div>
 
@@ -636,30 +694,30 @@
              ============================================== -->
         <div class="station-view" id="station-2">
           <div class="array-tray-inset" id="arrayTray">
-            <!-- Row 1 (4 pegs) -->
-            <div class="array-row-slat">
-              <div class="peg-dot"></div>
-              <div class="peg-dot"></div>
-              <div class="peg-dot"></div>
-              <div class="peg-dot"></div>
+            <!-- Row 1: Honey Gold -->
+            <div class="array-row-slat row-honey">
+              <div class="array-peg"></div>
+              <div class="array-peg"></div>
+              <div class="array-peg"></div>
+              <div class="array-peg"></div>
             </div>
-            <!-- Row 2 (4 pegs) -->
-            <div class="array-row-slat">
-              <div class="peg-dot"></div>
-              <div class="peg-dot"></div>
-              <div class="peg-dot"></div>
-              <div class="peg-dot"></div>
+            <!-- Row 2: Sky Blue -->
+            <div class="array-row-slat row-sky">
+              <div class="array-peg"></div>
+              <div class="array-peg"></div>
+              <div class="array-peg"></div>
+              <div class="array-peg"></div>
             </div>
-            <!-- Row 3 Target Drop Zone -->
+            <!-- Row 3 Target Drop Zone: Coral -->
             <div class="array-row-target-zone" id="arrayDropZone"></div>
           </div>
 
-          <!-- Draggable Row 3 Slat -->
+          <!-- Draggable Row 3 Slat: Strawberry Coral -->
           <div class="array-drag-slat" id="arrayDragSlat">
-            <div class="peg-dot"></div>
-            <div class="peg-dot"></div>
-            <div class="peg-dot"></div>
-            <div class="peg-dot"></div>
+            <div class="array-peg"></div>
+            <div class="array-peg"></div>
+            <div class="array-peg"></div>
+            <div class="array-peg"></div>
           </div>
         </div>
 
@@ -668,24 +726,24 @@
              ============================================== -->
         <div class="station-view" id="station-3">
           <div class="parity-board-inset" id="parityBoard">
-            <!-- Left Column (4 filled sockets) -->
+            <!-- Left Column: 4 Lavender Pegs -->
             <div class="parity-column-track">
-              <div class="parity-peg-socket filled"></div>
-              <div class="parity-peg-socket filled"></div>
-              <div class="parity-peg-socket filled"></div>
-              <div class="parity-peg-socket filled"></div>
+              <div class="parity-peg-socket team-lavender"></div>
+              <div class="parity-peg-socket team-lavender"></div>
+              <div class="parity-peg-socket team-lavender"></div>
+              <div class="parity-peg-socket team-lavender"></div>
             </div>
 
-            <!-- Right Column (3 filled sockets + 1 empty target socket) -->
+            <!-- Right Column: 3 Honey Pegs + 1 Sky Blue Snap Socket -->
             <div class="parity-column-track">
-              <div class="parity-peg-socket filled"></div>
-              <div class="parity-peg-socket filled"></div>
-              <div class="parity-peg-socket filled"></div>
+              <div class="parity-peg-socket team-honey"></div>
+              <div class="parity-peg-socket team-honey"></div>
+              <div class="parity-peg-socket team-honey"></div>
               <div class="parity-target-socket" id="parityDropSocket"></div>
             </div>
           </div>
 
-          <!-- Draggable Peg -->
+          <!-- Draggable Sky Blue Peg -->
           <div class="parity-drag-peg" id="parityPeg"></div>
         </div>
 
@@ -694,42 +752,63 @@
              ============================================== -->
         <div class="station-view" id="station-4">
           <div class="geometry-pan-inset" id="geoPan">
-            <svg class="wedge-svg" viewBox="0 0 250 250">
-              <!-- Wedge 1 (0 to 120 deg) -->
-              <path class="wedge-fixed" d="M 125 125 L 125 15 A 110 110 0 0 1 220.26 180 Z" />
-              <!-- Wedge 2 (120 to 240 deg) -->
-              <path class="wedge-fixed" d="M 125 125 L 220.26 180 A 110 110 0 0 1 29.74 180 Z" />
+            <svg class="wedge-svg" viewBox="0 0 270 270">
+              <defs>
+                <linearGradient id="coralGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ff6b81" />
+                  <stop offset="100%" stop-color="#ee5253" />
+                </linearGradient>
+                <linearGradient id="skyGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#70a1ff" />
+                  <stop offset="100%" stop-color="#1e90ff" />
+                </linearGradient>
+                <linearGradient id="mintGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#2ed573" />
+                  <stop offset="100%" stop-color="#10ac84" />
+                </linearGradient>
+              </defs>
+
+              <!-- Wedge 1: Strawberry Coral (0 to 120 deg) -->
+              <path
+                d="M 135 135 L 135 15 A 120 120 0 0 1 238.92 195 Z"
+                fill="url(#coralGrad)"
+                stroke="#c0392b"
+                stroke-width="2"
+              />
+              <!-- Wedge 2: Sky Blue (120 to 240 deg) -->
+              <path
+                d="M 135 135 L 238.92 195 A 120 120 0 0 1 31.08 195 Z"
+                fill="url(#skyGrad)"
+                stroke="#0c2461"
+                stroke-width="2"
+              />
               <!-- Target Snap Zone (240 to 360 deg) -->
               <path
                 class="wedge-snap-zone"
                 id="geoSnapZone"
-                d="M 125 125 L 29.74 180 A 110 110 0 0 1 125 15 Z"
+                d="M 135 135 L 31.08 195 A 120 120 0 0 1 135 15 Z"
               />
             </svg>
           </div>
 
-          <!-- Draggable 3rd Wedge -->
+          <!-- Draggable 3rd Wedge: Mint Green -->
           <div class="wedge-drag-container" id="geoWedge">
-            <svg width="130" height="130" viewBox="0 0 130 130">
+            <svg width="140" height="140" viewBox="0 0 140 140">
               <path
-                d="M 115 115 L 25 165 A 110 110 0 0 1 115 10 Z"
-                fill="url(#wedgeGrad)"
-                stroke="#8c5732"
+                d="M 125 125 L 25 180 A 120 120 0 0 1 125 10 Z"
+                fill="url(#mintGrad)"
+                stroke="#065f46"
                 stroke-width="2.5"
               />
-              <defs>
-                <linearGradient id="wedgeGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#e8b387" />
-                  <stop offset="100%" stop-color="#cf8f5e" />
-                </linearGradient>
-              </defs>
             </svg>
           </div>
         </div>
       </div>
 
       <!-- Engraved Dynamic Equation Result -->
-      <div class="engraved-brass-badge" id="engravedBadge">6 + 4 = 10 · Flush Dovetail Joint</div>
+      <div class="engraved-brass-badge" id="engravedBadge">
+        6 (Coral) + 4 (Mint) = 10 · Flush Dovetail Joint
+      </div>
     </div>
 
     <script>
@@ -772,7 +851,7 @@
       }
 
       function playSequentialThocks() {
-        ;[1.0, 1.15, 1.3].forEach((pitch, i) => {
+        ;[1.0, 1.18, 1.35].forEach((pitch, i) => {
           setTimeout(() => playWoodThock(pitch), i * 65)
         })
       }
@@ -781,23 +860,29 @@
       // CURRICULUM STATION SWITCHER
       // ==============================================================
       const TITLES = {
-        1: "Station 1: Ten-Frame Inset (6 + 4 = 10)",
-        2: "Station 2: Interlocking Arrays (3 Rows × 4 Cols = 12)",
-        3: "Station 3: Odd & Even Parity (8 = 4 + 4 Even Pairs)",
-        4: "Station 4: Geometry Equal Partitioning (3 Thirds = 1 Whole Tart)",
+        1: '<span style="font-size: 18px;">🍓</span><span>Station 1: Ten-Frame Inset (6 Coral + 4 Mint = 10)</span>',
+        2: '<span style="font-size: 18px;">🍯</span><span>Station 2: Interlocking Arrays (3 Rows × 4 Cols = 12)</span>',
+        3: '<span style="font-size: 18px;">🫐</span><span>Station 3: Odd & Even Parity (8 = 4 Lavender + 4 Honey)</span>',
+        4: '<span style="font-size: 18px;">🥧</span><span>Station 4: Geometry Fruit Tart (3 Equal Thirds)</span>',
       }
 
       const EQUATIONS = {
         1: {
-          normal: "6 + 4 = 10 · Flush Dovetail Joint",
+          normal: "6 (Coral) + 4 (Mint) = 10 · Flush Dovetail Joint",
           solved: "10 − 6 = 4 · Inset Completed ✓",
         },
-        2: { normal: "4 + 4 + 4 = 12 · 3 Rows of 4", solved: "3 × 4 = 12 · Solid Array Locked ✓" },
-        3: {
-          normal: "8 Pegs = 4 + 4 · Equal Partner Columns",
-          solved: "8 is EVEN · Symmetrical Pairs ✓",
+        2: {
+          normal: "Honey (4) + Blue (4) + Coral (4) = 12",
+          solved: "3 Rows × 4 Cols = 12 · Solid Array Locked ✓",
         },
-        4: { normal: "1 Whole Tart = 3 Equal Thirds", solved: "1/3 + 1/3 + 1/3 = 1 Whole Pan ✓" },
+        3: {
+          normal: "4 Lavender + 4 Honey = 8 Symmetrical Pairs",
+          solved: "8 is EVEN · Perfect Partner Teams ✓",
+        },
+        4: {
+          normal: "Coral (1/3) + Blue (1/3) + Mint (1/3) = 1 Whole",
+          solved: "3 Thirds = 1 Whole Fruit Tart ✓",
+        },
       }
 
       let currentStation = 1
@@ -809,11 +894,11 @@
 
         document.getElementById(`station-${id}`).classList.add("active")
         document.getElementById(`tab-${id}`).classList.add("active")
-        document.getElementById("workbenchTitle").textContent = TITLES[id]
+        document.getElementById("workbenchTitle").innerHTML = TITLES[id]
         document.getElementById("engravedBadge").textContent = EQUATIONS[id].normal
         document.getElementById("engravedBadge").classList.remove("solved")
 
-        playWoodThock(0.9)
+        playWoodThock(0.95)
       }
 
       function resetCurrentStation() {
@@ -846,7 +931,7 @@
         if (!is10Dragging || is10Locked) return
         const dx = e.clientX - start10X
         const dy = e.clientY - start10Y
-        block10.style.transform = `translate(${dx}px, ${dy}px) scale(1.06)`
+        block10.style.transform = `translate(${dx}px, ${dy}px) scale(1.08)`
 
         const bRect = block10.getBoundingClientRect()
         const zRect = snapZone10.getBoundingClientRect()
@@ -914,7 +999,7 @@
         if (!isArrayDragging || isArrayLocked) return
         const dx = e.clientX - startArrayX
         const dy = e.clientY - startArrayY
-        arrayDragSlat.style.transform = `translate(${dx}px, ${dy}px) scale(1.06)`
+        arrayDragSlat.style.transform = `translate(${dx}px, ${dy}px) scale(1.08)`
 
         const bRect = arrayDragSlat.getBoundingClientRect()
         const zRect = arrayDropZone.getBoundingClientRect()
@@ -982,7 +1067,7 @@
         if (!isParityDragging || isParityLocked) return
         const dx = e.clientX - startParityX
         const dy = e.clientY - startParityY
-        parityPeg.style.transform = `translate(${dx}px, ${dy}px) scale(1.15)`
+        parityPeg.style.transform = `translate(${dx}px, ${dy}px) scale(1.18)`
 
         const bRect = parityPeg.getBoundingClientRect()
         const zRect = parityDropSocket.getBoundingClientRect()
@@ -1052,7 +1137,7 @@
         if (!isGeoDragging || isGeoLocked) return
         const dx = e.clientX - startGeoX
         const dy = e.clientY - startGeoY
-        geoWedge.style.transform = `translate(${dx}px, ${dy}px) scale(1.1)`
+        geoWedge.style.transform = `translate(${dx}px, ${dy}px) scale(1.15)`
 
         const bRect = geoWedge.getBoundingClientRect()
         const zRect = geoSnapZone.getBoundingClientRect()
@@ -1080,7 +1165,7 @@
           geoSnapZone.classList.remove("hover")
           geoWedge.classList.add("locked")
           geoWedge.style.transform = ""
-          geoSnapZone.setAttribute("fill", "#d49a6a")
+          geoSnapZone.setAttribute("fill", "url(#mintGrad)")
           geoSnapZone.setAttribute("stroke-dasharray", "none")
           geoWedge.style.display = "none"
           playWoodThock(0.8)
@@ -1096,8 +1181,8 @@
         geoWedge.classList.remove("locked")
         geoWedge.style.transform = ""
         geoWedge.style.display = "block"
-        geoSnapZone.setAttribute("fill", "rgba(184, 122, 76, 0.08)")
-        geoSnapZone.setAttribute("stroke-dasharray", "6 4")
+        geoSnapZone.setAttribute("fill", "rgba(46, 213, 115, 0.12)")
+        geoSnapZone.setAttribute("stroke-dasharray", "6 5")
         document.getElementById("engravedBadge").textContent = EQUATIONS[4].normal
         document.getElementById("engravedBadge").classList.remove("solved")
         playWoodThock(1.2)

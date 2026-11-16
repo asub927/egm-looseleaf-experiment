@@ -11,17 +11,19 @@ import {
   type PairingSlot,
 } from "../lib/math/evaluator.ts"
 import type { MascotPose } from "../lib/ink/art/mascots/index.ts"
+import {
+  scaffoldingReducer,
+  createInitialScaffoldingState,
+  type ScaffoldingTier,
+  type ScaffoldingPhase,
+  type ScaffoldingState,
+  type ScaffoldingEvent,
+} from "../lib/state/scaffolding-machine.ts"
 
 export type { ArrayProblemSpec, ArrayDiagnostic, ParityProblemSpec, ParityDiagnostic, PairingSlot }
 
-export type ScaffoldingTier = 0 | 1 | 2 | 3
-
-export type ScaffoldingStatus =
-  | "constructing" // Student actively placing/moving tokens
-  | "tier1_prompt" // 1st failure: Socratic prompt delivered
-  | "tier2_ghost" // 2nd failure: Visual ghost assist active
-  | "tier3_demonstrate" // 3rd failure or student asked for help: Step demonstrated
-  | "validated" // Problem successfully solved
+export type { ScaffoldingTier, ScaffoldingState, ScaffoldingEvent }
+export type ScaffoldingStatus = ScaffoldingPhase
 
 export interface GhostCoordinate {
   row: number
@@ -249,6 +251,10 @@ export interface SocraticScaffoldingReturn {
   onTokenMutated: () => void
   /** Reset scaffolding ladder for active spec */
   resetScaffolding: () => void
+  /** Explicit State Machine snapshot for Agent (AX) and Developer (DX) introspection */
+  machineState: ScaffoldingState
+  /** Dispatch explicit state machine event */
+  dispatch: (event: ScaffoldingEvent) => void
 }
 
 // ============================================================================
@@ -272,16 +278,6 @@ export function useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaff
   const { type } = config
   const spec = config.spec
 
-  // State
-  const [tier, setTier] = React.useState<ScaffoldingTier>(0)
-  const [status, setStatus] = React.useState<ScaffoldingStatus>("constructing")
-  const [failureCount, setFailureCount] = React.useState<number>(0)
-  const [isGhostVisible, setIsGhostVisible] = React.useState<boolean>(false)
-  const [feedback, setFeedback] = React.useState<string | null>(null)
-  const [wasDemonstrated, setWasDemonstrated] = React.useState<boolean>(false)
-  const [masteryEligible, setMasteryEligible] = React.useState<boolean>(true)
-  const [isValidated, setIsValidated] = React.useState<boolean>(false)
-
   // Derived initial badge
   const initialTierBadge = React.useMemo(() => {
     if (type === "array") {
@@ -291,8 +287,12 @@ export function useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaff
     return "Step 1: Pair Up"
   }, [type, spec])
 
-  const [tierBadge, setTierBadge] = React.useState<string>(initialTierBadge)
-  const [mascotPose, setMascotPose] = React.useState<MascotPose>("idle")
+  // Explicit State Machine Reducer
+  const [state, dispatch] = React.useReducer(
+    (st: ScaffoldingState, ev: ScaffoldingEvent) => scaffoldingReducer(st, ev, initialTierBadge),
+    initialTierBadge,
+    createInitialScaffoldingState,
+  )
 
   // Target ghost coordinates
   const ghostCoordinates = React.useMemo(() => {
@@ -308,38 +308,8 @@ export function useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaff
   // State Mutation Guard
   // ==========================================================================
   const onTokenMutated = React.useCallback(() => {
-    // If validated, dismiss validation and column/row eyes
-    if (isValidated) {
-      setIsValidated(false)
-      setStatus("constructing")
-      setMascotPose("idle")
-      setTierBadge(initialTierBadge)
-      setFeedback(null)
-      return
-    }
-
-    // If student was on Tier 1 hint, reset to active construction
-    if (status === "tier1_prompt") {
-      setStatus("constructing")
-      setFeedback(null)
-      return
-    }
-
-    // If student is on Tier 2 ghost assist, keep ghost visible while constructing
-    if (status === "tier2_ghost") {
-      setStatus("constructing")
-      // isGhostVisible stays true
-      return
-    }
-
-    // If demonstrated, reset status to constructing while preserving wasDemonstrated
-    if (status === "tier3_demonstrate") {
-      setStatus("constructing")
-      return
-    }
-
-    setStatus("constructing")
-  }, [initialTierBadge, isValidated, status])
+    dispatch({ type: "TOKEN_MUTATED" })
+  }, [])
 
   // Automatic change detection guard when grid or slots are passed via props
   const tokensHash = React.useMemo(() => {
@@ -363,29 +333,14 @@ export function useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaff
 
   // Reset when spec changes
   React.useEffect(() => {
-    setTier(0)
-    setStatus("constructing")
-    setFailureCount(0)
-    setIsGhostVisible(false)
-    setFeedback(null)
-    setWasDemonstrated(false)
-    setMasteryEligible(true)
-    setIsValidated(false)
-    setMascotPose("idle")
-    setTierBadge(initialTierBadge)
+    dispatch({ type: "RESET", initialBadge: initialTierBadge })
   }, [spec, initialTierBadge])
 
   // ==========================================================================
   // Tier 3 Auto-Placement Demonstrator Step
   // ==========================================================================
   const autoPlaceStep = React.useCallback(() => {
-    setTier(3)
-    setStatus("tier3_demonstrate")
-    setWasDemonstrated(true)
-    setMasteryEligible(false)
-    setMascotPose("sketch")
-    setTierBadge("Step 3: Step Demonstration")
-
+    let demoFeedback = ""
     if (config.type === "array") {
       const arraySpec = config.spec
       const grid = config.grid || []
@@ -393,17 +348,21 @@ export function useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaff
       const cols = grid[0]?.length || 5
       const demonstrated = demonstrateArrayStep(arraySpec, rows, cols)
       config.onGridChange?.(demonstrated)
-      setFeedback(
-        `Pencil Pal placed Row 1 with ${arraySpec.targetCols} cookies! Now can you finish Rows 2 and ${arraySpec.targetRows}?`,
-      )
+      demoFeedback = `Pencil Pal placed Row 1 with ${arraySpec.targetCols} cookies! Now can you finish Rows 2 and ${arraySpec.targetRows}?`
     } else {
       const paritySpec = config.spec
       const slots = config.slots || []
       const maxPairs = slots.length || 10
       const demonstrated = demonstrateParityStep(paritySpec, maxPairs)
       config.onSlotsChange?.(demonstrated)
-      setFeedback("Pencil Pal paired up the first 2 counters! Can you pair up the rest?")
+      demoFeedback = "Pencil Pal paired up the first 2 counters! Can you pair up the rest?"
     }
+
+    dispatch({
+      type: "REQUEST_DEMONSTRATION",
+      feedback: demoFeedback,
+      tierBadge: "Step 3: Step Demonstration",
+    })
   }, [config])
 
   const requestDemonstration = React.useCallback(() => {
@@ -414,16 +373,7 @@ export function useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaff
   // Isomorphic Seed Retry
   // ==========================================================================
   const triggerIsomorphicRetry = React.useCallback(() => {
-    setTier(0)
-    setStatus("constructing")
-    setFailureCount(0)
-    setIsGhostVisible(false)
-    setFeedback(null)
-    setWasDemonstrated(false)
-    setMasteryEligible(true)
-    setIsValidated(false)
-    setMascotPose("wave")
-    setTierBadge(initialTierBadge)
+    dispatch({ type: "TRIGGER_ISOMORPHIC_RETRY", initialBadge: initialTierBadge })
 
     if (config.type === "array") {
       const nextSpec = getIsomorphicArraySpec(config.spec)
@@ -444,44 +394,36 @@ export function useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaff
         const diagnostic = evaluateArrayGrid(gridToEvaluate, config.spec)
 
         if (diagnostic.status === "correct") {
-          setTier(0)
-          setStatus("validated")
-          setIsValidated(true)
-          setMascotPose("celebrate")
-          setTierBadge(`${config.spec.targetRows} Rows Verified! 🌟`)
-          setFeedback(diagnostic.feedback)
+          dispatch({
+            type: "EVALUATION_SUCCESS",
+            feedback: diagnostic.feedback,
+            badge: `${config.spec.targetRows} Rows Verified! 🌟`,
+          })
           return diagnostic
         }
 
         // Failure detected: escalate progressive hint ladder
-        const nextFail = failureCount + 1
-        setFailureCount(nextFail)
-        setIsValidated(false)
+        const nextFail = state.failureCount + 1
 
-        if (nextFail === 1) {
-          // Tier 1: Targeted Socratic Prompt
-          setTier(1)
-          setStatus("tier1_prompt")
-          setTierBadge("Step 1: Check Your Rows")
-          setMascotPose(
+        if (nextFail >= 3) {
+          autoPlaceStep()
+        } else {
+          const tier1Pose =
             diagnostic.status === "incomplete_inventory" || diagnostic.status === "empty"
               ? "point"
-              : "think",
-          )
-          setFeedback(diagnostic.feedback)
-        } else if (nextFail === 2) {
-          // Tier 2: Visual Assist Ghost Outline
-          setTier(2)
-          setStatus("tier2_ghost")
-          setIsGhostVisible(true)
-          setMascotPose("sketch")
-          setTierBadge("Step 2: Ghost Assist")
-          setFeedback(
-            `Pencil Pal drew dotted ghost boxes for ${config.spec.targetRows} rows of ${config.spec.targetCols}! Can you fill the ghost boxes?`,
-          )
-        } else {
-          // Tier 3: Step Demonstration with Isomorphic Retry
-          autoPlaceStep()
+              : "think"
+          const tierFeedback =
+            nextFail === 1
+              ? diagnostic.feedback
+              : `Pencil Pal drew dotted ghost boxes for ${config.spec.targetRows} rows of ${config.spec.targetCols}! Can you fill the ghost boxes?`
+          const tierBadge = nextFail === 1 ? "Step 1: Check Your Rows" : "Step 2: Ghost Assist"
+
+          dispatch({
+            type: "EVALUATION_FAILURE",
+            feedback: tierFeedback,
+            tierBadge,
+            tier1Pose,
+          })
         }
 
         return diagnostic
@@ -491,84 +433,69 @@ export function useSocraticScaffolding(config: ScaffoldingConfig): SocraticScaff
         const diagnostic = evaluatePairingMat(slotsToEvaluate, config.spec)
 
         if (diagnostic.status === "correct_even" || diagnostic.status === "correct_odd") {
-          setTier(0)
-          setStatus("validated")
-          setIsValidated(true)
-          setMascotPose("celebrate")
-          setTierBadge("Buddy Pairs Verified! 🌟")
-          setFeedback(diagnostic.feedback)
+          dispatch({
+            type: "EVALUATION_SUCCESS",
+            feedback: diagnostic.feedback,
+            badge: "Buddy Pairs Verified! 🌟",
+          })
           return diagnostic
         }
 
         // Failure detected
-        const nextFail = failureCount + 1
-        setFailureCount(nextFail)
-        setIsValidated(false)
+        const nextFail = state.failureCount + 1
 
-        if (nextFail === 1) {
-          // Tier 1: Targeted Socratic Prompt
-          setTier(1)
-          setStatus("tier1_prompt")
-          setTierBadge("Step 1: Buddy Check")
-          setMascotPose(
+        if (nextFail >= 3) {
+          autoPlaceStep()
+        } else {
+          const tier1Pose =
             diagnostic.status === "incomplete_inventory" || diagnostic.status === "empty"
               ? "point"
-              : "think",
-          )
-          setFeedback(diagnostic.feedback)
-        } else if (nextFail === 2) {
-          // Tier 2: Visual Assist Ghost Outline
-          setTier(2)
-          setStatus("tier2_ghost")
-          setIsGhostVisible(true)
-          setMascotPose("sketch")
-          setTierBadge("Step 2: Ghost Assist")
-          setFeedback(
-            "Pencil Pal drew dotted ghost boxes for your pairs! Can you place your counters into the buddy boxes?",
-          )
-        } else {
-          // Tier 3: Step Demonstration with Isomorphic Retry
-          autoPlaceStep()
+              : "think"
+          const tierFeedback =
+            nextFail === 1
+              ? diagnostic.feedback
+              : "Pencil Pal drew dotted ghost boxes for your pairs! Can you place your counters into the buddy boxes?"
+          const tierBadge = nextFail === 1 ? "Step 1: Buddy Check" : "Step 2: Ghost Assist"
+
+          dispatch({
+            type: "EVALUATION_FAILURE",
+            feedback: tierFeedback,
+            tierBadge,
+            tier1Pose,
+          })
         }
 
         return diagnostic
       }
     },
-    [config, failureCount, autoPlaceStep],
+    [config, state.failureCount, autoPlaceStep],
   )
 
   const resetScaffolding = React.useCallback(() => {
-    setTier(0)
-    setStatus("constructing")
-    setFailureCount(0)
-    setIsGhostVisible(false)
-    setFeedback(null)
-    setWasDemonstrated(false)
-    setMasteryEligible(true)
-    setIsValidated(false)
-    setMascotPose("idle")
-    setTierBadge(initialTierBadge)
+    dispatch({ type: "RESET", initialBadge: initialTierBadge })
   }, [initialTierBadge])
 
   return {
-    tier,
-    status,
-    failureCount,
-    isGhostVisible,
+    tier: state.tier,
+    status: state.phase,
+    failureCount: state.failureCount,
+    isGhostVisible: state.isGhostVisible,
     ghostCoordinates,
     isGhostCell: checkGhostCell,
-    feedback,
-    mascotPose,
-    tierBadge,
-    wasDemonstrated,
-    masteryEligible,
-    isValidated,
+    feedback: state.feedback,
+    mascotPose: state.mascotPose,
+    tierBadge: state.tierBadge,
+    wasDemonstrated: state.wasDemonstrated,
+    masteryEligible: state.masteryEligible,
+    isValidated: state.isValidated,
     checkAnswer,
     requestDemonstration,
     autoPlaceStep,
     triggerIsomorphicRetry,
     onTokenMutated,
     resetScaffolding,
+    machineState: state,
+    dispatch,
   }
 }
 

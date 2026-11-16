@@ -233,12 +233,21 @@ export function NC2GWireframe({
 
   return (
     <Desk
+      data-theme={theme}
+      data-state-machine="nc2-g-geometry-wireframe"
+      data-active-manipulative={activeManipulative}
+      data-active-shares={activeShares}
+      data-target-shares={currentSeed.targetShares}
+      data-is-solved={isSolved ? "true" : "false"}
+      data-scaffolding-phase={scaffolding.status}
+      data-scaffolding-tier={scaffolding.tier}
+      data-star-count={starCount}
       objects={["pencil", "ruler"]}
       lamp={true}
       className="h-screen max-h-screen w-screen overflow-hidden p-2 sm:p-3 flex flex-col font-hand text-ink select-none"
     >
       {/* 1. Slim Top Navigation Bar (~40px) */}
-      <header className="h-10 shrink-0 w-full flex items-center justify-between px-3 bg-paper/90 backdrop-blur-xs rounded-lg border border-stone-300 shadow-xs mb-2">
+      <header className="desk-toolbar h-10 shrink-0 w-full flex items-center justify-between px-3 bg-paper/90 backdrop-blur-xs rounded-lg border border-stone-300 shadow-xs mb-2">
         <div className="flex items-center gap-2">
           {/* Kit Profile Badge */}
           <Badge
@@ -490,7 +499,7 @@ export function NC2GWireframe({
 
               {/* A. Socratic Challenge Banner with Read-Aloud Voice Button */}
               <div className="w-full shrink-0 px-3 py-1.5 bg-amber-100/90 border border-amber-300 rounded-lg shadow-xs flex items-center justify-between gap-2 mb-1.5">
-                <div className="text-sm sm:text-base font-script leading-tight text-amber-950 font-bold flex items-center gap-1.5 flex-wrap">
+                <div className="text-sm sm:text-base font-script leading-tight text-amber-950 font-bold flex items-center gap-1.5 flex-wrap text-balance">
                   <span>{currentSeed.icon}</span>
                   <span>{currentSeed.narrative}</span>
                 </div>
@@ -541,7 +550,7 @@ export function NC2GWireframe({
               )}
 
               {/* B. Tactile Geometry Manipulative Canvas */}
-              <div className="flex-1 min-h-0 w-full flex items-center justify-center relative overflow-hidden py-1">
+              <div className="@container flex-1 min-h-0 w-full flex items-center justify-center relative overflow-hidden py-1">
                 {currentSeed.shapeType === "rectangle" ? (
                   <BakingPan
                     cuts={cuts}

@@ -5,11 +5,19 @@ import {
   type VineProblemSeed,
   type VineSubmission,
   type VineSubmissionVia,
-  type VineEvaluationResult,
   CANONICAL_VINE_SEEDS,
   getVineSeedById,
   evaluateVineSubmission,
 } from "@/lib/math/vine-evaluator"
+import {
+  vineReducer,
+  createInitialVineState,
+  type VinePhase,
+  type VineState,
+  type VineEvent,
+} from "@/lib/state/vine-machine"
+
+export type { VinePhase, VineState, VineEvent }
 import { playPluck, playCelebrationChimes } from "@/lib/audio/garden-chimes"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -46,27 +54,26 @@ const NODE_COORDINATES = [
 ] as const
 
 export function WhisperingVine({ initialSeedId, onSolved, className }: WhisperingVineProps) {
-  // 1. Problem Seed State (default to CANONICAL_VINE_SEEDS[0]: 10 - 6)
-  const [currentSeed, setCurrentSeed] = React.useState<VineProblemSeed>(() => {
-    if (initialSeedId) {
-      const match = getVineSeedById(initialSeedId)
-      if (match) return match
-    }
-    return CANONICAL_VINE_SEEDS[0]
+  // 1. Explicit Finite State Machine for Whispering Vine
+  const [state, dispatch] = React.useReducer(vineReducer, initialSeedId, (id) => {
+    const match = id ? getVineSeedById(id) : null
+    return createInitialVineState(match ?? CANONICAL_VINE_SEEDS[0])
   })
 
-  // 2. Interactive Learner State
-  const [predictedGuess, setPredictedGuess] = React.useState<number | null>(null)
-  const [added, setAdded] = React.useState<number>(0)
-  const [isDragging, setIsDragging] = React.useState<boolean>(false)
-  const [hasReflected, setHasReflected] = React.useState<boolean>(false)
-  const [calmMode, setCalmMode] = React.useState<boolean>(false)
-  const [isWatching, setIsWatching] = React.useState<boolean>(false)
-  const [solved, setSolved] = React.useState<boolean>(false)
+  const {
+    phase,
+    currentSeed,
+    predictedGuess,
+    added,
+    isDragging,
+    hasReflected,
+    calmMode,
+    evaluation,
+    submissionVia,
+  } = state
 
-  // 3. Evaluation and Input Modality Tracking
-  const [evaluation, setEvaluation] = React.useState<VineEvaluationResult | null>(null)
-  const [submissionVia, setSubmissionVia] = React.useState<VineSubmissionVia>("drag")
+  const isWatching = phase === "demonstrating"
+  const solved = phase === "solved"
 
   // Refs for SVG coordinate projection and demo cleanup
   const svgRef = React.useRef<SVGSVGElement | null>(null)
@@ -112,40 +119,30 @@ export function WhisperingVine({ initialSeedId, onSolved, className }: Whisperin
   // Switch to a new problem seed
   const handleSelectSeed = (seed: VineProblemSeed) => {
     if (demoTimerRef.current) clearTimeout(demoTimerRef.current)
-    setCurrentSeed(seed)
-    setPredictedGuess(null)
-    setAdded(0)
-    setIsDragging(false)
-    setHasReflected(false)
-    setIsWatching(false)
-    setSolved(false)
-    setEvaluation(null)
-    setSubmissionVia("drag")
+    dispatch({ type: "SELECT_SEED", seed })
   }
 
   // Update added count safely with chime audio
   const updateAdded = React.useCallback(
     (newAdded: number, via: VineSubmissionVia) => {
-      const clamped = Math.max(0, Math.min(maxAdded, Math.round(newAdded)))
-      setAdded(clamped)
-      setSubmissionVia(via)
-      if (solved) setSolved(false)
-      if (evaluation) setEvaluation(null)
+      dispatch({ type: "UPDATE_ADDED", added: newAdded, via })
+
+      const max = Math.max(0, currentSeed.whole - currentSeed.known)
+      const clamped = Math.max(0, Math.min(max, Math.round(newAdded)))
 
       if (!calmMode && clamped > 0) {
         const targetNodeIndex = currentSeed.known + clamped - 1
         playPluck(targetNodeIndex)
       }
     },
-    [maxAdded, calmMode, currentSeed.known, solved, evaluation],
+    [calmMode, currentSeed.known, currentSeed.whole],
   )
 
   // Pointer Drag Handling with Integer Snapping along Y-axis
   const handlePointerDown = (e: React.PointerEvent) => {
     if (isWatching) return
     e.preventDefault()
-    setIsDragging(true)
-    setSubmissionVia("drag")
+    dispatch({ type: "START_DRAG" })
     ;(e.currentTarget as Element).setPointerCapture(e.pointerId)
   }
 
@@ -176,7 +173,7 @@ export function WhisperingVine({ initialSeedId, onSolved, className }: Whisperin
 
   const handlePointerUp = (e: React.PointerEvent) => {
     if (!isDragging) return
-    setIsDragging(false)
+    dispatch({ type: "STOP_DRAG" })
     try {
       ;(e.currentTarget as Element).releasePointerCapture(e.pointerId)
     } catch {
@@ -230,17 +227,15 @@ export function WhisperingVine({ initialSeedId, onSolved, className }: Whisperin
     }
 
     const result = evaluateVineSubmission(currentSeed, submission)
-    setEvaluation(result)
+    dispatch({ type: "LOCK_IN", evaluation: result })
 
     if (result.verdict === "correct") {
-      setSolved(true)
       if (!calmMode) {
         playCelebrationChimes()
       }
       confetti({ count: 70, spread: 80 })
       onSolved?.(submission)
     } else {
-      setSolved(false)
       if (!calmMode) {
         // Nudge pluck at lower pitch offset
         playPluck(currentSeed.known + added - 1, -4)
@@ -253,26 +248,22 @@ export function WhisperingVine({ initialSeedId, onSolved, className }: Whisperin
     if (isWatching) return
     if (demoTimerRef.current) clearTimeout(demoTimerRef.current)
 
-    setIsWatching(true)
-    setSolved(false)
-    setEvaluation(null)
-    setSubmissionVia("tap")
+    dispatch({ type: "START_DEMO" })
 
     const target = maxAdded
     let currentStep = 0
-    setAdded(0)
 
     const stepInterval = () => {
       if (currentStep < target) {
         currentStep += 1
         const stepVal = currentStep
-        setAdded(stepVal)
+        dispatch({ type: "STEP_DEMO", currentStep: stepVal })
         if (!calmMode) {
           playPluck(currentSeed.known + stepVal - 1)
         }
         demoTimerRef.current = setTimeout(stepInterval, 380)
       } else {
-        setIsWatching(false)
+        dispatch({ type: "FINISH_DEMO" })
       }
     }
 
@@ -295,6 +286,10 @@ export function WhisperingVine({ initialSeedId, onSolved, className }: Whisperin
       onKeyDown={handleKeyDown}
       role="region"
       aria-label="Whispering Vine 10 minus ? Math Manipulative"
+      data-state-machine="whispering-vine"
+      data-vine-phase={phase}
+      data-added-count={added}
+      data-solved={solved ? "true" : "false"}
       className={cn(
         "w-full h-full flex flex-col justify-between p-2 sm:p-3 select-none outline-none focus:ring-2 focus:ring-amber-400/50 rounded-xl",
         calmMode ? "bg-amber-50/20" : "bg-transparent",
@@ -349,7 +344,7 @@ export function WhisperingVine({ initialSeedId, onSolved, className }: Whisperin
             type="button"
             variant="outline"
             size="xs"
-            onClick={() => setCalmMode((c) => !c)}
+            onClick={() => dispatch({ type: "TOGGLE_CALM" })}
             className={cn(
               "h-7 text-xs px-2.5 transition-all cursor-pointer font-bold flex items-center gap-1",
               calmMode
@@ -970,7 +965,7 @@ export function WhisperingVine({ initialSeedId, onSolved, className }: Whisperin
                   <button
                     key={chipVal}
                     type="button"
-                    onClick={() => setPredictedGuess(isSelected ? null : chipVal)}
+                    onClick={() => dispatch({ type: "SELECT_PREDICTION", guess: chipVal })}
                     className={cn(
                       "size-8 rounded-full font-bold text-sm transition-all cursor-pointer border flex items-center justify-center shadow-2xs",
                       isSelected
@@ -1012,7 +1007,7 @@ export function WhisperingVine({ initialSeedId, onSolved, className }: Whisperin
                 <Button
                   size="xs"
                   variant="outline"
-                  onClick={() => setHasReflected(true)}
+                  onClick={() => dispatch({ type: "COMPLETE_REFLECTION" })}
                   className="h-6 text-[11px] justify-start bg-white/90 hover:bg-amber-100 border-amber-300 text-amber-950 font-bold cursor-pointer"
                 >
                   💡 The gap was {added} sleeping buds!
@@ -1020,7 +1015,7 @@ export function WhisperingVine({ initialSeedId, onSolved, className }: Whisperin
                 <Button
                   size="xs"
                   variant="outline"
-                  onClick={() => setHasReflected(true)}
+                  onClick={() => dispatch({ type: "COMPLETE_REFLECTION" })}
                   className="h-6 text-[11px] justify-start bg-white/90 hover:bg-amber-100 border-amber-300 text-amber-950 font-bold cursor-pointer"
                 >
                   ✨ Now I see: {currentSeed.known} + {added} = 10!

@@ -63,9 +63,9 @@ export function MascotCompanion({
       <Bubble
         variant="secondary"
         shape="cloud"
-        className="mt-1 w-full max-h-[96px] overflow-hidden shrink-0"
+        className="mt-1 w-full min-h-[80px] max-h-[96px] overflow-hidden shrink-0"
       >
-        <BubbleContent className="text-xs sm:text-sm font-hand leading-tight p-2 text-ink">
+        <BubbleContent className="text-xs sm:text-sm font-hand leading-tight p-2 text-ink text-pretty">
           {isSpeaking && (
             <span
               className="inline-flex items-center text-[10px] text-amber-700 mr-1 animate-pulse select-none"

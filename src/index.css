@@ -1627,3 +1627,39 @@
     color: var(--ll-ink-you);
   }
 }
+
+/* Modern Web Guidance: CSS Interpolate Size */
+@supports (interpolate-size: allow-keywords) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+}
+
+/* Modern Web Guidance: Same-Document View Transitions */
+.desk-stage {
+  view-transition-name: desk-stage;
+}
+
+.desk-toolbar {
+  view-transition-name: desk-toolbar;
+}
+
+::view-transition-old(desk-stage),
+::view-transition-new(desk-stage) {
+  animation-duration: 240ms;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+::view-transition-old(desk-toolbar),
+::view-transition-new(desk-toolbar) {
+  animation-duration: 180ms;
+  animation-timing-function: ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

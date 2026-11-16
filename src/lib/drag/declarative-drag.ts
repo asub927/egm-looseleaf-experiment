@@ -1,6 +1,15 @@
 "use client"
 
 import * as React from "react"
+import {
+  dragReducer,
+  createInitialDragState,
+  type DragState,
+  type DragEvent,
+  type DragPhase,
+} from "../state/drag-machine.ts"
+
+export type { DragState, DragEvent, DragPhase }
 
 export interface SnapTarget {
   id: string
@@ -27,6 +36,9 @@ export interface DeclarativeDragReturn {
   activeValue: number
   snappedTarget: SnapTarget | null
   isDragging: boolean
+  phase: DragPhase
+  machineState: DragState
+  dispatch: (event: DragEvent) => void
   handlePointerDown: (e: React.PointerEvent) => void
   handlePointerMove: (e: React.PointerEvent) => void
   handlePointerUp: (e: React.PointerEvent) => void
@@ -149,9 +161,7 @@ export function getThresholds(options: DeclarativeDragOptions): {
  * - Cooldown debounce to prevent finger tremor sound spam near boundary edges.
  */
 export function useDeclarativeDrag(options: DeclarativeDragOptions): DeclarativeDragReturn {
-  const [activeValue, setActiveValue] = React.useState<number>(0)
-  const [snappedTarget, setSnappedTarget] = React.useState<SnapTarget | null>(null)
-  const [isDragging, setIsDragging] = React.useState<boolean>(false)
+  const [state, dispatch] = React.useReducer(dragReducer, 0, createInitialDragState)
 
   // Mutable refs to prevent stale closures and avoid unnecessary re-renders
   const optionsRef = React.useRef(options)
@@ -254,9 +264,13 @@ export function useDeclarativeDrag(options: DeclarativeDragOptions): Declarative
       }
     }
 
-    // Discrete snap state synchronization to React
+    // Discrete snap state synchronization to React State Machine
     if (nextSnapped !== currentSnapped) {
-      setSnappedTarget(nextSnapped)
+      if (nextSnapped) {
+        dispatch({ type: "SNAP", target: nextSnapped, value: effectiveVal })
+      } else {
+        dispatch({ type: "RELEASE_SNAP", value: effectiveVal })
+      }
     }
 
     snappedTargetRef.current = nextSnapped
@@ -303,7 +317,7 @@ export function useDeclarativeDrag(options: DeclarativeDragOptions): Declarative
       }
 
       isDraggingRef.current = true
-      setIsDragging(true)
+      dispatch({ type: "POINTER_DOWN", initialValue: activeValueRef.current })
       latestPointerRef.current = { clientX: e.clientX, clientY: e.clientY }
 
       processPointerPosition(e.clientX, e.clientY)
@@ -346,7 +360,6 @@ export function useDeclarativeDrag(options: DeclarativeDragOptions): Declarative
       }
 
       isDraggingRef.current = false
-      setIsDragging(false)
       capturedElementRef.current = null
       pointerIdRef.current = null
 
@@ -356,8 +369,7 @@ export function useDeclarativeDrag(options: DeclarativeDragOptions): Declarative
       const finalValue = activeValueRef.current
       const finalSnapped = snappedTargetRef.current
 
-      setActiveValue(finalValue)
-      setSnappedTarget(finalSnapped)
+      dispatch({ type: "POINTER_UP", finalValue, target: finalSnapped })
 
       optionsRef.current.onCommit?.(finalValue, finalSnapped)
     },
@@ -397,8 +409,7 @@ export function useDeclarativeDrag(options: DeclarativeDragOptions): Declarative
     opts.onTransform?.(target.value, pixelOffset)
     opts.onSnap?.(target)
 
-    setActiveValue(target.value)
-    setSnappedTarget(target)
+    dispatch({ type: "PROGRAMMATIC_SNAP", target })
 
     opts.onCommit?.(target.value, target)
   }, [])
@@ -418,9 +429,12 @@ export function useDeclarativeDrag(options: DeclarativeDragOptions): Declarative
   }, [])
 
   return {
-    activeValue,
-    snappedTarget,
-    isDragging,
+    activeValue: state.activeValue,
+    snappedTarget: state.snappedTarget,
+    isDragging: state.isDragging,
+    phase: state.phase,
+    machineState: state,
+    dispatch,
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,

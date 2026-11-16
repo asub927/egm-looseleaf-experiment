@@ -22,7 +22,7 @@ export function PairingMat({
 }: PairingMatProps) {
   return (
     <div className="flex-1 min-h-0 flex items-center justify-center py-1 overflow-hidden select-none">
-      <div className="w-full max-w-md bg-stone-200/90 p-3 sm:p-4 rounded-2xl border-4 border-stone-400 shadow-md flex flex-col items-center">
+      <div className="@container w-full max-w-md bg-stone-200/90 p-2.5 sm:p-4 rounded-2xl border-4 border-stone-400 shadow-md flex flex-col items-center">
         {/* Mat Header */}
         <div className="w-full flex items-center justify-between pb-1.5 mb-2 border-b border-stone-300 text-xs font-bold text-stone-800">
           <span className="flex items-center gap-1.5">

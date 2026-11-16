@@ -2,12 +2,15 @@ import * as React from "react"
 import { NC2OA4Wireframe } from "@/components/math/NC2OA4Wireframe"
 import { NC2OA3Wireframe } from "@/components/math/NC2OA3Wireframe"
 import { NC2GWireframe } from "@/components/math/NC2GWireframe"
+import { useDeskViewTransition } from "@/lib/dom/view-transitions"
 import { loadStudentProfile, setThemePreference, type StudentTheme } from "@/lib/storage/profile"
 
 export type DeskTheme = StudentTheme
 export type ActiveStandard = "arrays" | "parity" | "geometry"
 
 export default function App() {
+  const { startDeskTransition } = useDeskViewTransition()
+
   const [activeStandard, setActiveStandard] = React.useState<ActiveStandard>(() => {
     try {
       const stored = localStorage.getItem("egm_active_standard")
@@ -20,6 +23,15 @@ export default function App() {
     return "geometry"
   })
 
+  const switchToStandard = React.useCallback(
+    (target: ActiveStandard) => {
+      startDeskTransition(() => {
+        setActiveStandard(target)
+      })
+    },
+    [startDeskTransition],
+  )
+
   const [theme, setTheme] = React.useState<DeskTheme>(() => {
     try {
       const storedTheme = localStorage.getItem("egm_desk_theme") as DeskTheme | null
@@ -31,6 +43,7 @@ export default function App() {
   })
 
   React.useEffect(() => {
+    document.documentElement.setAttribute("data-active-standard", activeStandard)
     try {
       localStorage.setItem("egm_active_standard", activeStandard)
     } catch {
@@ -48,34 +61,30 @@ export default function App() {
     }
   }, [theme])
 
-  if (activeStandard === "parity") {
-    return (
-      <NC2OA3Wireframe
-        theme={theme}
-        onSetTheme={setTheme}
-        onSwitchToArrays={() => setActiveStandard("arrays")}
-        onSwitchToGeometry={() => setActiveStandard("geometry")}
-      />
-    )
-  }
-
-  if (activeStandard === "geometry") {
-    return (
-      <NC2GWireframe
-        theme={theme}
-        onSetTheme={setTheme}
-        onSwitchToArrays={() => setActiveStandard("arrays")}
-        onSwitchToParity={() => setActiveStandard("parity")}
-      />
-    )
-  }
-
   return (
-    <NC2OA4Wireframe
-      theme={theme}
-      onSetTheme={setTheme}
-      onSwitchToParity={() => setActiveStandard("parity")}
-      onSwitchToGeometry={() => setActiveStandard("geometry")}
-    />
+    <div className="desk-stage w-full h-full min-h-screen">
+      {activeStandard === "parity" ? (
+        <NC2OA3Wireframe
+          theme={theme}
+          onSetTheme={setTheme}
+          onSwitchToArrays={() => switchToStandard("arrays")}
+          onSwitchToGeometry={() => switchToStandard("geometry")}
+        />
+      ) : activeStandard === "geometry" ? (
+        <NC2GWireframe
+          theme={theme}
+          onSetTheme={setTheme}
+          onSwitchToArrays={() => switchToStandard("arrays")}
+          onSwitchToParity={() => switchToStandard("parity")}
+        />
+      ) : (
+        <NC2OA4Wireframe
+          theme={theme}
+          onSetTheme={setTheme}
+          onSwitchToParity={() => switchToStandard("parity")}
+          onSwitchToGeometry={() => switchToStandard("geometry")}
+        />
+      )}
+    </div>
   )
 }

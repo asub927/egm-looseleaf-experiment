@@ -10,6 +10,7 @@ import {
 } from "../models/engine"
 import { answerForProblem, guessChips, problemsForBed } from "../models/problems"
 import { problemKey } from "../progress/storage"
+import { watchStepsForBed } from "../models/watch-steps"
 import type { BedId, GardenScreen } from "../types"
 import { ModelStage } from "./ModelStage"
 import { MossPet } from "./MossPet"
@@ -46,6 +47,7 @@ export function LessonShell({
   const [sub, setSub] = React.useState("")
   const [flowReveal, setFlowReveal] = React.useState(false)
   const [wsStep, setWsStep] = React.useState(0)
+  const [wsWatchIndex, setWsWatchIndex] = React.useState(0)
 
   React.useEffect(() => {
     const p = problems[initialProblemIndex]
@@ -57,9 +59,14 @@ export function LessonShell({
     })
     setLine(storyLine(bedId, p))
     setSub(promptLine(p))
+    resetWorksheet()
+  }, [bedId, initialProblemIndex])
+
+  function resetWorksheet() {
     setFlowReveal(false)
     setWsStep(0)
-  }, [bedId, initialProblemIndex])
+    setWsWatchIndex(0)
+  }
 
   const ctx = state.context
   if (!ctx) return null
@@ -76,7 +83,13 @@ export function LessonShell({
     state.phase === "hint3"
 
   const showCue = state.phase === "hint2" || state.phase === "hint3"
-  const revealCounters = state.phase === "solved" || flowReveal
+  const watchSteps = watchStepsForBed(bedId, problem)
+  const watchStep = state.phase === "hint3" ? (watchSteps?.[wsWatchIndex] ?? null) : null
+  const watchState = watchStep?.state ?? null
+  const watchReveal = watchStep?.beat === "reveal" || watchStep?.revealCounters === true
+  const flowOut = !reducedMotion && (watchStep?.beat === "zoom" || watchStep?.beat === "reveal")
+  const interactive = live && watchState === null
+  const revealCounters = state.phase === "solved" || flowReveal || watchReveal
 
   function lockIn() {
     if (!ctx || !canLockIn(state)) return
@@ -109,7 +122,7 @@ export function LessonShell({
       : state.phase === "hint2"
         ? hint2(bedId)
         : state.phase === "hint3"
-          ? worksheetStep(bedId, problem, wsStep)
+          ? (watchStep?.text ?? WORKSHEET_STEPS[wsStep])
           : ""
 
   return (
@@ -199,14 +212,17 @@ export function LessonShell({
           {hintText && (
             <div className="hintcard rung" data-testid={`hint-${ctx.hintRung}`}>
               {hintText}
-              {state.phase === "hint3" && (
+              {state.phase === "hint3" && watchStep?.beat !== "reset" && (
                 <button
                   type="button"
                   className="garden-tap wsnext"
                   data-testid="ws-next"
                   onClick={() => {
-                    const steps = worksheetSteps(bedId, problem)
-                    if (wsStep < steps.length - 1) setWsStep((k) => k + 1)
+                    if (watchSteps) {
+                      setWsWatchIndex((k) => Math.min(k + 1, watchSteps.length - 1))
+                      return
+                    }
+                    if (wsStep < WORKSHEET_STEPS.length - 1) setWsStep((k) => k + 1)
                     else setFlowReveal(true)
                   }}
                 >
@@ -218,10 +234,11 @@ export function LessonShell({
           <MotionStage
             id="stage"
             data-cue={showCue ? "1" : undefined}
+            className={flowOut ? "flow-out" : undefined}
             aria-label={stageLabel(bedId, problem)}
             tabIndex={0}
             onKeyDown={(e: React.KeyboardEvent) => {
-              if (!live || state.phase === "solved") return
+              if (!interactive) return
               if (e.key === "Enter") {
                 e.preventDefault()
                 lockIn()
@@ -243,7 +260,10 @@ export function LessonShell({
               bedId={bedId}
               problem={problem}
               modelState={ctx.modelState}
-              live={live && state.phase !== "solved"}
+              watchState={watchState}
+              snapMotion={ctx.via === "keyboard"}
+              equationsRevealed={state.phase === "solved"}
+              live={live}
               showCue={showCue}
               revealTotal={revealCounters}
               reducedMotion={reducedMotion}
@@ -257,7 +277,7 @@ export function LessonShell({
             id="lock"
             className="garden-tap primary"
             data-testid="lock"
-            disabled={!live || !modelReady(bedId, problem, ctx.modelState)}
+            disabled={!interactive || !modelReady(bedId, problem, ctx.modelState)}
             onClick={lockIn}
           >
             Lock it in
@@ -281,7 +301,10 @@ export function LessonShell({
             id="help"
             className="garden-tap"
             disabled={!live}
-            onClick={() => dispatch({ type: "HELP" })}
+            onClick={() => {
+              dispatch({ type: "HELP" })
+              setWsWatchIndex(0)
+            }}
           >
             Help me
           </button>
@@ -289,7 +312,7 @@ export function LessonShell({
             type="button"
             id="step-minus"
             className="garden-tap"
-            disabled={!live || !stepModel(bedId, problem, ctx.modelState, -1)}
+            disabled={!interactive || !stepModel(bedId, problem, ctx.modelState, -1)}
             onClick={() => {
               const n = stepModel(bedId, problem, ctx.modelState, -1)
               if (n) dispatch({ type: "SET_MODEL_STATE", modelState: n, via: "tap" })
@@ -301,7 +324,7 @@ export function LessonShell({
             type="button"
             id="step-plus"
             className="garden-tap"
-            disabled={!live || !stepModel(bedId, problem, ctx.modelState, 1)}
+            disabled={!interactive || !stepModel(bedId, problem, ctx.modelState, 1)}
             onClick={() => {
               const n = stepModel(bedId, problem, ctx.modelState, 1)
               if (n) dispatch({ type: "SET_MODEL_STATE", modelState: n, via: "tap" })
@@ -323,6 +346,7 @@ export function LessonShell({
                   })
                   setLine(storyLine(bedId, problems[1]))
                   setSub(promptLine(problems[1]))
+                  resetWorksheet()
                 } else onFinishBed()
               }}
             >
@@ -359,11 +383,11 @@ export function LessonShell({
 function MotionPanel(props: React.HTMLAttributes<HTMLDivElement>) {
   return <div {...props} className={`motion-fade ${props.className ?? ""}`} />
 }
-function MotionStage(props: React.HTMLAttributes<HTMLDivElement>) {
+function MotionStage({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       {...props}
-      className={`motion-fade ${props.className ?? ""}`}
+      className={`motion-fade ${className ?? ""}`}
       style={{ outline: "none", ...props.style }}
     />
   )
@@ -403,25 +427,7 @@ function hint2(_bedId: BedId): string {
   return "Look at the dashed cues on the model."
 }
 
-function worksheetSteps(bedId: BedId, p: ReturnType<typeof problemsForBed>[0]): string[] {
-  if (p.kind === "add" && bedId === "counting-on") {
-    const list = Array.from({ length: p.b }, (_, i) => p.a + i + 1).join(", ")
-    return [
-      `Put ${p.a} in your head.`,
-      `Count on: ${list}.`,
-      `You said ${p.b} numbers.`,
-      "Your turn. Lock it in.",
-    ]
-  }
-  if (p.kind === "add" && bedId === "number-line") {
-    return [`Start at ${p.a}.`, `Hop ${p.b} times.`, "Look at the flag.", "Your turn. Lock it in."]
-  }
-  return ["Walk through the steps.", "Your turn. Lock it in."]
-}
-
-function worksheetStep(bedId: BedId, p: ReturnType<typeof problemsForBed>[0], k: number): string {
-  return worksheetSteps(bedId, p)[k] ?? ""
-}
+const WORKSHEET_STEPS = ["Walk through the steps.", "Your turn. Lock it in."]
 
 function exampleLine(_bedId: BedId, p: ReturnType<typeof problemsForBed>[0]): string {
   const a = answerForProblem(p)

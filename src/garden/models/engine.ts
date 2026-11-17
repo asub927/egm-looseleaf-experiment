@@ -140,14 +140,13 @@ export function stepModel(
     case "decomposing": {
       const st = s as CutState
       if (p.kind !== "sub") return null
-      if (st.phase === "toTen") {
-        const next = Math.max(10, Math.min(p.n, st.position - delta))
-        if (next === st.position) return null
-        if (next <= 10) return { position: 10, phase: "rest" }
-        return { position: next, phase: "toTen" }
+      const range = st.phase === "toTen" ? ([10, p.n] as const) : ([1, 10] as const)
+      const next = clamp(st.position - delta, range[0], range[1])
+      if (next === st.position) return null
+      if (st.phase === "toTen" && next <= 10) {
+        return { position: 10, phase: "rest" }
       }
-      const next = Math.max(0, Math.min(10, st.position - delta))
-      return next === st.position ? null : { position: next, phase: "rest" }
+      return { position: next, phase: st.phase === "toTen" ? "toTen" : "rest" }
     }
     case "equivalent-sums": {
       const st = s as SeesawState

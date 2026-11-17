@@ -185,3 +185,25 @@ export function playPentatonicHarmony(ctx?: AudioContext | null): void {
     // Graceful fallback
   }
 }
+
+/**
+ * Sequential Thocks for Multistep Snaps (e.g. Array Slat Interlock).
+ * Plays a rapid rhythmic triple-thock cascade (thock-thock-thock).
+ */
+export function playSequentialThocks(
+  ctx?: AudioContext | null,
+  multipliers: readonly number[] = [1.0, 1.18, 1.35],
+): void {
+  try {
+    const audioCtx = ctx ?? getAudioContext()
+    if (!audioCtx) return
+
+    multipliers.forEach((mult, index) => {
+      setTimeout(() => {
+        playWoodThock(audioCtx, mult)
+      }, index * 65)
+    })
+  } catch {
+    // Graceful fallback
+  }
+}

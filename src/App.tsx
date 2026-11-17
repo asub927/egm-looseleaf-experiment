@@ -1,57 +1,34 @@
 import * as React from "react"
-import { NC2OA4Wireframe } from "@/components/math/NC2OA4Wireframe"
-import { NC2OA3Wireframe } from "@/components/math/NC2OA3Wireframe"
-import { NC2GWireframe } from "@/components/math/NC2GWireframe"
-import { ZenGardenLanding } from "@/components/landing/ZenGardenLanding"
 import GardenApp from "@/garden/GardenApp"
+import { ZenGardenLanding } from "@/components/landing/ZenGardenLanding"
 import { useDeskViewTransition } from "@/lib/dom/view-transitions"
 import { loadStudentProfile, setThemePreference, type StudentTheme } from "@/lib/storage/profile"
+import { cn } from "@/lib/utils"
 
 export type DeskTheme = StudentTheme
-export type ActiveStandard = "landing" | "arrays" | "parity" | "geometry"
-export type ActiveBoard = "zen-garden" | "pips-garden" | "looseleaf-desk" | "kinetic-studio"
+export type ActiveBoard = "toy" | "garden"
+export type ActiveStandard = ActiveBoard | "landing" | "arrays" | "parity" | "geometry"
 
 export default function App() {
   const { startDeskTransition } = useDeskViewTransition()
 
+  // Strictly 2 Boards: Board 1 (Wooden Math Toy Studio) & Board 2 (Pip's Math Garden)
   const [activeBoard, setActiveBoard] = React.useState<ActiveBoard>(() => {
     try {
-      const stored = localStorage.getItem("egm_active_board")
-      if (
-        stored === "zen-garden" ||
-        stored === "pips-garden" ||
-        stored === "looseleaf-desk" ||
-        stored === "kinetic-studio"
-      ) {
-        return stored
-      }
+      const stored =
+        localStorage.getItem("egm_active_board") || localStorage.getItem("egm_active_standard")
+      if (stored === "garden") return "garden"
+      if (stored === "toy" || stored === "landing") return "toy"
     } catch {
       // Storage access may be blocked
     }
-    return "zen-garden"
+    return "toy"
   })
 
-  const [activeStandard, setActiveStandard] = React.useState<ActiveStandard>(() => {
-    try {
-      const stored = localStorage.getItem("egm_active_standard")
-      if (
-        stored === "landing" ||
-        stored === "arrays" ||
-        stored === "parity" ||
-        stored === "geometry"
-      ) {
-        return stored
-      }
-    } catch {
-      // Storage access may be blocked
-    }
-    return "landing"
-  })
-
-  const switchToStandard = React.useCallback(
-    (target: ActiveStandard) => {
+  const switchToBoard = React.useCallback(
+    (target: ActiveBoard) => {
       startDeskTransition(() => {
-        setActiveStandard(target)
+        setActiveBoard(target)
       })
     },
     [startDeskTransition],
@@ -68,21 +45,14 @@ export default function App() {
   })
 
   React.useEffect(() => {
+    document.documentElement.setAttribute("data-active-board", activeBoard)
     try {
       localStorage.setItem("egm_active_board", activeBoard)
+      localStorage.setItem("egm_active_standard", activeBoard)
     } catch {
       // Ignore
     }
   }, [activeBoard])
-
-  React.useEffect(() => {
-    document.documentElement.setAttribute("data-active-standard", activeStandard)
-    try {
-      localStorage.setItem("egm_active_standard", activeStandard)
-    } catch {
-      // Ignore
-    }
-  }, [activeStandard])
 
   React.useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme)
@@ -95,209 +65,56 @@ export default function App() {
   }, [theme])
 
   return (
-    <div className="desk-stage w-full h-full min-h-screen relative flex flex-col">
-      {/* Top Design Board Comparison Switcher */}
-      <header className="sticky top-0 z-50 w-full bg-[#2c2724]/92 backdrop-blur-md border-b border-[#4a3e35]/50 text-[#f7f3ea] px-3.5 py-2 flex flex-wrap items-center justify-between gap-2 shadow-md">
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono tracking-wider uppercase text-[#ffa502] font-black bg-[#ffa502]/15 px-2 py-0.5 rounded border border-[#ffa502]/30">
-            Design Studio
-          </span>
-          <span className="text-xs font-medium text-[#d4c9b9] hidden sm:inline">
-            Compare Active Paradigms
-          </span>
-        </div>
-
-        <nav
-          className="flex items-center gap-1.5 overflow-x-auto text-xs font-semibold py-0.5"
-          aria-label="Design Boards"
+    <div className="desk-stage w-full h-full min-h-screen relative font-sans">
+      {/* Universal 2-Board Navigation Switcher Bar (Modern Web Guidance View Transition) */}
+      <nav
+        aria-label="Board switcher navigation"
+        className="fixed top-3.5 right-4 z-50 flex items-center gap-1.5 bg-white/95 backdrop-blur-md border border-[#bc6c25]/30 p-1 rounded-full shadow-lg"
+      >
+        <button
+          type="button"
+          onClick={() => switchToBoard("toy")}
+          className={cn(
+            "px-3.5 py-1.5 rounded-full text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 [text-wrap:nowrap]",
+            activeBoard === "toy"
+              ? "bg-[#2b2d42] text-white shadow-xs"
+              : "text-[#5c4a3b] hover:text-[#2b2d42] hover:bg-[#ede7dc]",
+          )}
+          aria-pressed={activeBoard === "toy"}
         >
-          <button
-            type="button"
-            onClick={() => setActiveBoard("zen-garden")}
-            className={`px-3 py-1 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
-              activeBoard === "zen-garden"
-                ? "bg-[#ffa502] text-[#2c2724] font-extrabold shadow-sm scale-102"
-                : "bg-white/10 text-[#f7f3ea] hover:bg-white/20"
-            }`}
-            title="Board 1: Zen Garden Sanctuary with Montessori Dovetail Joinery Toy"
-          >
-            <span>⛩️</span>
-            <span>Board 1: Zen Garden</span>
-          </button>
+          <span>🪵</span>
+          <span>Board 1: Wooden Toy</span>
+        </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveBoard("pips-garden")}
-            className={`px-3 py-1 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
-              activeBoard === "pips-garden"
-                ? "bg-[#10ac84] text-white font-extrabold shadow-sm scale-102"
-                : "bg-white/10 text-[#f7f3ea] hover:bg-white/20"
-            }`}
-            title="Board 2: Pip's Math Garden (from feat/pips-math-garden)"
-          >
-            <span>🦉</span>
-            <span>Board 2: Pip's Garden</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveBoard("looseleaf-desk")}
-            className={`px-3 py-1 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
-              activeBoard === "looseleaf-desk"
-                ? "bg-[#1e90ff] text-white font-extrabold shadow-sm scale-102"
-                : "bg-white/10 text-[#f7f3ea] hover:bg-white/20"
-            }`}
-            title="Board 3: Classic Looseleaf Classroom Desk (NC.2.OA.3, NC.2.OA.4, NC.2.G.3)"
-          >
-            <span>📐</span>
-            <span>Board 3: Looseleaf Desk</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveBoard("kinetic-studio")}
-            className={`px-3 py-1 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
-              activeBoard === "kinetic-studio"
-                ? "bg-[#ee5253] text-white font-extrabold shadow-sm scale-102"
-                : "bg-white/10 text-[#f7f3ea] hover:bg-white/20"
-            }`}
-            title="Board 4: Kinetic Toy Studio (Wood Joinery vs Ripple Pond vs Brass Ratchet)"
-          >
-            <span>🪵</span>
-            <span>Board 4: Kinetic Studio</span>
-          </button>
-        </nav>
-      </header>
-
-      {/* Board 1: Zen Garden Sanctuary & Dovetail Joinery */}
-      {activeBoard === "zen-garden" && (
-        <div className="w-full flex-1">
-          {activeStandard === "landing" ? (
-            <ZenGardenLanding
-              onSelectStandard={switchToStandard}
-              theme={theme}
-              onSetTheme={setTheme}
-            />
-          ) : activeStandard === "parity" ? (
-            <NC2OA3Wireframe
-              theme={theme}
-              onSetTheme={setTheme}
-              onSwitchToArrays={() => switchToStandard("arrays")}
-              onSwitchToGeometry={() => switchToStandard("geometry")}
-            />
-          ) : activeStandard === "geometry" ? (
-            <NC2GWireframe
-              theme={theme}
-              onSetTheme={setTheme}
-              onSwitchToArrays={() => switchToStandard("arrays")}
-              onSwitchToParity={() => switchToStandard("parity")}
-            />
-          ) : (
-            <NC2OA4Wireframe
-              theme={theme}
-              onSetTheme={setTheme}
-              onSwitchToParity={() => switchToStandard("parity")}
-              onSwitchToGeometry={() => switchToStandard("geometry")}
-            />
+        <button
+          type="button"
+          onClick={() => switchToBoard("garden")}
+          className={cn(
+            "px-3.5 py-1.5 rounded-full text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 [text-wrap:nowrap]",
+            activeBoard === "garden"
+              ? "bg-[#10ac84] text-white shadow-xs"
+              : "text-[#5c4a3b] hover:text-[#2b2d42] hover:bg-[#ede7dc]",
           )}
+          aria-pressed={activeBoard === "garden"}
+        >
+          <span>🦉</span>
+          <span>Board 2: Math Garden</span>
+        </button>
+      </nav>
 
-          {activeStandard !== "landing" && (
-            <button
-              type="button"
-              onClick={() => switchToStandard("landing")}
-              className="fixed bottom-4 left-4 z-50 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/95 border border-[#bc6c25]/30 text-[#4a3e35] text-xs font-extrabold shadow-lg hover:bg-[#ede7dc] hover:scale-105 active:scale-95 transition-all cursor-pointer backdrop-blur-md"
-              title="Return to Zen Garden of Learning"
-              aria-label="Return to Zen Garden of Learning"
-            >
-              <span className="text-[#bc6c25]">⛩️</span>
-              <span>Zen Garden</span>
-            </button>
-          )}
-        </div>
-      )}
-
-      {/* Board 2: Pip's Math Garden (from feat/pips-math-garden) */}
-      {activeBoard === "pips-garden" && (
-        <div className="w-full flex-1 bg-[#fbf7ee]">
-          <GardenApp />
-        </div>
-      )}
-
-      {/* Board 3: Classic Looseleaf Classroom Desk */}
-      {activeBoard === "looseleaf-desk" && (
-        <div className="w-full flex-1">
-          <div className="bg-white/80 border-b border-[#e5e0d8] px-4 py-2 flex items-center justify-between text-xs font-semibold backdrop-blur-sm">
-            <span className="text-[#6b5e51]">Looseleaf NC Grade 2 Standard:</span>
-            <div className="flex gap-1.5">
-              <button
-                type="button"
-                onClick={() => switchToStandard("geometry")}
-                className={`px-2.5 py-1 rounded border transition-all ${
-                  activeStandard === "geometry"
-                    ? "bg-[#10ac84] text-white border-[#10ac84]"
-                    : "bg-white text-[#4a3e35] border-[#d8d0c5] hover:bg-[#f6f2eb]"
-                }`}
-              >
-                NC.2.G.3 (Geometry)
-              </button>
-              <button
-                type="button"
-                onClick={() => switchToStandard("arrays")}
-                className={`px-2.5 py-1 rounded border transition-all ${
-                  activeStandard === "arrays"
-                    ? "bg-[#ffa502] text-[#2c2724] border-[#ffa502]"
-                    : "bg-white text-[#4a3e35] border-[#d8d0c5] hover:bg-[#f6f2eb]"
-                }`}
-              >
-                NC.2.OA.4 (Arrays)
-              </button>
-              <button
-                type="button"
-                onClick={() => switchToStandard("parity")}
-                className={`px-2.5 py-1 rounded border transition-all ${
-                  activeStandard === "parity"
-                    ? "bg-[#1e90ff] text-white border-[#1e90ff]"
-                    : "bg-white text-[#4a3e35] border-[#d8d0c5] hover:bg-[#f6f2eb]"
-                }`}
-              >
-                NC.2.OA.3 (Parity)
-              </button>
-            </div>
-          </div>
-          {activeStandard === "parity" ? (
-            <NC2OA3Wireframe
-              theme={theme}
-              onSetTheme={setTheme}
-              onSwitchToArrays={() => switchToStandard("arrays")}
-              onSwitchToGeometry={() => switchToStandard("geometry")}
-            />
-          ) : activeStandard === "geometry" ? (
-            <NC2GWireframe
-              theme={theme}
-              onSetTheme={setTheme}
-              onSwitchToArrays={() => switchToStandard("arrays")}
-              onSwitchToParity={() => switchToStandard("parity")}
-            />
-          ) : (
-            <NC2OA4Wireframe
-              theme={theme}
-              onSetTheme={setTheme}
-              onSwitchToParity={() => switchToStandard("parity")}
-              onSwitchToGeometry={() => switchToStandard("geometry")}
-            />
-          )}
-        </div>
-      )}
-
-      {/* Board 4: Kinetic Toy Studio (Wood Joinery vs Ripple Pond vs Brass Ratchet) */}
-      {activeBoard === "kinetic-studio" && (
-        <div className="w-full flex-1 h-[calc(100vh-45px)]">
-          <iframe
-            src="/tactile-toy-studio.html"
-            className="w-full h-full border-0"
-            title="Tactile Toy Studio: Kinetic Physics Comparison"
-          />
-        </div>
+      {/* Render Strictly the 2 Boards */}
+      {activeBoard === "garden" ? (
+        <GardenApp />
+      ) : (
+        <ZenGardenLanding
+          onSelectGarden={() => switchToBoard("garden")}
+          onSelectStandard={() => {
+            const cedar = document.querySelector(".cedar-workbench")
+            cedar?.scrollIntoView({ behavior: "smooth", block: "center" })
+          }}
+          theme={theme}
+          onSetTheme={setTheme}
+        />
       )}
     </div>
   )

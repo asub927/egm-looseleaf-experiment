@@ -124,3 +124,75 @@ export const SNAP_CAPTURE_RADIUS = 50
 /** 3D Tactile Elevation Invariants: Invariant 2 */
 export const ELEVATION_OFFSET_Y = -14
 export const ELEVATION_SCALE = 1.06
+
+export type CurriculumStationId = "making-ten" | "arrays" | "parity" | "geometry" | "dovetail"
+
+export interface CurriculumStationConfig {
+  id: CurriculumStationId
+  number: number
+  name: string
+  standard: string
+  badge: string
+  icon: string
+  title: string
+  normalEquation: string
+  solvedEquation: string
+}
+
+export const CURRICULUM_STATIONS: readonly CurriculumStationConfig[] = [
+  {
+    id: "making-ten",
+    number: 1,
+    name: "Making Ten",
+    standard: "NC.2.OA.2",
+    badge: "NC.2.OA.2",
+    icon: "🍓",
+    title: "Station 1: Ten-Frame Inset (6 Coral + 4 Mint = 10)",
+    normalEquation: "6 (Coral) + 4 (Mint) = 10 · Flush Dovetail Joint",
+    solvedEquation: "10 − 6 = 4 · Inset Completed ✓",
+  },
+  {
+    id: "arrays",
+    number: 2,
+    name: "Arrays",
+    standard: "NC.2.OA.4",
+    badge: "NC.2.OA.4",
+    icon: "🍯",
+    title: "Station 2: Interlocking Arrays (3 Rows × 4 Cols = 12)",
+    normalEquation: "Honey (4) + Blue (4) + Coral (4) = 12",
+    solvedEquation: "3 Rows × 4 Cols = 12 · Solid Array Locked ✓",
+  },
+  {
+    id: "parity",
+    number: 3,
+    name: "Odd & Even",
+    standard: "NC.2.OA.3",
+    badge: "NC.2.OA.3",
+    icon: "🫐",
+    title: "Station 3: Odd & Even Parity (8 = 4 Lavender + 4 Honey)",
+    normalEquation: "4 Lavender + 4 Honey = 8 Symmetrical Pairs",
+    solvedEquation: "8 is EVEN · Perfect Partner Teams ✓",
+  },
+  {
+    id: "geometry",
+    number: 4,
+    name: "Geometry Shares",
+    standard: "NC.2.G.3",
+    badge: "NC.2.G.3",
+    icon: "🥧",
+    title: "Station 4: Geometry Fruit Tart (3 Equal Thirds)",
+    normalEquation: "Coral (1/3) + Blue (1/3) + Mint (1/3) = 1 Whole",
+    solvedEquation: "3 Thirds = 1 Whole Fruit Tart ✓",
+  },
+  {
+    id: "dovetail",
+    number: 5,
+    name: "Dovetail Studio",
+    standard: "NC.2.OA.2-G.3",
+    badge: "Studio",
+    icon: "榫",
+    title: "Station 5: Master Dovetail Joinery (5 Dyed Lime Wood Tenons)",
+    normalEquation: "Assemble 5 Handcrafted Dovetail Tenons into Mortise Bench",
+    solvedEquation: "5 / 5 Harmonized · Master Joinery Achieved ✓",
+  },
+] as const

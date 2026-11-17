@@ -26,4 +26,5 @@ export {
   playWoodLift,
   playWoodSettle,
   playPentatonicHarmony,
+  playSequentialThocks,
 } from "./wood-thock-synth.ts"

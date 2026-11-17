@@ -1473,6 +1473,34 @@
   --ll-card: #faf5ff;
   --ll-paper-shade: #f3e8ff;
 }
+[data-theme="zen"],
+:root[data-theme="zen"] {
+  --ll-desk: #f4ede4;
+  --ll-desk-deep: #e5dacb;
+  --ll-paper: #fffdfa;
+  --ll-card: #f9f5ee;
+  --ll-paper-shade: #ede3d4;
+  --ll-desk-vignette: radial-gradient(
+    ellipse at 50% 30%,
+    rgba(255, 255, 255, 0.6) 0%,
+    rgba(188, 108, 37, 0.08) 60%,
+    rgba(140, 115, 85, 0.18) 100%
+  );
+}
+
+:root[data-theme="zen"] .desk-stage,
+[data-theme="zen"] .desk-stage {
+  background-color: var(--ll-desk);
+  background-image:
+    radial-gradient(ellipse at 50% 20%, rgba(255, 253, 248, 0.8) 0%, rgba(244, 237, 228, 0.4) 70%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 15px,
+      rgba(180, 165, 145, 0.12) 15px,
+      rgba(180, 165, 145, 0.12) 16px
+    );
+}
 
 @media (prefers-reduced-motion: reduce) {
   :root {
@@ -1625,5 +1653,41 @@
   }
   :is([data-slot="native-select"], [data-slot="calendar-dropdown"] select) option::checkmark {
     color: var(--ll-ink-you);
+  }
+}
+
+/* Modern Web Guidance: CSS Interpolate Size */
+@supports (interpolate-size: allow-keywords) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+}
+
+/* Modern Web Guidance: Same-Document View Transitions */
+.desk-stage {
+  view-transition-name: desk-stage;
+}
+
+.desk-toolbar {
+  view-transition-name: desk-toolbar;
+}
+
+::view-transition-old(desk-stage),
+::view-transition-new(desk-stage) {
+  animation-duration: 240ms;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+::view-transition-old(desk-toolbar),
+::view-transition-new(desk-toolbar) {
+  animation-duration: 180ms;
+  animation-timing-function: ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }

@@ -1,0 +1,1440 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>The Botanical Math Atelier · Hybrid Interactive Demo</title>
+    <style>
+      :root {
+        /* blu.school Minimalist Palette */
+        --bg: #fbf9f5;
+        --surface: #ffffff;
+        --surface-subtle: #f6f1e8;
+        --border: #e6dfd3;
+        --border-focus: #282538;
+        --ink: #1f1d2b;
+        --ink-muted: #656376;
+        --ink-faint: #a7a4b8;
+
+        /* Botanical Atelier Warm Accents */
+        --terracotta: #d97757;
+        --terracotta-soft: #fbefea;
+        --bamboo: #5c8d76;
+        --bamboo-deep: #3d6453;
+        --bamboo-soft: #e3f2eb;
+        --peach: #ffd6c9;
+        --peach-deep: #f28b72;
+        --mint: #c6edd9;
+        --mint-deep: #3d9b6d;
+        --gold: #f59e0b;
+        --gold-glow: rgba(245, 158, 11, 0.4);
+        --butter: #fef3c7;
+        --lavender: #ede9fe;
+        --lavender-deep: #7c3aed;
+        --sky: #e0f2fe;
+
+        --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+        --shadow-sm: 0 2px 8px rgba(31, 29, 43, 0.04);
+        --shadow-md: 0 10px 28px rgba(31, 29, 43, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        width: 100vw;
+        min-height: 100vh;
+        background: var(--bg);
+        font-family:
+          -apple-system, BlinkMacSystemFont, "SF Pro Rounded", ui-rounded, "Segoe UI", Roboto,
+          sans-serif;
+        color: var(--ink);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-x: hidden;
+        padding: 12px 18px 24px;
+      }
+
+      /* Chrome View Transition */
+      @view-transition {
+        navigation: auto;
+      }
+
+      /* Header & Navigation Bar */
+      header {
+        width: 100%;
+        max-width: 980px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 6px 0 14px;
+        border-bottom: 1.5px solid var(--border);
+        position: relative;
+        z-index: 100;
+      }
+
+      .brand-wrap {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: var(--surface);
+        border: 2px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .brand-text h1 {
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--ink);
+        letter-spacing: -0.01em;
+      }
+
+      .brand-text p {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--ink-muted);
+      }
+
+      /* Dropdown Selector (blu.school Style) */
+      .unit-dropdown-wrap {
+        position: relative;
+      }
+
+      .unit-dropdown-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 18px;
+        background: var(--surface);
+        border: 2px solid var(--border);
+        border-radius: 999px;
+        font-size: 13.5px;
+        font-weight: 800;
+        color: var(--ink);
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.15s var(--ease-smooth);
+      }
+
+      .unit-dropdown-btn:hover {
+        border-color: var(--ink);
+        transform: translateY(-1px);
+      }
+
+      .unit-dropdown-btn .chevron {
+        font-size: 11px;
+        transition: transform 0.2s ease;
+      }
+
+      .unit-dropdown-btn.open .chevron {
+        transform: rotate(180deg);
+      }
+
+      .unit-dropdown-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%);
+        width: 380px;
+        background: var(--surface);
+        border: 2px solid var(--border);
+        border-radius: 20px;
+        box-shadow: var(--shadow-md);
+        padding: 8px;
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        z-index: 250;
+      }
+
+      .unit-dropdown-menu.show {
+        display: flex;
+        animation: menuDrop 0.2s var(--ease-spring);
+      }
+
+      @keyframes menuDrop {
+        from {
+          opacity: 0;
+          transform: translate(-50%, -6px) scale(0.97);
+        }
+        to {
+          opacity: 1;
+          transform: translate(-50%, 0) scale(1);
+        }
+      }
+
+      .unit-item {
+        padding: 10px 14px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        border: 1.5px solid transparent;
+        transition: all 0.12s ease;
+      }
+
+      .unit-item:hover {
+        background: var(--surface-subtle);
+        border-color: var(--border);
+      }
+
+      .unit-item.active {
+        background: var(--mint);
+        border-color: var(--mint-deep);
+        color: #064e3b;
+      }
+
+      .unit-item .unit-badge {
+        font-size: 10px;
+        font-weight: 800;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.06);
+      }
+
+      .unit-item.active .unit-badge {
+        background: #065f46;
+        color: #fff;
+      }
+
+      /* Header Actions */
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .pill-btn {
+        padding: 7px 14px;
+        border-radius: 999px;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--ink-muted);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.12s ease;
+      }
+
+      .pill-btn:hover {
+        border-color: var(--ink);
+        color: var(--ink);
+      }
+
+      .pill-btn.active {
+        background: var(--butter);
+        border-color: var(--gold);
+        color: #78350f;
+      }
+
+      /* Main Stage Container (Container Queries) */
+      .atelier-container {
+        width: 100%;
+        max-width: 980px;
+        margin-top: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        container-type: inline-size;
+      }
+
+      /* Top Progress Bar & Auto Advance */
+      .progress-bar-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 18px;
+        padding: 8px 18px;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .progress-pips {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .pip-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        background: var(--surface-subtle);
+        border: 2px solid var(--border);
+        transition: all 0.25s var(--ease-spring);
+      }
+
+      .pip-dot.active {
+        background: var(--gold);
+        border-color: #d97706;
+        transform: scale(1.3);
+      }
+
+      .pip-dot.done {
+        background: var(--mint-deep);
+        border-color: #059669;
+      }
+
+      .progress-text {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--ink-muted);
+        margin-left: 10px;
+      }
+
+      .auto-advance-banner {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        background: var(--mint);
+        border: 1.5px solid var(--mint-deep);
+        border-radius: 999px;
+        padding: 4px 14px;
+        font-size: 12px;
+        font-weight: 800;
+        color: #064e3b;
+        animation: pulseBanner 1.5s infinite;
+      }
+
+      .auto-advance-banner.show {
+        display: flex;
+      }
+
+      .auto-advance-banner button {
+        background: #064e3b;
+        color: #fff;
+        border: none;
+        border-radius: 999px;
+        padding: 3px 10px;
+        font-size: 11px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      /* Atelier Stage Workspace */
+      .stage-grid {
+        display: grid;
+        grid-template-columns: 1.25fr 0.95fr;
+        gap: 16px;
+      }
+
+      @container (max-width: 780px) {
+        .stage-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Left Manipulative Canvas (The Atelier Desk) */
+      .canvas-desk {
+        background: var(--surface);
+        border: 2px solid var(--border);
+        border-radius: 28px;
+        padding: 20px;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 440px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .canvas-title {
+        font-size: 16px;
+        font-weight: 800;
+        text-wrap: balance;
+        text-align: center;
+        color: var(--ink);
+        margin-bottom: 12px;
+      }
+
+      .manipulative-viewport {
+        width: 100%;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      /* Synthesis "Glowing Gap" Core Style */
+      @keyframes gapGlow {
+        0%,
+        100% {
+          stroke: var(--gold);
+          fill: rgba(245, 158, 11, 0.12);
+          filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.45));
+        }
+        50% {
+          stroke: #10b981;
+          fill: rgba(16, 185, 129, 0.22);
+          filter: drop-shadow(0 0 18px rgba(16, 185, 129, 0.65));
+        }
+      }
+
+      .glowing-gap {
+        animation: gapGlow 1.8s ease-in-out infinite;
+        cursor: pointer;
+      }
+
+      .calm .glowing-gap {
+        animation: none !important;
+        stroke: var(--bamboo-deep) !important;
+        fill: rgba(92, 141, 118, 0.15) !important;
+      }
+
+      /* Right Pedagogical Dialogue & Metacognitive Reflection */
+      .dialogue-card {
+        background: var(--surface);
+        border: 2px solid var(--border);
+        border-radius: 28px;
+        padding: 22px;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .mascot-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+      }
+
+      .mascot-avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 18px;
+        background: var(--surface-subtle);
+        border: 2px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        flex-shrink: 0;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .speech-bubble {
+        background: var(--surface-subtle);
+        border: 1.5px solid var(--border);
+        border-radius: 20px;
+        border-top-left-radius: 4px;
+        padding: 12px 16px;
+        font-size: 13.5px;
+        line-height: 1.45;
+        font-weight: 600;
+        color: var(--ink);
+        text-wrap: pretty;
+      }
+
+      .speech-bubble strong {
+        color: var(--terracotta);
+      }
+
+      /* Prediction Pebble Chips ("What do you think first?") */
+      .pebble-section {
+        background: var(--bg);
+        border: 1.5px dashed var(--border);
+        border-radius: 20px;
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .pebble-label {
+        font-size: 11.5px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--ink-muted);
+      }
+
+      .pebble-chips-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .pebble-chip {
+        padding: 8px 16px;
+        border-radius: 999px;
+        background: var(--surface);
+        border: 2px solid var(--border);
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--ink);
+        cursor: pointer;
+        transition: all 0.15s var(--ease-spring);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .pebble-chip:hover {
+        border-color: var(--bamboo-deep);
+        transform: translateY(-2px);
+      }
+
+      .pebble-chip.selected {
+        background: var(--honey-deep, #e5b842);
+        border-color: #b45309;
+        color: #fff;
+        transform: scale(1.08);
+      }
+
+      /* Live Dynamic Equation (CPA Bridge) */
+      .equation-box {
+        background: #1e1b2e;
+        color: #fff;
+        border-radius: 18px;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        font-family: "SF Mono", ui-monospace, Menlo, monospace;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        box-shadow: 0 4px 16px rgba(30, 27, 46, 0.15);
+      }
+
+      .equation-slot {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        height: 36px;
+        padding: 0 8px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 2px dashed rgba(255, 255, 255, 0.35);
+        border-radius: 10px;
+        color: #fbbf24;
+      }
+
+      .equation-slot.filled {
+        background: #059669;
+        border: 2px solid #34d399;
+        color: #fff;
+        animation: slotPop 0.3s var(--ease-spring);
+      }
+
+      @keyframes slotPop {
+        0% {
+          transform: scale(0.8);
+        }
+        50% {
+          transform: scale(1.15);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* Action Bar / Direct Taps */
+      .action-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .btn-primary {
+        flex: 1;
+        padding: 12px 18px;
+        border-radius: 16px;
+        background: var(--bamboo-deep);
+        color: #fff;
+        border: none;
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 0 4px 14px rgba(61, 100, 83, 0.25);
+        transition: all 0.15s ease;
+      }
+
+      .btn-primary:hover {
+        background: #2e4d3f;
+        transform: translateY(-1px);
+      }
+
+      .btn-secondary {
+        padding: 12px 16px;
+        border-radius: 16px;
+        background: var(--surface);
+        border: 2px solid var(--border);
+        color: var(--ink);
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .btn-secondary:hover {
+        border-color: var(--ink);
+      }
+
+      /* Co-play Card */
+      .coplay-card {
+        background: var(--terracotta-soft);
+        border: 1.5px solid #f8d3c5;
+        border-radius: 18px;
+        padding: 10px 14px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #9c4125;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* Snail Slider & Vine Styles */
+      .vine-svg {
+        width: 100%;
+        max-width: 480px;
+        height: 360px;
+      }
+
+      .draggable-handle {
+        cursor: grab;
+      }
+      .draggable-handle:active {
+        cursor: grabbing;
+      }
+
+      /* Celebration Modal */
+      .celebration-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(31, 29, 43, 0.45);
+        backdrop-filter: blur(8px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 500;
+      }
+
+      .celebration-modal.show {
+        display: flex;
+        animation: modalFade 0.25s var(--ease-spring);
+      }
+
+      @keyframes modalFade {
+        from {
+          opacity: 0;
+          transform: scale(0.92);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .modal-box {
+        background: var(--surface);
+        border: 2px solid var(--border);
+        border-radius: 32px;
+        padding: 32px;
+        text-align: center;
+        max-width: 420px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .modal-box h2 {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--ink);
+      }
+
+      .modal-box p {
+        font-size: 14px;
+        color: var(--ink-muted);
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Header & Unit Dropdown Navigation -->
+    <header>
+      <div class="brand-wrap">
+        <div class="brand-icon">🌿</div>
+        <div class="brand-text">
+          <h1>Botanical Math Atelier</h1>
+          <p>NC Grade 2 Mathematics · Tactile Discovery</p>
+        </div>
+      </div>
+
+      <!-- blu.school Unit Dropdown -->
+      <div class="unit-dropdown-wrap">
+        <button class="unit-dropdown-btn" id="unitDropdownBtn" onclick="toggleUnitMenu()">
+          <span id="activeUnitIcon">🐌</span>
+          <span id="activeUnitTitle">Unit 1: Making Ten (Whispering Vine)</span>
+          <span class="chevron">▼</span>
+        </button>
+
+        <div class="unit-dropdown-menu" id="unitDropdownMenu">
+          <div class="unit-item active" onclick="selectUnit(1)">
+            <div>
+              <span style="margin-right: 6px">🐌</span>
+              <span>Unit 1: Making Ten (Whispering Vine)</span>
+            </div>
+            <span class="unit-badge">10 − ?</span>
+          </div>
+          <div class="unit-item" onclick="selectUnit(2)">
+            <div>
+              <span style="margin-right: 6px">🍪</span>
+              <span>Unit 2: Spatial Arrays & Stamp Garden</span>
+            </div>
+            <span class="unit-badge">5 × 5</span>
+          </div>
+          <div class="unit-item" onclick="selectUnit(3)">
+            <div>
+              <span style="margin-right: 6px">🌰</span>
+              <span>Unit 3: Parity & Buddy Ponds</span>
+            </div>
+            <span class="unit-badge">Odd / Even</span>
+          </div>
+          <div class="unit-item" onclick="selectUnit(4)">
+            <div>
+              <span style="margin-right: 6px">📐</span>
+              <span>Unit 4: Artisan Geometry Kitchen</span>
+            </div>
+            <span class="unit-badge">Shares</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Header Actions -->
+      <div class="header-actions">
+        <button class="pill-btn" id="audioToggleBtn" onclick="toggleAudio()">
+          <span id="audioIcon">🔔</span>
+          <span>Kalimba</span>
+        </button>
+        <button class="pill-btn" id="calmToggleBtn" onclick="toggleCalm()">
+          <span>🫧</span>
+          <span>Calm</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="atelier-container">
+      <!-- Progress Bar & Auto-Advance Banner -->
+      <div class="progress-bar-wrap">
+        <div class="progress-pips">
+          <div class="pip-dot active" id="pip-0"></div>
+          <div class="pip-dot" id="pip-1"></div>
+          <div class="pip-dot" id="pip-2"></div>
+          <div class="pip-dot" id="pip-3"></div>
+          <div class="pip-dot" id="pip-4"></div>
+          <span class="progress-text" id="progressText">Question 1 of 5</span>
+        </div>
+
+        <div class="auto-advance-banner" id="autoAdvanceBanner">
+          <span>🌟 Solved! Advancing in <span id="countdownSec">3</span>s…</span>
+          <button onclick="advanceNextQuestion()">Next ➔</button>
+        </div>
+      </div>
+
+      <!-- Atelier Stage Workspace -->
+      <div class="stage-grid">
+        <!-- Left Manipulative Canvas -->
+        <div class="canvas-desk" id="canvasDesk">
+          <div class="canvas-title" id="canvasPromptTitle">
+            The vine holds 7 glowing dewdrops. How many more fill the golden blossom of 10?
+          </div>
+
+          <div class="manipulative-viewport" id="manipulativeViewport">
+            <!-- Dynamic SVG Workspace injected by JS -->
+          </div>
+
+          <!-- Bottom Control Bar for Manipulative -->
+          <div
+            style="
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-top: 10px;
+            "
+          >
+            <div
+              style="font-size: 12px; font-weight: 700; color: var(--ink-muted)"
+              id="manipulativeHint"
+            >
+              ✨ Tap or drag glowing nodes into the gap
+            </div>
+            <button
+              class="pill-btn"
+              style="padding: 5px 12px; font-size: 11.5px"
+              onclick="resetCurrentWorkspace()"
+            >
+              ↺ Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Pedagogical Dialogue Card -->
+        <div class="dialogue-card">
+          <!-- Mascot Row -->
+          <div class="mascot-row">
+            <div class="mascot-avatar" id="mascotAvatar">🐌</div>
+            <div class="speech-bubble" id="mascotSpeech">
+              Welcome to the garden! Look at the <strong>glowing gap</strong> above the resting
+              dewdrop. Slide or tap to bring the vine to the top golden blossom!
+            </div>
+          </div>
+
+          <!-- Metacognitive Pebble Prediction Chips -->
+          <div class="pebble-section">
+            <span class="pebble-label">First: What do you think fills the gap?</span>
+            <div class="pebble-chips-row" id="pebbleChipsRow">
+              <!-- Injected by JS -->
+            </div>
+          </div>
+
+          <!-- Live Dynamic Equation (CPA Symbolic Bridge) -->
+          <div class="equation-box" id="equationDisplay">
+            <span>7</span>
+            <span>+</span>
+            <span class="equation-slot" id="equationSlot">?</span>
+            <span>=</span>
+            <span>10</span>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-row">
+            <button class="btn-primary" id="checkSolutionBtn" onclick="evaluateAnswer()">
+              <span>Check Solution</span>
+              <span>✓</span>
+            </button>
+          </div>
+
+          <!-- Grown-up Co-Play Guidance Card -->
+          <div class="coplay-card">
+            <span>💡</span>
+            <span id="coplayPrompt"
+              >Ask: "Can you see how many empty spots are glowing before the top flower?"</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Celebration Modal -->
+    <div class="celebration-modal" id="celebrationModal">
+      <div class="modal-box">
+        <div style="font-size: 48px">🏆</div>
+        <h2>Atelier Milestone Reached!</h2>
+        <p id="celebrationSubtext">
+          You mastered all 5 challenges in this unit with deep spatial intuition!
+        </p>
+        <button class="btn-primary" style="width: 100%" onclick="nextUnitOrReplay()">
+          <span>Next Unit ➔</span>
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // ==========================================
+      // 1. PENTATONIC KALIMBA WEB AUDIO SYNTHESIZER
+      // ==========================================
+      let audioCtx = null
+      let audioEnabled = true
+
+      function getAudioContext() {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+        }
+        if (audioCtx.state === "suspended") {
+          audioCtx.resume()
+        }
+        return audioCtx
+      }
+
+      const PENTATONIC_SCALE = [
+        261.63, // C4
+        293.66, // D4
+        329.63, // E4
+        392.0, // G4
+        440.0, // A4
+        523.25, // C5
+        587.33, // D5
+        659.25, // E5
+        783.99, // G5
+        1046.5, // C6
+      ]
+
+      function playKalimba(noteIndex, harmonicFactor = 2.01) {
+        if (!audioEnabled) return
+        try {
+          const ctx = getAudioContext()
+          const freq =
+            PENTATONIC_SCALE[Math.min(PENTATONIC_SCALE.length - 1, Math.max(0, noteIndex))]
+          const osc1 = ctx.createOscillator()
+          const osc2 = ctx.createOscillator()
+          const gain = ctx.createGain()
+
+          osc1.type = "sine"
+          osc2.type = "triangle"
+          osc1.frequency.setValueAtTime(freq, ctx.currentTime)
+          osc2.frequency.setValueAtTime(freq * harmonicFactor, ctx.currentTime)
+
+          gain.gain.setValueAtTime(0.25, ctx.currentTime)
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.38)
+
+          osc1.connect(gain)
+          osc2.connect(gain)
+          gain.connect(ctx.destination)
+
+          osc1.start()
+          osc2.start()
+          osc1.stop(ctx.currentTime + 0.39)
+          osc2.stop(ctx.currentTime + 0.39)
+        } catch (e) {}
+      }
+
+      function playCelebrationChord() {
+        if (!audioEnabled) return
+        try {
+          const chord = [523.25, 659.25, 783.99, 1046.5]
+          chord.forEach((f, idx) => {
+            setTimeout(() => {
+              const ctx = getAudioContext()
+              const osc = ctx.createOscillator()
+              const gain = ctx.createGain()
+              osc.type = "sine"
+              osc.frequency.setValueAtTime(f, ctx.currentTime)
+              gain.gain.setValueAtTime(0.2, ctx.currentTime)
+              gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.7)
+              osc.connect(gain)
+              gain.connect(ctx.destination)
+              osc.start()
+              osc.stop(ctx.currentTime + 0.7)
+            }, idx * 100)
+          })
+        } catch (e) {}
+      }
+
+      // ==========================================
+      // 2. CURRICULUM STATE & UNIT DEFINITIONS
+      // ==========================================
+      const UNITS_DATA = {
+        1: {
+          id: 1,
+          title: "Unit 1: Making Ten (Whispering Vine)",
+          mascot: "🐌",
+          mascotName: "Dewdrop Snail",
+          coplay: "Ask: 'How many empty spots are glowing before the top flower?'",
+          seeds: [
+            { id: "1a", whole: 10, known: 7, target: 3, choices: [2, 3, 4] },
+            { id: "1b", whole: 10, known: 8, target: 2, choices: [2, 3, 5] },
+            { id: "1c", whole: 10, known: 6, target: 4, choices: [3, 4, 5] },
+            { id: "1d", whole: 10, known: 9, target: 1, choices: [1, 2, 3] },
+            { id: "1e", whole: 10, known: 5, target: 5, choices: [4, 5, 6] },
+          ],
+        },
+        2: {
+          id: 2,
+          title: "Unit 2: Spatial Arrays & Stamp Garden",
+          mascot: "🍪",
+          mascotName: "Baker Pip",
+          coplay:
+            "Ask: 'How many cookies do you see in each row? What happens if we count by rows?'",
+          seeds: [
+            { id: "2a", rows: 3, cols: 4, total: 12, choices: [9, 12, 15] },
+            { id: "2b", rows: 2, cols: 5, total: 10, choices: [8, 10, 12] },
+            { id: "2c", rows: 4, cols: 3, total: 12, choices: [10, 12, 14] },
+            { id: "2d", rows: 3, cols: 3, total: 9, choices: [6, 9, 12] },
+            { id: "2e", rows: 5, cols: 2, total: 10, choices: [7, 10, 15] },
+          ],
+        },
+        3: {
+          id: 3,
+          title: "Unit 3: Parity & Buddy Ponds",
+          mascot: "🌰",
+          mascotName: "Kit the Fox",
+          coplay: "Ask: 'Does every acorn have a partner, or is one left out by itself?'",
+          seeds: [
+            {
+              id: "3a",
+              count: 8,
+              isEven: true,
+              pairs: 4,
+              leftover: 0,
+              choices: ["Even (8)", "Odd (7)"],
+            },
+            { id: "3b", count: 7, isEven: false, pairs: 3, leftover: 1, choices: ["Even", "Odd"] },
+            { id: "3c", count: 12, isEven: true, pairs: 6, leftover: 0, choices: ["Even", "Odd"] },
+            { id: "3d", count: 9, isEven: false, pairs: 4, leftover: 1, choices: ["Even", "Odd"] },
+            { id: "3e", count: 14, isEven: true, pairs: 7, leftover: 0, choices: ["Even", "Odd"] },
+          ],
+        },
+        4: {
+          id: 4,
+          title: "Unit 4: Artisan Geometry Kitchen",
+          mascot: "📐",
+          mascotName: "Pencil Pal",
+          coplay: "Ask: 'Are the slices the exact same size? How many shares make the whole pan?'",
+          seeds: [
+            { id: "4a", shape: "rectangle", shares: 2, name: "2 Halves", choices: [2, 3, 4] },
+            { id: "4b", shape: "circle", shares: 3, name: "3 Thirds", choices: [2, 3, 4] },
+            { id: "4c", shape: "rectangle", shares: 4, name: "4 Fourths", choices: [2, 3, 4] },
+            { id: "4d", shape: "circle", shares: 2, name: "2 Halves", choices: [2, 3, 4] },
+            { id: "4e", shape: "rectangle", shares: 3, name: "3 Thirds", choices: [2, 3, 4] },
+          ],
+        },
+      }
+
+      let currentUnitId = 1
+      let currentQuestionIndex = 0
+      let studentPrediction = null
+      let currentAdded = 0
+      let autoAdvanceTimer = null
+
+      // ==========================================
+      // 3. UI RENDERING & UNIT DISPATCHER
+      // ==========================================
+      function renderCurrentQuestion() {
+        const unit = UNITS_DATA[currentUnitId]
+        const seed = unit.seeds[currentQuestionIndex]
+        studentPrediction = null
+        currentAdded = 0
+        clearAutoAdvance()
+
+        // Update Header & Mascot
+        document.getElementById("activeUnitIcon").textContent = unit.mascot
+        document.getElementById("activeUnitTitle").textContent = unit.title
+        document.getElementById("mascotAvatar").textContent = unit.mascot
+        document.getElementById("coplayPrompt").textContent = unit.coplay
+
+        // Update Progress Pips
+        for (let i = 0; i < 5; i++) {
+          const pip = document.getElementById("pip-" + i)
+          pip.className =
+            "pip-dot" +
+            (i === currentQuestionIndex ? " active" : i < currentQuestionIndex ? " done" : "")
+        }
+        document.getElementById("progressText").textContent =
+          `Question ${currentQuestionIndex + 1} of 5`
+
+        // Render Prediction Chips
+        const pebbleRow = document.getElementById("pebbleChipsRow")
+        pebbleRow.innerHTML = ""
+        seed.choices.forEach((val) => {
+          const chip = document.createElement("button")
+          chip.className = "pebble-chip"
+          chip.textContent = val
+          chip.onclick = () => selectPrediction(val, chip)
+          pebbleRow.appendChild(chip)
+        })
+
+        // Unit-Specific Rendering
+        if (currentUnitId === 1) renderUnit1Vine(seed)
+        else if (currentUnitId === 2) renderUnit2Array(seed)
+        else if (currentUnitId === 3) renderUnit3Parity(seed)
+        else if (currentUnitId === 4) renderUnit4Geometry(seed)
+      }
+
+      // --- UNIT 1: WHISPERING VINE (10 - ?) ---
+      function renderUnit1Vine(seed) {
+        document.getElementById("canvasPromptTitle").textContent =
+          `The vine holds ${seed.known} glowing dewdrops. How many more fill the golden blossom of 10?`
+        document.getElementById("mascotSpeech").innerHTML =
+          `Look at the <strong>glowing gap</strong> above dewdrop #${seed.known}! Drag the snail or tap the glowing nodes to reach 10.`
+        document.getElementById("equationDisplay").innerHTML =
+          `<span>${seed.known}</span> <span>+</span> <span class="equation-slot" id="equationSlot">?</span> <span>=</span> <span>10</span>`
+
+        const viewport = document.getElementById("manipulativeViewport")
+        viewport.innerHTML = `
+          <svg class="vine-svg" viewBox="0 0 320 380">
+            <!-- Terracotta Pot -->
+            <path d="M 120 340 L 200 340 L 215 375 L 105 375 Z" fill="#d97757" stroke="#b45309" stroke-width="3"/>
+            <!-- Bamboo Stem -->
+            <line x1="160" y1="40" x2="160" y2="340" stroke="#5c8d76" stroke-width="14" stroke-linecap="round"/>
+            <!-- 10 Growth Nodes -->
+            <g id="vineNodesGroup"></g>
+            <!-- Top Golden Blossom (10) -->
+            <circle cx="160" cy="40" r="22" fill="#fef3c7" stroke="#f59e0b" stroke-width="4"/>
+            <text x="160" y="47" text-anchor="middle" font-size="18">🌸</text>
+            <text x="160" y="22" text-anchor="middle" font-size="12" font-weight="800" fill="#b45309">10</text>
+            <!-- Snail Handle -->
+            <g id="snailHandle" class="draggable-handle" transform="translate(110, 310)">
+              <rect x="0" y="0" width="100" height="34" rx="17" fill="#ffffff" stroke="#3d6453" stroke-width="2.5" filter="drop-shadow(0 2px 6px rgba(0,0,0,0.15))"/>
+              <text x="18" y="24" font-size="20">🐌</text>
+              <text id="snailCountText" x="62" y="22" font-size="14" font-weight="800" fill="#3d6453">0</text>
+            </g>
+          </svg>
+        `
+
+        const nodesGroup = document.getElementById("vineNodesGroup")
+        for (let i = 1; i <= 10; i++) {
+          const cy = 340 - i * 28
+          const isKnown = i <= seed.known
+          const isGap = i > seed.known
+
+          const nodeG = document.createElementNS("http://www.w3.org/2000/svg", "g")
+          nodeG.id = `node-${i}`
+          nodeG.onclick = () => onVineNodeClicked(i, seed)
+
+          const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle")
+          circle.setAttribute("cx", "160")
+          circle.setAttribute("cy", cy)
+          circle.setAttribute("r", isKnown ? "11" : "13")
+          circle.setAttribute("stroke-width", "3")
+
+          if (isKnown) {
+            circle.setAttribute("fill", "#ffd6c9")
+            circle.setAttribute("stroke", "#f28b72")
+          } else {
+            circle.setAttribute("class", "glowing-gap")
+            circle.setAttribute("stroke", "#f59e0b")
+            circle.setAttribute("fill", "rgba(245, 158, 11, 0.15)")
+          }
+
+          const txt = document.createElementNS("http://www.w3.org/2000/svg", "text")
+          txt.setAttribute("x", "160")
+          txt.setAttribute("y", cy + 4)
+          txt.setAttribute("text-anchor", "middle")
+          txt.setAttribute("font-size", "10")
+          txt.setAttribute("font-weight", "800")
+          txt.setAttribute("fill", isKnown ? "#9c4125" : "#656376")
+          txt.textContent = i
+
+          nodeG.appendChild(circle)
+          nodeG.appendChild(txt)
+          nodesGroup.appendChild(nodeG)
+        }
+      }
+
+      function onVineNodeClicked(nodeNum, seed) {
+        if (nodeNum <= seed.known) return
+        const added = nodeNum - seed.known
+        currentAdded = added
+        playKalimba(added + 2)
+
+        // Update nodes visually
+        for (let i = seed.known + 1; i <= 10; i++) {
+          const g = document.getElementById(`node-${i}`)
+          if (!g) continue
+          const circle = g.querySelector("circle")
+          if (i <= seed.known + added) {
+            circle.setAttribute("fill", "#c6edd9")
+            circle.setAttribute("stroke", "#3d9b6d")
+            circle.removeAttribute("class")
+          } else {
+            circle.setAttribute("class", "glowing-gap")
+            circle.setAttribute("stroke", "#f59e0b")
+            circle.setAttribute("fill", "rgba(245, 158, 11, 0.15)")
+          }
+        }
+
+        // Update Snail Handle
+        const snail = document.getElementById("snailHandle")
+        if (snail) {
+          const cy = 340 - (seed.known + added) * 28
+          snail.setAttribute("transform", `translate(110, ${cy - 17})`)
+          document.getElementById("snailCountText").textContent = `+${added}`
+        }
+
+        // Update Equation Slot
+        const slot = document.getElementById("equationSlot")
+        slot.textContent = added
+        slot.className = "equation-slot filled"
+      }
+
+      // --- UNIT 2: SPATIAL ARRAYS & STAMP GARDEN ---
+      function renderUnit2Array(seed) {
+        document.getElementById("canvasPromptTitle").textContent =
+          `Garden Bed: ${seed.rows} rows of ${seed.cols} cookies. How many in total?`
+        document.getElementById("mascotSpeech").innerHTML =
+          `Look at the grid! Fill each glowing cookie slot. Each row has <strong>${seed.cols}</strong> cookies.`
+        document.getElementById("equationDisplay").innerHTML =
+          `<span>${seed.rows} × ${seed.cols}</span> <span>=</span> <span class="equation-slot" id="equationSlot">?</span>`
+
+        const viewport = document.getElementById("manipulativeViewport")
+        let gridHtml = `<div style="display: grid; grid-template-rows: repeat(${seed.rows}, 1fr); gap: 12px; padding: 18px; background: #fffdfa; border: 2px dashed var(--border); border-radius: 20px;">`
+
+        for (let r = 0; r < seed.rows; r++) {
+          gridHtml += `<div style="display: flex; gap: 12px; align-items: center;">`
+          for (let c = 0; c < seed.cols; c++) {
+            gridHtml += `
+              <div id="slot-${r}-${c}" class="glowing-gap" onclick="onArraySlotClicked(${r}, ${c}, ${seed.rows}, ${seed.cols})"
+                style="width: 48px; height: 48px; border-radius: 50%; border: 2.5px solid var(--gold); display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; transition: all 0.2s var(--ease-spring);">
+                🍪
+              </div>
+            `
+          }
+          gridHtml += `</div>`
+        }
+        gridHtml += `</div>`
+        viewport.innerHTML = gridHtml
+      }
+
+      let arrayPlacedCount = 0
+      function onArraySlotClicked(r, c, rows, cols) {
+        const slot = document.getElementById(`slot-${r}-${c}`)
+        if (slot.dataset.filled === "true") {
+          slot.dataset.filled = "false"
+          slot.className = "glowing-gap"
+          slot.style.background = "rgba(245, 158, 11, 0.15)"
+          arrayPlacedCount--
+        } else {
+          slot.dataset.filled = "true"
+          slot.removeAttribute("class")
+          slot.style.background = "#ffd6c9"
+          slot.style.borderColor = "#f28b72"
+          arrayPlacedCount++
+          playKalimba(arrayPlacedCount)
+        }
+        currentAdded = arrayPlacedCount
+        const slotEl = document.getElementById("equationSlot")
+        slotEl.textContent = arrayPlacedCount
+        slotEl.className = "equation-slot filled"
+      }
+
+      // --- UNIT 3: PARITY & BUDDY PONDS ---
+      function renderUnit3Parity(seed) {
+        document.getElementById("canvasPromptTitle").textContent =
+          `Pairing Mat: Can ${seed.count} acorns form equal pairs without a leftover?`
+        document.getElementById("mascotSpeech").innerHTML =
+          `Put the acorns in pairs! If every acorn has a buddy, it's <strong>EVEN</strong>. If one is alone, it's <strong>ODD</strong>.`
+        document.getElementById("equationDisplay").innerHTML =
+          `<span>${seed.count} acorns</span> <span>=</span> <span class="equation-slot" id="equationSlot">?</span>`
+
+        const viewport = document.getElementById("manipulativeViewport")
+        let matHtml = `<div style="display: flex; gap: 24px; padding: 20px; background: #fbf7ee; border: 2px solid var(--border); border-radius: 24px; min-width: 320px; justify-content: center;">`
+
+        // Two Columns
+        matHtml += `<div style="display: flex; flex-direction: column; gap: 10px;">`
+        for (let i = 0; i < Math.ceil(seed.count / 2); i++) {
+          matHtml += `<div class="glowing-gap" style="width: 52px; height: 52px; border-radius: 14px; border: 2px solid #5c8d76; display: flex; align-items: center; justify-content: center; font-size: 24px;">🌰</div>`
+        }
+        matHtml += `</div>`
+
+        matHtml += `<div style="display: flex; flex-direction: column; gap: 10px;">`
+        for (let i = 0; i < Math.floor(seed.count / 2); i++) {
+          matHtml += `<div class="glowing-gap" style="width: 52px; height: 52px; border-radius: 14px; border: 2px solid #5c8d76; display: flex; align-items: center; justify-content: center; font-size: 24px;">🌰</div>`
+        }
+        if (!seed.isEven) {
+          matHtml += `<div style="width: 52px; height: 52px; border-radius: 14px; border: 2px dashed #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #b45309;">No Buddy</div>`
+        }
+        matHtml += `</div>`
+        matHtml += `</div>`
+        viewport.innerHTML = matHtml
+      }
+
+      // --- UNIT 4: ARTISAN GEOMETRY KITCHEN ---
+      function renderUnit4Geometry(seed) {
+        document.getElementById("canvasPromptTitle").textContent =
+          `Cut the ${seed.shape} into ${seed.name} (${seed.shares} equal shares)`
+        document.getElementById("mascotSpeech").innerHTML =
+          `Tap the slice cutter below to partition the shape into <strong>${seed.name}</strong>.`
+        document.getElementById("equationDisplay").innerHTML =
+          `<span>1 whole</span> <span>=</span> <span class="equation-slot" id="equationSlot">${seed.shares} shares</span>`
+
+        const viewport = document.getElementById("manipulativeViewport")
+        if (seed.shape === "rectangle") {
+          let cols = ""
+          for (let i = 0; i < seed.shares; i++) {
+            cols += `<div class="glowing-gap" style="flex: 1; border: 2px solid #3d9b6d; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #064e3b; background: rgba(198, 237, 217, 0.4);">Share ${i + 1}</div>`
+          }
+          viewport.innerHTML = `
+            <div style="width: 320px; height: 200px; background: #fed7aa; border: 4px solid #ea580c; border-radius: 16px; display: flex; gap: 6px; padding: 10px; box-shadow: var(--shadow-md);">
+              ${cols}
+            </div>
+          `
+        } else {
+          viewport.innerHTML = `
+            <svg width="220" height="220" viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="90" fill="#fde68a" stroke="#d97706" stroke-width="6"/>
+              ${seed.shares === 2 ? '<line x1="100" y1="10" x2="100" y2="190" stroke="#78350f" stroke-width="4" stroke-dasharray="6,4"/>' : ""}
+              ${seed.shares === 3 ? '<line x1="100" y1="100" x2="100" y2="10" stroke="#78350f" stroke-width="4"/><line x1="100" y1="100" x2="178" y2="145" stroke="#78350f" stroke-width="4"/><line x1="100" y1="100" x2="22" y2="145" stroke="#78350f" stroke-width="4"/>' : ""}
+              ${seed.shares === 4 ? '<line x1="100" y1="10" x2="100" y2="190" stroke="#78350f" stroke-width="4"/><line x1="10" y1="100" x2="190" y2="100" stroke="#78350f" stroke-width="4"/>' : ""}
+            </svg>
+          `
+        }
+      }
+
+      // ==========================================
+      // 4. INTERACTION & EVALUATION ENGINE
+      // ==========================================
+      function selectPrediction(val, chipEl) {
+        studentPrediction = val
+        playKalimba(4)
+        document.querySelectorAll(".pebble-chip").forEach((c) => c.classList.remove("selected"))
+        chipEl.classList.add("selected")
+      }
+
+      function evaluateAnswer() {
+        const unit = UNITS_DATA[currentUnitId]
+        const seed = unit.seeds[currentQuestionIndex]
+        let isCorrect = false
+
+        if (currentUnitId === 1) {
+          isCorrect = currentAdded === seed.target
+        } else if (currentUnitId === 2) {
+          isCorrect = currentAdded === seed.total
+        } else if (currentUnitId === 3) {
+          isCorrect =
+            studentPrediction === (seed.isEven ? "Even" : "Odd") || studentPrediction === "Even (8)"
+        } else if (currentUnitId === 4) {
+          isCorrect = true // Partition demonstrated
+        }
+
+        if (isCorrect) {
+          playCelebrationChord()
+          triggerSuccessFeedback(unit, seed)
+        } else {
+          playKalimba(1, -5)
+          document.getElementById("mascotSpeech").innerHTML =
+            `Almost there! Try taking another look at the <strong>glowing gap</strong>.`
+        }
+      }
+
+      function triggerSuccessFeedback(unit, seed) {
+        document.getElementById("mascotSpeech").innerHTML =
+          `🌟 <strong>Splendid work!</strong> Your hands found the exact solution!`
+
+        // Auto-advance Countdown (3s)
+        const banner = document.getElementById("autoAdvanceBanner")
+        banner.className = "auto-advance-banner show"
+        let count = 3
+        document.getElementById("countdownSec").textContent = count
+
+        autoAdvanceTimer = setInterval(() => {
+          count--
+          document.getElementById("countdownSec").textContent = count
+          if (count <= 0) {
+            clearAutoAdvance()
+            advanceNextQuestion()
+          }
+        }, 1000)
+      }
+
+      function clearAutoAdvance() {
+        if (autoAdvanceTimer) {
+          clearInterval(autoAdvanceTimer)
+          autoAdvanceTimer = null
+        }
+        document.getElementById("autoAdvanceBanner").className = "auto-advance-banner"
+      }
+
+      function advanceNextQuestion() {
+        clearAutoAdvance()
+        currentQuestionIndex++
+        if (currentQuestionIndex >= 5) {
+          // Unit Complete Victory Ceremony
+          showCelebrationModal()
+        } else {
+          renderCurrentQuestion()
+        }
+      }
+
+      function showCelebrationModal() {
+        playCelebrationChord()
+        const modal = document.getElementById("celebrationModal")
+        modal.className = "celebration-modal show"
+      }
+
+      function nextUnitOrReplay() {
+        document.getElementById("celebrationModal").className = "celebration-modal"
+        currentQuestionIndex = 0
+        currentUnitId = (currentUnitId % 4) + 1
+        renderCurrentQuestion()
+      }
+
+      function resetCurrentWorkspace() {
+        currentAdded = 0
+        renderCurrentQuestion()
+      }
+
+      // ==========================================
+      // 5. DROPDOWN & ACCESSIBILITY CONTROLS
+      // ==========================================
+      function toggleUnitMenu() {
+        const btn = document.getElementById("unitDropdownBtn")
+        const menu = document.getElementById("unitDropdownMenu")
+        btn.classList.toggle("open")
+        menu.classList.toggle("show")
+      }
+
+      function selectUnit(id) {
+        currentUnitId = id
+        currentQuestionIndex = 0
+        document.getElementById("unitDropdownBtn").classList.remove("open")
+        document.getElementById("unitDropdownMenu").classList.remove("show")
+
+        // Update menu active class
+        document.querySelectorAll(".unit-item").forEach((el, idx) => {
+          el.className = "unit-item" + (idx + 1 === id ? " active" : "")
+        })
+
+        renderCurrentQuestion()
+      }
+
+      function toggleAudio() {
+        audioEnabled = !audioEnabled
+        const btn = document.getElementById("audioToggleBtn")
+        btn.classList.toggle("active", audioEnabled)
+        document.getElementById("audioIcon").textContent = audioEnabled ? "🔔" : "🔕"
+      }
+
+      function toggleCalm() {
+        document.body.classList.toggle("calm")
+        const btn = document.getElementById("calmToggleBtn")
+        btn.classList.toggle("active")
+      }
+
+      // Close dropdown when clicking outside
+      window.addEventListener("click", (e) => {
+        if (!e.target.closest(".unit-dropdown-wrap")) {
+          document.getElementById("unitDropdownBtn").classList.remove("open")
+          document.getElementById("unitDropdownMenu").classList.remove("show")
+        }
+      })
+
+      // Initial boot
+      renderCurrentQuestion()
+    </script>
+  </body>
+</html>

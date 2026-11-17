@@ -24,7 +24,7 @@ export function SupplyTray({
   helperText,
 }: SupplyTrayProps) {
   return (
-    <Card className="shrink-0 bg-paper/90 border-2 border-stone-300 shadow-xs p-2.5 select-none">
+    <Card className="@container shrink-0 bg-paper/90 border-2 border-stone-300 shadow-xs p-2.5 select-none">
       <CardHeader className="p-0 pb-1.5 flex flex-row items-center justify-between">
         <CardTitle className="text-xs font-bold uppercase tracking-wider text-ink-soft flex items-center gap-1.5">
           <span>{icon}</span> {title}
@@ -37,7 +37,7 @@ export function SupplyTray({
         </Badge>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="grid grid-cols-5 gap-1.5 bg-amber-50/80 p-2 rounded-xl border border-stone-300">
+        <div className="grid grid-cols-5 gap-1.5 @sm:gap-2 @md:gap-2.5 bg-amber-50/80 p-2 rounded-xl border border-stone-300">
           {Array.from({ length: totalCount }).map((_, i) => {
             const isAvailable = i < supplyCount
             return (

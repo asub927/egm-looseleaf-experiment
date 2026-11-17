@@ -20,3 +20,10 @@ export {
   SfxBus,
   type VoiceOptions,
 } from "./audio-bus.ts"
+
+export {
+  playWoodThock,
+  playWoodLift,
+  playWoodSettle,
+  playPentatonicHarmony,
+} from "./wood-thock-synth.ts"

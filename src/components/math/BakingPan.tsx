@@ -128,7 +128,12 @@ export function BakingPan({
     <svg
       ref={svgRef}
       viewBox="0 0 800 500"
-      className={cn("w-full h-full select-none touch-none", className)}
+      preserveAspectRatio="xMidYMid meet"
+      data-state-machine="baking-pan-cutter"
+      data-drag-phase={drag.phase}
+      data-is-dragging={drag.isDragging ? "true" : "false"}
+      data-target-shares={targetShares}
+      className={cn("w-full h-full aspect-[16/10] select-none touch-none", className)}
       onPointerMove={drag.handlePointerMove}
       onPointerUp={drag.handlePointerUp}
       onPointerCancel={drag.handlePointerUp}

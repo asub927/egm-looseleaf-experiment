@@ -335,15 +335,31 @@ export function NC2OA3Wireframe({
     [scaffolding],
   )
 
+  const inquiryPhase =
+    solvedParity === "even"
+      ? "solved_even"
+      : solvedParity === "odd"
+        ? "solved_odd"
+        : inquiryPrompt
+          ? "inquiry_prompted"
+          : "manipulating"
+
   return (
     <Desk
       data-theme={theme}
+      data-state-machine="nc2-oa3-parity-wireframe"
+      data-inquiry-phase={inquiryPhase}
+      data-scaffolding-phase={scaffolding.status}
+      data-scaffolding-tier={scaffolding.tier}
+      data-total-tokens={totalTokens}
+      data-supply-count={supplyCount}
+      data-star-count={starCount}
       objects={["pencil", "ruler"]}
       lamp={true}
       className="h-screen max-h-screen w-screen overflow-hidden p-2 sm:p-3 flex flex-col font-hand text-ink select-none"
     >
       {/* 1. Header Bar (~40px) */}
-      <header className="h-10 shrink-0 w-full flex items-center justify-between px-3 bg-paper/90 backdrop-blur-xs rounded-lg border border-stone-300 shadow-xs mb-2">
+      <header className="desk-toolbar h-10 shrink-0 w-full flex items-center justify-between px-3 bg-paper/90 backdrop-blur-xs rounded-lg border border-stone-300 shadow-xs mb-2">
         <div className="flex items-center gap-2">
           <Badge
             variant="outline"
@@ -443,6 +459,18 @@ export function NC2OA3Wireframe({
             >
               🎨 Studio
             </button>
+            <button
+              type="button"
+              title="Zen Garden Desk"
+              onClick={() => onSetTheme?.("zen")}
+              className={`px-1.5 py-0.5 rounded font-bold transition-all text-[11px] cursor-pointer ${
+                theme === "zen"
+                  ? "bg-stone-300 text-stone-900 shadow-2xs border border-[#bc6c25]"
+                  : "text-stone-600 hover:text-stone-900"
+              }`}
+            >
+              ⛩️ Zen
+            </button>
           </div>
         </div>
 
@@ -502,7 +530,7 @@ export function NC2OA3Wireframe({
 
             {/* A. Sleek Socratic Prompt Strip (Zero vertical bloat) */}
             <div className="w-full shrink-0 px-3 py-2 bg-amber-100/90 border border-amber-300 rounded-lg shadow-xs flex items-center justify-between gap-2 mb-1.5">
-              <div className="text-sm sm:text-base font-script leading-tight text-amber-950 font-bold flex items-center gap-1.5 flex-wrap">
+              <div className="text-sm sm:text-base font-script leading-tight text-amber-950 font-bold flex items-center gap-1.5 flex-wrap text-balance">
                 <span>Can you pair up</span>
                 <Highlight tone="yellow" weight="heavy">
                   {totalTokens} acorns

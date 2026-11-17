@@ -3,6 +3,15 @@
 import * as React from "react"
 import { audioBus, cleanSpeechText, type VoiceOptions } from "../lib/audio/audio-bus.ts"
 import type { MascotPose } from "../lib/ink/art/mascots/index.ts"
+import {
+  audioNarrationReducer,
+  createInitialAudioState,
+  type AudioNarrationState,
+  type AudioNarrationEvent,
+  type AudioNarrationPhase,
+} from "../lib/state/audio-narration-machine.ts"
+
+export type { AudioNarrationState, AudioNarrationEvent, AudioNarrationPhase }
 
 export interface WordToken {
   word: string
@@ -71,6 +80,10 @@ export interface UseAudioNarrationReturn {
   enabled: boolean
   /** Toggle audio voice narration on or off */
   setEnabled: (enabled: boolean) => void
+  /** Explicit State Machine snapshot for Agent (AX) and Developer (DX) introspection */
+  machineState: AudioNarrationState
+  /** Dispatch explicit audio narration event */
+  dispatch: (event: AudioNarrationEvent) => void
 }
 
 /**
@@ -108,23 +121,22 @@ export function useAudioNarration(
     onError: globalOnError,
   } = initialOptions
 
-  const [enabled, setEnabledState] = React.useState<boolean>(initialEnabled)
-  const [isSpeaking, setIsSpeaking] = React.useState<boolean>(false)
-  const [currentText, setCurrentText] = React.useState<string>("")
-  const [cleanedText, setCleanedText] = React.useState<string>("")
-  const [tokens, setTokens] = React.useState<WordToken[]>([])
-  const [currentWordIndex, setCurrentWordIndex] = React.useState<number>(-1)
-  const [currentWord, setCurrentWord] = React.useState<string | null>(null)
-  const [mascotPose, setMascotPose] = React.useState<MascotPose>(defaultIdlePose)
+  const [state, dispatch] = React.useReducer(audioNarrationReducer, initialEnabled, (en) =>
+    createInitialAudioState(en, defaultIdlePose),
+  )
 
   // Track cancel function for active utterance
   const cancelRef = React.useRef<(() => void) | null>(null)
-  const tokensRef = React.useRef<WordToken[]>([])
-  tokensRef.current = tokens
+  const tokensRef = React.useRef<readonly WordToken[]>([])
+  tokensRef.current = state.tokens
 
   const setEnabled = React.useCallback((nextEnabled: boolean) => {
-    setEnabledState(nextEnabled)
+    dispatch({ type: "SET_ENABLED", enabled: nextEnabled })
     audioBus.voice.setEnabled(nextEnabled)
+  }, [])
+
+  const setMascotPose = React.useCallback((pose: MascotPose) => {
+    dispatch({ type: "SET_POSE", pose })
   }, [])
 
   const stop = React.useCallback(() => {
@@ -134,9 +146,7 @@ export function useAudioNarration(
     } else {
       audioBus.voice.cancel()
     }
-    setIsSpeaking(false)
-    setCurrentWordIndex(-1)
-    setCurrentWord(null)
+    dispatch({ type: "STOP" })
   }, [])
 
   const speak = React.useCallback(
@@ -147,18 +157,16 @@ export function useAudioNarration(
       const cleaned = cleanSpeechText(text)
       const parsedTokens = tokenizeWords(cleaned)
 
-      setCurrentText(text)
-      setCleanedText(cleaned)
-      setTokens(parsedTokens)
+      dispatch({
+        type: "PREPARE",
+        text,
+        cleanedText: cleaned,
+        tokens: parsedTokens,
+        pose: options?.pose,
+      })
       tokensRef.current = parsedTokens
-      setCurrentWordIndex(-1)
-      setCurrentWord(null)
 
-      if (options?.pose) {
-        setMascotPose(options.pose)
-      }
-
-      const voiceActive = options?.enabled ?? enabled
+      const voiceActive = options?.enabled ?? state.enabled
       if (!voiceActive || !cleaned) {
         // In silent mode, skip audio engine playback
         return
@@ -169,11 +177,7 @@ export function useAudioNarration(
         rate: options?.rate ?? defaultRate,
         pitch: options?.pitch ?? defaultPitch,
         onStart: () => {
-          setIsSpeaking(true)
-          if (parsedTokens.length > 0) {
-            setCurrentWordIndex(0)
-            setCurrentWord(parsedTokens[0].word)
-          }
+          dispatch({ type: "START" })
           globalOnStart?.()
         },
         onWord: (_word: string, charIndex: number) => {
@@ -186,33 +190,36 @@ export function useAudioNarration(
           )
 
           if (idx !== -1) {
-            setCurrentWordIndex(idx)
-            setCurrentWord(currentTokens[idx].word)
+            dispatch({
+              type: "WORD_BOUNDARY",
+              wordIndex: idx,
+              word: currentTokens[idx].word,
+            })
           } else {
             // Find closest token ahead of charIndex
             const nextIdx = currentTokens.findIndex((t) => t.startIndex >= charIndex)
             if (nextIdx !== -1) {
-              setCurrentWordIndex(nextIdx)
-              setCurrentWord(currentTokens[nextIdx].word)
+              dispatch({
+                type: "WORD_BOUNDARY",
+                wordIndex: nextIdx,
+                word: currentTokens[nextIdx].word,
+              })
             }
           }
         },
         onEnd: () => {
-          setIsSpeaking(false)
-          setCurrentWordIndex(-1)
-          setCurrentWord(null)
           cancelRef.current = null
-          if (resetPoseOnEnd) {
-            setMascotPose(defaultIdlePose)
-          }
+          dispatch({
+            type: "END",
+            defaultIdlePose,
+            resetPoseOnEnd,
+          })
           options?.onEnd?.()
           globalOnEnd?.()
         },
         onError: (err) => {
-          setIsSpeaking(false)
-          setCurrentWordIndex(-1)
-          setCurrentWord(null)
           cancelRef.current = null
+          dispatch({ type: "ERROR", error: err })
           globalOnError?.(err)
         },
       }
@@ -223,7 +230,7 @@ export function useAudioNarration(
       defaultIdlePose,
       defaultPitch,
       defaultRate,
-      enabled,
+      state.enabled,
       globalOnEnd,
       globalOnError,
       globalOnStart,
@@ -234,9 +241,9 @@ export function useAudioNarration(
 
   const isWordActive = React.useCallback(
     (wordIndex: number) => {
-      return isSpeaking && currentWordIndex === wordIndex
+      return state.phase === "speaking" && state.currentWordIndex === wordIndex
     },
-    [isSpeaking, currentWordIndex],
+    [state.phase, state.currentWordIndex],
   )
 
   // Cleanup speech synthesis on unmount
@@ -249,22 +256,24 @@ export function useAudioNarration(
     }
   }, [])
 
-  const words = React.useMemo(() => tokens.map((t) => t.word), [tokens])
+  const words = React.useMemo(() => state.tokens.map((t) => t.word), [state.tokens])
 
   return {
-    isSpeaking,
-    currentText,
-    cleanedText,
+    isSpeaking: state.phase === "speaking",
+    currentText: state.currentText,
+    cleanedText: state.cleanedText,
     words,
-    tokens,
-    currentWord,
-    currentWordIndex,
-    mascotPose,
+    tokens: state.tokens as WordToken[],
+    currentWord: state.currentWord,
+    currentWordIndex: state.currentWordIndex,
+    mascotPose: state.mascotPose,
     setMascotPose,
     speak,
     stop,
     isWordActive,
-    enabled,
+    enabled: state.enabled,
     setEnabled,
+    machineState: state,
+    dispatch,
   }
 }

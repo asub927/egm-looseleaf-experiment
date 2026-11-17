@@ -89,9 +89,27 @@ Decoupled completely from React DOM, window, and SVG APIs, the evaluator execute
 
 ---
 
-## Automated Invariant Test Matrix (35 Tests)
+## Modern Web Guidance Architecture (Chromium Standards)
 
-The test harness runs directly in Node 26 with native TypeScript stripping (`node --experimental-strip-types --test tests/invariants/*.test.ts`), executing 35 deterministic pedagogical invariants:
+The application incorporates Google Chrome's [Modern Web Guidance](https://developer.chrome.com/docs/modern-web-guidance) standards through three declarative, high-performance platform enhancements:
+
+1. **Same-Document View Transitions (`src/lib/dom/view-transitions.ts`, `src/App.tsx`)**:
+   - Standard switching is wrapped in `useDeskViewTransition` using `document.startViewTransition` and `ReactDOM.flushSync`.
+   - Smooth cross-fades maintain visual desk continuity between math domains (`NC.2.OA.4`, `NC.2.OA.3`, `NC.2.G.3`).
+   - Automatically bypasses transitions when `prefers-reduced-motion: reduce` is active.
+2. **CSS Container Queries (`@container`)**:
+   - Manipulative workspace containers dynamically scale to split-screen and tablet viewport dimensions on classroom Chromebooks.
+   - SVG manipulatives (`BakingPan`, `TartPlate`) lock coordinate dimensions (`viewBox="0 0 800 500"`, `aspect-[16/10]`) with `preserveAspectRatio="xMidYMid meet"` to prevent coordinate drift in the pointer snapping engine.
+3. **Early-Literacy Typography & Smooth Height Transitions**:
+   - Instruction headers use `text-wrap: balance` (`text-balance`) for even line distribution.
+   - Mascot dialogue speech bubbles use `text-wrap: pretty` (`text-pretty`) with bounded minimum heights (`min-h-[80px]`) to eliminate cumulative layout shifts (CLS) on active manipulatives.
+   - Smooth CSS height transitions enabled via `@supports (interpolate-size: allow-keywords)`.
+
+---
+
+## Automated Invariant Test Matrix (43 Tests)
+
+The test harness runs directly in Node 26 with native TypeScript stripping (`node --experimental-strip-types --test tests/invariants/*.test.ts`), executing 43 deterministic pedagogical invariants:
 
 | Test Suite                     | Count  | Invariants Covered                                                                                                                                                                                                                                                                                                                             |
 | :----------------------------- | :----: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -99,7 +117,8 @@ The test harness runs directly in Node 26 with native TypeScript stripping (`nod
 | `nc2-g.invariant.test.ts`      |   10   | Rectangular & circular equal share validation (halves, thirds, fourths), $360^\circ$ angular wrap-around, $\pm 5\%$ tolerance boundaries, unequal share diagnostics, wrong share counts, unpartitioned states, 200-seed adversarial cut fuzzing, canonical demonstrative cuts, isomorphic spec generation, and 3-tier scaffolding progression. |
 | `nc2-oa3.invariant.test.ts`    |   8    | Parity evaluation, even pairs (`correct_even`), odd leftovers (`correct_odd`), unpaired slot gaps, empty mats, incomplete token inventory, right-column remainder layout, and 200-seed parity fuzzing.                                                                                                                                         |
 | `nc2-oa4.invariant.test.ts`    |   8    | Rectangular array validation, $3 \times 4$ verification, orientation regressions ($4 \times 3 \neq 3 \times 4$), unequal rows, incomplete inventories, empty grids, square array ($3 \times 3$) orientation immunity, spatial contiguity/gap detection, and permutation oracles.                                                               |
-| **Total Invariant Tests**      | **35** | **100% Pass Rate**                                                                                                                                                                                                                                                                                                                             |
+| `vine_evaluator.test.ts`       |   8    | Canonical seed integrity, exact submissions, underfilled/overfilled diagnostics, metacognitive mismatch triggers, zero-NaN input robustness, 200-seed adversarial fuzzing, and garden chimes audio resiliency.                                                                                                                                 |
+| **Total Invariant Tests**      | **43** | **100% Pass Rate**                                                                                                                                                                                                                                                                                                                             |
 
 ---
 

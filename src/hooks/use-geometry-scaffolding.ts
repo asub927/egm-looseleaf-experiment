@@ -6,8 +6,14 @@ import { NC2_G_SEEDS } from "../curriculum/items/nc2-g.ts"
 import { evaluatePartition, type GeometryDiagnostic } from "../lib/math/geometry-evaluator.ts"
 import type { ScaffoldingTier, ScaffoldingStatus } from "./use-socratic-scaffolding.ts"
 import type { MascotPose } from "../lib/ink/art/mascots/index.ts"
+import {
+  scaffoldingReducer,
+  createInitialScaffoldingState,
+  type ScaffoldingState,
+  type ScaffoldingEvent,
+} from "../lib/state/scaffolding-machine.ts"
 
-export type { ScaffoldingTier, ScaffoldingStatus }
+export type { ScaffoldingTier, ScaffoldingStatus, ScaffoldingState, ScaffoldingEvent }
 
 export interface GeometryScaffoldingConfig {
   spec: NC2GItem
@@ -33,6 +39,10 @@ export interface GeometryScaffoldingReturn {
   autoPlaceStep: () => void
   triggerIsomorphicRetry: () => void
   resetScaffolding: () => void
+  /** Explicit State Machine snapshot for Agent (AX) and Developer (DX) introspection */
+  machineState: ScaffoldingState
+  /** Dispatch explicit state machine event */
+  dispatch: (event: ScaffoldingEvent) => void
 }
 
 /**
@@ -119,17 +129,14 @@ export function useGeometryScaffolding(
   config: GeometryScaffoldingConfig,
 ): GeometryScaffoldingReturn {
   const { spec } = config
+  const initialTierBadge = React.useMemo(() => getInitialTierBadge(spec), [spec])
 
-  const [tier, setTier] = React.useState<ScaffoldingTier>(0)
-  const [status, setStatus] = React.useState<ScaffoldingStatus>("constructing")
-  const [failureCount, setFailureCount] = React.useState<number>(0)
-  const [isGhostVisible, setIsGhostVisible] = React.useState<boolean>(false)
-  const [feedback, setFeedback] = React.useState<string | null>(null)
-  const [mascotPose, setMascotPose] = React.useState<MascotPose>("idle")
-  const [tierBadge, setTierBadge] = React.useState<string>(() => getInitialTierBadge(spec))
-  const [wasDemonstrated, setWasDemonstrated] = React.useState<boolean>(false)
-  const [masteryEligible, setMasteryEligible] = React.useState<boolean>(true)
-  const [isValidated, setIsValidated] = React.useState<boolean>(false)
+  // Explicit State Machine Reducer
+  const [state, dispatch] = React.useReducer(
+    (st: ScaffoldingState, ev: ScaffoldingEvent) => scaffoldingReducer(st, ev, initialTierBadge),
+    initialTierBadge,
+    createInitialScaffoldingState,
+  )
 
   // Ghost cut coordinates derived from canonical demonstration
   const ghostCuts = React.useMemo(() => {
@@ -145,34 +152,8 @@ export function useGeometryScaffolding(
   const isDemonstratingRef = React.useRef(false)
 
   const onCutsMutated = React.useCallback(() => {
-    if (isValidated) {
-      setIsValidated(false)
-      setStatus("constructing")
-      setMascotPose("idle")
-      setTierBadge(getInitialTierBadge(config.spec))
-      setFeedback(null)
-      return
-    }
-
-    if (status === "tier1_prompt") {
-      setStatus("constructing")
-      setFeedback(null)
-      return
-    }
-
-    if (status === "tier2_ghost") {
-      setStatus("constructing")
-      // isGhostVisible remains true so student can follow ghost lines
-      return
-    }
-
-    if (status === "tier3_demonstrate") {
-      setStatus("constructing")
-      return
-    }
-
-    setStatus("constructing")
-  }, [config.spec, isValidated, status])
+    dispatch({ type: "TOKEN_MUTATED" })
+  }, [])
 
   React.useEffect(() => {
     if (prevCutsHashRef.current !== cutsHash) {
@@ -187,35 +168,21 @@ export function useGeometryScaffolding(
 
   // Reset when spec changes
   React.useEffect(() => {
-    setTier(0)
-    setStatus("constructing")
-    setFailureCount(0)
-    setIsGhostVisible(false)
-    setFeedback(null)
-    setWasDemonstrated(false)
-    setMasteryEligible(true)
-    setIsValidated(false)
-    setMascotPose("idle")
-    setTierBadge(getInitialTierBadge(spec))
-  }, [spec])
+    dispatch({ type: "RESET", initialBadge: initialTierBadge })
+  }, [spec, initialTierBadge])
 
   // ==========================================================================
   // Tier 3 Demonstrator Step
   // ==========================================================================
   const autoPlaceStep = React.useCallback(() => {
     const demoCuts = demonstrateGeometryStep(config.spec)
-    setTier(3)
-    setStatus("tier3_demonstrate")
-    setWasDemonstrated(true)
-    setMasteryEligible(false)
-    setIsGhostVisible(true)
-    setMascotPose("sketch")
-    setTierBadge("Step 3: Step Demonstration")
-    setFeedback(
-      `Pencil Pal demonstrated the cut for ${config.spec.targetShares} equal ${config.spec.verbalShareName}! Try another challenge to earn your star.`,
-    )
     isDemonstratingRef.current = true
     config.onCutsChange(demoCuts)
+    dispatch({
+      type: "REQUEST_DEMONSTRATION",
+      feedback: `Pencil Pal demonstrated the cut for ${config.spec.targetShares} equal ${config.spec.verbalShareName}! Try another challenge to earn your star.`,
+      tierBadge: "Step 3: Step Demonstration",
+    })
   }, [config])
 
   const requestDemonstration = React.useCallback(() => {
@@ -227,16 +194,7 @@ export function useGeometryScaffolding(
   // ==========================================================================
   const triggerIsomorphicRetry = React.useCallback(() => {
     const nextSpec = getIsomorphicGeometrySpec(config.spec)
-    setTier(0)
-    setStatus("constructing")
-    setFailureCount(0)
-    setIsGhostVisible(false)
-    setFeedback(null)
-    setWasDemonstrated(false)
-    setMasteryEligible(true)
-    setIsValidated(false)
-    setMascotPose("wave")
-    setTierBadge(getInitialTierBadge(nextSpec))
+    dispatch({ type: "TRIGGER_ISOMORPHIC_RETRY", initialBadge: getInitialTierBadge(nextSpec) })
     config.onCutsChange([])
     config.onIsomorphicRetry?.(nextSpec)
   }, [config])
@@ -250,78 +208,63 @@ export function useGeometryScaffolding(
       const diagnostic = evaluatePartition(cutsToEvaluate, config.spec)
 
       if (diagnostic.status === "correct") {
-        setTier(0)
-        setStatus("validated")
-        setIsValidated(true)
-        setMascotPose("celebrate")
         const capitalized =
           config.spec.verbalShareName.charAt(0).toUpperCase() + config.spec.verbalShareName.slice(1)
-        setTierBadge(`${config.spec.targetShares} Equal ${capitalized}! 🌟`)
-        setFeedback(diagnostic.feedback)
+        dispatch({
+          type: "EVALUATION_SUCCESS",
+          feedback: diagnostic.feedback,
+          badge: `${config.spec.targetShares} Equal ${capitalized}! 🌟`,
+        })
         return diagnostic
       }
 
       // Failure detected: escalate progressive hint ladder
-      const nextFail = failureCount + 1
-      setFailureCount(nextFail)
-      setIsValidated(false)
+      const nextFail = state.failureCount + 1
 
-      if (nextFail === 1) {
-        // Tier 1: Targeted Socratic Prompt
-        setTier(1)
-        setStatus("tier1_prompt")
-        setTierBadge("Step 1: Check Equal Shares")
-        setMascotPose("think")
-        setFeedback(diagnostic.feedback)
-      } else if (nextFail === 2) {
-        // Tier 2: Visual Assist Ghost Lines
-        setTier(2)
-        setStatus("tier2_ghost")
-        setIsGhostVisible(true)
-        setMascotPose("sketch")
-        setTierBadge("Step 2: Ghost Assist")
-        setFeedback(
-          `Pencil Pal drew dotted guide lines for ${config.spec.targetShares} equal ${config.spec.verbalShareName}! Can you snap the cutter to the dotted lines?`,
-        )
-      } else {
-        // Tier 3: Step Demonstration with Isomorphic Retry
+      if (nextFail >= 3) {
         autoPlaceStep()
+      } else {
+        const tierFeedback =
+          nextFail === 1
+            ? diagnostic.feedback
+            : `Pencil Pal drew dotted guide lines for ${config.spec.targetShares} equal ${config.spec.verbalShareName}! Can you snap the cutter to the dotted lines?`
+        const tierBadge = nextFail === 1 ? "Step 1: Check Equal Shares" : "Step 2: Ghost Assist"
+
+        dispatch({
+          type: "EVALUATION_FAILURE",
+          feedback: tierFeedback,
+          tierBadge,
+          tier1Pose: "think",
+        })
       }
 
       return diagnostic
     },
-    [config, failureCount, autoPlaceStep],
+    [config, state.failureCount, autoPlaceStep],
   )
 
   const resetScaffolding = React.useCallback(() => {
-    setTier(0)
-    setStatus("constructing")
-    setFailureCount(0)
-    setIsGhostVisible(false)
-    setFeedback(null)
-    setWasDemonstrated(false)
-    setMasteryEligible(true)
-    setIsValidated(false)
-    setMascotPose("idle")
-    setTierBadge(getInitialTierBadge(config.spec))
-  }, [config.spec])
+    dispatch({ type: "RESET", initialBadge: initialTierBadge })
+  }, [initialTierBadge])
 
   return {
-    tier,
-    status,
-    failureCount,
-    isGhostVisible,
+    tier: state.tier,
+    status: state.phase,
+    failureCount: state.failureCount,
+    isGhostVisible: state.isGhostVisible,
     ghostCuts,
-    feedback,
-    mascotPose,
-    tierBadge,
-    wasDemonstrated,
-    masteryEligible,
-    isValidated,
+    feedback: state.feedback,
+    mascotPose: state.mascotPose,
+    tierBadge: state.tierBadge,
+    wasDemonstrated: state.wasDemonstrated,
+    masteryEligible: state.masteryEligible,
+    isValidated: state.isValidated,
     checkAnswer,
     requestDemonstration,
     autoPlaceStep,
     triggerIsomorphicRetry,
     resetScaffolding,
+    machineState: state,
+    dispatch,
   }
 }

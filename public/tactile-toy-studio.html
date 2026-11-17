@@ -1,0 +1,1181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Tactile Toy Studio · 3 Original Interactive Physical Concepts</title>
+    <style>
+      :root {
+        --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+        --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue",
+          sans-serif;
+        background: #000;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* =========================================
+         MINIMALIST DESIGN SWITCHER (STUDIO NAV)
+         ========================================= */
+      header {
+        position: fixed;
+        top: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(22, 22, 26, 0.82);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+        padding: 5px;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      }
+
+      .concept-tab {
+        padding: 8px 18px;
+        border-radius: 999px;
+        border: none;
+        background: transparent;
+        color: #94949e;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s var(--ease-smooth);
+      }
+
+      .concept-tab:hover {
+        color: #fff;
+      }
+
+      .concept-tab.active {
+        background: #fff;
+        color: #000;
+        box-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
+      }
+
+      .concept-tab .badge {
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 2px 6px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.1);
+        font-weight: 700;
+      }
+
+      .concept-tab.active .badge {
+        background: rgba(0, 0, 0, 0.12);
+        color: #000;
+      }
+
+      /* Viewport Stage */
+      .stage-host {
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      .concept-view {
+        position: absolute;
+        inset: 0;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.35s ease;
+      }
+
+      .concept-view.active {
+        display: flex;
+        opacity: 1;
+      }
+
+      /* =================================================================
+         CONCEPT 1: THE WOODEN INSET PUZZLE (THE JOINERY)
+         ================================================================= */
+      .view-wood {
+        background: radial-gradient(circle at 50% 30%, #ede6db 0%, #d8cdbe 100%);
+        color: #383028;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        position: relative;
+      }
+
+      .wood-workbench {
+        width: 720px;
+        height: 480px;
+        background: #f7f3ec;
+        border-radius: 36px;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow:
+          0 24px 60px rgba(56, 48, 40, 0.14),
+          0 2px 8px rgba(56, 48, 40, 0.06),
+          inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 40px;
+        position: relative;
+      }
+
+      .wood-label {
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #9c8e7e;
+      }
+
+      /* 10-Slot Carved Wood Inset Bar */
+      .wood-tray-inset {
+        width: 600px;
+        height: 88px;
+        background: #e2d7c7;
+        border-radius: 24px;
+        box-shadow:
+          inset 0 4px 10px rgba(56, 48, 40, 0.28),
+          inset 0 1px 3px rgba(56, 48, 40, 0.35),
+          0 1px 0 rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        gap: 8px;
+        position: relative;
+      }
+
+      /* 10 Carved Recessed Pockets */
+      .wood-pocket {
+        flex: 1;
+        height: 100%;
+        border-radius: 16px;
+        background: #d4c8b6;
+        box-shadow: inset 0 2px 6px rgba(56, 48, 40, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        transition: background 0.2s ease;
+      }
+
+      .wood-pocket.known {
+        background: linear-gradient(180deg, #d49a6a 0%, #b87a4c 100%);
+        box-shadow:
+          0 3px 6px rgba(56, 48, 40, 0.25),
+          inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      }
+
+      .wood-pocket.known::after {
+        content: "";
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #8c5732;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Target Snap Drop Zone */
+      .wood-target-zone {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        bottom: 10px;
+        width: 172px; /* 3 slots */
+        border-radius: 18px;
+        border: 2px dashed #b87a4c;
+        background: rgba(184, 122, 76, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+      }
+
+      .wood-target-zone.hover {
+        background: rgba(184, 122, 76, 0.22);
+        border-color: #8c5732;
+        transform: scale(1.02);
+      }
+
+      /* Draggable Handcrafted Wooden Block */
+      .wood-drag-block {
+        width: 172px;
+        height: 68px;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #e8b387 0%, #cf8f5e 100%);
+        box-shadow:
+          0 8px 18px rgba(56, 48, 40, 0.22),
+          0 2px 4px rgba(56, 48, 40, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 12px;
+        cursor: grab;
+        position: absolute;
+        bottom: 40px;
+        transition:
+          transform 0.15s var(--ease-spring),
+          box-shadow 0.15s ease;
+        touch-action: none;
+      }
+
+      .wood-drag-block:active {
+        cursor: grabbing;
+      }
+
+      .wood-drag-block.elevated {
+        transform: scale(1.06) translateY(-14px);
+        box-shadow:
+          0 28px 48px rgba(56, 48, 40, 0.3),
+          0 8px 16px rgba(56, 48, 40, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      }
+
+      .wood-drag-block.locked {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        bottom: 10px;
+        box-shadow:
+          0 3px 8px rgba(56, 48, 40, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        cursor: default;
+        animation: lockRecoil 0.25s var(--ease-snap);
+      }
+
+      @keyframes lockRecoil {
+        0% {
+          transform: scale(0.96);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .wood-peg-indicator {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #965d38;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.35);
+      }
+
+      /* Engraved Equation Badge */
+      .wood-engraved-badge {
+        font-family: "SF Pro Rounded", "Georgia", serif;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        color: #7a6a58;
+        text-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.8),
+          0 -1px 0 rgba(56, 48, 40, 0.2);
+        opacity: 0.4;
+        transition: opacity 0.3s ease;
+      }
+
+      .wood-engraved-badge.solved {
+        opacity: 1;
+        color: #383028;
+      }
+
+      /* =================================================================
+         CONCEPT 2: THE LIVING RIPPLE POND (SURFACE TENSION & STONES)
+         ================================================================= */
+      .view-pond {
+        background: radial-gradient(circle at 50% 40%, #17332b 0%, #0c1c17 100%);
+        color: #d1fae5;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Water Ripple Canvas */
+      .water-ripple-layer {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .pond-pad-stage {
+        width: 680px;
+        height: 440px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 44px;
+        box-shadow:
+          0 30px 80px rgba(0, 0, 0, 0.6),
+          inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(12px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 36px;
+        position: relative;
+        z-index: 10;
+      }
+
+      .pond-title {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #6ee7b7;
+        opacity: 0.8;
+      }
+
+      /* Twin Lilypad Columns (Odd/Even Parity) */
+      .pond-mat-lanes {
+        display: flex;
+        gap: 36px;
+        position: relative;
+      }
+
+      .lilypad-lane {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .lilypad-slot {
+        width: 64px;
+        height: 64px;
+        border-radius: 22px;
+        background: rgba(52, 211, 153, 0.08);
+        border: 1.5px solid rgba(52, 211, 153, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        transition: all 0.25s var(--ease-spring);
+      }
+
+      .lilypad-slot.paired {
+        background: rgba(52, 211, 153, 0.2);
+        border-color: rgba(52, 211, 153, 0.45);
+        box-shadow: 0 0 16px rgba(52, 211, 153, 0.2);
+      }
+
+      .river-stone-static {
+        width: 48px;
+        height: 48px;
+        border-radius: 18px;
+        background: radial-gradient(circle at 35% 35%, #a7f3d0 0%, #34d399 70%, #059669 100%);
+        box-shadow:
+          0 6px 14px rgba(0, 0, 0, 0.35),
+          inset 0 2px 4px rgba(255, 255, 255, 0.6);
+      }
+
+      /* Magnetic Snap Recipient Bay */
+      .lilypad-snap-bay {
+        width: 64px;
+        height: 64px;
+        border-radius: 22px;
+        border: 2px dashed #6ee7b7;
+        background: rgba(110, 231, 183, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        animation: pondPulse 2.2s infinite ease-in-out;
+      }
+
+      @keyframes pondPulse {
+        0%,
+        100% {
+          transform: scale(1);
+          box-shadow: 0 0 12px rgba(110, 231, 183, 0.2);
+        }
+        50% {
+          transform: scale(1.06);
+          box-shadow: 0 0 24px rgba(110, 231, 183, 0.5);
+        }
+      }
+
+      /* Draggable Glassy Pebble */
+      .draggable-pebble {
+        width: 52px;
+        height: 52px;
+        border-radius: 20px;
+        background: radial-gradient(circle at 35% 35%, #6ee7b7 0%, #10b981 70%, #047857 100%);
+        box-shadow:
+          0 10px 24px rgba(0, 0, 0, 0.4),
+          0 2px 6px rgba(0, 0, 0, 0.25),
+          inset 0 2px 5px rgba(255, 255, 255, 0.7);
+        position: absolute;
+        bottom: 30px;
+        cursor: grab;
+        transition: transform 0.15s var(--ease-spring);
+        touch-action: none;
+      }
+
+      .draggable-pebble:active {
+        cursor: grabbing;
+      }
+
+      .draggable-pebble.floating {
+        transform: scale(1.16);
+        box-shadow:
+          0 20px 40px rgba(0, 0, 0, 0.5),
+          0 0 24px rgba(110, 231, 183, 0.6),
+          inset 0 2px 6px rgba(255, 255, 255, 0.9);
+      }
+
+      .draggable-pebble.snapped {
+        position: relative;
+        bottom: auto;
+        animation: stoneMerge 0.3s var(--ease-spring);
+        box-shadow:
+          0 4px 12px rgba(0, 0, 0, 0.3),
+          inset 0 2px 4px rgba(255, 255, 255, 0.6);
+      }
+
+      @keyframes stoneMerge {
+        0% {
+          transform: scale(0.85);
+        }
+        50% {
+          transform: scale(1.15);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .pond-status-text {
+        font-size: 16px;
+        font-weight: 600;
+        color: #a7f3d0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* =================================================================
+         CONCEPT 3: THE MECHANICAL BRASS SWITCHBOARD (RATCHET INSTRUMENT)
+         ================================================================= */
+      .view-brass {
+        background: radial-gradient(circle at 50% 35%, #252830 0%, #131418 100%);
+        color: #e5e7eb;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        position: relative;
+      }
+
+      .brass-chassis {
+        width: 740px;
+        height: 440px;
+        background: #1c1e24;
+        border-radius: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow:
+          0 32px 70px rgba(0, 0, 0, 0.7),
+          inset 0 1px 0 rgba(255, 255, 255, 0.15),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 38px 44px;
+        position: relative;
+      }
+
+      .brass-header-row {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .brass-plate-title {
+        font-family: ui-monospace, "SF Mono", monospace;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #d4af37;
+        text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+      }
+
+      .brass-odometer {
+        background: #0f1013;
+        border: 1px solid #33363f;
+        border-radius: 12px;
+        padding: 6px 18px;
+        font-family: ui-monospace, "SF Mono", monospace;
+        font-size: 24px;
+        font-weight: 900;
+        color: #fbbf24;
+        letter-spacing: 0.08em;
+        box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8);
+      }
+
+      /* Milled Brass Ratchet Track */
+      .brass-slider-track {
+        width: 100%;
+        height: 72px;
+        background: #111215;
+        border-radius: 20px;
+        border: 2px solid #2d313b;
+        box-shadow:
+          inset 0 6px 14px rgba(0, 0, 0, 0.9),
+          0 1px 0 rgba(255, 255, 255, 0.08);
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+      }
+
+      .brass-rail-groove {
+        position: absolute;
+        left: 20px;
+        right: 20px;
+        height: 10px;
+        background: #08080a;
+        border-radius: 999px;
+        box-shadow:
+          inset 0 2px 4px rgba(0, 0, 0, 1),
+          0 1px 0 rgba(255, 255, 255, 0.05);
+      }
+
+      /* 10 Notched Stations */
+      .brass-stations-layer {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        z-index: 5;
+        padding: 0 10px;
+      }
+
+      .brass-notch-pin {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+      }
+
+      .brass-pin-head {
+        width: 8px;
+        height: 16px;
+        background: #373b45;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        transition: all 0.15s ease;
+      }
+
+      .brass-pin-head.active {
+        background: #d4af37;
+        box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+        transform: scaleY(1.3);
+      }
+
+      .brass-notch-label {
+        font-family: ui-monospace, "SF Mono", monospace;
+        font-size: 11px;
+        font-weight: 700;
+        color: #6b7280;
+      }
+
+      /* Heavy Brass Knurled Slider */
+      .brass-heavy-slider {
+        position: absolute;
+        left: 40px;
+        width: 58px;
+        height: 58px;
+        border-radius: 18px;
+        background: radial-gradient(circle at 40% 30%, #fef08a 0%, #eab308 50%, #854d0e 100%);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow:
+          0 10px 24px rgba(0, 0, 0, 0.6),
+          0 2px 6px rgba(0, 0, 0, 0.4),
+          inset 0 1px 3px rgba(255, 255, 255, 0.8),
+          inset 0 -2px 4px rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: grab;
+        z-index: 20;
+        touch-action: none;
+        transition: transform 0.08s ease;
+      }
+
+      .brass-heavy-slider:active {
+        cursor: grabbing;
+        transform: scale(1.08);
+      }
+
+      .brass-heavy-slider::after {
+        content: "";
+        width: 6px;
+        height: 24px;
+        border-radius: 3px;
+        background: #451a03;
+        box-shadow:
+          inset 0 1px 2px rgba(0, 0, 0, 0.6),
+          0 1px 0 rgba(255, 255, 255, 0.2);
+      }
+
+      .brass-heavy-slider.latched {
+        animation: latchDrop 0.2s var(--ease-snap);
+      }
+
+      @keyframes latchDrop {
+        0% {
+          transform: scale(1.15) translateY(-4px);
+        }
+        60% {
+          transform: scale(0.95) translateY(2px);
+        }
+        100% {
+          transform: scale(1) translateY(0);
+        }
+      }
+
+      .brass-instruction-plate {
+        font-family: ui-monospace, "SF Mono", monospace;
+        font-size: 13px;
+        font-weight: 600;
+        color: #9ca3af;
+        letter-spacing: 0.02em;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Concept Switcher -->
+    <header>
+      <button class="concept-tab active" id="tab-wood" onclick="switchToy('wood')">
+        <span>🪵 Concept 1: Wood Joinery</span>
+        <span class="badge">Inset Puzzle</span>
+      </button>
+
+      <button class="concept-tab" id="tab-pond" onclick="switchToy('pond')">
+        <span>💧 Concept 2: Ripple Pond</span>
+        <span class="badge">Surface Tension</span>
+      </button>
+
+      <button class="concept-tab" id="tab-brass" onclick="switchToy('brass')">
+        <span>⚙️ Concept 3: Brass Ratchet</span>
+        <span class="badge">Switchboard</span>
+      </button>
+    </header>
+
+    <div class="stage-host">
+      <!-- =========================================================
+           CONCEPT 1: THE WOODEN INSET PUZZLE
+           ========================================================= -->
+      <div class="concept-view view-wood active" id="view-wood">
+        <div class="wood-workbench">
+          <div class="wood-label">Dovetail Joinery · Making Ten Inset ($7 + 3 = 10$)</div>
+
+          <!-- 10-Slot Carved Inset Tray -->
+          <div class="wood-tray-inset" id="woodTray">
+            <!-- 7 Fixed Inset Pegs -->
+            <div class="wood-pocket known"></div>
+            <div class="wood-pocket known"></div>
+            <div class="wood-pocket known"></div>
+            <div class="wood-pocket known"></div>
+            <div class="wood-pocket known"></div>
+            <div class="wood-pocket known"></div>
+            <div class="wood-pocket known"></div>
+            <!-- 3 Empty Recessed Pockets -->
+            <div class="wood-pocket"></div>
+            <div class="wood-pocket"></div>
+            <div class="wood-pocket"></div>
+
+            <!-- Target Magnetic Snap Basin (Right 3 slots) -->
+            <div class="wood-target-zone" id="woodDropZone"></div>
+          </div>
+
+          <!-- Engraved Mathematical Formula -->
+          <div class="wood-engraved-badge" id="woodBadge">7 + 3 = 10 · Dovetail Balance</div>
+
+          <!-- Draggable Handcrafted Wooden Block of 3 Pegs -->
+          <div class="wood-drag-block" id="woodBlock">
+            <div class="wood-peg-indicator"></div>
+            <div class="wood-peg-indicator"></div>
+            <div class="wood-peg-indicator"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =========================================================
+           CONCEPT 2: THE LIVING RIPPLE POND
+           ========================================================= -->
+      <div class="concept-view view-pond" id="view-pond">
+        <svg class="water-ripple-layer" id="rippleSvg"></svg>
+
+        <div class="pond-pad-stage">
+          <div class="pond-title">Surface Tension & River Stones · Parity (8 = 4 + 4)</div>
+
+          <!-- Twin Columns of Lilypads -->
+          <div class="pond-mat-lanes">
+            <!-- Left Lane (4 paired stones) -->
+            <div class="lilypad-lane">
+              <div class="lilypad-slot paired"><div class="river-stone-static"></div></div>
+              <div class="lilypad-slot paired"><div class="river-stone-static"></div></div>
+              <div class="lilypad-slot paired"><div class="river-stone-static"></div></div>
+              <div class="lilypad-slot paired"><div class="river-stone-static"></div></div>
+            </div>
+
+            <!-- Right Lane (3 paired stones + 1 magnetic drop bay) -->
+            <div class="lilypad-lane">
+              <div class="lilypad-slot paired"><div class="river-stone-static"></div></div>
+              <div class="lilypad-slot paired"><div class="river-stone-static"></div></div>
+              <div class="lilypad-slot paired"><div class="river-stone-static"></div></div>
+              <div class="lilypad-slot" id="pondDropBay">
+                <div class="lilypad-snap-bay" id="pondSnapSlot"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pond-status-text" id="pondStatus">
+            <span>✨ Drag the loose river pebble to find its twin partner</span>
+          </div>
+
+          <!-- Draggable Glassy Pebble -->
+          <div class="draggable-pebble" id="pondPebble"></div>
+        </div>
+      </div>
+
+      <!-- =========================================================
+           CONCEPT 3: THE MECHANICAL BRASS SWITCHBOARD
+           ========================================================= -->
+      <div class="concept-view view-brass" id="view-brass">
+        <div class="brass-chassis">
+          <div class="brass-header-row">
+            <div class="brass-plate-title">Milled Ratchet Instrument · Model 10−4</div>
+            <div class="brass-odometer" id="brassCounter">06</div>
+          </div>
+
+          <!-- Heavy Ratchet Track -->
+          <div class="brass-slider-track" id="brassTrack">
+            <div class="brass-rail-groove"></div>
+
+            <!-- 11 Notches (0 to 10) -->
+            <div class="brass-stations-layer" id="brassNotches">
+              <!-- Rendered by JS -->
+            </div>
+
+            <!-- Draggable Brass Knurled Slider -->
+            <div class="brass-heavy-slider" id="brassSlider"></div>
+          </div>
+
+          <div class="brass-instruction-plate" id="brassPrompt">
+            Slide the knurled knob across the steel rail to notch [ 6 ]
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ==============================================================
+      // 1. PROCEDURAL PHYSICAL AUDIO SYNTHESIZERS (ZERO DEPENDENCIES)
+      // ==============================================================
+      let audioCtx = null
+      function getAudioContext() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+        if (audioCtx.state === "suspended") audioCtx.resume()
+        return audioCtx
+      }
+
+      // (A) Real Wood Block Percussion (Hollow Resonant "THOCK")
+      function playWoodThock() {
+        try {
+          const ctx = getAudioContext()
+          const osc = ctx.createOscillator()
+          const filter = ctx.createBiquadFilter()
+          const gain = ctx.createGain()
+
+          osc.type = "sine"
+          osc.frequency.setValueAtTime(420, ctx.currentTime)
+          osc.frequency.exponentialRampToValueAtTime(140, ctx.currentTime + 0.08)
+
+          filter.type = "bandpass"
+          filter.frequency.setValueAtTime(520, ctx.currentTime)
+          filter.Q.setValueAtTime(6.0, ctx.currentTime)
+
+          gain.gain.setValueAtTime(0.7, ctx.currentTime)
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12)
+
+          osc.connect(filter)
+          filter.connect(gain)
+          gain.connect(ctx.destination)
+
+          osc.start()
+          osc.stop(ctx.currentTime + 0.13)
+        } catch (e) {}
+      }
+
+      // (B) Surface Tension Liquid Bubble ("BLOOP-POP")
+      function playBubblePop() {
+        try {
+          const ctx = getAudioContext()
+          const osc = ctx.createOscillator()
+          const gain = ctx.createGain()
+
+          osc.type = "sine"
+          osc.frequency.setValueAtTime(260, ctx.currentTime)
+          osc.frequency.exponentialRampToValueAtTime(740, ctx.currentTime + 0.04)
+
+          gain.gain.setValueAtTime(0.45, ctx.currentTime)
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1)
+
+          osc.connect(gain)
+          gain.connect(ctx.destination)
+
+          osc.start()
+          osc.stop(ctx.currentTime + 0.11)
+        } catch (e) {}
+      }
+
+      // (C) Sharp Mechanical Gear Click ("TICK")
+      function playRatchetClick() {
+        try {
+          const ctx = getAudioContext()
+          const osc = ctx.createOscillator()
+          const gain = ctx.createGain()
+
+          osc.type = "triangle"
+          osc.frequency.setValueAtTime(1800, ctx.currentTime)
+
+          gain.gain.setValueAtTime(0.2, ctx.currentTime)
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.02)
+
+          osc.connect(gain)
+          gain.connect(ctx.destination)
+
+          osc.start()
+          osc.stop(ctx.currentTime + 0.025)
+        } catch (e) {}
+      }
+
+      // (D) Heavy Industrial Solenoid Latch ("CLACK-LATCH")
+      function playMechanicalLatch() {
+        try {
+          const ctx = getAudioContext()
+
+          // Heavy body thud
+          const osc = ctx.createOscillator()
+          const gain = ctx.createGain()
+          osc.type = "sine"
+          osc.frequency.setValueAtTime(160, ctx.currentTime)
+          osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.09)
+          gain.gain.setValueAtTime(0.6, ctx.currentTime)
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15)
+          osc.connect(gain)
+          gain.connect(ctx.destination)
+          osc.start()
+          osc.stop(ctx.currentTime + 0.16)
+
+          // Metallic snap
+          const click = ctx.createOscillator()
+          const clickGain = ctx.createGain()
+          click.type = "triangle"
+          click.frequency.setValueAtTime(2400, ctx.currentTime)
+          clickGain.gain.setValueAtTime(0.4, ctx.currentTime)
+          clickGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04)
+          click.connect(clickGain)
+          clickGain.connect(ctx.destination)
+          click.start()
+          click.stop(ctx.currentTime + 0.05)
+        } catch (e) {}
+      }
+
+      // ==============================================================
+      // 2. CONCEPT SWITCHER (STUDIO ROUTER)
+      // ==============================================================
+      function switchToy(id) {
+        document.querySelectorAll(".concept-view").forEach((v) => v.classList.remove("active"))
+        document.querySelectorAll(".concept-tab").forEach((t) => t.classList.remove("active"))
+
+        document.getElementById(`view-${id}`).classList.add("active")
+        document.getElementById(`tab-${id}`).classList.add("active")
+
+        if (id === "wood") playWoodThock()
+        else if (id === "pond") playBubblePop()
+        else if (id === "brass") playMechanicalLatch()
+      }
+
+      // ==============================================================
+      // 3. CONCEPT 1 INTERACTION: WOOD INSET SNAP PHYSICS
+      // ==============================================================
+      const woodBlock = document.getElementById("woodBlock")
+      const woodDropZone = document.getElementById("woodDropZone")
+      let isWoodDragging = false
+      let woodStartX, woodStartY, woodInitialX, woodInitialY
+      let isWoodLocked = false
+
+      woodBlock.addEventListener("pointerdown", (e) => {
+        if (isWoodLocked) {
+          // Reset on click to replay
+          isWoodLocked = false
+          woodBlock.classList.remove("locked")
+          woodBlock.style.transform = ""
+          document.getElementById("woodBadge").classList.remove("solved")
+          return
+        }
+        isWoodDragging = true
+        woodBlock.setPointerCapture(e.pointerId)
+        woodStartX = e.clientX
+        woodStartY = e.clientY
+        const rect = woodBlock.getBoundingClientRect()
+        woodInitialX = rect.left
+        woodInitialY = rect.top
+        woodBlock.classList.add("elevated")
+        playWoodThock()
+      })
+
+      window.addEventListener("pointermove", (e) => {
+        if (!isWoodDragging || isWoodLocked) return
+        const dx = e.clientX - woodStartX
+        const dy = e.clientY - woodStartY
+        woodBlock.style.transform = `translate(${dx}px, ${dy}px) scale(1.06)`
+
+        // Test Proximity to Drop Zone
+        const blockRect = woodBlock.getBoundingClientRect()
+        const targetRect = woodDropZone.getBoundingClientRect()
+        const dist = Math.hypot(
+          blockRect.left + blockRect.width / 2 - (targetRect.left + targetRect.width / 2),
+          blockRect.top + blockRect.height / 2 - (targetRect.top + targetRect.height / 2),
+        )
+
+        if (dist < 90) {
+          woodDropZone.classList.add("hover")
+        } else {
+          woodDropZone.classList.remove("hover")
+        }
+      })
+
+      window.addEventListener("pointerup", (e) => {
+        if (!isWoodDragging || isWoodLocked) return
+        isWoodDragging = false
+        woodBlock.classList.remove("elevated")
+
+        const blockRect = woodBlock.getBoundingClientRect()
+        const targetRect = woodDropZone.getBoundingClientRect()
+        const dist = Math.hypot(
+          blockRect.left + blockRect.width / 2 - (targetRect.left + targetRect.width / 2),
+          blockRect.top + blockRect.height / 2 - (targetRect.top + targetRect.height / 2),
+        )
+
+        if (dist < 90) {
+          // MAGNETIC SNAP & LOCK!
+          isWoodLocked = true
+          woodDropZone.classList.remove("hover")
+          woodBlock.classList.add("locked")
+          woodBlock.style.transform = ""
+          playWoodThock()
+          document.getElementById("woodBadge").classList.add("solved")
+        } else {
+          // Spring recoil back to resting spot
+          woodBlock.style.transform = "translate(0px, 0px)"
+        }
+      })
+
+      // ==============================================================
+      // 4. CONCEPT 2 INTERACTION: RIPPLE POND & SURFACE TENSION
+      // ==============================================================
+      const pondPebble = document.getElementById("pondPebble")
+      const pondSnapSlot = document.getElementById("pondSnapSlot")
+      let isPondDragging = false
+      let pondStartX, pondStartY
+      let isPondSnapped = false
+
+      pondPebble.addEventListener("pointerdown", (e) => {
+        if (isPondSnapped) {
+          // Reset to replay
+          isPondSnapped = false
+          pondPebble.classList.remove("snapped")
+          pondPebble.style.transform = ""
+          document.getElementById("pondDropBay").appendChild(pondSnapSlot)
+          document.getElementById("pondStatus").innerHTML =
+            `<span>✨ Drag the loose river pebble to find its twin partner</span>`
+          return
+        }
+        isPondDragging = true
+        pondPebble.setPointerCapture(e.pointerId)
+        pondStartX = e.clientX
+        pondStartY = e.clientY
+        pondPebble.classList.add("floating")
+        createWaterRipple(e.clientX, e.clientY)
+        playBubblePop()
+      })
+
+      window.addEventListener("pointermove", (e) => {
+        if (!isPondDragging || isPondSnapped) return
+        const dx = e.clientX - pondStartX
+        const dy = e.clientY - pondStartY
+        pondPebble.style.transform = `translate(${dx}px, ${dy}px) scale(1.16)`
+
+        if (Math.random() > 0.6) {
+          createWaterRipple(e.clientX, e.clientY)
+        }
+      })
+
+      window.addEventListener("pointerup", (e) => {
+        if (!isPondDragging || isPondSnapped) return
+        isPondDragging = false
+        pondPebble.classList.remove("floating")
+
+        const pebbleRect = pondPebble.getBoundingClientRect()
+        const targetRect = pondSnapSlot.getBoundingClientRect()
+        const dist = Math.hypot(
+          pebbleRect.left + pebbleRect.width / 2 - (targetRect.left + targetRect.width / 2),
+          pebbleRect.top + pebbleRect.height / 2 - (targetRect.top + targetRect.height / 2),
+        )
+
+        if (dist < 85) {
+          // SURFACE TENSION MERGE & POP!
+          isPondSnapped = true
+          pondPebble.classList.add("snapped")
+          pondPebble.style.transform = ""
+          document.getElementById("pondDropBay").innerHTML = ""
+          document.getElementById("pondDropBay").appendChild(pondPebble)
+          createWaterRipple(targetRect.left + 30, targetRect.top + 30, true)
+          playBubblePop()
+          document.getElementById("pondStatus").innerHTML =
+            `<span>🌸 <strong>Even Harmony!</strong> 4 pairs on left = 4 pairs on right</span>`
+        } else {
+          pondPebble.style.transform = "translate(0px, 0px)"
+        }
+      })
+
+      function createWaterRipple(x, y, big = false) {
+        const svg = document.getElementById("rippleSvg")
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle")
+        circle.setAttribute("cx", x)
+        circle.setAttribute("cy", y)
+        circle.setAttribute("r", "10")
+        circle.setAttribute("fill", "none")
+        circle.setAttribute("stroke", big ? "#a7f3d0" : "rgba(110, 231, 183, 0.4)")
+        circle.setAttribute("stroke-width", big ? "3" : "1.5")
+        svg.appendChild(circle)
+
+        let r = 10
+        let opacity = 0.8
+        const anim = setInterval(() => {
+          r += big ? 5 : 2.5
+          opacity -= 0.03
+          circle.setAttribute("r", r)
+          circle.setAttribute("opacity", opacity)
+          if (opacity <= 0) {
+            clearInterval(anim)
+            svg.removeChild(circle)
+          }
+        }, 16)
+      }
+
+      // ==============================================================
+      // 5. CONCEPT 3 INTERACTION: MECHANICAL BRASS RATCHET
+      // ==============================================================
+      const brassSlider = document.getElementById("brassSlider")
+      const brassTrack = document.getElementById("brassTrack")
+      const brassNotchesContainer = document.getElementById("brassNotches")
+      const TARGET_NOTCH = 6
+      let currentNotch = 1
+      let isBrassDragging = false
+
+      // Render 11 notched station pins
+      for (let i = 0; i <= 10; i++) {
+        const pin = document.createElement("div")
+        pin.className = "brass-notch-pin"
+        pin.innerHTML = `
+          <div class="brass-pin-head ${i === 1 ? "active" : ""}" id="brassPin-${i}"></div>
+          <div class="brass-notch-label">${i < 10 ? "0" + i : i}</div>
+        `
+        pin.onclick = () => setBrassPosition(i)
+        brassNotchesContainer.appendChild(pin)
+      }
+
+      function setBrassPosition(idx) {
+        currentNotch = idx
+        const trackRect = brassTrack.getBoundingClientRect()
+        const usableWidth = trackRect.width - 90
+        const step = usableWidth / 10
+        const newLeft = 16 + idx * step
+        brassSlider.style.left = `${newLeft}px`
+
+        document.querySelectorAll(".brass-pin-head").forEach((p, i) => {
+          p.classList.toggle("active", i === idx)
+        })
+
+        document.getElementById("brassCounter").textContent = idx < 10 ? `0${idx}` : idx
+
+        if (idx === TARGET_NOTCH) {
+          playMechanicalLatch()
+          brassSlider.classList.add("latched")
+          document.getElementById("brassPrompt").innerHTML =
+            `⚙️ <strong style="color: #fbbf24;">LATCH ENGAGED!</strong> 10 − 4 = 06 exactly locked!`
+        } else {
+          playRatchetClick()
+          brassSlider.classList.remove("latched")
+        }
+      }
+
+      brassSlider.addEventListener("pointerdown", (e) => {
+        isBrassDragging = true
+        brassSlider.setPointerCapture(e.pointerId)
+      })
+
+      window.addEventListener("pointermove", (e) => {
+        if (!isBrassDragging) return
+        const trackRect = brassTrack.getBoundingClientRect()
+        const usableWidth = trackRect.width - 90
+        const relX = Math.max(0, Math.min(usableWidth, e.clientX - trackRect.left - 45))
+        const step = usableWidth / 10
+        const nearestIndex = Math.round(relX / step)
+
+        if (nearestIndex !== currentNotch) {
+          setBrassPosition(nearestIndex)
+        }
+      })
+
+      window.addEventListener("pointerup", () => {
+        isBrassDragging = false
+      })
+
+      // Set initial brass position to 1
+      setTimeout(() => setBrassPosition(1), 50)
+    </script>
+  </body>
+</html>

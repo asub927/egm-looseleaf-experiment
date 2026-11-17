@@ -1,7 +1,2 @@
-node_modules
-dist
-dist-ssr
-package-lock.json
-.git
-.github
-.agents
+garden-ref/
+dist/

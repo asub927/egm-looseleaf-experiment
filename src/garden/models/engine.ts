@@ -1,0 +1,341 @@
+import type { BedId, PictureRow, WrongBubble } from "../types"
+import { answerForProblem, type ProblemSpec } from "./problems"
+
+import type {
+  BeadState,
+  CutState,
+  FactState,
+  HopState,
+  ModelState,
+  SeesawState,
+  TrainState,
+} from "./state"
+
+export type {
+  BeadState,
+  CutState,
+  FactState,
+  HopState,
+  ModelState,
+  SeesawState,
+  TrainState,
+} from "./state"
+
+export function initialModelState(bedId: BedId, p: ProblemSpec): ModelState {
+  switch (bedId) {
+    case "making-ten":
+      return { moved: 0 }
+    case "counting-on":
+      return { at: p.kind === "add" ? p.a : 0 }
+    case "decomposing":
+      return { position: p.kind === "sub" ? p.n : 0, phase: "toTen" }
+    case "equivalent-sums":
+      return { movesAcross: 0 }
+    case "relationship":
+      return { tile: null }
+    case "number-line":
+      return { land: p.kind === "add" ? p.a : 5 }
+    default: {
+      const _exhaustive: never = bedId
+      return _exhaustive
+    }
+  }
+}
+
+export function modelReady(bedId: BedId, p: ProblemSpec, s: ModelState): boolean {
+  switch (bedId) {
+    case "making-ten": {
+      const st = s as BeadState
+      return st.moved > 0 && p.kind === "add"
+    }
+    case "counting-on": {
+      const st = s as TrainState
+      return p.kind === "add" && st.at > p.a
+    }
+    case "decomposing": {
+      const st = s as CutState
+      return p.kind === "sub" && st.phase === "rest" && st.position < 10
+    }
+    case "equivalent-sums": {
+      const st = s as SeesawState
+      return st.movesAcross > 0
+    }
+    case "relationship": {
+      const st = s as FactState
+      return st.tile !== null
+    }
+    case "number-line": {
+      const st = s as HopState
+      return p.kind === "add" && st.land !== p.a
+    }
+    default: {
+      const _exhaustive: never = bedId
+      return _exhaustive
+    }
+  }
+}
+
+export function modelCorrect(bedId: BedId, p: ProblemSpec, s: ModelState): boolean {
+  const ans = answerForProblem(p)
+  switch (bedId) {
+    case "making-ten": {
+      const st = s as BeadState
+      if (p.kind !== "add") return false
+      return p.a + st.moved === 10 && p.a + st.moved + (p.b - st.moved) === ans
+    }
+    case "counting-on": {
+      const st = s as TrainState
+      return st.at === ans
+    }
+    case "decomposing": {
+      const st = s as CutState
+      return p.kind === "sub" && st.position === ans
+    }
+    case "equivalent-sums": {
+      const st = s as SeesawState
+      if (p.kind !== "add") return false
+      const left = p.a - st.movesAcross
+      const right = p.b + st.movesAcross
+      return left === right
+    }
+    case "relationship": {
+      const st = s as FactState
+      return st.tile === ans
+    }
+    case "number-line": {
+      const st = s as HopState
+      return st.land === ans
+    }
+    default: {
+      const _exhaustive: never = bedId
+      return _exhaustive
+    }
+  }
+}
+
+export function beadMaxMove(p: ProblemSpec, _moved: number): number {
+  if (p.kind !== "add") return 0
+  return Math.min(p.b, 10 - p.a)
+}
+
+export function stepModel(
+  bedId: BedId,
+  p: ProblemSpec,
+  s: ModelState,
+  delta: number,
+): ModelState | null {
+  switch (bedId) {
+    case "making-ten": {
+      const st = s as BeadState
+      const max = beadMaxMove(p, st.moved)
+      const next = Math.max(0, Math.min(max, st.moved + delta))
+      return next === st.moved ? null : { moved: next }
+    }
+    case "counting-on": {
+      const st = s as TrainState
+      if (p.kind !== "add") return null
+      const next = Math.max(p.a, Math.min(20, st.at + delta))
+      return next === st.at ? null : { at: next }
+    }
+    case "decomposing": {
+      const st = s as CutState
+      if (p.kind !== "sub") return null
+      if (st.phase === "toTen") {
+        const next = Math.max(10, Math.min(p.n, st.position - delta))
+        if (next === st.position) return null
+        if (next <= 10) return { position: 10, phase: "rest" }
+        return { position: next, phase: "toTen" }
+      }
+      const next = Math.max(0, Math.min(10, st.position - delta))
+      return next === st.position ? null : { position: next, phase: "rest" }
+    }
+    case "equivalent-sums": {
+      const st = s as SeesawState
+      if (p.kind !== "add") return null
+      const need = Math.abs(p.a - p.b) / 2
+      const next = Math.max(0, Math.min(need, st.movesAcross + delta))
+      return next === st.movesAcross ? null : { movesAcross: next }
+    }
+    case "relationship": {
+      const st = s as FactState
+      if (p.kind !== "fact") return null
+      const miss = p.whole - p.part
+      const tiles = [miss - 2, miss - 1, miss, miss + 1, miss + 2]
+      const idx = st.tile === null ? -1 : tiles.indexOf(st.tile)
+      const j = clamp(idx + delta, -1, tiles.length - 1)
+      const tile = j < 0 ? null : tiles[j]
+      if (tile === st.tile) return null
+      return { tile }
+    }
+    case "number-line": {
+      const st = s as HopState
+      const next = Math.max(5, Math.min(20, st.land + delta))
+      return next === st.land ? null : { land: next }
+    }
+    default: {
+      const _exhaustive: never = bedId
+      return _exhaustive
+    }
+  }
+}
+
+function clamp(v: number, a: number, b: number): number {
+  return Math.max(a, Math.min(b, v))
+}
+
+export function wrongBubble(bedId: BedId, p: ProblemSpec, s: ModelState): WrongBubble {
+  const rows = observationPicture(bedId, p, s)
+  const obs = observationCopy(bedId, p, s)
+  return { title: obs.title, body: obs.body, pictureRows: rows }
+}
+
+function observationCopy(
+  bedId: BedId,
+  p: ProblemSpec,
+  s: ModelState,
+): { title: string; body: string } {
+  switch (bedId) {
+    case "making-ten": {
+      const st = s as BeadState
+      if (p.kind !== "add")
+        return { title: "Look at the wires.", body: "Move beads to fill the top wire." }
+      const top = p.a + st.moved
+      return {
+        title: `The top wire has ${top} beads.`,
+        body: "A full ten has 10 beads.",
+      }
+    }
+    case "counting-on": {
+      const st = s as TrainState
+      if (p.kind !== "add") return { title: "Look at the train.", body: "" }
+      const c = st.at - p.a
+      return {
+        title: `The engine counted on ${c} ${c === 1 ? "car" : "cars"}.`,
+        body: `We add ${p.b}.`,
+      }
+    }
+    case "decomposing": {
+      const st = s as CutState
+      if (p.kind !== "sub") return { title: "", body: "" }
+      const taken = p.n - st.position
+      const need = p.take
+      const diff = taken - need
+      if (st.position === 10)
+        return {
+          title: "You reached a full ten.",
+          body: `Nice start. We still take the rest of the ${need}.`,
+        }
+      if (diff > 0)
+        return {
+          title: `That is ${diff} more than we need.`,
+          body: `You took away ${taken}. We need ${need}.`,
+        }
+      return {
+        title: `That is ${-diff} fewer than we need.`,
+        body: `You took away ${taken}. We need ${need}.`,
+      }
+    }
+    case "equivalent-sums": {
+      const st = s as SeesawState
+      if (p.kind !== "add") return { title: "", body: "" }
+      const left = p.a - st.movesAcross
+      const right = p.b + st.movesAcross
+      return {
+        title: `The left side has ${left}. The right side has ${right}.`,
+        body: left > right ? "The left side is still down." : "Now the right side is down.",
+      }
+    }
+    case "relationship": {
+      const st = s as FactState
+      if (p.kind !== "fact" || st.tile === null)
+        return { title: "Pick a tile for the empty corner.", body: "" }
+      const sum = p.part + st.tile
+      return {
+        title: `${p.part} and ${st.tile} make ${sum}.`,
+        body: `The roof says ${p.whole}.`,
+      }
+    }
+    case "number-line": {
+      const st = s as HopState
+      if (p.kind !== "add") return { title: "", body: "" }
+      const hops = st.land - p.a
+      return {
+        title: `The flag is ${Math.abs(hops)} ${Math.abs(hops) === 1 ? "hop" : "hops"} forward from ${p.a}.`,
+        body: `Pip hops ${p.b}.`,
+      }
+    }
+    default: {
+      const _exhaustive: never = bedId
+      return _exhaustive
+    }
+  }
+}
+
+function observationPicture(bedId: BedId, p: ProblemSpec, s: ModelState): PictureRow[] {
+  switch (bedId) {
+    case "making-ten": {
+      const st = s as BeadState
+      if (p.kind !== "add") return []
+      const top = p.a + st.moved
+      return [
+        { label: "Top", n: top, of: 10, fill: "#FF9FB0" },
+        { label: "Ten", n: 10, of: 10, fill: "#B8A6FF" },
+      ]
+    }
+    case "counting-on": {
+      const st = s as TrainState
+      if (p.kind !== "add") return []
+      const c = st.at - p.a
+      const m = Math.max(c, p.b)
+      return [
+        { label: "Counted", n: c, of: m, fill: "#9CCBF5" },
+        { label: "Add", n: p.b, of: m, fill: "#B8A6FF" },
+      ]
+    }
+    case "decomposing": {
+      const st = s as CutState
+      if (p.kind !== "sub") return []
+      const taken = p.n - st.position
+      const m = Math.max(taken, p.take)
+      return [
+        { label: "Away", n: taken, of: m, fill: "#FFB59E" },
+        { label: "Need", n: p.take, of: m, fill: "#B8A6FF" },
+      ]
+    }
+    case "equivalent-sums": {
+      const st = s as SeesawState
+      if (p.kind !== "add") return []
+      const left = p.a - st.movesAcross
+      const right = p.b + st.movesAcross
+      const m = Math.max(left, right)
+      return [
+        { label: "Left", n: left, of: m, fill: "#FFB59E" },
+        { label: "Right", n: right, of: m, fill: "#9CCBF5" },
+      ]
+    }
+    case "relationship": {
+      const st = s as FactState
+      if (p.kind !== "fact" || st.tile === null) return []
+      const sum = p.part + st.tile
+      const m = Math.max(sum, p.whole)
+      return [
+        { label: `${p.part} + ${st.tile}`, n: sum, of: m, fill: "#FFB59E" },
+        { label: "Roof", n: p.whole, of: m, fill: "#B8A6FF" },
+      ]
+    }
+    case "number-line": {
+      const st = s as HopState
+      if (p.kind !== "add") return []
+      const hops = Math.abs(st.land - p.a)
+      const m = Math.max(hops, p.b)
+      return [
+        { label: "Hops", n: hops, of: m, fill: "#B8A6FF" },
+        { label: "Pip hops", n: p.b, of: m, fill: "#FFB59E" },
+      ]
+    }
+    default: {
+      const _exhaustive: never = bedId
+      return _exhaustive
+    }
+  }
+}

@@ -1,0 +1,101 @@
+/* Pip's Math Garden — poteto-garden theme */
+.garden-root {
+  --g-peach: #ffd6c9;
+  --g-lavender: #d9ccff;
+  --g-mint: #c9f2dd;
+  --g-sky: #cde8ff;
+  --g-butter: #fff1b8;
+  --g-rose: #ffd1e3;
+  --g-cream: #fffdf8;
+  --g-paper: #f6f1e4;
+  --g-ink: #2b2a3a;
+  min-height: 100dvh;
+  background: var(--g-paper);
+  color: var(--g-ink);
+  font-family: system-ui, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+
+.garden-root * {
+  box-sizing: border-box;
+}
+
+.garden-root button,
+.garden-root [role="button"] {
+  min-height: 56px;
+  min-width: 56px;
+  touch-action: manipulation;
+}
+
+.garden-root .garden-tap {
+  min-height: 56px;
+  min-width: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 2px solid var(--g-lavender);
+  background: #fff;
+  color: var(--g-ink);
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
+.garden-root .garden-tap:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.garden-root .garden-tap:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.garden-root .garden-tap.primary {
+  background: var(--g-mint);
+  border-color: var(--g-ink);
+}
+
+.garden-root .peach-bubble {
+  background: var(--g-peach);
+  border: 2px solid var(--g-ink);
+  border-radius: 24px;
+  padding: 1rem 1.25rem;
+  max-width: 420px;
+}
+
+.garden-root .flow-count {
+  font-variant-numeric: tabular-nums;
+  font-weight: 900;
+  font-size: 1.5rem;
+}
+
+.garden-root .motion-fade {
+  transition: opacity 260ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .garden-root .motion-fade,
+  .garden-root .garden-tap {
+    transition: opacity 200ms ease !important;
+    transform: none !important;
+  }
+}
+
+.garden-root.nomove .motion-move {
+  transition: none !important;
+}
+
+.garden-root .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

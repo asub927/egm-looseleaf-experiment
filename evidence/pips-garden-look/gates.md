@@ -19,7 +19,8 @@ Overlap assertions ignore decorative path/gate pairs (see `fluid-sweep.mjs`).
 
 - **G6**: Owl uses `min-width` / `min-height` 56px with visual SVG smaller inside — invisible grab padding pattern.
 - **03-map-all-done**: baseline PNG absent (demo verify gap); not in harness manifest.
-- **WebKit phone / ipad 3done**: residual 1.07–7.15% after chrome parity fix (engine text AA; 3done bloom art vs verify baseline).
+- **WebKit phone map chrome**: ~1.95% on fresh/01-map/shots-map (WebKit raster vs Chromium baseline PNG).
+- **02-map-3done touch/narrow**: verify walkthrough baseline ≠ localStorage seed (~5.6% phone, ~3.0% ipad landscape on demo HTML); harness walkthrough blocked on lesson `win` timeout (see `map/heatmap-notes.md`).
 
 ## No pause items
 

@@ -33,6 +33,10 @@
     linear-gradient(180deg, var(--sky-wash) 0%, var(--cream) 42%, var(--sand-wash) 100%);
   color: var(--ink);
   font-family: ui-rounded, "SF Pro Rounded", "Nunito", "Segoe UI", system-ui, sans-serif;
+  line-height: normal;
+  text-rendering: geometricPrecision;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   overflow: hidden;
 }
 
@@ -918,6 +922,7 @@
   margin: 0 6px 0 0;
   font-weight: 900;
   letter-spacing: 0.2px;
+  line-height: normal;
   text-shadow: 0 1px 0 rgba(255, 248, 240, 0.7);
 }
 
@@ -927,6 +932,7 @@
   padding: 10px 16px;
   font-weight: 900;
   font-size: 17px;
+  line-height: normal;
   flex: 0 0 auto;
 }
 
@@ -961,6 +967,7 @@
 .garden-root .garden-map-screen .ghostbtn {
   background: rgba(255, 255, 255, 0.82);
   font-size: 16px;
+  line-height: normal;
   border: 0;
   border-radius: 18px;
   min-height: 56px;
@@ -988,6 +995,7 @@
   margin: 0;
   font-size: clamp(17px, 2.1vw, 24px);
   font-weight: 800;
+  line-height: normal;
 }
 
 .garden-root .garden-canvas {

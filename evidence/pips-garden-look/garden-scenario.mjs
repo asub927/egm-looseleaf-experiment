@@ -128,7 +128,21 @@ async function tap(page, selector, touch) {
   await page.waitForTimeout(180)
 }
 
-async function dragOn(page, fromSel, toSel, steps = 18) {
+async function touchCdp(page, touch) {
+  if (!touch) return null
+  if (page._gardenTouchCdp === false) return null
+  if (!page._gardenTouchCdp) {
+    try {
+      page._gardenTouchCdp = await page.context().newCDPSession(page)
+    } catch {
+      page._gardenTouchCdp = false
+      return null
+    }
+  }
+  return page._gardenTouchCdp
+}
+
+async function dragOn(page, fromSel, toSel, steps = 18, touch = false) {
   const from = page.locator(fromSel).first()
   const to = page.locator(toSel).first()
   await from.scrollIntoViewIfNeeded()
@@ -139,23 +153,54 @@ async function dragOn(page, fromSel, toSel, steps = 18) {
   const fy = a.y + a.height / 2
   const tx = b.x + b.width / 2
   const ty = b.y + b.height / 2
-  await page.mouse.move(fx, fy)
-  await page.mouse.down()
-  for (let i = 1; i <= steps; i++) {
-    const t = i / steps
-    await page.mouse.move(fx + (tx - fx) * t, fy + (ty - fy) * t, { steps: 1 })
-    await page.waitForTimeout(12)
+  const cdp = await touchCdp(page, touch)
+  if (touch && !cdp) {
+    await from.dragTo(to, { steps })
+    await page.waitForTimeout(420)
+    return true
   }
-  await page.mouse.up()
-  await page.waitForTimeout(320)
+  if (touch && cdp) {
+    await cdp.send("Input.dispatchTouchEvent", {
+      type: "touchStart",
+      touchPoints: [{ x: fx, y: fy, id: 1 }],
+    })
+    for (let i = 1; i <= steps; i++) {
+      const t = i / steps
+      const px = fx + (tx - fx) * t
+      const py = fy + (ty - fy) * t
+      await cdp.send("Input.dispatchTouchEvent", {
+        type: "touchMove",
+        touchPoints: [{ x: px, y: py, id: 1 }],
+      })
+      await page.waitForTimeout(12)
+    }
+    for (let k = 0; k < 3; k++) {
+      await cdp.send("Input.dispatchTouchEvent", {
+        type: "touchMove",
+        touchPoints: [{ x: tx, y: ty, id: 1 }],
+      })
+      await page.waitForTimeout(60)
+    }
+    await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] })
+  } else {
+    await page.mouse.move(fx, fy)
+    await page.mouse.down()
+    for (let i = 1; i <= steps; i++) {
+      const t = i / steps
+      await page.mouse.move(fx + (tx - fx) * t, fy + (ty - fy) * t, { steps: 1 })
+      await page.waitForTimeout(12)
+    }
+    await page.mouse.up()
+  }
+  await page.waitForTimeout(touch ? 420 : 320)
   return true
 }
 
-async function runDragPlan(page, plan) {
+async function runDragPlan(page, plan, touch = false) {
   const moves =
     plan.moves ?? (plan.from ? Array.from({ length: plan.repeats ?? 1 }, () => plan) : [])
   for (const move of moves) {
-    await dragOn(page, move.from, move.to, 20)
+    await dragOn(page, move.from, move.to, 20, touch)
   }
 }
 
@@ -177,22 +222,25 @@ async function resetProgress(page) {
   }, PROGRESS_KEY)
 }
 
-async function setThreeBedsDone(page) {
-  await page.evaluate((key) => {
-    localStorage.setItem(
-      key,
-      JSON.stringify({
-        schemaVersion: 1,
-        solvedBedIds: ["making-ten", "counting-on", "decomposing"],
-        solvedProblemKeys: [],
-        mossLeaves: 6,
-        sessionBedsFinished: 3,
-        restedThisSession: true,
-        calmMode: false,
-        owlBedIndex: 2,
-      }),
-    )
-  }, PROGRESS_KEY)
+async function setThreeBedsDone(page, owlBedIndex = 2) {
+  await page.evaluate(
+    ([key, owl]) => {
+      localStorage.setItem(
+        key,
+        JSON.stringify({
+          schemaVersion: 1,
+          solvedBedIds: ["making-ten", "counting-on", "decomposing"],
+          solvedProblemKeys: [],
+          mossLeaves: 6,
+          sessionBedsFinished: 3,
+          restedThisSession: true,
+          calmMode: false,
+          owlBedIndex: owl,
+        }),
+      )
+    },
+    [PROGRESS_KEY, owlBedIndex],
+  )
 }
 
 async function waitMap(page, rm) {
@@ -286,7 +334,7 @@ async function finishProblemTwo(page, bed, touch) {
         moves: [{ from: '[data-testid="flag"]', to: '[data-testid="tick-14"]' }],
       },
     }
-    await runDragPlan(page, p2Plan[bed])
+    await runDragPlan(page, p2Plan[bed], touch)
     await ensureLock(page, bed)
   }
   if (await page.locator('[data-testid="lock"]').isEnabled()) {
@@ -322,7 +370,7 @@ export async function runMainScenario(page, config, shot, baseUrl) {
     await tap(page, `[data-testid="chip-${GUESS_WRONG[bed]}"]`, touch)
     await page.waitForTimeout(300)
 
-    await runDragPlan(page, WRONG_DRAG[bed])
+    await runDragPlan(page, WRONG_DRAG[bed], touch)
     await shot(`${prefix}-2drag`, await page.screenshot({ fullPage: true }))
 
     await tap(page, '[data-testid="lock"]', touch)
@@ -340,7 +388,7 @@ export async function runMainScenario(page, config, shot, baseUrl) {
       await page.locator("#reset").click()
       await page.waitForTimeout(200)
     }
-    await runDragPlan(page, RIGHT_DRAG[bed])
+    await runDragPlan(page, RIGHT_DRAG[bed], touch)
     await ensureLock(page, bed)
     await tap(page, '[data-testid="lock"]', touch)
     await waitMs(page, 350, rm)
@@ -383,6 +431,7 @@ export async function runMapOnlyForConfig(page, config, shot, baseUrl) {
   await page.reload({ waitUntil: "networkidle" })
   await page.waitForSelector('[data-testid="ready"]', { timeout: 15000 })
   await waitMap(page, rm)
+  await page.waitForTimeout(rm ? 80 : 200)
   await shot("02-map-3done", await page.screenshot({ fullPage: true }))
 }
 
@@ -393,7 +442,8 @@ export async function runMapSnapshots(page, mapConfig, shot, baseUrl) {
   await page.waitForSelector('[data-testid="ready"]', { timeout: 15000 })
   await waitMap(page, false)
   await shot("fresh", await page.screenshot({ fullPage: false }))
-  await setThreeBedsDone(page)
+  // shot-map.mjs keeps Pip at the home perch (owl index 0) when capturing 3done.
+  await setThreeBedsDone(page, 0)
   await page.reload({ waitUntil: "networkidle" })
   await page.waitForSelector('[data-testid="ready"]', { timeout: 15000 })
   await waitMap(page, false)

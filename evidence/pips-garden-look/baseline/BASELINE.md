@@ -1,19 +1,17 @@
 # Baseline (garden-map-demo)
 
-Generated on this VM from unmodified `~/garden-design/design/garden-map-demo/garden.html`.
+Generated from unmodified `~/garden-design/design/garden-map-demo/garden.html`.
 
 ```bash
-cd ~/garden-design/design/garden-map-demo
-./build.sh
-npm install
-node verify.mjs    # writes shots/ (desk, ipad, phone, reduced motion)
-node shot-map.mjs  # writes shots-map/
+cd evidence/pips-garden-look/baseline
+./generate-baseline.sh --engine chromium   # lesson shots via verify.mjs + seeded map overlays
+./generate-baseline.sh --engine webkit     # map rows only (capture-map-baselines.mjs)
 ```
 
-Demo verify result: **1485/1495** checks passed (10 known demo flakes in rm config).
+Layout:
 
-Copy into repo: `./evidence/pips-garden-look/baseline/generate-baseline.sh` (full regen) or manual `cp` as documented in BASELINE.md.
+- `chromium/shots/` + `chromium/shots-map/` — full lesson mirror (171 files) plus seeded map rows
+- `webkit/shots/` + `webkit/shots-map/` — map parity rows only (same filenames as harness manifest)
+- `superseded/walkthrough-02-map-3done/` — verify walkthrough 3-done PNGs replaced in retry 2
 
-**171** PNG files under `shots/` and `shots-map/`.
-
-Filename pattern: `{config}-{screen}.png` (see any file under `shots/` for examples).
+Seeded 3-done uses `window.__app.APP` flags (`making-ten`, `counting-on`, `decomposing`, `leaves: 6`, `owlAt: 0`), same as `shot-map.mjs`.

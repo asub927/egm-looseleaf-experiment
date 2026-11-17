@@ -222,7 +222,35 @@ async function resetProgress(page) {
   }, PROGRESS_KEY)
 }
 
-async function setThreeBedsDone(page, owlBedIndex = 2) {
+async function setAllBedsDone(page, owlBedIndex = 0) {
+  await page.evaluate(
+    ([key, owl]) => {
+      localStorage.setItem(
+        key,
+        JSON.stringify({
+          schemaVersion: 1,
+          solvedBedIds: [
+            "making-ten",
+            "counting-on",
+            "decomposing",
+            "equivalent-sums",
+            "relationship",
+            "number-line",
+          ],
+          solvedProblemKeys: [],
+          mossLeaves: 12,
+          sessionBedsFinished: 6,
+          restedThisSession: true,
+          calmMode: false,
+          owlBedIndex: owl,
+        }),
+      )
+    },
+    [PROGRESS_KEY, owlBedIndex],
+  )
+}
+
+async function setThreeBedsDone(page, owlBedIndex = 0) {
   await page.evaluate(
     ([key, owl]) => {
       localStorage.setItem(
@@ -426,13 +454,19 @@ export async function runMapOnlyForConfig(page, config, shot, baseUrl) {
   await page.reload({ waitUntil: "networkidle" })
   await page.waitForSelector('[data-testid="ready"]', { timeout: 15000 })
   await waitMap(page, rm)
-  await shot("01-map", await page.screenshot({ fullPage: true }))
-  await setThreeBedsDone(page)
+  await shot("01-map", await page.screenshot({ fullPage: false }))
+  await setThreeBedsDone(page, 0)
   await page.reload({ waitUntil: "networkidle" })
   await page.waitForSelector('[data-testid="ready"]', { timeout: 15000 })
   await waitMap(page, rm)
   await page.waitForTimeout(rm ? 80 : 200)
-  await shot("02-map-3done", await page.screenshot({ fullPage: true }))
+  await shot("02-map-3done", await page.screenshot({ fullPage: false }))
+  await setAllBedsDone(page, 0)
+  await page.reload({ waitUntil: "networkidle" })
+  await page.waitForSelector('[data-testid="ready"]', { timeout: 15000 })
+  await waitMap(page, rm)
+  await page.waitForTimeout(rm ? 80 : 200)
+  await shot("03-map-all-done", await page.screenshot({ fullPage: false }))
 }
 
 export async function runMapSnapshots(page, mapConfig, shot, baseUrl) {

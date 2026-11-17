@@ -59,7 +59,18 @@ async function exists(p) {
   }
 }
 
-async function resolveBaselineRoot() {
+async function baselineDirForEngine(engineName, subdir) {
+  const engineRoot = path.join(BASELINE_REPO, engineName)
+  const legacy = path.join(BASELINE_REPO, subdir)
+  const perEngine = path.join(engineRoot, subdir)
+  if (await exists(perEngine)) return perEngine
+  if (engineName === "chromium" && (await exists(legacy))) return legacy
+  return null
+}
+
+async function resolveBaselineRepo() {
+  const chromiumShots = await baselineDirForEngine("chromium", "shots")
+  if (chromiumShots) return BASELINE_REPO
   if (await exists(path.join(BASELINE_REPO, "shots"))) return BASELINE_REPO
   if (await exists(path.join(DEMO_BASELINE, "shots"))) return DEMO_BASELINE
   return null
@@ -188,16 +199,20 @@ async function captureForConfig(engine, configTag, isMap, onlyMap) {
   return { captures, maskRects, error: scenarioError }
 }
 
-async function loadManifest(baselineRoot) {
+async function loadManifest(baselineRoot, engineName) {
   const manifest = []
+  const seen = new Set()
   for (const [subdir, kind] of [
     ["shots", "shots"],
     ["shots-map", "shots-map"],
   ]) {
-    const dir = path.join(baselineRoot, subdir)
-    if (!(await exists(dir))) continue
+    const dir = await baselineDirForEngine(engineName, subdir)
+    if (!dir) continue
     const names = (await readdir(dir)).filter((f) => f.endsWith(".png")).sort()
     for (const baselineName of names) {
+      const key = `${subdir}:${baselineName}`
+      if (seen.has(key)) continue
+      seen.add(key)
       const parsed = parseBaselineFilename(baselineName)
       manifest.push({
         baselineName,
@@ -206,6 +221,7 @@ async function loadManifest(baselineRoot) {
         configTag: parsed?.configTag,
         screenId: parsed?.screenId,
         subdir,
+        engine: engineName,
       })
     }
   }
@@ -221,7 +237,7 @@ function harnessOnlyMap() {
 
 async function main() {
   const onlyMap = harnessOnlyMap()
-  const baselineRoot = await resolveBaselineRoot()
+  const baselineRoot = await resolveBaselineRepo()
   if (!baselineRoot) {
     const msg =
       "BLOCKED: no baseline. Extract garden-design-v2.tar.gz to ~/garden-design and commit evidence/pips-garden-look/baseline/ before visual changes."
@@ -234,7 +250,11 @@ async function main() {
   }
 
   await mkdir(ARTIFACTS, { recursive: true })
-  let manifest = await loadManifest(baselineRoot)
+  let manifest = []
+  for (const engine of ENGINES) {
+    const part = await loadManifest(baselineRoot, engine.name)
+    manifest.push(...part)
+  }
   if (onlyMap) {
     manifest = manifest.filter((row) => isMapScreenId(row.screenId))
   }
@@ -277,6 +297,7 @@ async function main() {
 
   for (const engine of ENGINES) {
     for (const item of manifest) {
+      if (item.engine !== engine.name) continue
       if (onlyConfig && item.configTag !== onlyConfig) continue
       const { baselineName, baselinePath, screenId, configTag, subdir } = item
       const cacheKey = `${engine.name}:${subdir === "shots-map" ? "map" : "main"}:${configTag}`
@@ -373,7 +394,7 @@ async function main() {
     exampleNav: EXAMPLE_NAV,
     unmappedScreenIds: [...UNMAPPED_SCREEN_IDS],
     missingBaselinesNote:
-      "b6-number-line-5win and 03-map-all-done are absent from committed baseline/shots (demo verify gaps).",
+      "b6-number-line-5win absent from committed baseline/shots (demo verify gap). Map rows include seeded 03-map-all-done (capture-map-baselines.mjs).",
     rows,
     pass: failed === 0,
   }

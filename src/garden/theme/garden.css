@@ -1,4 +1,9 @@
 /* Pip's Math Garden — poteto-garden theme */
+html:has(.garden-root) body {
+  font-family: ui-rounded, "SF Pro Rounded", "Nunito", "Segoe UI", system-ui, sans-serif;
+  line-height: normal;
+}
+
 .garden-root {
   --g-peach: #ffd6c9;
   --g-lavender: #d9ccff;
@@ -46,6 +51,10 @@
 
 .garden-root button,
 .garden-root [role="button"] {
+  font: inherit;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 800;
   min-height: 56px;
   min-width: 56px;
   touch-action: manipulation;
@@ -993,9 +1002,10 @@
 
 .garden-root .garden-map-screen .maptalk p {
   margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
   font-size: clamp(17px, 2.1vw, 24px);
   font-weight: 800;
-  line-height: normal;
 }
 
 .garden-root .garden-canvas {

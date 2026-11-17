@@ -85,7 +85,7 @@ export default function GardenApp() {
         ready
       </i>
       <div
-        className={`garden-screen${screen === "map" ? " garden-screen-on" : ""}`}
+        className={`garden-screen garden-screen-map${screen === "map" ? " garden-screen-on" : ""}`}
         id="map"
         data-testid="map"
         aria-hidden={screen !== "map"}

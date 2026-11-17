@@ -199,6 +199,19 @@
     visibility 0s;
 }
 
+.garden-root .garden-screen-map {
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+  background: linear-gradient(180deg, #bfdff5 0%, #cde8ff 26%, #e8f4d8 62%, #d8ebc4 100%);
+}
+
+.garden-root .garden-screen-map .garden-map-screen {
+  flex: 1;
+  min-height: 100%;
+  height: 100%;
+}
+
 .garden-root.nomove .garden-screen {
   transform: none;
 }
@@ -308,9 +321,15 @@
   flex: 0 0 auto;
   cursor: pointer;
   font-size: 1.1rem;
+  color: var(--ink);
   transition:
     transform 140ms var(--ease-out),
     opacity 200ms ease;
+}
+
+.garden-root .read svg {
+  width: 26px;
+  height: 26px;
 }
 
 .garden-root .read:active {
@@ -873,6 +892,7 @@
 
 /* ---------- MAP (garden-map-demo) ---------- */
 .garden-root .garden-map-screen {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
@@ -890,6 +910,7 @@
   flex-wrap: wrap;
   padding: 10px 18px 0;
   flex-shrink: 0;
+  row-gap: 8px;
 }
 
 .garden-root .garden-map-screen h1 {
@@ -906,6 +927,7 @@
   padding: 10px 16px;
   font-weight: 900;
   font-size: 17px;
+  flex: 0 0 auto;
 }
 
 .garden-root .garden-map-screen .pet-wrap {
@@ -930,6 +952,12 @@
   flex: 1;
 }
 
+.garden-root .garden-map-screen .map-actions {
+  display: flex;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
 .garden-root .garden-map-screen .ghostbtn {
   background: rgba(255, 255, 255, 0.82);
   font-size: 16px;
@@ -941,6 +969,10 @@
   font-weight: 800;
   cursor: pointer;
   box-shadow: 0 2px 0 rgba(43, 42, 58, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
 }
 
 .garden-root .garden-map-screen .maptalk {
@@ -959,8 +991,10 @@
 }
 
 .garden-root .garden-canvas {
-  position: relative;
-  flex: 1;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  flex: none;
   min-height: 0;
 }
 
@@ -1024,7 +1058,7 @@
     0 10px 18px rgba(43, 42, 58, 0.08),
     inset 0 0 0 3px #f6eedd,
     inset 0 0 0 5px rgba(43, 42, 58, 0.16);
-  transition: transform 160ms var(--g-ease-out);
+  transition: transform 160ms var(--ease-out);
 }
 
 .garden-root .bed .plot::after {
@@ -1051,7 +1085,7 @@
 
 .garden-root .bed .seed-art {
   opacity: 1;
-  transition: opacity 220ms var(--g-ease-out);
+  transition: opacity 220ms var(--ease-out);
 }
 
 .garden-root .bed.done .seed-art {
@@ -1226,8 +1260,8 @@
   opacity: 0;
   transform: scale(0.95);
   transition:
-    opacity 220ms var(--g-ease-out),
-    transform 220ms var(--g-ease-out);
+    opacity 220ms var(--ease-out),
+    transform 220ms var(--ease-out);
   pointer-events: none;
   z-index: 1;
 }
@@ -1255,7 +1289,7 @@
   pointer-events: none;
   transition-property: transform;
   transition-duration: 280ms;
-  transition-timing-function: var(--g-ease-out);
+  transition-timing-function: var(--ease-out);
   will-change: transform;
 }
 
@@ -1277,9 +1311,47 @@
   }
 }
 
+@media (max-width: 900px) {
+  .garden-root .garden-map-screen .pet-label {
+    display: none;
+  }
+
+  .garden-root .garden-map-screen h1 {
+    font-size: clamp(20px, 3.2vw, 28px);
+  }
+}
+
 @media (max-width: 520px) {
+  .garden-root .garden-map-screen .bar {
+    padding: 8px 10px 0;
+    gap: 8px;
+  }
+
+  .garden-root .garden-map-screen .maptalk {
+    padding: 2px 10px 6px;
+  }
+
+  .garden-root .garden-map-screen h1 {
+    font-size: 20px;
+  }
+
+  .garden-root .garden-map-screen .maptalk p {
+    font-size: 16px;
+  }
+
   .garden-root .garden-map-screen .bed .hint {
     display: none;
+  }
+
+  .garden-root .garden-map-screen .bed .plaque {
+    padding: 6px 8px 7px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 520px) and (max-aspect-ratio: 3/4) {
+  .garden-root .garden-map-screen .bar {
+    padding-top: 6px;
   }
 }
 

@@ -107,7 +107,7 @@ export function GardenMap({
         <div className="map-actions">
           <button
             type="button"
-            className="garden-tap ghostbtn calmbtn"
+            className="ghostbtn calmbtn"
             aria-pressed={calmMode}
             data-testid="calm-mode"
             onClick={onToggleCalm}
@@ -116,7 +116,7 @@ export function GardenMap({
           </button>
           <button
             type="button"
-            className="garden-tap ghostbtn"
+            className="ghostbtn"
             data-testid="done-today"
             onClick={onDoneForToday}
           >
@@ -125,7 +125,7 @@ export function GardenMap({
         </div>
       </div>
       <div ref={maptalkRef} className="maptalk">
-        <ReadAloudButton getText={() => line} testId="read-map" />
+        <ReadAloudButton getText={() => line} testId="read-map" className="read" />
         <p id="mapline" data-testid="mapline">
           {line}
         </p>

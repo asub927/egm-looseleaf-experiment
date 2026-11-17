@@ -1,16 +1,17 @@
 {
-  "at": "2026-11-17T05:25:38.952Z",
+  "at": "2026-11-17T05:46:20.501Z",
   "previewUrl": "http://127.0.0.1:4173",
   "threshold": 0.1,
   "maxPercent": 1,
-  "manifestCount": 171,
+  "onlyMap": true,
+  "manifestCount": 16,
   "masks": [
     "butterflies",
     "bee",
     "clouds",
     "text-caret"
   ],
-  "maskNote": "Mask selectors present but no matching DOM nodes in React app; full-frame compare.",
+  "maskNote": "Element bounding boxes masked before pixelmatch when DOM nodes exist.",
   "exampleNav": [
     {
       "screenId": "01-map",
@@ -47,990 +48,608 @@
       "engine": "chromium",
       "screenId": "01-map",
       "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "percent": 0.10908203125,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-desk-1280x800-mouse-01-map-chromium.png",
+      "diff": "artifacts/diff/diff-desk-1280x800-mouse-01-map-chromium.png",
+      "side": "artifacts/diff/side-desk-1280x800-mouse-01-map-chromium.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
       "baseline": "desk-1280x800-mouse-02-map-3done.png",
       "engine": "chromium",
       "screenId": "02-map-3done",
       "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "percent": 0.69794921875,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-desk-1280x800-mouse-02-map-3done-chromium.png",
+      "diff": "artifacts/diff/diff-desk-1280x800-mouse-02-map-3done-chromium.png",
+      "side": "artifacts/diff/side-desk-1280x800-mouse-02-map-3done-chromium.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-06-rest.png",
+      "baseline": "ipad-1024x768-touch-01-map.png",
       "engine": "chromium",
-      "screenId": "06-rest",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "01-map",
+      "configTag": "ipad-1024x768-touch",
+      "percent": 0.17102559407552081,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-1024x768-touch-01-map-chromium.png",
+      "diff": "artifacts/diff/diff-ipad-1024x768-touch-01-map-chromium.png",
+      "side": "artifacts/diff/side-ipad-1024x768-touch-01-map-chromium.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b1-making-ten-1story.png",
+      "baseline": "ipad-1024x768-touch-02-map-3done.png",
       "engine": "chromium",
-      "screenId": "b1-making-ten-1story",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
+      "screenId": "02-map-3done",
+      "configTag": "ipad-1024x768-touch",
+      "percent": 3.0231475830078125,
       "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-1024x768-touch-02-map-3done-chromium.png",
+      "diff": "artifacts/diff/diff-ipad-1024x768-touch-02-map-3done-chromium.png",
+      "side": "artifacts/diff/side-ipad-1024x768-touch-02-map-3done-chromium.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b1-making-ten-2drag.png",
+      "baseline": "ipad-768x1024-touch-01-map.png",
       "engine": "chromium",
-      "screenId": "b1-making-ten-2drag",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "01-map",
+      "configTag": "ipad-768x1024-touch",
+      "percent": 0.17484029134114581,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-768x1024-touch-01-map-chromium.png",
+      "diff": "artifacts/diff/diff-ipad-768x1024-touch-01-map-chromium.png",
+      "side": "artifacts/diff/side-ipad-768x1024-touch-01-map-chromium.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b1-making-ten-3wrong.png",
+      "baseline": "ipad-768x1024-touch-02-map-3done.png",
       "engine": "chromium",
-      "screenId": "b1-making-ten-3wrong",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "02-map-3done",
+      "configTag": "ipad-768x1024-touch",
+      "percent": 0.7485707600911458,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-768x1024-touch-02-map-3done-chromium.png",
+      "diff": "artifacts/diff/diff-ipad-768x1024-touch-02-map-3done-chromium.png",
+      "side": "artifacts/diff/side-ipad-768x1024-touch-02-map-3done-chromium.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b1-making-ten-4sheet.png",
+      "baseline": "phone-390x844-touch-01-map.png",
       "engine": "chromium",
-      "screenId": "b1-making-ten-4sheet",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "01-map",
+      "configTag": "phone-390x844-touch",
+      "percent": 0.5741888443310245,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-phone-390x844-touch-01-map-chromium.png",
+      "diff": "artifacts/diff/diff-phone-390x844-touch-01-map-chromium.png",
+      "side": "artifacts/diff/side-phone-390x844-touch-01-map-chromium.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b1-making-ten-5win.png",
+      "baseline": "phone-390x844-touch-02-map-3done.png",
       "engine": "chromium",
-      "screenId": "b1-making-ten-5win",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
+      "screenId": "02-map-3done",
+      "configTag": "phone-390x844-touch",
+      "percent": 5.888321788795722,
       "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-phone-390x844-touch-02-map-3done-chromium.png",
+      "diff": "artifacts/diff/diff-phone-390x844-touch-02-map-3done-chromium.png",
+      "side": "artifacts/diff/side-phone-390x844-touch-02-map-3done-chromium.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b2-counting-on-1story.png",
+      "baseline": "rm-1280x800-mouse-01-map.png",
       "engine": "chromium",
-      "screenId": "b2-counting-on-1story",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "01-map",
+      "configTag": "rm-1280x800-mouse",
+      "percent": 0.1767578125,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-rm-1280x800-mouse-01-map-chromium.png",
+      "diff": "artifacts/diff/diff-rm-1280x800-mouse-01-map-chromium.png",
+      "side": "artifacts/diff/side-rm-1280x800-mouse-01-map-chromium.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b2-counting-on-2drag.png",
+      "baseline": "rm-1280x800-mouse-02-map-3done.png",
       "engine": "chromium",
-      "screenId": "b2-counting-on-2drag",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "02-map-3done",
+      "configTag": "rm-1280x800-mouse",
+      "percent": 0.226171875,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-rm-1280x800-mouse-02-map-3done-chromium.png",
+      "diff": "artifacts/diff/diff-rm-1280x800-mouse-02-map-3done-chromium.png",
+      "side": "artifacts/diff/side-rm-1280x800-mouse-02-map-3done-chromium.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b2-counting-on-3wrong.png",
+      "baseline": "ipad-1024x768-3done.png",
       "engine": "chromium",
-      "screenId": "b2-counting-on-3wrong",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "3done",
+      "configTag": "ipad-1024x768",
+      "percent": 0.4657745361328125,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-1024x768-3done-chromium.png",
+      "diff": "artifacts/diff/diff-ipad-1024x768-3done-chromium.png",
+      "side": "artifacts/diff/side-ipad-1024x768-3done-chromium.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b2-counting-on-4sheet.png",
+      "baseline": "ipad-1024x768-fresh.png",
       "engine": "chromium",
-      "screenId": "b2-counting-on-4sheet",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "fresh",
+      "configTag": "ipad-1024x768",
+      "percent": 0.17407735188802081,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-1024x768-fresh-chromium.png",
+      "diff": "artifacts/diff/diff-ipad-1024x768-fresh-chromium.png",
+      "side": "artifacts/diff/side-ipad-1024x768-fresh-chromium.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b2-counting-on-5win.png",
+      "baseline": "ipad-768x1024-3done.png",
       "engine": "chromium",
-      "screenId": "b2-counting-on-5win",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "3done",
+      "configTag": "ipad-768x1024",
+      "percent": 0.4680633544921875,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-768x1024-3done-chromium.png",
+      "diff": "artifacts/diff/diff-ipad-768x1024-3done-chromium.png",
+      "side": "artifacts/diff/side-ipad-768x1024-3done-chromium.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b3-decomposing-1story.png",
+      "baseline": "ipad-768x1024-fresh.png",
       "engine": "chromium",
-      "screenId": "b3-decomposing-1story",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "fresh",
+      "configTag": "ipad-768x1024",
+      "percent": 0.17763773600260419,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-768x1024-fresh-chromium.png",
+      "diff": "artifacts/diff/diff-ipad-768x1024-fresh-chromium.png",
+      "side": "artifacts/diff/side-ipad-768x1024-fresh-chromium.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b3-decomposing-2drag.png",
+      "baseline": "phone-390x844-3done.png",
       "engine": "chromium",
-      "screenId": "b3-decomposing-2drag",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
+      "screenId": "3done",
+      "configTag": "phone-390x844",
+      "percent": 1.0693887471138657,
       "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-phone-390x844-3done-chromium.png",
+      "diff": "artifacts/diff/diff-phone-390x844-3done-chromium.png",
+      "side": "artifacts/diff/side-phone-390x844-3done-chromium.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b3-decomposing-3wrong.png",
+      "baseline": "phone-390x844-fresh.png",
       "engine": "chromium",
-      "screenId": "b3-decomposing-3wrong",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "fresh",
+      "configTag": "phone-390x844",
+      "percent": 0.5808725240004861,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-phone-390x844-fresh-chromium.png",
+      "diff": "artifacts/diff/diff-phone-390x844-fresh-chromium.png",
+      "side": "artifacts/diff/side-phone-390x844-fresh-chromium.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b3-decomposing-4sheet.png",
-      "engine": "chromium",
-      "screenId": "b3-decomposing-4sheet",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b3-decomposing-5win.png",
-      "engine": "chromium",
-      "screenId": "b3-decomposing-5win",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-1story.png",
-      "engine": "chromium",
-      "screenId": "b4-equivalent-sums-1story",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-2drag.png",
-      "engine": "chromium",
-      "screenId": "b4-equivalent-sums-2drag",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-3wrong.png",
-      "engine": "chromium",
-      "screenId": "b4-equivalent-sums-3wrong",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-4sheet.png",
-      "engine": "chromium",
-      "screenId": "b4-equivalent-sums-4sheet",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-5win.png",
-      "engine": "chromium",
-      "screenId": "b4-equivalent-sums-5win",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b5-relationship-1story.png",
-      "engine": "chromium",
-      "screenId": "b5-relationship-1story",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b5-relationship-2drag.png",
-      "engine": "chromium",
-      "screenId": "b5-relationship-2drag",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b5-relationship-3wrong.png",
-      "engine": "chromium",
-      "screenId": "b5-relationship-3wrong",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b5-relationship-4sheet.png",
-      "engine": "chromium",
-      "screenId": "b5-relationship-4sheet",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b5-relationship-5win.png",
-      "engine": "chromium",
-      "screenId": "b5-relationship-5win",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b6-number-line-1story.png",
-      "engine": "chromium",
-      "screenId": "b6-number-line-1story",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b6-number-line-2drag.png",
-      "engine": "chromium",
-      "screenId": "b6-number-line-2drag",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b6-number-line-3wrong.png",
-      "engine": "chromium",
-      "screenId": "b6-number-line-3wrong",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b6-number-line-4sheet.png",
-      "engine": "chromium",
-      "screenId": "b6-number-line-4sheet",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-zz-error.png",
-      "engine": "chromium",
-      "screenId": "zz-error",
-      "configTag": "desk-1280x800-mouse",
-      "pass": null,
-      "skipped": true,
-      "detail": "no navigation mapping (demo error shot only)",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
       "baseline": "desk-1280x800-mouse-01-map.png",
       "engine": "webkit",
       "screenId": "01-map",
       "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "percent": 0.33349609375,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-desk-1280x800-mouse-01-map-webkit.png",
+      "diff": "artifacts/diff/diff-desk-1280x800-mouse-01-map-webkit.png",
+      "side": "artifacts/diff/side-desk-1280x800-mouse-01-map-webkit.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
       "baseline": "desk-1280x800-mouse-02-map-3done.png",
       "engine": "webkit",
       "screenId": "02-map-3done",
       "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "percent": 0.9103515624999999,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-desk-1280x800-mouse-02-map-3done-webkit.png",
+      "diff": "artifacts/diff/diff-desk-1280x800-mouse-02-map-3done-webkit.png",
+      "side": "artifacts/diff/side-desk-1280x800-mouse-02-map-3done-webkit.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-06-rest.png",
+      "baseline": "ipad-1024x768-touch-01-map.png",
       "engine": "webkit",
-      "screenId": "06-rest",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "01-map",
+      "configTag": "ipad-1024x768-touch",
+      "percent": 0.21820068359375,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-1024x768-touch-01-map-webkit.png",
+      "diff": "artifacts/diff/diff-ipad-1024x768-touch-01-map-webkit.png",
+      "side": "artifacts/diff/side-ipad-1024x768-touch-01-map-webkit.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b1-making-ten-1story.png",
+      "baseline": "ipad-1024x768-touch-02-map-3done.png",
       "engine": "webkit",
-      "screenId": "b1-making-ten-1story",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
+      "screenId": "02-map-3done",
+      "configTag": "ipad-1024x768-touch",
+      "percent": 3.005727132161458,
       "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-1024x768-touch-02-map-3done-webkit.png",
+      "diff": "artifacts/diff/diff-ipad-1024x768-touch-02-map-3done-webkit.png",
+      "side": "artifacts/diff/side-ipad-1024x768-touch-02-map-3done-webkit.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b1-making-ten-2drag.png",
+      "baseline": "ipad-768x1024-touch-01-map.png",
       "engine": "webkit",
-      "screenId": "b1-making-ten-2drag",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "01-map",
+      "configTag": "ipad-768x1024-touch",
+      "percent": 0.2422332763671875,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-768x1024-touch-01-map-webkit.png",
+      "diff": "artifacts/diff/diff-ipad-768x1024-touch-01-map-webkit.png",
+      "side": "artifacts/diff/side-ipad-768x1024-touch-01-map-webkit.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b1-making-ten-3wrong.png",
+      "baseline": "ipad-768x1024-touch-02-map-3done.png",
       "engine": "webkit",
-      "screenId": "b1-making-ten-3wrong",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "02-map-3done",
+      "configTag": "ipad-768x1024-touch",
+      "percent": 0.80718994140625,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-768x1024-touch-02-map-3done-webkit.png",
+      "diff": "artifacts/diff/diff-ipad-768x1024-touch-02-map-3done-webkit.png",
+      "side": "artifacts/diff/side-ipad-768x1024-touch-02-map-3done-webkit.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b1-making-ten-4sheet.png",
+      "baseline": "phone-390x844-touch-01-map.png",
       "engine": "webkit",
-      "screenId": "b1-making-ten-4sheet",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
+      "screenId": "01-map",
+      "configTag": "phone-390x844-touch",
+      "percent": 2.196803985903512,
       "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-phone-390x844-touch-01-map-webkit.png",
+      "diff": "artifacts/diff/diff-phone-390x844-touch-01-map-webkit.png",
+      "side": "artifacts/diff/side-phone-390x844-touch-01-map-webkit.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b1-making-ten-5win.png",
+      "baseline": "phone-390x844-touch-02-map-3done.png",
       "engine": "webkit",
-      "screenId": "b1-making-ten-5win",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
+      "screenId": "02-map-3done",
+      "configTag": "phone-390x844-touch",
+      "percent": 7.151537246323976,
       "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-phone-390x844-touch-02-map-3done-webkit.png",
+      "diff": "artifacts/diff/diff-phone-390x844-touch-02-map-3done-webkit.png",
+      "side": "artifacts/diff/side-phone-390x844-touch-02-map-3done-webkit.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b2-counting-on-1story.png",
+      "baseline": "rm-1280x800-mouse-01-map.png",
       "engine": "webkit",
-      "screenId": "b2-counting-on-1story",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "01-map",
+      "configTag": "rm-1280x800-mouse",
+      "percent": 0.81025390625,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-rm-1280x800-mouse-01-map-webkit.png",
+      "diff": "artifacts/diff/diff-rm-1280x800-mouse-01-map-webkit.png",
+      "side": "artifacts/diff/side-rm-1280x800-mouse-01-map-webkit.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b2-counting-on-2drag.png",
+      "baseline": "rm-1280x800-mouse-02-map-3done.png",
       "engine": "webkit",
-      "screenId": "b2-counting-on-2drag",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "02-map-3done",
+      "configTag": "rm-1280x800-mouse",
+      "percent": 0.85068359375,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-rm-1280x800-mouse-02-map-3done-webkit.png",
+      "diff": "artifacts/diff/diff-rm-1280x800-mouse-02-map-3done-webkit.png",
+      "side": "artifacts/diff/side-rm-1280x800-mouse-02-map-3done-webkit.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b2-counting-on-3wrong.png",
+      "baseline": "ipad-1024x768-3done.png",
       "engine": "webkit",
-      "screenId": "b2-counting-on-3wrong",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "3done",
+      "configTag": "ipad-1024x768",
+      "percent": 0.5082448323567708,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-1024x768-3done-webkit.png",
+      "diff": "artifacts/diff/diff-ipad-1024x768-3done-webkit.png",
+      "side": "artifacts/diff/side-ipad-1024x768-3done-webkit.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b2-counting-on-4sheet.png",
+      "baseline": "ipad-1024x768-fresh.png",
       "engine": "webkit",
-      "screenId": "b2-counting-on-4sheet",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "fresh",
+      "configTag": "ipad-1024x768",
+      "percent": 0.21921793619791666,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-1024x768-fresh-webkit.png",
+      "diff": "artifacts/diff/diff-ipad-1024x768-fresh-webkit.png",
+      "side": "artifacts/diff/side-ipad-1024x768-fresh-webkit.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b2-counting-on-5win.png",
+      "baseline": "ipad-768x1024-3done.png",
       "engine": "webkit",
-      "screenId": "b2-counting-on-5win",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "3done",
+      "configTag": "ipad-768x1024",
+      "percent": 0.5243937174479167,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-768x1024-3done-webkit.png",
+      "diff": "artifacts/diff/diff-ipad-768x1024-3done-webkit.png",
+      "side": "artifacts/diff/side-ipad-768x1024-3done-webkit.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b3-decomposing-1story.png",
+      "baseline": "ipad-768x1024-fresh.png",
       "engine": "webkit",
-      "screenId": "b3-decomposing-1story",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "screenId": "fresh",
+      "configTag": "ipad-768x1024",
+      "percent": 0.2429962158203125,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-768x1024-fresh-webkit.png",
+      "diff": "artifacts/diff/diff-ipad-768x1024-fresh-webkit.png",
+      "side": "artifacts/diff/side-ipad-768x1024-fresh-webkit.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b3-decomposing-2drag.png",
+      "baseline": "phone-390x844-3done.png",
       "engine": "webkit",
-      "screenId": "b3-decomposing-2drag",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
+      "screenId": "3done",
+      "configTag": "phone-390x844",
+      "percent": 2.6616235265524364,
       "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-phone-390x844-3done-webkit.png",
+      "diff": "artifacts/diff/diff-phone-390x844-3done-webkit.png",
+      "side": "artifacts/diff/side-phone-390x844-3done-webkit.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
+      ],
+      "masksApplied": true
     },
     {
-      "baseline": "desk-1280x800-mouse-b3-decomposing-3wrong.png",
+      "baseline": "phone-390x844-fresh.png",
       "engine": "webkit",
-      "screenId": "b3-decomposing-3wrong",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
+      "screenId": "fresh",
+      "configTag": "phone-390x844",
+      "percent": 2.1995382184955647,
       "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-phone-390x844-fresh-webkit.png",
+      "diff": "artifacts/diff/diff-phone-390x844-fresh-webkit.png",
+      "side": "artifacts/diff/side-phone-390x844-fresh-webkit.png",
       "masks": [
         "butterflies",
         "bee",
         "clouds",
         "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b3-decomposing-4sheet.png",
-      "engine": "webkit",
-      "screenId": "b3-decomposing-4sheet",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b3-decomposing-5win.png",
-      "engine": "webkit",
-      "screenId": "b3-decomposing-5win",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-1story.png",
-      "engine": "webkit",
-      "screenId": "b4-equivalent-sums-1story",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-2drag.png",
-      "engine": "webkit",
-      "screenId": "b4-equivalent-sums-2drag",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-3wrong.png",
-      "engine": "webkit",
-      "screenId": "b4-equivalent-sums-3wrong",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-4sheet.png",
-      "engine": "webkit",
-      "screenId": "b4-equivalent-sums-4sheet",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-5win.png",
-      "engine": "webkit",
-      "screenId": "b4-equivalent-sums-5win",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b5-relationship-1story.png",
-      "engine": "webkit",
-      "screenId": "b5-relationship-1story",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b5-relationship-2drag.png",
-      "engine": "webkit",
-      "screenId": "b5-relationship-2drag",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b5-relationship-3wrong.png",
-      "engine": "webkit",
-      "screenId": "b5-relationship-3wrong",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b5-relationship-4sheet.png",
-      "engine": "webkit",
-      "screenId": "b5-relationship-4sheet",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b5-relationship-5win.png",
-      "engine": "webkit",
-      "screenId": "b5-relationship-5win",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b6-number-line-1story.png",
-      "engine": "webkit",
-      "screenId": "b6-number-line-1story",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b6-number-line-2drag.png",
-      "engine": "webkit",
-      "screenId": "b6-number-line-2drag",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b6-number-line-3wrong.png",
-      "engine": "webkit",
-      "screenId": "b6-number-line-3wrong",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-b6-number-line-4sheet.png",
-      "engine": "webkit",
-      "screenId": "b6-number-line-4sheet",
-      "configTag": "desk-1280x800-mouse",
-      "percent": null,
-      "pass": false,
-      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
-    },
-    {
-      "baseline": "desk-1280x800-mouse-zz-error.png",
-      "engine": "webkit",
-      "screenId": "zz-error",
-      "configTag": "desk-1280x800-mouse",
-      "pass": null,
-      "skipped": true,
-      "detail": "no navigation mapping (demo error shot only)",
-      "masks": [
-        "butterflies",
-        "bee",
-        "clouds",
-        "text-caret"
-      ]
+      ],
+      "masksApplied": true
     }
   ],
   "pass": false

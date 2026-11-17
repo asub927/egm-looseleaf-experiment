@@ -325,7 +325,13 @@ function drawScene(
   const cloud = (cx: number, cy: number, sc: number) => {
     const g = el(
       "g",
-      { fill: "#fff", opacity: 0.85, transform: `translate(${cx} ${cy}) scale(${sc})` },
+      {
+        fill: "#fff",
+        opacity: 0.85,
+        transform: `translate(${cx} ${cy}) scale(${sc})`,
+        "data-testid": "clouds",
+        class: "clouds",
+      },
       svg,
     )
     el("ellipse", { cx: 0, cy: 0, rx: 30, ry: 12 }, g)
@@ -484,7 +490,10 @@ function drawCritters(
     const q = place.find(sz + 8, sz + 8, w[1], w[2], [sz, W - sz, topY + sz, H - sz], { pathR: 14 })
     if (!q) return
     const d = document.createElement("div")
-    d.className = `critter ${w[3]}`
+    const kind = w[3]
+    d.className = `critter ${kind}${kind === "b1" || kind === "b2" ? " butterflies" : ""}`
+    if (kind === "bee") d.setAttribute("data-testid", "bee")
+    if (kind === "b1" || kind === "b2") d.setAttribute("data-testid", "butterflies")
     d.setAttribute("aria-hidden", "true")
     d.style.width = `${sz}px`
     d.style.transform = `translate(${Math.round(q.x - sz / 2)}px,${Math.round(q.y - sz - 4)}px)`

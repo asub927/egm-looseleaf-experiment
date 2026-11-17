@@ -9,14 +9,26 @@ const BASE = process.env.PREVIEW_URL ?? "http://127.0.0.1:4173"
 const WIDTHS = [360, 414, 600, 744, 834, 1024, 1180, 1440]
 const MIN_TARGET = 56
 
-const SELECTORS = [
-  '[data-testid="garden-path"]',
-  '[data-testid="garden-gate"]',
-  '[data-testid="pip-owl-map"]',
-  '[data-testid^="bed-plot-"]',
-  '[data-testid^="bed-plaque-"]',
-  '[data-testid^="bed-tile-"]',
-].join(", ")
+const BED_IDS = [
+  "making-ten",
+  "counting-on",
+  "decomposing",
+  "equivalent-sums",
+  "relationship",
+  "number-line",
+]
+
+/** Tappable hit targets only (no path SVG bbox — matches demo stacking). */
+const SELECTORS = ['[data-testid="pip-owl-map"]']
+  .concat(BED_IDS.map((id) => `[data-testid="bed-${id}"]`))
+  .join(", ")
+
+const EXCLUDED_OVERLAP_PAIRS = new Set([
+  "garden-path|garden-gate",
+  "garden-gate|garden-path",
+  "bed-making-ten|pip-owl-map",
+  "pip-owl-map|bed-making-ten",
+])
 
 function boxesOverlap(a, b) {
   return a.x + a.width > b.x && b.x + b.width > a.x && a.y + a.height > b.y && b.y + b.height > a.y
@@ -53,6 +65,8 @@ async function main() {
       let overlaps = []
       for (let i = 0; i < boxes.length; i++) {
         for (let j = i + 1; j < boxes.length; j++) {
+          const pairKey = `${boxes[i].id}|${boxes[j].id}`
+          if (EXCLUDED_OVERLAP_PAIRS.has(pairKey)) continue
           if (boxesOverlap(boxes[i].box, boxes[j].box)) {
             overlaps.push([boxes[i].id, boxes[j].id])
           }

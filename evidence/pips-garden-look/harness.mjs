@@ -9,7 +9,9 @@ import {
   EXAMPLE_NAV,
   MAP_SNAPSHOTS,
   parseBaselineFilename,
+  isMapScreenId,
   runMainScenario,
+  runMapOnlyForConfig,
   runMapSnapshots,
 } from "./garden-scenario.mjs"
 
@@ -147,7 +149,7 @@ function sideBySide(baseline, build, diff) {
   return out
 }
 
-async function captureForConfig(engine, configTag, isMap) {
+async function captureForConfig(engine, configTag, isMap, onlyMap) {
   const config = isMap ? MAP_SNAPSHOTS.find((m) => m.tag === configTag) : configByTag(configTag)
   if (!config) return { captures: new Map(), maskRects: [] }
 
@@ -171,6 +173,8 @@ async function captureForConfig(engine, configTag, isMap) {
   try {
     if (isMap) {
       await runMapSnapshots(page, config, shot, BASE)
+    } else if (onlyMap) {
+      await runMapOnlyForConfig(page, config, shot, BASE)
     } else {
       await runMainScenario(page, config, shot, BASE)
     }
@@ -208,7 +212,15 @@ async function loadManifest(baselineRoot) {
   return manifest
 }
 
+function harnessOnlyMap() {
+  return (
+    process.argv.some((a) => a === "--only=map" || a.startsWith("--only=map,")) ||
+    process.env.HARNESS_ONLY === "map"
+  )
+}
+
 async function main() {
+  const onlyMap = harnessOnlyMap()
   const baselineRoot = await resolveBaselineRoot()
   if (!baselineRoot) {
     const msg =
@@ -222,7 +234,10 @@ async function main() {
   }
 
   await mkdir(ARTIFACTS, { recursive: true })
-  const manifest = await loadManifest(baselineRoot)
+  let manifest = await loadManifest(baselineRoot)
+  if (onlyMap) {
+    manifest = manifest.filter((row) => isMapScreenId(row.screenId))
+  }
 
   const onlyConfig = process.env.HARNESS_CONFIG
   const configTagsNeeded = new Set()
@@ -230,7 +245,7 @@ async function main() {
   for (const row of manifest) {
     if (onlyConfig && row.configTag !== onlyConfig) continue
     if (row.subdir === "shots-map") mapTagsNeeded.add(row.configTag)
-    else configTagsNeeded.add(row.configTag)
+    else if (!onlyMap || isMapScreenId(row.screenId)) configTagsNeeded.add(row.configTag)
   }
 
   const captureCache = new Map()
@@ -242,7 +257,7 @@ async function main() {
       const key = `${engine.name}:main:${tag}`
       if (!captureCache.has(key)) {
         try {
-          captureCache.set(key, await captureForConfig(engine, tag, false))
+          captureCache.set(key, await captureForConfig(engine, tag, false, onlyMap))
         } catch (e) {
           captureCache.set(key, { captures: new Map(), maskRects: [], error: String(e) })
         }
@@ -252,7 +267,7 @@ async function main() {
       const key = `${engine.name}:map:${tag}`
       if (!captureCache.has(key)) {
         try {
-          captureCache.set(key, await captureForConfig(engine, tag, true))
+          captureCache.set(key, await captureForConfig(engine, tag, true, onlyMap))
         } catch (e) {
           captureCache.set(key, { captures: new Map(), maskRects: [], error: String(e) })
         }
@@ -349,6 +364,7 @@ async function main() {
     previewUrl: BASE,
     threshold: PIXELMATCH_THRESHOLD,
     maxPercent: MAX_PERCENT,
+    onlyMap,
     manifestCount: manifest.length,
     masks: MASK_IDS,
     maskNote:

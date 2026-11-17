@@ -189,7 +189,7 @@ async function setThreeBedsDone(page) {
         sessionBedsFinished: 3,
         restedThisSession: true,
         calmMode: false,
-        owlBedIndex: 0,
+        owlBedIndex: 2,
       }),
     )
   }, PROGRESS_KEY)
@@ -197,7 +197,20 @@ async function setThreeBedsDone(page) {
 
 async function waitMap(page, rm) {
   await page.waitForSelector('[data-testid="garden-canvas"]', { timeout: 12000 })
-  await waitMs(page, rm ? 150 : 420, rm)
+  await page.waitForFunction(
+    () => {
+      const g = document.querySelector('[data-testid="garden"]')
+      return g && g.clientWidth > 48 && g.clientHeight > 48
+    },
+    { timeout: 12000 },
+  )
+  await page.evaluate(
+    () =>
+      new Promise((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(resolve))
+      }),
+  )
+  await waitMs(page, rm ? 150 : 500, rm)
 }
 
 async function waitLesson(page, rm) {
@@ -351,17 +364,39 @@ export async function runMainScenario(page, config, shot, baseUrl) {
   }
 }
 
+const MAP_SCREEN_IDS = new Set(["01-map", "02-map-3done", "03-map-all-done", "fresh", "3done"])
+
+export function isMapScreenId(screenId) {
+  return MAP_SCREEN_IDS.has(screenId)
+}
+
+/** Map baselines only (no lesson walkthrough). */
+export async function runMapOnlyForConfig(page, config, shot, baseUrl) {
+  const { rm } = config
+  await page.goto(baseUrl, { waitUntil: "networkidle" })
+  await resetProgress(page)
+  await page.reload({ waitUntil: "networkidle" })
+  await page.waitForSelector('[data-testid="ready"]', { timeout: 15000 })
+  await waitMap(page, rm)
+  await shot("01-map", await page.screenshot({ fullPage: true }))
+  await setThreeBedsDone(page)
+  await page.reload({ waitUntil: "networkidle" })
+  await page.waitForSelector('[data-testid="ready"]', { timeout: 15000 })
+  await waitMap(page, rm)
+  await shot("02-map-3done", await page.screenshot({ fullPage: true }))
+}
+
 export async function runMapSnapshots(page, mapConfig, shot, baseUrl) {
   await page.goto(baseUrl, { waitUntil: "networkidle" })
   await resetProgress(page)
   await page.reload({ waitUntil: "networkidle" })
   await page.waitForSelector('[data-testid="ready"]', { timeout: 15000 })
-  await waitMs(page, 200, false)
+  await waitMap(page, false)
   await shot("fresh", await page.screenshot({ fullPage: false }))
   await setThreeBedsDone(page)
   await page.reload({ waitUntil: "networkidle" })
   await page.waitForSelector('[data-testid="ready"]', { timeout: 15000 })
-  await waitMs(page, 200, false)
+  await waitMap(page, false)
   await shot("3done", await page.screenshot({ fullPage: false }))
 }
 

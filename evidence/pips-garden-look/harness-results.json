@@ -1,0 +1,1037 @@
+{
+  "at": "2026-11-17T05:24:10.821Z",
+  "previewUrl": "http://127.0.0.1:4173",
+  "threshold": 0.1,
+  "maxPercent": 1,
+  "manifestCount": 171,
+  "masks": [
+    "butterflies",
+    "bee",
+    "clouds",
+    "text-caret"
+  ],
+  "maskNote": "Mask selectors present but no matching DOM nodes in React app; full-frame compare.",
+  "exampleNav": [
+    {
+      "screenId": "01-map",
+      "steps": "goto /, wait [data-testid=ready]"
+    },
+    {
+      "screenId": "b1-making-ten-1story",
+      "steps": "click [data-testid=bed-making-ten], wait [data-testid=strategy-chip]"
+    },
+    {
+      "screenId": "b1-making-ten-2drag",
+      "steps": "start-try → chip-12 → WRONG_DRAG making-ten"
+    },
+    {
+      "screenId": "b1-making-ten-3wrong",
+      "steps": "Lock it in (wrong) → peach bubble"
+    },
+    {
+      "screenId": "b1-making-ten-4sheet",
+      "steps": "Lock ×2 → ws-next through worksheet"
+    },
+    {
+      "screenId": "b1-making-ten-5win",
+      "steps": "RIGHT_DRAG → Lock → [data-testid=win]"
+    }
+  ],
+  "unmappedScreenIds": [
+    "zz-error"
+  ],
+  "missingBaselinesNote": "b6-number-line-5win and 03-map-all-done are absent from committed baseline/shots (demo verify gaps).",
+  "rows": [
+    {
+      "baseline": "desk-1280x800-mouse-01-map.png",
+      "engine": "chromium",
+      "screenId": "01-map",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-02-map-3done.png",
+      "engine": "chromium",
+      "screenId": "02-map-3done",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-06-rest.png",
+      "engine": "chromium",
+      "screenId": "06-rest",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b1-making-ten-1story.png",
+      "engine": "chromium",
+      "screenId": "b1-making-ten-1story",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b1-making-ten-2drag.png",
+      "engine": "chromium",
+      "screenId": "b1-making-ten-2drag",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b1-making-ten-3wrong.png",
+      "engine": "chromium",
+      "screenId": "b1-making-ten-3wrong",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b1-making-ten-4sheet.png",
+      "engine": "chromium",
+      "screenId": "b1-making-ten-4sheet",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b1-making-ten-5win.png",
+      "engine": "chromium",
+      "screenId": "b1-making-ten-5win",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b2-counting-on-1story.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-1story",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b2-counting-on-2drag.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-2drag",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b2-counting-on-3wrong.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-3wrong",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b2-counting-on-4sheet.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-4sheet",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b2-counting-on-5win.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-5win",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b3-decomposing-1story.png",
+      "engine": "chromium",
+      "screenId": "b3-decomposing-1story",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b3-decomposing-2drag.png",
+      "engine": "chromium",
+      "screenId": "b3-decomposing-2drag",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b3-decomposing-3wrong.png",
+      "engine": "chromium",
+      "screenId": "b3-decomposing-3wrong",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b3-decomposing-4sheet.png",
+      "engine": "chromium",
+      "screenId": "b3-decomposing-4sheet",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b3-decomposing-5win.png",
+      "engine": "chromium",
+      "screenId": "b3-decomposing-5win",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-1story.png",
+      "engine": "chromium",
+      "screenId": "b4-equivalent-sums-1story",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-2drag.png",
+      "engine": "chromium",
+      "screenId": "b4-equivalent-sums-2drag",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-3wrong.png",
+      "engine": "chromium",
+      "screenId": "b4-equivalent-sums-3wrong",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-4sheet.png",
+      "engine": "chromium",
+      "screenId": "b4-equivalent-sums-4sheet",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-5win.png",
+      "engine": "chromium",
+      "screenId": "b4-equivalent-sums-5win",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b5-relationship-1story.png",
+      "engine": "chromium",
+      "screenId": "b5-relationship-1story",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b5-relationship-2drag.png",
+      "engine": "chromium",
+      "screenId": "b5-relationship-2drag",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b5-relationship-3wrong.png",
+      "engine": "chromium",
+      "screenId": "b5-relationship-3wrong",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b5-relationship-4sheet.png",
+      "engine": "chromium",
+      "screenId": "b5-relationship-4sheet",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b5-relationship-5win.png",
+      "engine": "chromium",
+      "screenId": "b5-relationship-5win",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b6-number-line-1story.png",
+      "engine": "chromium",
+      "screenId": "b6-number-line-1story",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b6-number-line-2drag.png",
+      "engine": "chromium",
+      "screenId": "b6-number-line-2drag",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b6-number-line-3wrong.png",
+      "engine": "chromium",
+      "screenId": "b6-number-line-3wrong",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b6-number-line-4sheet.png",
+      "engine": "chromium",
+      "screenId": "b6-number-line-4sheet",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-zz-error.png",
+      "engine": "chromium",
+      "screenId": "zz-error",
+      "configTag": "desk-1280x800-mouse",
+      "pass": null,
+      "skipped": true,
+      "detail": "no navigation mapping (demo error shot only)",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-01-map.png",
+      "engine": "webkit",
+      "screenId": "01-map",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-02-map-3done.png",
+      "engine": "webkit",
+      "screenId": "02-map-3done",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-06-rest.png",
+      "engine": "webkit",
+      "screenId": "06-rest",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b1-making-ten-1story.png",
+      "engine": "webkit",
+      "screenId": "b1-making-ten-1story",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b1-making-ten-2drag.png",
+      "engine": "webkit",
+      "screenId": "b1-making-ten-2drag",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b1-making-ten-3wrong.png",
+      "engine": "webkit",
+      "screenId": "b1-making-ten-3wrong",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b1-making-ten-4sheet.png",
+      "engine": "webkit",
+      "screenId": "b1-making-ten-4sheet",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b1-making-ten-5win.png",
+      "engine": "webkit",
+      "screenId": "b1-making-ten-5win",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b2-counting-on-1story.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-1story",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b2-counting-on-2drag.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-2drag",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b2-counting-on-3wrong.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-3wrong",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b2-counting-on-4sheet.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-4sheet",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b2-counting-on-5win.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-5win",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b3-decomposing-1story.png",
+      "engine": "webkit",
+      "screenId": "b3-decomposing-1story",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b3-decomposing-2drag.png",
+      "engine": "webkit",
+      "screenId": "b3-decomposing-2drag",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b3-decomposing-3wrong.png",
+      "engine": "webkit",
+      "screenId": "b3-decomposing-3wrong",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b3-decomposing-4sheet.png",
+      "engine": "webkit",
+      "screenId": "b3-decomposing-4sheet",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b3-decomposing-5win.png",
+      "engine": "webkit",
+      "screenId": "b3-decomposing-5win",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-1story.png",
+      "engine": "webkit",
+      "screenId": "b4-equivalent-sums-1story",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-2drag.png",
+      "engine": "webkit",
+      "screenId": "b4-equivalent-sums-2drag",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-3wrong.png",
+      "engine": "webkit",
+      "screenId": "b4-equivalent-sums-3wrong",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-4sheet.png",
+      "engine": "webkit",
+      "screenId": "b4-equivalent-sums-4sheet",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b4-equivalent-sums-5win.png",
+      "engine": "webkit",
+      "screenId": "b4-equivalent-sums-5win",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b5-relationship-1story.png",
+      "engine": "webkit",
+      "screenId": "b5-relationship-1story",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b5-relationship-2drag.png",
+      "engine": "webkit",
+      "screenId": "b5-relationship-2drag",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b5-relationship-3wrong.png",
+      "engine": "webkit",
+      "screenId": "b5-relationship-3wrong",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b5-relationship-4sheet.png",
+      "engine": "webkit",
+      "screenId": "b5-relationship-4sheet",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b5-relationship-5win.png",
+      "engine": "webkit",
+      "screenId": "b5-relationship-5win",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b6-number-line-1story.png",
+      "engine": "webkit",
+      "screenId": "b6-number-line-1story",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b6-number-line-2drag.png",
+      "engine": "webkit",
+      "screenId": "b6-number-line-2drag",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b6-number-line-3wrong.png",
+      "engine": "webkit",
+      "screenId": "b6-number-line-3wrong",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b6-number-line-4sheet.png",
+      "engine": "webkit",
+      "screenId": "b6-number-line-4sheet",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-zz-error.png",
+      "engine": "webkit",
+      "screenId": "zz-error",
+      "configTag": "desk-1280x800-mouse",
+      "pass": null,
+      "skipped": true,
+      "detail": "no navigation mapping (demo error shot only)",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    }
+  ],
+  "pass": false
+}

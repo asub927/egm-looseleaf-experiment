@@ -1,12 +1,19 @@
-import { access, copyFile, mkdir, readdir, readFile, writeFile } from "node:fs/promises"
+import { access, mkdir, readdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { chromium, webkit } from "playwright"
 import pixelmatch from "pixelmatch"
 import { PNG } from "pngjs"
+import {
+  CONFIGS,
+  EXAMPLE_NAV,
+  MAP_SNAPSHOTS,
+  parseBaselineFilename,
+  runMainScenario,
+  runMapSnapshots,
+} from "./garden-scenario.mjs"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const ROOT = path.join(__dirname, "..", "..")
 const BASELINE_REPO = path.join(__dirname, "baseline")
 const DEMO_BASELINE = path.join(
   process.env.HOME ?? "/home/ubuntu",
@@ -17,20 +24,29 @@ const BASE = process.env.PREVIEW_URL ?? "http://127.0.0.1:4173"
 const MAX_PERCENT = 1.0
 const PIXELMATCH_THRESHOLD = 0.1
 
-/** Animated / nondeterministic regions — mask in diff (document in report). */
+/**
+ * Allowed diff masks (animated / nondeterministic). React app may not render separate
+ * layers for these yet; when absent, comparison runs unmasked (documented in results).
+ */
 const MASK_IDS = ["butterflies", "bee", "clouds", "text-caret"]
-
-const VIEWPORTS = [
-  { tag: "desk-1280x800", width: 1280, height: 800 },
-  { tag: "ipad-1024x768", width: 1024, height: 768 },
-  { tag: "ipad-768x1024", width: 768, height: 1024 },
-  { tag: "phone-390x844", width: 390, height: 844 },
+const MASK_SELECTORS = [
+  "[data-testid='butterflies']",
+  "[data-testid='bee']",
+  "[data-testid='clouds']",
+  ".butterflies",
+  ".bee",
+  ".clouds",
+  "input:focus",
+  "[contenteditable]:focus",
 ]
 
 const ENGINES = [
   { name: "chromium", launcher: chromium },
   { name: "webkit", launcher: webkit },
 ]
+
+/** Screens with no automated navigation (demo error capture only). */
+const UNMAPPED_SCREEN_IDS = new Set(["zz-error"])
 
 async function exists(p) {
   try {
@@ -47,29 +63,67 @@ async function resolveBaselineRoot() {
   return null
 }
 
-async function ensureBaselineMirrored(fromRoot) {
-  if (fromRoot === BASELINE_REPO) return
-  await mkdir(path.join(BASELINE_REPO, "shots"), { recursive: true })
-  await mkdir(path.join(BASELINE_REPO, "shots-map"), { recursive: true })
-  for (const sub of ["shots", "shots-map"]) {
-    const srcDir = path.join(fromRoot, sub)
-    if (!(await exists(srcDir))) continue
-    const names = await readdir(srcDir)
-    for (const name of names) {
-      if (!name.endsWith(".png")) continue
-      await copyFile(path.join(srcDir, name), path.join(BASELINE_REPO, sub, name))
+function configByTag(tag) {
+  return CONFIGS.find((c) => c.tag === tag)
+}
+
+function fillRect(data, width, x0, y0, w, h) {
+  for (let y = y0; y < y0 + h; y++) {
+    for (let x = x0; x < x0 + w; x++) {
+      const i = (width * y + x) << 2
+      data[i] = 0
+      data[i + 1] = 0
+      data[i + 2] = 0
+      data[i + 3] = 255
     }
   }
 }
 
-function percentDiff(imgA, imgB, diffPng) {
+async function collectMaskRects(page) {
+  return page.evaluate((sels) => {
+    const out = []
+    for (const sel of sels) {
+      for (const el of document.querySelectorAll(sel)) {
+        const r = el.getBoundingClientRect()
+        if (r.width < 1 || r.height < 1) continue
+        out.push({
+          x: Math.floor(r.x),
+          y: Math.floor(r.y),
+          w: Math.ceil(r.width),
+          h: Math.ceil(r.height),
+        })
+      }
+    }
+    return out
+  }, MASK_SELECTORS)
+}
+
+function applyMasksToPng(png, rects) {
+  for (const r of rects) {
+    const x0 = Math.max(0, r.x)
+    const y0 = Math.max(0, r.y)
+    const w = Math.min(png.width - x0, r.w)
+    const h = Math.min(png.height - y0, r.h)
+    if (w > 0 && h > 0) fillRect(png.data, png.width, x0, y0, w, h)
+  }
+}
+
+function percentDiff(imgA, imgB, diffPng, maskRects) {
   const { width, height } = imgA
   if (imgB.width !== width || imgB.height !== height) {
     return { percent: 100, mismatchedDimensions: true }
   }
+  const a = PNG.sync.write(imgA)
+  const b = PNG.sync.write(imgB)
+  const imgAc = PNG.sync.read(a)
+  const imgBc = PNG.sync.read(b)
+  if (maskRects?.length) {
+    applyMasksToPng(imgAc, maskRects)
+    applyMasksToPng(imgBc, maskRects)
+  }
   const mismatched = pixelmatch(
-    imgA.data,
-    imgB.data,
+    imgAc.data,
+    imgBc.data,
     diffPng.data,
     width,
     height,
@@ -84,17 +138,81 @@ async function loadPng(filePath) {
   return PNG.sync.read(buf)
 }
 
-/**
- * Screens and states are driven by filenames in baseline/shots/*.png
- * (e.g. map__desk-1280x800__chromium.png). extend NAV below when demo shot manifest is present.
- */
-const NAV = [
-  { screen: "map", goto: async (page) => page.goto(`${BASE}/`) },
-]
+function sideBySide(baseline, build, diff) {
+  const w = baseline.width + build.width + diff.width
+  const h = Math.max(baseline.height, build.height, diff.height)
+  const out = new PNG({ width: w, height: h })
+  for (const src of [
+    { img: baseline, x: 0 },
+    { img: build, x: baseline.width },
+    { img: diff, x: baseline.width + build.width },
+  ]) {
+    PNG.bitblt(src.img, out, 0, 0, src.img.width, src.img.height, src.x, 0)
+  }
+  return out
+}
 
-async function capture(page, outPath) {
-  await mkdir(path.dirname(outPath), { recursive: true })
-  await page.screenshot({ path: outPath, fullPage: true })
+async function captureForConfig(engine, configTag, isMap) {
+  const config = isMap
+    ? MAP_SNAPSHOTS.find((m) => m.tag === configTag)
+    : configByTag(configTag)
+  if (!config) return { captures: new Map(), maskRects: [] }
+
+  const browser = await engine.launcher.launch()
+  const context = await browser.newContext({
+    viewport: { width: config.width, height: config.height },
+    hasTouch: config.touch ?? false,
+    reducedMotion: config.rm ? "reduce" : "no-preference",
+  })
+  const page = await context.newPage()
+  const captures = new Map()
+  let maskRects = []
+
+  const shot = async (id, buffer) => {
+    captures.set(id, buffer)
+    const rects = await collectMaskRects(page).catch(() => [])
+    if (rects.length) maskRects = rects
+  }
+
+  try {
+    if (isMap) {
+      await runMapSnapshots(page, config, shot, BASE)
+    } else {
+      await runMainScenario(page, config, shot, BASE)
+    }
+  } catch (err) {
+    captures.set("__error__", Buffer.from(String(err)))
+    throw err
+  } finally {
+    await context.close()
+    await browser.close()
+  }
+
+  return { captures, maskRects }
+}
+
+async function loadManifest(baselineRoot) {
+  const manifest = []
+  for (const [subdir, kind] of [
+    ["shots", "shots"],
+    ["shots-map", "shots-map"],
+  ]) {
+    const dir = path.join(baselineRoot, subdir)
+    if (!(await exists(dir))) continue
+    const names = (await readdir(dir)).filter((f) => f.endsWith(".png")).sort()
+    for (const baselineName of names) {
+      const parsed = parseBaselineFilename(baselineName)
+      manifest.push({
+        baselineName,
+        baselinePath: path.join(dir, baselineName),
+        kind: parsed?.kind ?? kind,
+        configTag: parsed?.configTag,
+        screenId: parsed?.screenId,
+        subdir,
+      })
+    }
+  }
+  return manifest
 }
 
 async function main() {
@@ -110,84 +228,159 @@ async function main() {
     process.exit(2)
   }
 
-  if (baselineRoot !== BASELINE_REPO) {
-    await ensureBaselineMirrored(baselineRoot)
-    console.log(`Mirrored baselines from ${baselineRoot} → ${BASELINE_REPO}`)
+  await mkdir(ARTIFACTS, { recursive: true })
+  const manifest = await loadManifest(baselineRoot)
+
+  const onlyConfig = process.env.HARNESS_CONFIG
+  const configTagsNeeded = new Set()
+  const mapTagsNeeded = new Set()
+  for (const row of manifest) {
+    if (onlyConfig && row.configTag !== onlyConfig) continue
+    if (row.subdir === "shots-map") mapTagsNeeded.add(row.configTag)
+    else configTagsNeeded.add(row.configTag)
   }
 
-  const shotsDir = path.join(BASELINE_REPO, "shots")
-  const manifest = (await readdir(shotsDir)).filter((f) => f.endsWith(".png"))
-  if (manifest.length === 0) {
-    console.error("BLOCKED: baseline/shots is empty — regenerate from garden-map-demo shot script.")
-    process.exit(2)
-  }
-
+  const captureCache = new Map()
   const rows = []
   let failed = 0
 
   for (const engine of ENGINES) {
-    const browser = await engine.launcher.launch()
-  for (const vp of VIEWPORTS) {
-      const context = await browser.newContext({
-        viewport: { width: vp.width, height: vp.height },
-      })
-      const page = await context.newPage()
-      for (const { screen, goto } of NAV) {
-        await goto(page)
-        const buildPath = path.join(ARTIFACTS, `build-${screen}-${vp.tag}-${engine.name}.png`)
-        await capture(page, buildPath)
-        const baselineName = manifest.find(
-          (f) => f.includes(screen) && f.includes(vp.tag) && f.includes(engine.name),
-        )
-        if (!baselineName) {
-          rows.push({
-            screen,
-            size: vp.tag,
-            engine: engine.name,
-            percent: null,
-            pass: false,
-            detail: "missing baseline file",
-          })
-          failed++
-          continue
+    for (const tag of configTagsNeeded) {
+      const key = `${engine.name}:main:${tag}`
+      if (!captureCache.has(key)) {
+        try {
+          captureCache.set(key, await captureForConfig(engine, tag, false))
+        } catch (e) {
+          captureCache.set(key, { captures: new Map(), maskRects: [], error: String(e) })
         }
-        const baselinePath = path.join(shotsDir, baselineName)
-        const imgA = await loadPng(baselinePath)
-        const imgB = await loadPng(buildPath)
-        const diff = new PNG({ width: imgA.width, height: imgA.height })
-        const { percent, mismatchedDimensions } = percentDiff(imgA, imgB, diff)
-        const diffPath = path.join(ARTIFACTS, `diff-${screen}-${vp.tag}-${engine.name}.png`)
-        if (!mismatchedDimensions) {
-          await writeFile(diffPath, PNG.sync.write(diff))
+      }
+    }
+    for (const tag of mapTagsNeeded) {
+      const key = `${engine.name}:map:${tag}`
+      if (!captureCache.has(key)) {
+        try {
+          captureCache.set(key, await captureForConfig(engine, tag, true))
+        } catch (e) {
+          captureCache.set(key, { captures: new Map(), maskRects: [], error: String(e) })
         }
-        const pass = !mismatchedDimensions && percent <= MAX_PERCENT
-        if (!pass) failed++
+      }
+    }
+  }
+
+  for (const engine of ENGINES) {
+    for (const item of manifest) {
+      if (onlyConfig && item.configTag !== onlyConfig) continue
+      const { baselineName, baselinePath, screenId, configTag, subdir } = item
+      const cacheKey = `${engine.name}:${subdir === "shots-map" ? "map" : "main"}:${configTag}`
+      const { captures, maskRects, error } = captureCache.get(cacheKey) ?? {
+        captures: new Map(),
+        maskRects: [],
+      }
+
+      if (UNMAPPED_SCREEN_IDS.has(screenId)) {
         rows.push({
-          screen,
-          size: vp.tag,
-          engine: engine.name,
-          percent: mismatchedDimensions ? 100 : percent,
-          pass,
           baseline: baselineName,
+          engine: engine.name,
+          screenId,
+          configTag,
+          pass: null,
+          skipped: true,
+          detail: "no navigation mapping (demo error shot only)",
           masks: MASK_IDS,
         })
+        continue
       }
-      await context.close()
+
+      const shotBuffer = captures.get(screenId)
+      if (!shotBuffer) {
+        rows.push({
+          baseline: baselineName,
+          engine: engine.name,
+          screenId,
+          configTag,
+          percent: null,
+          pass: false,
+          detail: error ? `scenario failed: ${error.slice(0, 200)}` : "capture missing for screen",
+          masks: MASK_IDS,
+        })
+        failed++
+        continue
+      }
+
+      const buildPath = path.join(ARTIFACTS, `build-${baselineName.replace(/\.png$/, "")}-${engine.name}.png`)
+      await writeFile(buildPath, shotBuffer)
+
+      const imgA = await loadPng(baselinePath)
+      const imgB = PNG.sync.read(shotBuffer)
+      const diff = new PNG({ width: imgA.width, height: imgA.height })
+      const { percent, mismatchedDimensions } = percentDiff(imgA, imgB, diff, maskRects)
+      const diffPath = path.join(ARTIFACTS, `diff-${baselineName.replace(/\.png$/, "")}-${engine.name}.png`)
+      const sidePath = path.join(ARTIFACTS, `side-${baselineName.replace(/\.png$/, "")}-${engine.name}.png`)
+
+      if (!mismatchedDimensions) {
+        await writeFile(diffPath, PNG.sync.write(diff))
+        const side = sideBySide(imgA, imgB, diff)
+        await writeFile(sidePath, PNG.sync.write(side))
+      }
+
+      const pass = !mismatchedDimensions && percent <= MAX_PERCENT
+      if (!pass) failed++
+      rows.push({
+        baseline: baselineName,
+        engine: engine.name,
+        screenId,
+        configTag,
+        percent: mismatchedDimensions ? 100 : percent,
+        pass,
+        mismatchedDimensions: !!mismatchedDimensions,
+        build: path.relative(__dirname, buildPath),
+        diff: mismatchedDimensions ? null : path.relative(__dirname, diffPath),
+        side: mismatchedDimensions ? null : path.relative(__dirname, sidePath),
+        masks: MASK_IDS,
+        masksApplied: maskRects.length > 0,
+      })
     }
-    await browser.close()
   }
 
   const out = {
     at: new Date().toISOString(),
+    previewUrl: BASE,
     threshold: PIXELMATCH_THRESHOLD,
     maxPercent: MAX_PERCENT,
+    manifestCount: manifest.length,
     masks: MASK_IDS,
+    maskNote:
+      maskRectsNote(rows) ||
+      "Mask selectors present but no matching DOM nodes in React app; full-frame compare.",
+    exampleNav: EXAMPLE_NAV,
+    unmappedScreenIds: [...UNMAPPED_SCREEN_IDS],
+    missingBaselinesNote:
+      "b6-number-line-5win and 03-map-all-done are absent from committed baseline/shots (demo verify gaps).",
     rows,
     pass: failed === 0,
   }
   await writeFile(path.join(__dirname, "harness-results.json"), JSON.stringify(out, null, 2))
-  console.log(JSON.stringify(out, null, 2))
+  console.log(
+    JSON.stringify(
+      {
+        manifestCount: manifest.length,
+        pass: out.pass,
+        failed,
+        exampleNav: EXAMPLE_NAV,
+        unmappedScreenIds: out.unmappedScreenIds,
+      },
+      null,
+      2,
+    ),
+  )
   process.exit(failed === 0 ? 0 : 1)
+}
+
+function maskRectsNote(rows) {
+  if (rows.some((r) => r.masksApplied)) {
+    return "Element bounding boxes masked before pixelmatch when DOM nodes exist."
+  }
+  return null
 }
 
 main().catch((err) => {

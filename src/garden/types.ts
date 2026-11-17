@@ -13,12 +13,27 @@ export const GARDEN_PALETTE = {
   paper: "#F6F1E4",
 } as const
 
+/** Demo-aligned accents (garden-map-demo). */
+export const GARDEN_DEMO = {
+  cream: "#FFF8F0",
+  soil: "#E8D9C4",
+  leaf: "#7BC47F",
+  ear: "#B8A6FF",
+  feet: "#E8A24A",
+  bloomPetal: "#F4A6C1",
+  restSkyTop: "#C9D6F0",
+  restSkyBottom: "#E4DFF5",
+  restHill: "#D7E8B8",
+  skyWash: "#EAF6FF",
+  sandWash: "#F3E8D4",
+} as const
+
 /** Derived accents (palette-only); see PR Tradeoffs. */
 export const GARDEN_ACCENT = {
   /** Peach line on map paths (slightly deeper than fill peach for contrast). */
   pathWood: "#E8C4B8",
-  /** Moss leaf highlight (mint family, legible on cream). */
-  leaf: "#9BD4B5",
+  /** Moss leaf (demo drawPet). */
+  leaf: GARDEN_DEMO.leaf,
 } as const
 
 export const GARDEN_ALLOWED_HEX = new Set(
@@ -26,6 +41,7 @@ export const GARDEN_ALLOWED_HEX = new Set(
     GARDEN_INK,
     ...Object.values(GARDEN_PALETTE),
     ...Object.values(GARDEN_ACCENT),
+    ...Object.values(GARDEN_DEMO),
     "#FFFFFF",
     "#ffffff",
     "#fff",

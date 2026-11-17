@@ -13,7 +13,7 @@ import { problemKey } from "../progress/storage"
 import { watchStepsForBed } from "../models/watch-steps"
 import type { BedId, GardenScreen } from "../types"
 import { ModelStage } from "./ModelStage"
-import { MossPet } from "./MossPet"
+import { MossPet, mossStage } from "./MossPet"
 import { PeachBubble } from "./PeachBubble"
 import { ReadAloudButton } from "./ReadAloudButton"
 
@@ -91,6 +91,8 @@ export function LessonShell({
   const interactive = live && watchState === null
   const revealCounters = state.phase === "solved" || flowReveal || watchReveal
 
+  const curBar = BAR_STEPS.indexOf(state.bar)
+
   function lockIn() {
     if (!ctx || !canLockIn(state)) return
     const ok = modelCorrect(bedId, problem, ctx.modelState)
@@ -126,73 +128,90 @@ export function LessonShell({
           : ""
 
   return (
-    <section
-      className="lesson"
-      style={{ minHeight: "100dvh", display: "flex", flexDirection: "column" }}
-    >
-      <header
-        style={{
-          padding: "12px 16px",
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 8,
-          alignItems: "center",
-        }}
-      >
-        <button type="button" className="garden-tap" data-testid="to-map" onClick={onLeave}>
-          Map
+    <>
+      <h2 className="sr-only" id="lesson-h" tabIndex={-1}>
+        Lesson
+      </h2>
+      <div className="bar">
+        <button
+          type="button"
+          className="ghostbtn"
+          data-testid="to-map"
+          aria-label="Back to the garden map"
+          onClick={onLeave}
+        >
+          ‹ <span className="wide-only">Garden map</span>
+          <span className="narrow-only">Map</span>
         </button>
-        <span data-testid="strategy-chip">Strategy · {bed.ncdpiName}</span>
-        <span data-testid="round-chip">
-          Problem {ctx.problemIndex + 1} of {problems.length}
+        <span className="chip" data-testid="strategy-chip">
+          Strategy · {bed.ncdpiName}
         </span>
-        <MossPet leaves={mossLeaves} />
-        <span aria-pressed={calmMode}>Calm</span>
-      </header>
-      <ol
-        id="lbar"
-        style={{ display: "flex", gap: 8, listStyle: "none", padding: "0 16px", margin: 0 }}
-      >
-        {BAR_STEPS.map((s, j) => (
-          <li
-            key={s}
-            aria-current={state.bar === s ? "step" : undefined}
-            className={BAR_STEPS.indexOf(state.bar) > j ? "past" : state.bar === s ? "cur" : ""}
-            style={{
-              padding: "4px 10px",
-              borderRadius: 8,
-              background: state.bar === s ? "var(--g-lavender)" : "var(--g-cream)",
-            }}
-          >
-            {s.charAt(0).toUpperCase() + s.slice(1)}
-          </li>
-        ))}
-      </ol>
-      <div style={{ padding: 16, flex: 1, display: "flex", flexDirection: "column", gap: 16 }}>
-        <div>
-          <ReadAloudButton getText={() => `${line}. ${sub}`} testId="read-line" />
-          <p id="line" data-testid="instruction-line">
-            {line}
-          </p>
-          <p id="sub">{sub}</p>
+        <span className="sp" />
+        <span className="count" id="round-chip" data-testid="round-chip">
+          <span className="wide-only">Problem </span>
+          {ctx.problemIndex + 1} of {problems.length}
+        </span>
+        <div className="pet-wrap" data-testid="pet-wrap">
+          <MossPet leaves={mossLeaves} />
+          <span className="pet-label">Moss · {mossStage(mossLeaves)}</span>
         </div>
-        {state.phase === "story" && (
+        <button
+          type="button"
+          className="ghostbtn calmbtn"
+          data-testid="calm"
+          aria-pressed={calmMode}
+        >
+          Calm<span className="wide-only"> mode</span>
+        </button>
+      </div>
+      <div className="lmain" id="lmain">
+        <ol className="lbar" id="lbar" data-testid="lesson-bar" aria-label="Lesson steps">
+          {BAR_STEPS.map((s, j) => (
+            <li
+              key={s}
+              data-step={s}
+              aria-current={state.bar === s ? "step" : undefined}
+              className={curBar > j ? "past" : state.bar === s ? "cur" : ""}
+            >
+              {s.charAt(0).toUpperCase() + s.slice(1)}
+            </li>
+          ))}
+        </ol>
+        <section className="talk">
+          <div className="linerow">
+            <ReadAloudButton
+              className="read"
+              getText={() => `${line}. ${sub}`}
+              testId="read-line"
+              label="Read instruction aloud"
+            />
+            <div className="line" id="line" data-testid="instruction-line">
+              {line}
+            </div>
+          </div>
+          <div className="sub" id="sub" data-testid="sub">
+            {sub}
+          </div>
           <button
             type="button"
-            className="garden-tap primary"
+            className={`trybtn${state.phase !== "story" ? " hide" : ""}`}
+            id="start-try"
             data-testid="start-try"
             onClick={() => dispatch({ type: "START_PREDICT" })}
           >
-            Start try
+            Let&apos;s try
           </button>
-        )}
-        {state.phase === "predict" && (
-          <div id="chips" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <div
+            className={`chips${state.phase !== "predict" ? " hide" : ""}`}
+            id="chips"
+            role="group"
+            aria-label="Pick a guess"
+          >
             {guessChips(ans).map((v) => (
               <button
                 key={v}
                 type="button"
-                className="garden-tap"
+                className={ctx.guess === v ? "pick" : ""}
                 data-testid={`chip-${v}`}
                 onClick={() => {
                   dispatch({ type: "SET_GUESS", guess: v })
@@ -204,18 +223,92 @@ export function LessonShell({
               </button>
             ))}
           </div>
-        )}
-        <MotionPanel data-testid="stagecard">
+          <div className="counter" id="counter" data-testid="counter" />
+        </section>
+        <section className="stagewrap">
+          <div className="stagecard" id="stagecard" data-testid="stagecard">
+            <div
+              id="stage"
+              data-testid="stage"
+              data-cue={showCue ? "1" : undefined}
+              data-keyboard={ctx.via === "keyboard" ? "1" : "0"}
+              data-via={ctx.via ?? "none"}
+              className={flowOut ? "flow-out" : undefined}
+              aria-label={stageLabel(bedId, problem)}
+              tabIndex={0}
+              role="group"
+              onKeyDown={(e: React.KeyboardEvent) => {
+                if (!interactive) return
+                if (e.key === "Enter") {
+                  e.preventDefault()
+                  lockIn()
+                  return
+                }
+                const d =
+                  e.key === "ArrowRight" || e.key === "ArrowUp"
+                    ? 1
+                    : e.key === "ArrowLeft" || e.key === "ArrowDown"
+                      ? -1
+                      : 0
+                if (!d) return
+                e.preventDefault()
+                const n = stepModel(bedId, problem, ctx.modelState, d)
+                if (n) dispatch({ type: "SET_MODEL_STATE", modelState: n, via: "keyboard" })
+              }}
+            >
+              <ModelStage
+                bedId={bedId}
+                problem={problem}
+                modelState={ctx.modelState}
+                watchState={watchState}
+                snapMotion={ctx.via === "keyboard"}
+                equationsRevealed={state.phase === "solved"}
+                live={live}
+                showCue={showCue}
+                revealTotal={revealCounters}
+                reducedMotion={reducedMotion}
+                onChange={(n, via) => dispatch({ type: "SET_MODEL_STATE", modelState: n, via })}
+              />
+            </div>
+          </div>
+          <div className="stepper" id="stepper">
+            <button
+              type="button"
+              id="step-minus"
+              data-testid="step-minus"
+              disabled={!interactive || !stepModel(bedId, problem, ctx.modelState, -1)}
+              onClick={() => {
+                const n = stepModel(bedId, problem, ctx.modelState, -1)
+                if (n) dispatch({ type: "SET_MODEL_STATE", modelState: n, via: "tap" })
+              }}
+            >
+              Back
+            </button>
+            <button
+              type="button"
+              id="step-plus"
+              data-testid="step-plus"
+              disabled={!interactive || !stepModel(bedId, problem, ctx.modelState, 1)}
+              onClick={() => {
+                const n = stepModel(bedId, problem, ctx.modelState, 1)
+                if (n) dispatch({ type: "SET_MODEL_STATE", modelState: n, via: "tap" })
+              }}
+            >
+              Forward
+            </button>
+          </div>
+        </section>
+        <section className="panel" id="panel" data-testid="panel">
           {ctx.bubble && (state.phase === "wrongBubble" || state.phase.startsWith("hint")) && (
             <PeachBubble guess={ctx.guess} bubble={ctx.bubble} />
           )}
           {hintText && (
-            <div className="hintcard rung" data-testid={`hint-${ctx.hintRung}`}>
-              {hintText}
+            <div className="card hintcard rung" data-testid={`hint-${ctx.hintRung}`}>
+              <div>{hintText}</div>
               {state.phase === "hint3" && watchStep?.beat !== "reset" && (
                 <button
                   type="button"
-                  className="garden-tap wsnext"
+                  className="wsnext"
                   data-testid="ws-next"
                   onClick={() => {
                     if (watchSteps) {
@@ -231,142 +324,83 @@ export function LessonShell({
               )}
             </div>
           )}
-          <MotionStage
-            id="stage"
-            data-cue={showCue ? "1" : undefined}
-            data-keyboard={ctx.via === "keyboard" ? "1" : "0"}
-            data-via={ctx.via ?? "none"}
-            className={flowOut ? "flow-out" : undefined}
-            aria-label={stageLabel(bedId, problem)}
-            tabIndex={0}
-            onKeyDown={(e: React.KeyboardEvent) => {
-              if (!interactive) return
-              if (e.key === "Enter") {
-                e.preventDefault()
-                lockIn()
-                return
-              }
-              const d =
-                e.key === "ArrowRight" || e.key === "ArrowUp"
-                  ? 1
-                  : e.key === "ArrowLeft" || e.key === "ArrowDown"
-                    ? -1
-                    : 0
-              if (!d) return
-              e.preventDefault()
-              const n = stepModel(bedId, problem, ctx.modelState, d)
-              if (n) dispatch({ type: "SET_MODEL_STATE", modelState: n, via: "keyboard" })
-            }}
-          >
-            <ModelStage
-              bedId={bedId}
-              problem={problem}
-              modelState={ctx.modelState}
-              watchState={watchState}
-              snapMotion={ctx.via === "keyboard"}
-              equationsRevealed={state.phase === "solved"}
-              live={live}
-              showCue={showCue}
-              revealTotal={revealCounters}
-              reducedMotion={reducedMotion}
-              onChange={(n, via) => dispatch({ type: "SET_MODEL_STATE", modelState: n, via })}
-            />
-          </MotionStage>
-        </MotionPanel>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-          <button
-            type="button"
-            id="lock"
-            className="garden-tap primary"
-            data-testid="lock"
-            disabled={!interactive || !modelReady(bedId, problem, ctx.modelState)}
-            onClick={lockIn}
-          >
-            Lock it in
-          </button>
-          <button
-            type="button"
-            id="reset"
-            className="garden-tap"
-            disabled={!live}
-            onClick={() =>
-              dispatch({
-                type: "RESET_MODEL",
-                modelState: initialModelState(bedId, problem),
-              })
-            }
-          >
-            Start over
-          </button>
-          <button
-            type="button"
-            id="help"
-            className="garden-tap"
-            disabled={!live}
-            onClick={() => {
-              dispatch({ type: "HELP" })
-              setWsWatchIndex(0)
-            }}
-          >
-            Help me
-          </button>
-          <button
-            type="button"
-            id="step-minus"
-            className="garden-tap"
-            disabled={!interactive || !stepModel(bedId, problem, ctx.modelState, -1)}
-            onClick={() => {
-              const n = stepModel(bedId, problem, ctx.modelState, -1)
-              if (n) dispatch({ type: "SET_MODEL_STATE", modelState: n, via: "tap" })
-            }}
-          >
-            Step back
-          </button>
-          <button
-            type="button"
-            id="step-plus"
-            className="garden-tap"
-            disabled={!interactive || !stepModel(bedId, problem, ctx.modelState, 1)}
-            onClick={() => {
-              const n = stepModel(bedId, problem, ctx.modelState, 1)
-              if (n) dispatch({ type: "SET_MODEL_STATE", modelState: n, via: "tap" })
-            }}
-          >
-            Step forward
-          </button>
           {state.phase === "solved" && (
-            <button
-              type="button"
-              id="next"
-              className="garden-tap"
-              data-testid="next"
-              onClick={() => {
-                if (ctx.problemIndex === 0) {
-                  dispatch({
-                    type: "NEXT_PROBLEM",
-                    modelState: initialModelState(bedId, problems[1]),
-                  })
-                  setLine(storyLine(bedId, problems[1]))
-                  setSub(promptLine(problems[1]))
-                  resetWorksheet()
-                } else onFinishBed()
-              }}
-            >
-              {ctx.problemIndex === 0 ? "Next problem ›" : "Back to the garden ›"}
-            </button>
+            <div className="card win" data-testid="win">
+              <div className="top">
+                <span className="chip" data-testid="strategy-win">
+                  Strategy · {bed.ncdpiName}
+                </span>
+                <ReadExample getText={() => exampleLine(bedId, problem)} testId="read-example" />
+              </div>
+              <p className="petnote" data-testid="pet-note">
+                {ctx.wasAlreadySolved
+                  ? "You solved this one before. Moss keeps its leaves."
+                  : "Moss grew a new leaf."}
+              </p>
+              <p data-testid="example">{exampleLine(bedId, problem)}</p>
+            </div>
           )}
-        </div>
-        {state.phase === "solved" && (
-          <div data-testid="win">
-            <span data-testid="strategy-win">Strategy · {bed.ncdpiName}</span>
-            <p data-testid="example">{exampleLine(bedId, problem)}</p>
-            <p data-testid="pet-note">
-              {ctx.wasAlreadySolved
-                ? "You solved this one before. Moss keeps its leaves."
-                : "Moss grew a new leaf."}
-            </p>
-          </div>
-        )}
+        </section>
+      </div>
+      <div className="foot">
+        <button
+          type="button"
+          className="lock"
+          id="lock"
+          data-testid="lock"
+          disabled={!interactive || !modelReady(bedId, problem, ctx.modelState)}
+          onClick={lockIn}
+        >
+          Lock it in
+        </button>
+        <button
+          type="button"
+          className="ghostbtn"
+          id="reset"
+          data-testid="reset"
+          disabled={!live}
+          onClick={() =>
+            dispatch({
+              type: "RESET_MODEL",
+              modelState: initialModelState(bedId, problem),
+            })
+          }
+        >
+          Start over
+        </button>
+        <button
+          type="button"
+          className="ghostbtn"
+          id="help"
+          data-testid="help"
+          disabled={!live}
+          onClick={() => {
+            dispatch({ type: "HELP" })
+            setWsWatchIndex(0)
+          }}
+        >
+          Help me
+        </button>
+        <span className="sp" />
+        <button
+          type="button"
+          className={`next${state.phase !== "solved" ? " hide" : ""}`}
+          id="next"
+          data-testid="next"
+          onClick={() => {
+            if (ctx.problemIndex === 0) {
+              dispatch({
+                type: "NEXT_PROBLEM",
+                modelState: initialModelState(bedId, problems[1]),
+              })
+              setLine(storyLine(bedId, problems[1]))
+              setSub(promptLine(problems[1]))
+              resetWorksheet()
+            } else onFinishBed()
+          }}
+        >
+          {ctx.problemIndex === 0 ? "Next problem ›" : "Back to the garden ›"}
+        </button>
       </div>
       <div
         className="sr-only"
@@ -375,22 +409,19 @@ export function LessonShell({
         id="aria"
         data-testid="aria-live"
       >
-        {/* Never announce numeric answers before lock-in */}
         {state.phase === "solved" ? eqLine(problem) : live ? "Try the model." : line}
       </div>
-    </section>
+    </>
   )
 }
 
-function MotionPanel(props: React.HTMLAttributes<HTMLDivElement>) {
-  return <div {...props} className={`motion-fade ${props.className ?? ""}`} />
-}
-function MotionStage({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+function ReadExample({ getText, testId }: { getText: () => string; testId: string }) {
   return (
-    <div
-      {...props}
-      className={`motion-fade ${className ?? ""}`}
-      style={{ outline: "none", ...props.style }}
+    <ReadAloudButton
+      className="read"
+      getText={getText}
+      testId={testId}
+      label="Read example aloud"
     />
   )
 }

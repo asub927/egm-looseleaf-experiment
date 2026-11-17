@@ -25,13 +25,16 @@ Regenerate missing demo states only with the demo's own shot script — never ha
 
 ## Harness
 
-| Script            | Purpose                                                                                                 |
-| ----------------- | ------------------------------------------------------------------------------------------------------- |
-| `harness.mjs`     | Per-screen/state screenshots vs baseline; pixelmatch threshold **0.1**; fail if **>1.0%** pixels differ |
-| `fluid-sweep.mjs` | Widths 360, 414, 600, 744, 834, 1024, 1180, 1440 × portrait & landscape — overlap, clip, 56×56 targets  |
-| `motion.test.mjs` | All garden transitions ≤300ms, transform/opacity only; keyboard static; reduced-motion opacity-only     |
+| Script                | Purpose                                                                                                                                                                                            |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `harness.mjs`         | Walks the React garden via `garden-scenario.mjs` (one run per config × Chromium/WebKit), compares every `baseline/shots/*.png` and `shots-map/*.png`; pixelmatch **0.1**; fail if **>1.0%** differ |
+| `garden-scenario.mjs` | NAV manifest: baseline filename → Playwright steps (`data-testid` selectors)                                                                                                                       |
+| `fluid-sweep.mjs`     | Widths 360, 414, 600, 744, 834, 1024, 1180, 1440 × portrait & landscape — overlap, clip, 56×56 targets                                                                                             |
+| `motion.test.mjs`     | All garden transitions ≤300ms, transform/opacity only; keyboard static; reduced-motion opacity-only                                                                                                |
 
-Allowed diff masks (listed in harness output): butterflies, bee, clouds, text caret.
+Allowed diff masks (listed in `harness-results.json`): butterflies, bee, clouds, text caret. Mask rects apply when matching DOM nodes exist; otherwise comparison is documented as unmasked.
+
+`HARNESS_CONFIG=desk-1280x800-mouse` limits scenario runs while debugging.
 
 ## Run (Chromium + WebKit)
 

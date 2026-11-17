@@ -6,13 +6,34 @@
   --g-sky: #cde8ff;
   --g-butter: #fff1b8;
   --g-rose: #ffd1e3;
-  --g-cream: #fffdf8;
+  --g-cream: #fff8f0;
   --g-paper: #f6f1e4;
   --g-ink: #2b2a3a;
+  --peach: var(--g-peach);
+  --lav: var(--g-lavender);
+  --mint: var(--g-mint);
+  --sky: var(--g-sky);
+  --butter: var(--g-butter);
+  --rose: var(--g-rose);
+  --cream: #fff8f0;
+  --ink: var(--g-ink);
+  --soil: #e8d9c4;
+  --leaf: #7bc47f;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-io: cubic-bezier(0.77, 0, 0.175, 1);
+  --hand: "Chalkboard SE", "Marker Felt", "Comic Sans MS", "Segoe Print", cursive;
+  --sky-wash: #eaf6ff;
+  --sand-wash: #f3e8d4;
+  --g-rest-sky-top: #c9d6f0;
+  --g-rest-sky-bottom: #e4dff5;
   min-height: 100dvh;
-  background: var(--g-paper);
-  color: var(--g-ink);
-  font-family: system-ui, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  background:
+    radial-gradient(circle at 1px 1px, rgba(43, 42, 58, 0.05) 1.1px, transparent 1.5px) 0 0/28px
+      28px,
+    linear-gradient(180deg, var(--sky-wash) 0%, var(--cream) 42%, var(--sand-wash) 100%);
+  color: var(--ink);
+  font-family: ui-rounded, "SF Pro Rounded", "Nunito", "Segoe UI", system-ui, sans-serif;
+  overflow: hidden;
 }
 
 .garden-root * {
@@ -41,7 +62,7 @@
   cursor: pointer;
   transition:
     opacity 200ms ease,
-    transform 200ms ease;
+    transform 140ms var(--ease-out);
 }
 
 .garden-root .garden-tap:active:not(:disabled) {
@@ -56,14 +77,6 @@
 .garden-root .garden-tap.primary {
   background: var(--g-mint);
   border-color: var(--g-ink);
-}
-
-.garden-root .peach-bubble {
-  background: var(--g-peach);
-  border: 2px solid var(--g-ink);
-  border-radius: 24px;
-  padding: 1rem 1.25rem;
-  max-width: 420px;
 }
 
 .garden-root .flowcounts {
@@ -123,12 +136,10 @@
   -webkit-user-select: none;
 }
 
-.garden-root .flow-out {
-  transition: opacity 260ms ease;
-}
-
-.garden-root .flow-out #stage {
-  transition: opacity 260ms ease;
+.garden-root #stage svg.flow-out,
+.garden-root #stage.flow-out svg {
+  transform: scale(0.9);
+  transition: transform 280ms var(--ease-out);
 }
 
 .garden-root #stage[data-keyboard="1"] svg,
@@ -138,7 +149,7 @@
 }
 
 .garden-root .motion-move {
-  transition: transform 260ms ease-out;
+  transition: transform 260ms var(--ease-out);
 }
 
 .garden-root .grab {
@@ -155,14 +166,720 @@
 }
 
 .garden-root .motion-fade {
-  transition: opacity 260ms ease;
+  transition: opacity 200ms var(--ease-out);
+}
+
+/* ---------- screens: crossfade (ported from garden-map-demo) ---------- */
+.garden-root .garden-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(10px, 2vh, 18px) clamp(12px, 3vw, 32px);
+  gap: clamp(8px, 1.4vh, 14px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: scale(0.985);
+  transition:
+    opacity 240ms var(--ease-out),
+    transform 240ms var(--ease-out),
+    visibility 0s linear 240ms;
+  overflow: hidden;
+}
+
+.garden-root .garden-screen-on {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+  transition:
+    opacity 240ms var(--ease-out),
+    transform 240ms var(--ease-out),
+    visibility 0s;
+}
+
+.garden-root.nomove .garden-screen {
+  transform: none;
+}
+
+.garden-root .garden-screen-rest {
+  padding: 0;
+}
+
+.garden-root .bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+}
+
+.garden-root .sp {
+  flex: 1;
+}
+
+.garden-root .ghostbtn {
+  font: inherit;
+  color: var(--ink);
+  border: 0;
+  border-radius: 18px;
+  min-height: 56px;
+  min-width: 56px;
+  padding: 0 18px;
+  font-weight: 800;
+  font-size: 16px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 2px 0 rgba(43, 42, 58, 0.12);
+  transition:
+    transform 140ms var(--ease-out),
+    background-color 200ms ease,
+    opacity 200ms ease;
+}
+
+.garden-root .ghostbtn:active {
+  transform: scale(0.97);
+}
+
+.garden-root .ghostbtn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.garden-root .ghostbtn:disabled:active {
+  transform: none;
+}
+
+.garden-root .chip {
+  background: var(--lav);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-weight: 800;
+  font-size: clamp(14px, 1.5vw, 18px);
+  box-shadow: 0 2px 0 rgba(43, 42, 58, 0.08);
+  line-height: 1.25;
+}
+
+.garden-root .count {
+  background: var(--butter);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 900;
+  font-size: 17px;
+}
+
+.garden-root .pet-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  border-radius: 18px;
+  padding: 4px 12px 4px 6px;
+  min-height: 56px;
+}
+
+.garden-root .pet {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+}
+
+.garden-root .pet-label {
+  font-size: 13px;
+  font-weight: 800;
+  opacity: 0.78;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.garden-root .read {
+  min-width: 56px;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border-radius: 50%;
+  border: 0;
+  background: var(--sky);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition:
+    transform 140ms var(--ease-out),
+    opacity 200ms ease;
+}
+
+.garden-root .read:active {
+  transform: scale(0.97);
+}
+
+.garden-root .hide {
+  display: none !important;
+}
+
+.garden-root .narrow-only {
+  display: none;
+}
+
+.garden-root .owl {
+  transition: transform 260ms var(--ease-io);
+  will-change: transform;
+}
+
+.garden-root.calm .owl {
+  transition-duration: 280ms;
+}
+
+.garden-root .owl svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 3px 0 rgba(43, 42, 58, 0.12));
+}
+
+/* ---------- LESSON grid ---------- */
+.garden-root .lmain {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  gap: clamp(10px, 2vw, 26px);
+  grid-template-columns: minmax(270px, 33%) minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-areas:
+    "lbar stage"
+    "talk stage"
+    "panel stage";
+}
+
+.garden-root .lbar {
+  grid-area: lbar;
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.garden-root .lbar li {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 900;
+  padding: 7px 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 2px solid rgba(43, 42, 58, 0.12);
+  transition: background-color 200ms ease;
+}
+
+.garden-root .lbar li.past {
+  background: var(--mint);
+}
+
+.garden-root .lbar li.cur {
+  background: var(--peach);
+  border-color: var(--ink);
+}
+
+.garden-root .talk {
+  grid-area: talk;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.garden-root .linerow {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.garden-root .line {
+  flex: 1;
+  font-size: clamp(22px, 2.8vw, 38px);
+  font-weight: 900;
+  line-height: 1.16;
+  min-height: 2.3em;
+}
+
+.garden-root .sub {
+  font-size: clamp(16px, 1.7vw, 21px);
+  font-weight: 700;
+  opacity: 0.88;
+  min-height: 1.3em;
+}
+
+.garden-root .chips {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.garden-root .chips button {
+  font: inherit;
+  color: var(--ink);
+  border: 0;
+  border-radius: 18px;
+  min-height: 56px;
+  min-width: 76px;
+  padding: 0 18px;
+  font-weight: 800;
+  font-size: 26px;
+  cursor: pointer;
+  background: var(--butter);
+  box-shadow: 0 2px 0 rgba(43, 42, 58, 0.12);
+  transition:
+    transform 140ms var(--ease-out),
+    background-color 200ms ease;
+}
+
+.garden-root .chips button.pick {
+  background: var(--peach);
+  outline: 3px solid var(--ink);
+}
+
+.garden-root .trybtn {
+  font: inherit;
+  color: var(--ink);
+  border: 0;
+  border-radius: 18px;
+  min-height: 56px;
+  padding: 0 28px;
+  font-weight: 800;
+  font-size: 20px;
+  cursor: pointer;
+  background: var(--mint);
+  box-shadow: 0 2px 0 rgba(43, 42, 58, 0.12);
+  align-self: flex-start;
+  transition: transform 140ms var(--ease-out);
+}
+
+.garden-root .counter {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.garden-root .stagewrap {
+  grid-area: stage;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.garden-root .stagecard {
+  flex: 1;
+  min-height: 0;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.58);
+  border: 2px solid rgba(43, 42, 58, 0.08);
+  box-shadow: 0 10px 30px rgba(43, 42, 58, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  overflow: hidden;
+  transition: opacity 200ms var(--ease-out);
+}
+
+.garden-root #stage {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 22px;
+}
+
+.garden-root #stage svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform-origin: 50% 50%;
+  transition: transform 280ms var(--ease-out);
+}
+
+.garden-root .stepper {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.garden-root .stepper button {
+  font: inherit;
+  color: var(--ink);
+  border: 0;
+  border-radius: 18px;
+  min-height: 56px;
+  min-width: 150px;
+  padding: 0 18px;
+  font-weight: 800;
+  font-size: 17px;
+  cursor: pointer;
+  background: var(--lav);
+  box-shadow: 0 2px 0 rgba(43, 42, 58, 0.12);
+  transition:
+    transform 140ms var(--ease-out),
+    opacity 200ms ease;
+}
+
+.garden-root .panel {
+  grid-area: panel;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 2px 4px 6px 2px;
+}
+
+.garden-root .bubble {
+  background: var(--peach);
+  border-radius: 22px;
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: start;
+  box-shadow: 0 3px 0 rgba(43, 42, 58, 0.08);
+  transform: scale(0.96);
+  opacity: 0;
+  transition:
+    opacity 220ms var(--ease-out),
+    transform 220ms var(--ease-out);
+  transform-origin: 50% 0;
+}
+
+.garden-root .bubble.on {
+  transform: none;
+  opacity: 1;
+}
+
+.garden-root .bubble .face {
+  width: 34px;
+  height: 34px;
+}
+
+.garden-root .msg {
+  font-size: clamp(15px, 1.6vw, 18px);
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+.garden-root .msg strong {
+  display: block;
+  font-weight: 900;
+  margin: 0.1em 0;
+}
+
+.garden-root .guess-tag {
+  font-family: var(--hand);
+  font-size: 21px;
+  opacity: 0.85;
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+
+.garden-root .diag-art {
+  background: #fff;
+  border-radius: 14px;
+  padding: 6px 8px;
+  border: 2px dashed rgba(43, 42, 58, 0.25);
+  margin-top: 8px;
+}
+
+.garden-root .diag-art svg {
+  width: 100%;
+  height: auto;
+  max-height: 72px;
+  display: block;
+}
+
+.garden-root .card {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 22px;
+  padding: 12px 14px;
+  font-size: clamp(16px, 1.7vw, 20px);
+  line-height: 1.35;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.garden-root .hintcard {
+  background: var(--butter);
+  flex-direction: column;
+}
+
+.garden-root .win {
+  background: var(--mint);
+  flex-direction: column;
+}
+
+.garden-root .win .top {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.garden-root .win .chip {
+  display: inline-block;
+  background: var(--lav);
+  margin-bottom: 6px;
+}
+
+.garden-root .petnote {
+  font-size: 15px;
+  font-weight: 800;
+  opacity: 0.8;
+}
+
+.garden-root .wsnext {
+  margin-top: 8px;
+  font: inherit;
+  border: 0;
+  border-radius: 18px;
+  min-height: 56px;
+  padding: 0 18px;
+  font-weight: 800;
+  background: var(--lav);
+  cursor: pointer;
+  transition: transform 140ms var(--ease-out);
+}
+
+.garden-root .foot {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.garden-root .lock {
+  font: inherit;
+  color: var(--ink);
+  border: 0;
+  border-radius: 18px;
+  min-height: 56px;
+  padding: 0 26px;
+  font-weight: 800;
+  font-size: 19px;
+  cursor: pointer;
+  background: var(--mint);
+  box-shadow: 0 2px 0 rgba(43, 42, 58, 0.12);
+  transition:
+    transform 140ms var(--ease-out),
+    opacity 200ms ease;
+}
+
+.garden-root .next {
+  font: inherit;
+  color: var(--ink);
+  border: 0;
+  border-radius: 18px;
+  min-height: 56px;
+  padding: 0 18px;
+  font-weight: 800;
+  background: var(--butter);
+  box-shadow: 0 2px 0 rgba(43, 42, 58, 0.12);
+  cursor: pointer;
+  transition: transform 140ms var(--ease-out);
+}
+
+/* ---------- REST ---------- */
+.garden-root #rest {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(
+    180deg,
+    var(--g-rest-sky-top) 0%,
+    var(--g-rest-sky-bottom) 46%,
+    var(--sand-wash) 100%
+  );
+  padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.garden-root .rest-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.garden-root .restcard {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 760px;
+  padding: 28px 24px;
+  background: rgba(255, 248, 240, 0.72);
+  border-radius: 28px;
+  box-shadow: 0 10px 30px rgba(43, 42, 58, 0.08);
+}
+
+.garden-root .sleepers {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(10px, 3vw, 40px);
+}
+
+.garden-root .sleepers .pip {
+  width: clamp(130px, 22vw, 210px);
+}
+
+.garden-root .sleepers .pet {
+  width: clamp(80px, 12vw, 120px);
+  height: auto;
+}
+
+.garden-root .breathe {
+  animation: garden-breathe 4.4s ease-in-out infinite;
+  transform-origin: 50% 92%;
+  transform-box: fill-box;
+}
+
+@keyframes garden-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.035);
+  }
+}
+
+.garden-root .zz {
+  font-family: var(--hand);
+  font-size: 30px;
+  opacity: 0.55;
+  align-self: flex-start;
+}
+
+.garden-root .resttext {
+  font-size: clamp(24px, 3.4vw, 40px);
+  font-weight: 900;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.garden-root .restrow {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+.garden-root .alldone {
+  font: inherit;
+  color: var(--ink);
+  border: 0;
+  border-radius: 18px;
+  min-height: 56px;
+  padding: 0 34px;
+  font-weight: 800;
+  font-size: 22px;
+  cursor: pointer;
+  background: var(--mint);
+  box-shadow: 0 2px 0 rgba(43, 42, 58, 0.12);
+  transition: transform 140ms var(--ease-out);
+}
+
+.garden-root .restsub {
+  font-size: 18px;
+  font-weight: 700;
+  opacity: 0.8;
+  margin: 0;
+}
+
+@media (max-width: 1100px) {
+  .garden-root .wide-only {
+    display: none;
+  }
+  .garden-root .narrow-only {
+    display: inline;
+  }
+}
+
+@media (max-aspect-ratio: 1/1) {
+  .garden-root .lmain {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas:
+      "lbar"
+      "talk"
+      "stage"
+      "panel";
+    overflow-y: auto;
+    overflow-x: hidden;
+    align-content: start;
+  }
+  .garden-root .lmain > * {
+    min-height: auto;
+  }
+  .garden-root .stagewrap {
+    height: auto;
+  }
+  .garden-root .stagecard {
+    flex: none;
+    display: block;
+  }
+  .garden-root #stage {
+    min-height: 0;
+    height: auto;
+    display: block;
+  }
+  .garden-root #stage svg {
+    display: block;
+    height: auto;
+    max-height: 64vh;
+  }
+  .garden-root .panel {
+    overflow: visible;
+  }
+  .garden-root .line {
+    min-height: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .garden-root .motion-fade,
-  .garden-root .garden-tap {
-    transition: opacity 200ms ease !important;
+  .garden-root .garden-screen,
+  .garden-root.nomove .garden-screen {
     transform: none !important;
+  }
+  .garden-root .motion-fade,
+  .garden-root .garden-tap,
+  .garden-root .owl,
+  .garden-root #stage svg {
+    transition-property: opacity !important;
+  }
+  .garden-root #stage.flow-out svg,
+  .garden-root #stage svg.flow-out {
+    transform: none !important;
+  }
+  .garden-root .bubble {
+    transform: none !important;
+  }
+  .garden-root .breathe {
+    animation: none !important;
   }
 }
 
@@ -170,31 +887,429 @@
   transition: none !important;
 }
 
-.garden-root .garden-map-narrow .garden-canvas {
-  -webkit-overflow-scrolling: touch;
-}
-
-.garden-root .garden-beds-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px 10px;
-  padding: 10px 8px 20px;
-  align-content: start;
-}
-
-.garden-root .garden-beds-grid .garden-owl-row {
-  grid-column: 1 / -1;
+/* ---------- MAP (garden-map-demo) ---------- */
+.garden-root .garden-map-screen {
   display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  padding: 0;
+  gap: 0;
+  background: linear-gradient(180deg, #bfdff5 0%, #cde8ff 26%, #e8f4d8 62%, #d8ebc4 100%);
+}
+
+.garden-root .garden-map-screen .bar {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 18px 0;
+  flex-shrink: 0;
+}
+
+.garden-root .garden-map-screen h1 {
+  font-size: clamp(22px, 2.8vw, 34px);
+  margin: 0 6px 0 0;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 0 rgba(255, 248, 240, 0.7);
+}
+
+.garden-root .garden-map-screen .count {
+  background: rgba(255, 241, 184, 0.92);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 900;
+  font-size: 17px;
+}
+
+.garden-root .garden-map-screen .pet-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  border-radius: 18px;
+  padding: 4px 12px 4px 6px;
+  min-height: 56px;
+}
+
+.garden-root .garden-map-screen .pet-label {
+  font-size: 13px;
+  font-weight: 800;
+  opacity: 0.78;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.garden-root .garden-map-screen .sp {
+  flex: 1;
+}
+
+.garden-root .garden-map-screen .ghostbtn {
+  background: rgba(255, 255, 255, 0.82);
+  font-size: 16px;
+  border: 0;
+  border-radius: 18px;
+  min-height: 56px;
+  min-width: 56px;
+  padding: 0 18px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 2px 0 rgba(43, 42, 58, 0.12);
+}
+
+.garden-root .garden-map-screen .maptalk {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 18px 8px;
+}
+
+.garden-root .garden-map-screen .maptalk p {
+  margin: 0;
+  font-size: clamp(17px, 2.1vw, 24px);
+  font-weight: 800;
+}
+
+.garden-root .garden-canvas {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.garden-root .garden {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  display: block;
+  --plot: var(--plot, 96px);
+}
+
+.garden-root .scenery,
+.garden-root .pathsvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: block;
+}
+
+.garden-root .scenery {
+  z-index: 0;
+}
+
+.garden-root .pathsvg {
+  z-index: 1;
+}
+
+.garden-root .bed {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+  min-width: 56px;
+  min-height: 56px;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  text-align: center;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+}
+
+.garden-root .bed .plot {
+  position: relative;
+  width: var(--plot, 96px);
+  height: var(--plot-h, 76px);
+  flex: 0 0 auto;
+  border-radius: 18px;
+  background:
+    radial-gradient(ellipse at 50% 28%, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 60%),
+    var(--bed);
+  box-shadow:
+    0 6px 0 rgba(120, 100, 70, 0.14),
+    0 10px 18px rgba(43, 42, 58, 0.08),
+    inset 0 0 0 3px #f6eedd,
+    inset 0 0 0 5px rgba(43, 42, 58, 0.16);
+  transition: transform 160ms var(--g-ease-out);
+}
+
+.garden-root .bed .plot::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  height: 22%;
+  pointer-events: none;
+  border-radius: 0 0 13px 13px;
+  background: linear-gradient(180deg, rgba(217, 194, 162, 0), rgba(217, 194, 162, 0.55));
+}
+
+.garden-root .bed .art {
+  position: absolute;
+  inset: 6px 4px 4px;
+  width: auto;
+  height: auto;
+  max-height: none;
+  flex: none;
+  display: block;
+}
+
+.garden-root .bed .seed-art {
+  opacity: 1;
+  transition: opacity 220ms var(--g-ease-out);
+}
+
+.garden-root .bed.done .seed-art {
+  opacity: 0;
+}
+
+.garden-root .bed .num {
+  position: absolute;
+  left: -9px;
+  top: -9px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff8f0;
+  border: 2px solid rgba(43, 42, 58, 0.55);
+  display: flex;
+  align-items: center;
   justify-content: center;
-  padding: 4px 0 6px;
+  font-size: 12.5px;
+  font-weight: 900;
+  box-shadow: 0 2px 0 rgba(43, 42, 58, 0.12);
+  z-index: 2;
+}
+
+.garden-root .bed .plaque {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  max-width: var(--plaque, 220px);
+  min-width: 56px;
+  padding: 6px 11px 7px;
+  border-radius: 10px;
+  background: #fff8f0;
+  border: 2px solid #e3cfae;
+  border-bottom-width: 4px;
+  border-bottom-color: #d4b98f;
+  box-shadow: 0 3px 0 rgba(120, 100, 70, 0.12);
+}
+
+.garden-root .bed .plaque::before,
+.garden-root .bed .plaque::after {
+  content: "";
+  position: absolute;
+  bottom: -11px;
+  width: 5px;
+  height: 9px;
+  border-radius: 0 0 2px 2px;
+  background: #c9a36b;
+  box-shadow: inset 0 -2px 0 rgba(43, 42, 58, 0.18);
+  z-index: -1;
+}
+
+.garden-root .bed .plaque::before {
+  left: 24%;
+}
+
+.garden-root .bed .plaque::after {
+  right: 24%;
+}
+
+.garden-root .critters {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   pointer-events: none;
 }
 
-.garden-root .garden-beds-grid .bed {
-  position: static;
-  transform: none;
+.garden-root .critter {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.garden-root .critter svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.garden-root .critter .drift {
+  animation: garden-drift 7.5s ease-in-out infinite;
+}
+
+.garden-root .critter.b2 .drift {
+  animation-duration: 9s;
+  animation-delay: -3s;
+}
+
+.garden-root .critter.bee .drift {
+  animation-name: garden-hover;
+  animation-duration: 5s;
+}
+
+.garden-root .critter .wing {
+  transform-box: fill-box;
+  transform-origin: 50% 60%;
+  animation: garden-flap 2.4s ease-in-out infinite;
+}
+
+.garden-root .critter.bee .wing {
+  animation-duration: 1.2s;
+}
+
+@keyframes garden-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(-4deg);
+  }
+  50% {
+    transform: translate(7px, -5px) rotate(4deg);
+  }
+}
+
+@keyframes garden-hover {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-5px, -3px);
+  }
+}
+
+@keyframes garden-flap {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(0.72);
+  }
+}
+
+.garden-root.calm .critters,
+.garden-root.nomove .critters {
+  visibility: hidden;
+}
+
+.garden-root.calm .critter .drift,
+.garden-root.calm .critter .wing,
+.garden-root.nomove .critter .drift,
+.garden-root.nomove .critter .wing {
+  animation: none;
+}
+
+.garden-root .bed .name {
+  font-size: clamp(12.5px, 1.4vw, 15.5px);
+  line-height: 1.25;
+  font-weight: 800;
   max-width: 100%;
-  min-width: 0;
+}
+
+.garden-root .bed .hint {
+  font-size: clamp(11px, 1.1vw, 12.5px);
+  font-weight: 700;
+  opacity: 0.62;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.garden-root .bed .done-badge {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: transparent;
+  border: 0;
+  display: block;
+  width: auto;
+  height: auto;
+  opacity: 0;
+  transform: scale(0.95);
+  transition:
+    opacity 220ms var(--g-ease-out),
+    transform 220ms var(--g-ease-out);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.garden-root .bed.done .done-badge {
+  opacity: 1;
+  transform: none;
+}
+
+.garden-root .bed.done .plot {
+  box-shadow:
+    0 6px 0 rgba(120, 100, 70, 0.14),
+    0 10px 18px rgba(43, 42, 58, 0.08),
+    inset 0 0 0 3px #f6eedd,
+    inset 0 0 0 5px rgba(43, 42, 58, 0.16),
+    0 0 0 4px rgba(201, 242, 221, 0.7);
+}
+
+.garden-root .owl {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--owl, 64px);
+  z-index: 3;
+  pointer-events: none;
+  transition: transform 280ms var(--g-ease-out);
+  will-change: transform;
+}
+
+.garden-root .owl.instant,
+.garden-root.nomove .owl {
+  transition: none;
+}
+
+.garden-root .owl svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 3px 0 rgba(43, 42, 58, 0.12));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .garden-root .bed:hover .plot {
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 520px) {
+  .garden-root .garden-map-screen .bed .hint {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .garden-root .owl {
+    transition-property: opacity !important;
+  }
+  .garden-root .bed .done-badge,
+  .garden-root .bed .plot {
+    transform: none !important;
+  }
+  .garden-root .critter .drift,
+  .garden-root .critter .wing {
+    animation: none !important;
+  }
 }
 
 .garden-root .sr-only {

@@ -5,6 +5,7 @@ import { LessonShell } from "./components/LessonShell"
 import { RestScreen } from "./components/RestScreen"
 import { loadGardenProgress, problemKey, saveGardenProgress } from "./progress/storage"
 import type { BedId, GardenProgress, GardenScreen } from "./types"
+import { OWL_WALK_MS } from "./map/layout-map"
 import "./theme/garden.css"
 
 function doneRecord(progress: GardenProgress): Record<BedId, boolean> {
@@ -47,7 +48,8 @@ export default function GardenApp() {
     setActiveBed(bed.id)
     setProblemIndex(0)
     persist({ owlBedIndex: index })
-    window.setTimeout(() => setScreen("lesson"), reducedMotion ? 40 : 400)
+    const delay = reducedMotion ? 40 : OWL_WALK_MS
+    window.setTimeout(() => setScreen("lesson"), delay)
   }
 
   const finishBed = () => {
@@ -75,51 +77,71 @@ export default function GardenApp() {
     }))
   }
 
+  const rootClass = `garden-root${reducedMotion ? " nomove" : ""}${progress.calmMode ? " calm" : ""}`
+
   return (
-    <div
-      className={`garden-root${reducedMotion ? " nomove" : ""}${progress.calmMode ? " calm" : ""}`}
-      data-testid="garden-app"
-    >
+    <div className={rootClass} data-testid="garden-app">
       <i className="sr-only" data-testid="ready">
         ready
       </i>
-      {screen === "map" && (
+      <div
+        className={`garden-screen${screen === "map" ? " garden-screen-on" : ""}`}
+        id="map"
+        data-testid="map"
+        aria-hidden={screen !== "map"}
+        {...(screen !== "map" ? { inert: true } : {})}
+      >
         <GardenMap
           doneBeds={doneRecord(progress)}
           mossLeaves={progress.mossLeaves}
           calmMode={progress.calmMode}
           owlBedIndex={progress.owlBedIndex}
+          reducedMotion={reducedMotion}
           onPickBed={pickBed}
           onDoneForToday={() => setScreen("rest")}
           onToggleCalm={() => persist({ calmMode: !progress.calmMode })}
         />
-      )}
-      {screen === "lesson" && activeBed && (
-        <LessonShell
-          bedId={activeBed}
-          initialProblemIndex={problemIndex}
-          solvedProblemKeys={progress.solvedProblemKeys}
-          calmMode={progress.calmMode}
-          mossLeaves={progress.mossLeaves}
-          reducedMotion={reducedMotion}
-          onFinishBed={finishBed}
-          onLeave={() => {
-            setActiveBed(null)
-            setScreen("map")
-          }}
-          onMossGrow={onMossGrow}
-        />
-      )}
-      {screen === "rest" && (
+      </div>
+      <div
+        className={`garden-screen${screen === "lesson" ? " garden-screen-on" : ""}`}
+        id="lesson"
+        data-testid="lesson"
+        aria-labelledby="lesson-h"
+        aria-hidden={screen !== "lesson"}
+        {...(screen !== "lesson" ? { inert: true } : {})}
+      >
+        {activeBed && (
+          <LessonShell
+            bedId={activeBed}
+            initialProblemIndex={problemIndex}
+            solvedProblemKeys={progress.solvedProblemKeys}
+            calmMode={progress.calmMode}
+            mossLeaves={progress.mossLeaves}
+            reducedMotion={reducedMotion}
+            onFinishBed={finishBed}
+            onLeave={() => {
+              setActiveBed(null)
+              setScreen("map")
+            }}
+            onMossGrow={onMossGrow}
+          />
+        )}
+      </div>
+      <div
+        className={`garden-screen garden-screen-rest${screen === "rest" ? " garden-screen-on" : ""}`}
+        aria-hidden={screen !== "rest"}
+        {...(screen !== "rest" ? { inert: true } : {})}
+      >
         <RestScreen
           bedsFinished={progress.sessionBedsFinished}
           mossLeaves={progress.mossLeaves}
+          reducedMotion={reducedMotion}
           onAllDone={() => {
             persist({ restedThisSession: true })
             setScreen("map")
           }}
         />
-      )}
+      </div>
     </div>
   )
 }

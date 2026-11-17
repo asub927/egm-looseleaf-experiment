@@ -17,12 +17,14 @@ import {
   SNAP_CAPTURE_RADIUS,
   ELEVATION_OFFSET_Y,
   ELEVATION_SCALE,
+  CURRICULUM_STATIONS,
 } from "../../src/lib/math/dovetail-constants.ts"
 import {
   playWoodThock,
   playWoodLift,
   playWoodSettle,
   playPentatonicHarmony,
+  playSequentialThocks,
 } from "../../src/lib/audio/wood-thock-synth.ts"
 
 test("Dovetail Invariant 1: Grimm's dyed wood palette color verification", () => {
@@ -158,4 +160,29 @@ test("Dovetail Invariant 5: Unique slot IDs, distinct positions, and NC standard
       "Slots must be ordered sequentially left-to-right",
     )
   }
+})
+
+test("Dovetail Invariant 6: 4 Curriculum Stations & Multi-Thock Cascade Invariants", () => {
+  assert.ok(CURRICULUM_STATIONS.length >= 4, "Must define at least 4 curriculum stations")
+
+  const expectedStations = [
+    { id: "making-ten", number: 1, standard: "NC.2.OA.2" },
+    { id: "arrays", number: 2, standard: "NC.2.OA.4" },
+    { id: "parity", number: 3, standard: "NC.2.OA.3" },
+    { id: "geometry", number: 4, standard: "NC.2.G.3" },
+  ]
+
+  for (const expected of expectedStations) {
+    const station = CURRICULUM_STATIONS.find((s) => s.id === expected.id)
+    assert.ok(station, `Station ${expected.id} must exist`)
+    assert.equal(station.number, expected.number, `Station ${expected.id} number mismatch`)
+    assert.equal(station.standard, expected.standard, `Station ${expected.id} standard mismatch`)
+    assert.ok(station.normalEquation.length > 5, "Must have valid normal equation text")
+    assert.ok(station.solvedEquation.length > 5, "Must have valid solved equation text")
+  }
+
+  // Ensure playSequentialThocks executes safely without throwing in headless Node 26
+  assert.doesNotThrow(() => {
+    playSequentialThocks(null, [1.0, 1.18, 1.35])
+  }, "playSequentialThocks must run safely in headless Node 26 environment")
 })

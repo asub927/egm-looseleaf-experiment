@@ -1,15 +1,19 @@
 "use client"
 
 import * as React from "react"
-import { DovetailZenToy, type DovetailSnapDetail } from "./DovetailZenToy"
+import { DovetailZenToy, type DovetailSnapDetail, type CurriculumStationId } from "./DovetailZenToy"
 import { playPluck } from "@/lib/audio/garden-chimes"
 import { playWoodThock } from "@/lib/audio/wood-thock-synth"
 import type { StudentTheme } from "@/lib/storage/profile"
 import { cn } from "@/lib/utils"
 
 export interface ZenGardenLandingProps {
-  /** Handler to navigate into a curriculum wireframe standard */
-  onSelectStandard: (standard: "arrays" | "parity" | "geometry") => void
+  /** Handler to navigate into Board 2: Pip's Math Garden */
+  onSelectGarden?: () => void
+  /** Handler to navigate into a curriculum wireframe standard (backward-compatible) */
+  onSelectStandard?: (standard?: "arrays" | "parity" | "geometry") => void
+  /** Handler to navigate directly into a curriculum station */
+  onSelectStation?: (station: CurriculumStationId) => void
   /** Current active theme */
   theme?: StudentTheme
   /** Theme change handler */
@@ -28,7 +32,9 @@ interface ActiveRipple {
 }
 
 export function ZenGardenLanding({
+  onSelectGarden,
   onSelectStandard,
+  onSelectStation,
   theme = "honey",
   onSetTheme,
   className,
@@ -45,6 +51,7 @@ export function ZenGardenLanding({
   })
 
   // Selected hero station or active feedback
+  const [activeStation, setActiveStation] = React.useState<CurriculumStationId>("making-ten")
   const [lastSnappedInfo, setLastSnappedInfo] = React.useState<string | null>(null)
   const [celebrationActive, setCelebrationActive] = React.useState(false)
 
@@ -225,6 +232,19 @@ export function ZenGardenLanding({
     [addRipple, soundEnabled],
   )
 
+  // Activate curriculum station from stepping stone
+  const handleActivateStation = React.useCallback(
+    (station: CurriculumStationId, pitch: number, std?: "arrays" | "parity" | "geometry") => {
+      if (soundEnabled) playWoodThock(null, pitch)
+      setActiveStation(station)
+      onSelectStation?.(station)
+      if (std) onSelectStandard?.(std)
+      const cedar = document.querySelector(".cedar-workbench")
+      cedar?.scrollIntoView({ behavior: "smooth", block: "center" })
+    },
+    [soundEnabled, onSelectStation, onSelectStandard],
+  )
+
   // Keyboard accessibility handler for Tobi-ishi stepping stone cards (WCAG 2.1 AA)
   const handleStoneKeyDown = React.useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>, action: () => void) => {
@@ -329,7 +349,7 @@ export function ZenGardenLanding({
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pr-44 sm:pr-48">
           {/* Audio Synthesizer Toggle */}
           <button
             type="button"
@@ -356,7 +376,7 @@ export function ZenGardenLanding({
 
           {/* Theme Selector Pill */}
           {onSetTheme && (
-            <div className="hidden md:flex items-center gap-1 bg-white/85 backdrop-blur-md border border-stone-300/60 p-1 rounded-full shadow-xs text-xs">
+            <div className="hidden lg:flex items-center gap-1 bg-white/85 backdrop-blur-md border border-stone-300/60 p-1 rounded-full shadow-xs text-xs">
               {(["zen", "honey", "sky", "cork"] as const).map((t) => (
                 <button
                   key={t}
@@ -374,31 +394,6 @@ export function ZenGardenLanding({
               ))}
             </div>
           )}
-
-          {/* Quick Curriculum Wireframe Jump */}
-          <div className="hidden sm:flex items-center gap-1 bg-white/85 backdrop-blur-md border border-stone-300/60 p-1 rounded-full shadow-xs">
-            <button
-              type="button"
-              onClick={() => onSelectStandard("parity")}
-              className="px-2.5 py-1 rounded-full text-xs font-bold text-stone-700 hover:text-stone-900 hover:bg-[#ede7dc] transition-all cursor-pointer"
-            >
-              🌰 Parity
-            </button>
-            <button
-              type="button"
-              onClick={() => onSelectStandard("arrays")}
-              className="px-2.5 py-1 rounded-full text-xs font-bold text-stone-700 hover:text-stone-900 hover:bg-[#ede7dc] transition-all cursor-pointer"
-            >
-              🍪 Arrays
-            </button>
-            <button
-              type="button"
-              onClick={() => onSelectStandard("geometry")}
-              className="px-2.5 py-1 rounded-full text-xs font-bold text-stone-700 hover:text-stone-900 hover:bg-[#ede7dc] transition-all cursor-pointer"
-            >
-              📐 Geometry
-            </button>
-          </div>
         </div>
       </header>
 
@@ -410,21 +405,21 @@ export function ZenGardenLanding({
         <section className="flex flex-col items-center text-center gap-6 garden-bg-trigger">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 border border-[#bc6c25]/25 text-[#7b4a1b] text-xs font-extrabold uppercase tracking-wide shadow-xs">
             <span className="text-[#bc6c25]">★</span>
-            <span>North Carolina Grade 2 Mathematics Sanctuary</span>
+            <span>Board 1 · Handcrafted Wooden Math Toy Studio</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#242220] max-w-3xl leading-[1.15]">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#242220] max-w-3xl leading-[1.15] [text-wrap:balance]">
             The <span className="text-[#bc6c25]">Zen Garden</span> of Learning
           </h1>
 
-          <p className="text-base sm:text-lg text-[#635b54] max-w-2xl leading-relaxed font-medium">
-            Explore foundational mathematics through tactile dovetail joinery, gentle raked sand
-            wave ripples, and handcrafted stained-wood manipulatives. Zero cartoon clutter. Honest,
-            physical mathematics.
+          <p className="text-base sm:text-lg text-[#635b54] max-w-2xl leading-relaxed font-medium [text-wrap:pretty]">
+            Explore foundational North Carolina Grade 2 mathematics through tactile dovetail
+            joinery, gentle raked sand wave ripples, and handcrafted stained-wood manipulatives.
+            Zero cartoon clutter. Honest, physical mathematics.
           </p>
 
-          {/* Warm Cedar Workbench Container */}
-          <div className="w-full max-w-3xl bg-gradient-to-br from-[#fefdfb] to-[#f4eee3] border-4 border-[#d4a373] rounded-3xl p-5 sm:p-7 shadow-xl shadow-stone-900/10 relative overflow-hidden flex flex-col items-center gap-5 cedar-workbench">
+          {/* Warm Cedar Workbench Container with CSS Container Query Support (Track 2) */}
+          <div className="w-full max-w-3xl @container/workbench bg-gradient-to-br from-[#fefdfb] to-[#f4eee3] border-4 border-[#d4a373] rounded-3xl p-5 sm:p-7 shadow-xl shadow-stone-900/10 relative overflow-hidden flex flex-col items-center gap-5 cedar-workbench">
             {/* Top Hinoki Wood Grain Accent Strip */}
             <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#d4a373] via-[#bc6c25] to-[#d4a373]" />
 
@@ -433,7 +428,7 @@ export function ZenGardenLanding({
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#10ac84] animate-pulse" />
                 <span className="text-[#5c4a3b]">
-                  Dovetail Joinery Workbench · Montessori Physical Math
+                  Dovetail Joinery Workbench · 4 Curriculum Stations
                 </span>
               </div>
               {celebrationActive ? (
@@ -454,6 +449,8 @@ export function ZenGardenLanding({
             {/* Embedded DovetailZenToy Hero Manipulative */}
             <div className="w-full flex justify-center py-2">
               <DovetailZenToy
+                activeStation={activeStation}
+                onStationChange={setActiveStation}
                 onSnap={handleSnap}
                 onRipple={handleCustomRipple}
                 onComplete={handleToyComplete}
@@ -488,29 +485,21 @@ export function ZenGardenLanding({
             <span className="text-xs font-extrabold uppercase tracking-widest text-[#8c6d48] bg-[#dccdb9]/40 px-3 py-1 rounded-full">
               Tobi-ishi 飛び石 · The Stepping Stone Path
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-[#242220] tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black text-[#242220] tracking-tight [text-wrap:balance]">
               4 Foundations Across Grade 2 Math
             </h2>
-            <p className="text-sm sm:text-base text-[#6e645a] max-w-xl">
-              Traverse the smooth basalt garden stones to step directly into each North Carolina
-              curriculum standard.
+            <p className="text-sm sm:text-base text-[#6e645a] max-w-xl [text-wrap:pretty]">
+              Traverse the smooth basalt garden stones to explore each core curriculum standard
+              inside the Handcrafted Wooden Toy Studio.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 w-full">
             {/* STONE 1: PEBBLE BASIN (NC.2.OA.2) */}
             <div
-              onClick={() => {
-                if (soundEnabled) playWoodThock(null, 0.85)
-                const cedar = document.querySelector(".cedar-workbench")
-                cedar?.scrollIntoView({ behavior: "smooth", block: "center" })
-              }}
+              onClick={() => handleActivateStation("making-ten", 0.85)}
               onKeyDown={(e) =>
-                handleStoneKeyDown(e, () => {
-                  if (soundEnabled) playWoodThock(null, 0.85)
-                  const cedar = document.querySelector(".cedar-workbench")
-                  cedar?.scrollIntoView({ behavior: "smooth", block: "center" })
-                })
+                handleStoneKeyDown(e, () => handleActivateStation("making-ten", 0.85))
               }
               className="group bg-gradient-to-br from-[#32354c] to-[#222436] border-2 border-white/10 hover:border-white/30 rounded-3xl p-5 text-white flex flex-col justify-between gap-4 shadow-xl shadow-stone-900/15 cursor-pointer transition-all duration-200 hover:-translate-y-2 hover:scale-[1.02] relative overflow-hidden focus-visible:outline-3 focus-visible:outline-[#ffa502] focus-visible:outline-offset-4"
               tabIndex={0}
@@ -540,32 +529,26 @@ export function ZenGardenLanding({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <h3 className="text-lg font-black text-white group-hover:text-[#ff8585] transition-colors">
+                <h3 className="text-lg font-black text-white group-hover:text-[#ff8585] transition-colors [text-wrap:balance]">
                   Pebble Basin
                 </h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-slate-300 leading-relaxed [text-wrap:pretty]">
                   Making Ten &amp; Sum Complements. Flush ten-frame insets with Strawberry Coral
                   &amp; Sage Mint blocks.
                 </p>
               </div>
 
               <div className="flex items-center justify-between pt-3 border-t border-white/10 text-xs font-bold text-white">
-                <span>Try Ten Inset</span>
+                <span>Station 1: Ten Inset</span>
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </div>
 
             {/* STONE 2: TWIN PINES (NC.2.OA.3) */}
             <div
-              onClick={() => {
-                if (soundEnabled) playWoodThock(null, 1.0)
-                onSelectStandard("parity")
-              }}
+              onClick={() => handleActivateStation("parity", 1.0, "parity")}
               onKeyDown={(e) =>
-                handleStoneKeyDown(e, () => {
-                  if (soundEnabled) playWoodThock(null, 1.0)
-                  onSelectStandard("parity")
-                })
+                handleStoneKeyDown(e, () => handleActivateStation("parity", 1.0, "parity"))
               }
               className="group bg-gradient-to-br from-[#32354c] to-[#222436] border-2 border-white/10 hover:border-white/30 rounded-3xl p-5 text-white flex flex-col justify-between gap-4 shadow-xl shadow-stone-900/15 cursor-pointer transition-all duration-200 hover:-translate-y-2 hover:scale-[1.02] relative overflow-hidden focus-visible:outline-3 focus-visible:outline-[#ffa502] focus-visible:outline-offset-4"
               tabIndex={0}
@@ -594,32 +577,26 @@ export function ZenGardenLanding({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <h3 className="text-lg font-black text-white group-hover:text-[#d1b8ff] transition-colors">
+                <h3 className="text-lg font-black text-white group-hover:text-[#d1b8ff] transition-colors [text-wrap:balance]">
                   Twin Pines
                 </h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-slate-300 leading-relaxed [text-wrap:pretty]">
                   Odd &amp; Even Parity. Dual balanced columns of Lavender &amp; Honey dowels ($2k$
                   vs $2k+1$).
                 </p>
               </div>
 
               <div className="flex items-center justify-between pt-3 border-t border-white/10 text-xs font-bold text-white">
-                <span>Launch Parity Mat</span>
+                <span>Station 3: Parity</span>
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </div>
 
             {/* STONE 3: BAMBOO LATTICE (NC.2.OA.4) */}
             <div
-              onClick={() => {
-                if (soundEnabled) playWoodThock(null, 1.2)
-                onSelectStandard("arrays")
-              }}
+              onClick={() => handleActivateStation("arrays", 1.2, "arrays")}
               onKeyDown={(e) =>
-                handleStoneKeyDown(e, () => {
-                  if (soundEnabled) playWoodThock(null, 1.2)
-                  onSelectStandard("arrays")
-                })
+                handleStoneKeyDown(e, () => handleActivateStation("arrays", 1.2, "arrays"))
               }
               className="group bg-gradient-to-br from-[#32354c] to-[#222436] border-2 border-white/10 hover:border-white/30 rounded-3xl p-5 text-white flex flex-col justify-between gap-4 shadow-xl shadow-stone-900/15 cursor-pointer transition-all duration-200 hover:-translate-y-2 hover:scale-[1.02] relative overflow-hidden focus-visible:outline-3 focus-visible:outline-[#ffa502] focus-visible:outline-offset-4"
               tabIndex={0}
@@ -645,32 +622,26 @@ export function ZenGardenLanding({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <h3 className="text-lg font-black text-white group-hover:text-[#ffd175] transition-colors">
+                <h3 className="text-lg font-black text-white group-hover:text-[#ffd175] transition-colors [text-wrap:balance]">
                   Bamboo Lattice
                 </h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-slate-300 leading-relaxed [text-wrap:pretty]">
                   Rectangular Arrays ($5 \times 5$). Repeated addition of rows ($4 + 4 + 4 = 12$) on
                   cedar baking pans.
                 </p>
               </div>
 
               <div className="flex items-center justify-between pt-3 border-t border-white/10 text-xs font-bold text-white">
-                <span>Launch Array Pan</span>
+                <span>Station 2: Arrays</span>
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </div>
 
             {/* STONE 4: MOON GATE (NC.2.G.3) */}
             <div
-              onClick={() => {
-                if (soundEnabled) playWoodThock(null, 1.4)
-                onSelectStandard("geometry")
-              }}
+              onClick={() => handleActivateStation("geometry", 1.4, "geometry")}
               onKeyDown={(e) =>
-                handleStoneKeyDown(e, () => {
-                  if (soundEnabled) playWoodThock(null, 1.4)
-                  onSelectStandard("geometry")
-                })
+                handleStoneKeyDown(e, () => handleActivateStation("geometry", 1.4, "geometry"))
               }
               className="group bg-gradient-to-br from-[#32354c] to-[#222436] border-2 border-white/10 hover:border-white/30 rounded-3xl p-5 text-white flex flex-col justify-between gap-4 shadow-xl shadow-stone-900/15 cursor-pointer transition-all duration-200 hover:-translate-y-2 hover:scale-[1.02] relative overflow-hidden focus-visible:outline-3 focus-visible:outline-[#ffa502] focus-visible:outline-offset-4"
               tabIndex={0}
@@ -704,21 +675,52 @@ export function ZenGardenLanding({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <h3 className="text-lg font-black text-white group-hover:text-[#79f2d0] transition-colors">
+                <h3 className="text-lg font-black text-white group-hover:text-[#79f2d0] transition-colors [text-wrap:balance]">
                   Moon Gate
                 </h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-slate-300 leading-relaxed [text-wrap:pretty]">
                   Equal Partitioning. Halves, thirds, and fourths of circular Enso tarts and
                   rectangular tatami mats.
                 </p>
               </div>
 
               <div className="flex items-center justify-between pt-3 border-t border-white/10 text-xs font-bold text-white">
-                <span>Launch Geometry Lab</span>
+                <span>Station 4: Geometry</span>
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </div>
           </div>
+
+          {/* ==============================================================
+              BOARD 2 (PIP'S MATH GARDEN) BRIDGE INVITATION
+              ============================================================== */}
+          {onSelectGarden && (
+            <div className="w-full bg-gradient-to-r from-[#2d6a4f]/10 via-[#1b4332]/10 to-[#2d6a4f]/10 border-2 border-[#10ac84]/30 rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+              <div className="flex items-center gap-4 text-left">
+                <div className="w-12 h-12 rounded-2xl bg-[#10ac84]/20 flex items-center justify-center text-2xl shadow-xs">
+                  🦉
+                </div>
+                <div>
+                  <h4 className="text-base font-black text-[#1b4332] [text-wrap:balance]">
+                    Ready to Plant in Board 2? Pip's Math Garden
+                  </h4>
+                  <p className="text-xs text-[#2d6a4f] [text-wrap:pretty]">
+                    Travel to the garden beds with Pip the Owl. Concrete-first number lines,
+                    making-ten soil beds, and decomposing sprouts.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={onSelectGarden}
+                className="px-5 py-2.5 rounded-full bg-[#10ac84] hover:bg-[#0e9673] text-white font-extrabold text-xs shadow-md transition-all cursor-pointer flex items-center gap-2 hover:scale-105 active:scale-95 [text-wrap:nowrap]"
+              >
+                <span>Enter Pip's Garden</span>
+                <span>→</span>
+              </button>
+            </div>
+          )}
         </section>
 
         {/* ==============================================================
@@ -729,7 +731,7 @@ export function ZenGardenLanding({
             <span className="text-xs font-extrabold uppercase tracking-widest text-[#8c6d48] bg-[#ede7dc] px-3 py-1 rounded-full">
               Pedagogical Standards &amp; Invariants
             </span>
-            <h2 className="text-xl sm:text-2xl font-black text-[#242220] mt-2">
+            <h2 className="text-xl sm:text-2xl font-black text-[#242220] mt-2 [text-wrap:balance]">
               The Anti-Clipart Educational Sanctuary
             </h2>
           </div>
@@ -740,8 +742,8 @@ export function ZenGardenLanding({
                 ✓
               </div>
               <h4 className="text-sm font-bold text-[#242220]">NC Grade 2 Alignment</h4>
-              <p className="text-xs text-[#665d55] leading-relaxed">
-                Strictly mapped to NC.2.OA.2, NC.2.OA.3, NC.2.OA.4, and NC.2.G.3. Verified by 43
+              <p className="text-xs text-[#665d55] leading-relaxed [text-wrap:pretty]">
+                Strictly mapped to NC.2.OA.2, NC.2.OA.3, NC.2.OA.4, and NC.2.G.3. Verified by 48
                 invariant tests in pure Node 26.
               </p>
             </div>
@@ -751,7 +753,7 @@ export function ZenGardenLanding({
                 🛡
               </div>
               <h4 className="text-sm font-bold text-[#242220]">100% Offline COPPA</h4>
-              <p className="text-xs text-[#665d55] leading-relaxed">
+              <p className="text-xs text-[#665d55] leading-relaxed [text-wrap:pretty]">
                 Zero network telemetry, zero third-party cookies, and zero student PII. 100% private
                 and classroom safe.
               </p>
@@ -762,7 +764,7 @@ export function ZenGardenLanding({
                 🪵
               </div>
               <h4 className="text-sm font-bold text-[#242220]">Zero-Clipart Guarantee</h4>
-              <p className="text-xs text-[#665d55] leading-relaxed">
+              <p className="text-xs text-[#665d55] leading-relaxed [text-wrap:pretty]">
                 No patronizing cartoon mascots or flashing casino loot loops. Tactile stained wood
                 designed for calm focus.
               </p>
@@ -773,7 +775,7 @@ export function ZenGardenLanding({
                 ⚡
               </div>
               <h4 className="text-sm font-bold text-[#242220]">&lt; 120MB Envelope</h4>
-              <p className="text-xs text-[#665d55] leading-relaxed">
+              <p className="text-xs text-[#665d55] leading-relaxed [text-wrap:pretty]">
                 Optimized for dual-core Chromebooks. 60 FPS GPU compositor animations, zero forced
                 layout thrashing.
               </p>
@@ -784,7 +786,7 @@ export function ZenGardenLanding({
           <div className="flex items-center justify-between flex-wrap gap-3 p-3 bg-[#ede6d9] rounded-xl text-xs font-bold text-[#524438]">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#10ac84]" />
-              <span>Invariant Test Gate: 43/43 Deterministic Tests Passing (&lt;250ms)</span>
+              <span>Invariant Test Gate: 48/48 Deterministic Tests Passing (&lt;250ms)</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#10ac84]" />

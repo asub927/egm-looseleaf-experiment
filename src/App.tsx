@@ -1,38 +1,34 @@
 import * as React from "react"
-import { NC2OA4Wireframe } from "@/components/math/NC2OA4Wireframe"
-import { NC2OA3Wireframe } from "@/components/math/NC2OA3Wireframe"
-import { NC2GWireframe } from "@/components/math/NC2GWireframe"
+import GardenApp from "@/garden/GardenApp"
 import { ZenGardenLanding } from "@/components/landing/ZenGardenLanding"
 import { useDeskViewTransition } from "@/lib/dom/view-transitions"
 import { loadStudentProfile, setThemePreference, type StudentTheme } from "@/lib/storage/profile"
+import { cn } from "@/lib/utils"
 
 export type DeskTheme = StudentTheme
-export type ActiveStandard = "landing" | "arrays" | "parity" | "geometry"
+export type ActiveBoard = "toy" | "garden"
+export type ActiveStandard = ActiveBoard | "landing" | "arrays" | "parity" | "geometry"
 
 export default function App() {
   const { startDeskTransition } = useDeskViewTransition()
 
-  const [activeStandard, setActiveStandard] = React.useState<ActiveStandard>(() => {
+  // Strictly 2 Boards: Board 1 (Wooden Math Toy Studio) & Board 2 (Pip's Math Garden)
+  const [activeBoard, setActiveBoard] = React.useState<ActiveBoard>(() => {
     try {
-      const stored = localStorage.getItem("egm_active_standard")
-      if (
-        stored === "landing" ||
-        stored === "arrays" ||
-        stored === "parity" ||
-        stored === "geometry"
-      ) {
-        return stored
-      }
+      const stored =
+        localStorage.getItem("egm_active_board") || localStorage.getItem("egm_active_standard")
+      if (stored === "garden") return "garden"
+      if (stored === "toy" || stored === "landing") return "toy"
     } catch {
       // Storage access may be blocked
     }
-    return "landing"
+    return "toy"
   })
 
-  const switchToStandard = React.useCallback(
-    (target: ActiveStandard) => {
+  const switchToBoard = React.useCallback(
+    (target: ActiveBoard) => {
       startDeskTransition(() => {
-        setActiveStandard(target)
+        setActiveBoard(target)
       })
     },
     [startDeskTransition],
@@ -49,13 +45,14 @@ export default function App() {
   })
 
   React.useEffect(() => {
-    document.documentElement.setAttribute("data-active-standard", activeStandard)
+    document.documentElement.setAttribute("data-active-board", activeBoard)
     try {
-      localStorage.setItem("egm_active_standard", activeStandard)
+      localStorage.setItem("egm_active_board", activeBoard)
+      localStorage.setItem("egm_active_standard", activeBoard)
     } catch {
       // Ignore
     }
-  }, [activeStandard])
+  }, [activeBoard])
 
   React.useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme)
@@ -68,44 +65,56 @@ export default function App() {
   }, [theme])
 
   return (
-    <div className="desk-stage w-full h-full min-h-screen relative">
-      {activeStandard === "landing" ? (
-        <ZenGardenLanding onSelectStandard={switchToStandard} theme={theme} onSetTheme={setTheme} />
-      ) : activeStandard === "parity" ? (
-        <NC2OA3Wireframe
-          theme={theme}
-          onSetTheme={setTheme}
-          onSwitchToArrays={() => switchToStandard("arrays")}
-          onSwitchToGeometry={() => switchToStandard("geometry")}
-        />
-      ) : activeStandard === "geometry" ? (
-        <NC2GWireframe
-          theme={theme}
-          onSetTheme={setTheme}
-          onSwitchToArrays={() => switchToStandard("arrays")}
-          onSwitchToParity={() => switchToStandard("parity")}
-        />
-      ) : (
-        <NC2OA4Wireframe
-          theme={theme}
-          onSetTheme={setTheme}
-          onSwitchToParity={() => switchToStandard("parity")}
-          onSwitchToGeometry={() => switchToStandard("geometry")}
-        />
-      )}
-
-      {/* Floating Zen Garden Home Portal when in curriculum wireframes */}
-      {activeStandard !== "landing" && (
+    <div className="desk-stage w-full h-full min-h-screen relative font-sans">
+      {/* Universal 2-Board Navigation Switcher Bar (Modern Web Guidance View Transition) */}
+      <nav
+        aria-label="Board switcher navigation"
+        className="fixed top-3.5 right-4 z-50 flex items-center gap-1.5 bg-white/95 backdrop-blur-md border border-[#bc6c25]/30 p-1 rounded-full shadow-lg"
+      >
         <button
           type="button"
-          onClick={() => switchToStandard("landing")}
-          className="fixed bottom-4 left-4 z-50 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/95 border border-[#bc6c25]/30 text-[#4a3e35] text-xs font-extrabold shadow-lg hover:bg-[#ede7dc] hover:scale-105 active:scale-95 transition-all cursor-pointer backdrop-blur-md"
-          title="Return to Zen Garden of Learning"
-          aria-label="Return to Zen Garden of Learning"
+          onClick={() => switchToBoard("toy")}
+          className={cn(
+            "px-3.5 py-1.5 rounded-full text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 [text-wrap:nowrap]",
+            activeBoard === "toy"
+              ? "bg-[#2b2d42] text-white shadow-xs"
+              : "text-[#5c4a3b] hover:text-[#2b2d42] hover:bg-[#ede7dc]",
+          )}
+          aria-pressed={activeBoard === "toy"}
         >
-          <span className="text-[#bc6c25]">⛩️</span>
-          <span>Zen Garden</span>
+          <span>🪵</span>
+          <span>Board 1: Wooden Toy</span>
         </button>
+
+        <button
+          type="button"
+          onClick={() => switchToBoard("garden")}
+          className={cn(
+            "px-3.5 py-1.5 rounded-full text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 [text-wrap:nowrap]",
+            activeBoard === "garden"
+              ? "bg-[#10ac84] text-white shadow-xs"
+              : "text-[#5c4a3b] hover:text-[#2b2d42] hover:bg-[#ede7dc]",
+          )}
+          aria-pressed={activeBoard === "garden"}
+        >
+          <span>🦉</span>
+          <span>Board 2: Math Garden</span>
+        </button>
+      </nav>
+
+      {/* Render Strictly the 2 Boards */}
+      {activeBoard === "garden" ? (
+        <GardenApp />
+      ) : (
+        <ZenGardenLanding
+          onSelectGarden={() => switchToBoard("garden")}
+          onSelectStandard={() => {
+            const cedar = document.querySelector(".cedar-workbench")
+            cedar?.scrollIntoView({ behavior: "smooth", block: "center" })
+          }}
+          theme={theme}
+          onSetTheme={setTheme}
+        />
       )}
     </div>
   )

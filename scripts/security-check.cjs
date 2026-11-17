@@ -35,16 +35,21 @@ try {
     }
   }
 
-  // Check staged diff content for obvious API keys or secrets
-  if (stagedFiles.length > 0) {
-    const stagedDiff = execSync("git diff --cached -U0", { encoding: "utf8" })
+  // Check staged diff content for obvious API keys or secrets (skip binary assets; paths can false-positive)
+  const textStaged = stagedFiles.filter((f) => !/\.(png|jpe?g|gif|webp|webm|mp4|woff2?)$/i.test(f))
+  if (textStaged.length > 0) {
+    const { spawnSync } = require("child_process")
+    const diffOut = spawnSync("git", ["diff", "--cached", "-U0", "--", ...textStaged], {
+      encoding: "utf8",
+    })
+    const stagedDiff = diffOut.stdout ?? ""
     const secretPatterns = [
       { name: "GitHub Token", regex: /(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{36,}/ },
       { name: "Generic Private Key", regex: /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/ },
       { name: "AWS Access Key", regex: /AKIA[0-9A-Z]{16}/ },
       {
         name: "OpenAI/Anthropic API Key",
-        regex: /sk-(?:ant-api[0-9]{2}-|live-)?[A-Za-z0-9_-]{20,}/,
+        regex: /(?<![A-Za-z])sk-(?:ant-api[0-9]{2}-|live-)?[A-Za-z0-9_-]{20,}/,
       },
     ]
 

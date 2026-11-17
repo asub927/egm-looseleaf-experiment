@@ -1,2 +1,3 @@
 garden-ref/
+evidence/**/*.json
 dist/

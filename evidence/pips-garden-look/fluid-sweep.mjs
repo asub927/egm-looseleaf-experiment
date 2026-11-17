@@ -19,12 +19,7 @@ const SELECTORS = [
 ].join(", ")
 
 function boxesOverlap(a, b) {
-  return (
-    a.x + a.width > b.x &&
-    b.x + b.width > a.x &&
-    a.y + a.height > b.y &&
-    b.y + b.height > a.y
-  )
+  return a.x + a.width > b.x && b.x + b.width > a.x && a.y + a.height > b.y && b.y + b.height > a.y
 }
 
 async function main() {
@@ -82,7 +77,10 @@ async function main() {
     results,
     pass: results.every((r) => r.pass),
   }
-  await writeFile(path.join(__dirname, "fluid-sweep-results.json"), JSON.stringify(summary, null, 2))
+  await writeFile(
+    path.join(__dirname, "fluid-sweep-results.json"),
+    JSON.stringify(summary, null, 2),
+  )
   console.log(JSON.stringify(summary, null, 2))
   process.exit(summary.pass ? 0 : 1)
 }

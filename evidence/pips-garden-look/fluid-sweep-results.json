@@ -1,0 +1,2803 @@
+{
+  "at": "2026-11-17T05:26:58.934Z",
+  "minTarget": 56,
+  "widths": [
+    360,
+    414,
+    600,
+    744,
+    834,
+    1024,
+    1180,
+    1440
+  ],
+  "results": [
+    {
+      "tag": "360x800-portrait",
+      "overlaps": [
+        [
+          "garden-path",
+          "garden-gate"
+        ],
+        [
+          "garden-path",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plot-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-tile-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-tile-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plot-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-tile-number-line"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-counting-on"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plaque-decomposing",
+          "bed-plot-relationship"
+        ],
+        [
+          "bed-plaque-decomposing",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plaque-equivalent-sums",
+          "bed-plaque-relationship"
+        ],
+        [
+          "bed-plaque-equivalent-sums",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-plaque-equivalent-sums",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-plot-relationship",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plaque-relationship",
+          "bed-plaque-number-line"
+        ],
+        [
+          "bed-plot-number-line",
+          "bed-tile-number-line"
+        ]
+      ],
+      "smallTargets": [
+        {
+          "id": "garden-gate",
+          "box": {
+            "x": -3.8837318420410156,
+            "y": 372.5080261230469,
+            "width": 83.62712478637695,
+            "height": 46.020904541015625
+          }
+        },
+        {
+          "id": "bed-plaque-making-ten",
+          "box": {
+            "x": 57.078125,
+            "y": 435.671875,
+            "width": 97.3125,
+            "height": 34.625
+          }
+        },
+        {
+          "id": "bed-plaque-counting-on",
+          "box": {
+            "x": 202.90625,
+            "y": 498.34375,
+            "width": 102.703125,
+            "height": 34.625
+          }
+        },
+        {
+          "id": "bed-plaque-number-line",
+          "box": {
+            "x": 179.90625,
+            "y": 758.09375,
+            "width": 148,
+            "height": 50.25
+          }
+        }
+      ],
+      "pass": false
+    },
+    {
+      "tag": "640x360-landscape",
+      "overlaps": [
+        [
+          "garden-path",
+          "garden-gate"
+        ],
+        [
+          "garden-path",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plot-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-tile-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-tile-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plot-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-tile-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-number-line"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-plot-decomposing"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-plot-relationship"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-plaque-relationship"
+        ],
+        [
+          "bed-tile-making-ten",
+          "bed-plot-decomposing"
+        ],
+        [
+          "bed-tile-making-ten",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-tile-making-ten",
+          "bed-plot-relationship"
+        ],
+        [
+          "bed-tile-making-ten",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-tile-making-ten",
+          "bed-plaque-relationship"
+        ],
+        [
+          "bed-plaque-making-ten",
+          "bed-plot-decomposing"
+        ],
+        [
+          "bed-plaque-making-ten",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "bed-plaque-making-ten",
+          "bed-plaque-relationship"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-counting-on"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-tile-counting-on",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "bed-tile-counting-on",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-tile-counting-on",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "bed-tile-counting-on",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-tile-counting-on",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-plaque-counting-on",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "bed-plaque-counting-on",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-plaque-counting-on",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-plaque-counting-on",
+          "bed-plaque-number-line"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-plot-relationship"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-plaque-relationship"
+        ],
+        [
+          "bed-tile-decomposing",
+          "bed-plot-relationship"
+        ],
+        [
+          "bed-tile-decomposing",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-tile-decomposing",
+          "bed-plaque-relationship"
+        ],
+        [
+          "bed-plaque-decomposing",
+          "bed-plaque-relationship"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-tile-equivalent-sums",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-tile-equivalent-sums",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-plaque-equivalent-sums",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-plaque-equivalent-sums",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-plaque-equivalent-sums",
+          "bed-plaque-number-line"
+        ],
+        [
+          "bed-plot-relationship",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-number-line",
+          "bed-tile-number-line"
+        ]
+      ],
+      "smallTargets": [
+        {
+          "id": "garden-gate",
+          "box": {
+            "x": 58.9227294921875,
+            "y": 216.2959442138672,
+            "width": 101.53671264648438,
+            "height": 54.41609191894531
+          }
+        },
+        {
+          "id": "bed-plaque-making-ten",
+          "box": {
+            "x": 138.734375,
+            "y": 290,
+            "width": 97.3125,
+            "height": 49.8125
+          }
+        },
+        {
+          "id": "bed-plaque-counting-on",
+          "box": {
+            "x": 393.625,
+            "y": 304.390625,
+            "width": 117.28125,
+            "height": 49.8125
+          }
+        },
+        {
+          "id": "bed-plaque-number-line",
+          "box": {
+            "x": 376.625,
+            "y": 312.1875,
+            "width": 151.8125,
+            "height": 49.8125
+          }
+        }
+      ],
+      "pass": false
+    },
+    {
+      "tag": "414x800-portrait",
+      "overlaps": [
+        [
+          "garden-path",
+          "garden-gate"
+        ],
+        [
+          "garden-path",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plot-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-tile-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-tile-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plot-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-tile-number-line"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-counting-on"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plaque-decomposing",
+          "bed-plot-relationship"
+        ],
+        [
+          "bed-plaque-decomposing",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plaque-equivalent-sums",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-plaque-equivalent-sums",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-plot-relationship",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-number-line",
+          "bed-tile-number-line"
+        ]
+      ],
+      "smallTargets": [
+        {
+          "id": "garden-gate",
+          "box": {
+            "x": 9.305001258850098,
+            "y": 372.5080261230469,
+            "width": 83.62712001800537,
+            "height": 46.020904541015625
+          }
+        },
+        {
+          "id": "bed-plaque-making-ten",
+          "box": {
+            "x": 72.3125,
+            "y": 435.671875,
+            "width": 97.3125,
+            "height": 34.625
+          }
+        },
+        {
+          "id": "bed-plaque-counting-on",
+          "box": {
+            "x": 241.484375,
+            "y": 498.34375,
+            "width": 102.703125,
+            "height": 34.625
+          }
+        },
+        {
+          "id": "bed-plaque-number-line",
+          "box": {
+            "x": 216.484375,
+            "y": 764.6875,
+            "width": 151.8125,
+            "height": 34.625
+          }
+        }
+      ],
+      "pass": false
+    },
+    {
+      "tag": "640x414-landscape",
+      "overlaps": [
+        [
+          "garden-path",
+          "garden-gate"
+        ],
+        [
+          "garden-path",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plot-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-tile-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-tile-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plot-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-tile-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-number-line"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-plot-decomposing"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-plot-relationship"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-tile-making-ten",
+          "bed-plot-decomposing"
+        ],
+        [
+          "bed-tile-making-ten",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-tile-making-ten",
+          "bed-plot-relationship"
+        ],
+        [
+          "bed-tile-making-ten",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plaque-making-ten",
+          "bed-plot-decomposing"
+        ],
+        [
+          "bed-plaque-making-ten",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plaque-making-ten",
+          "bed-plot-relationship"
+        ],
+        [
+          "bed-plaque-making-ten",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plaque-making-ten",
+          "bed-plaque-relationship"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-counting-on"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-tile-counting-on",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "bed-tile-counting-on",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-tile-counting-on",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-tile-counting-on",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-plaque-counting-on",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "bed-plaque-counting-on",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plaque-counting-on",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "bed-plaque-counting-on",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-plaque-counting-on",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-plaque-counting-on",
+          "bed-plaque-number-line"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-plot-relationship"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-plaque-relationship"
+        ],
+        [
+          "bed-tile-decomposing",
+          "bed-plot-relationship"
+        ],
+        [
+          "bed-tile-decomposing",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-tile-decomposing",
+          "bed-plaque-relationship"
+        ],
+        [
+          "bed-plaque-decomposing",
+          "bed-plaque-relationship"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-tile-equivalent-sums",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-tile-equivalent-sums",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-plaque-equivalent-sums",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-plaque-equivalent-sums",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-plaque-equivalent-sums",
+          "bed-plaque-number-line"
+        ],
+        [
+          "bed-plot-relationship",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-number-line",
+          "bed-tile-number-line"
+        ]
+      ],
+      "smallTargets": [
+        {
+          "id": "garden-gate",
+          "box": {
+            "x": 58.9227294921875,
+            "y": 228.8599395751953,
+            "width": 101.53671264648438,
+            "height": 54.41609191894531
+          }
+        },
+        {
+          "id": "bed-plaque-making-ten",
+          "box": {
+            "x": 138.734375,
+            "y": 297.75,
+            "width": 97.3125,
+            "height": 49.8125
+          }
+        },
+        {
+          "id": "bed-plaque-counting-on",
+          "box": {
+            "x": 393.625,
+            "y": 323.421875,
+            "width": 117.28125,
+            "height": 49.8125
+          }
+        },
+        {
+          "id": "bed-plaque-number-line",
+          "box": {
+            "x": 376.625,
+            "y": 366.1875,
+            "width": 151.8125,
+            "height": 49.8125
+          }
+        }
+      ],
+      "pass": false
+    },
+    {
+      "tag": "600x840-portrait",
+      "overlaps": [
+        [
+          "garden-path",
+          "garden-gate"
+        ],
+        [
+          "garden-path",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plot-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-tile-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-tile-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plot-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-tile-number-line"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-counting-on"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plot-relationship",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-number-line",
+          "bed-tile-number-line"
+        ]
+      ],
+      "smallTargets": [
+        {
+          "id": "garden-gate",
+          "box": {
+            "x": 47.119998931884766,
+            "y": 333.3028564453125,
+            "width": 101.60000228881836,
+            "height": 54.45001220703125
+          }
+        },
+        {
+          "id": "bed-plaque-making-ten",
+          "box": {
+            "x": 126.90625,
+            "y": 402.25,
+            "width": 97.3125,
+            "height": 49.8125
+          }
+        },
+        {
+          "id": "bed-plaque-counting-on",
+          "box": {
+            "x": 365.078125,
+            "y": 475.96875,
+            "width": 117.28125,
+            "height": 49.8125
+          }
+        },
+        {
+          "id": "bed-plaque-number-line",
+          "box": {
+            "x": 348.078125,
+            "y": 789.3125,
+            "width": 151.8125,
+            "height": 49.8125
+          }
+        }
+      ],
+      "pass": false
+    },
+    {
+      "tag": "640x600-landscape",
+      "overlaps": [
+        [
+          "garden-path",
+          "garden-gate"
+        ],
+        [
+          "garden-path",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plot-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-tile-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-tile-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plot-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-tile-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-number-line"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plaque-making-ten",
+          "bed-plot-decomposing"
+        ],
+        [
+          "bed-plaque-making-ten",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-counting-on"
+        ],
+        [
+          "bed-plaque-counting-on",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "bed-plaque-counting-on",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plaque-decomposing",
+          "bed-plot-relationship"
+        ],
+        [
+          "bed-plaque-decomposing",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-tile-equivalent-sums",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-tile-equivalent-sums",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-plaque-equivalent-sums",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-plaque-equivalent-sums",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-plaque-equivalent-sums",
+          "bed-plaque-number-line"
+        ],
+        [
+          "bed-plot-relationship",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-number-line",
+          "bed-tile-number-line"
+        ]
+      ],
+      "smallTargets": [
+        {
+          "id": "garden-gate",
+          "box": {
+            "x": 58.9227294921875,
+            "y": 274.13592529296875,
+            "width": 101.53671264648438,
+            "height": 54.41607666015625
+          }
+        },
+        {
+          "id": "bed-plaque-making-ten",
+          "box": {
+            "x": 138.734375,
+            "y": 343,
+            "width": 97.3125,
+            "height": 49.8125
+          }
+        },
+        {
+          "id": "bed-plaque-counting-on",
+          "box": {
+            "x": 393.625,
+            "y": 391,
+            "width": 117.28125,
+            "height": 49.8125
+          }
+        },
+        {
+          "id": "bed-plaque-number-line",
+          "box": {
+            "x": 376.625,
+            "y": 554.1875,
+            "width": 151.8125,
+            "height": 49.8125
+          }
+        }
+      ],
+      "pass": false
+    },
+    {
+      "tag": "744x1042-portrait",
+      "overlaps": [
+        [
+          "garden-path",
+          "garden-gate"
+        ],
+        [
+          "garden-path",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plot-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-tile-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-tile-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plot-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-tile-number-line"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-counting-on"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plot-relationship",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-number-line",
+          "bed-tile-number-line"
+        ]
+      ],
+      "smallTargets": [
+        {
+          "id": "garden-gate",
+          "box": {
+            "x": 89.41999816894531,
+            "y": 381.04681396484375,
+            "width": 101.60000610351562,
+            "height": 54.449981689453125
+          }
+        },
+        {
+          "id": "bed-plaque-making-ten",
+          "box": {
+            "x": 169.03125,
+            "y": 449.984375,
+            "width": 97.3125,
+            "height": 49.8125
+          }
+        },
+        {
+          "id": "bed-plaque-counting-on",
+          "box": {
+            "x": 466.578125,
+            "y": 546.984375,
+            "width": 117.28125,
+            "height": 49.8125
+          }
+        },
+        {
+          "id": "bed-plaque-number-line",
+          "box": {
+            "x": 449.578125,
+            "y": 959.234375,
+            "width": 151.8125,
+            "height": 49.8125
+          }
+        }
+      ],
+      "pass": false
+    },
+    {
+      "tag": "744x744-landscape",
+      "overlaps": [
+        [
+          "garden-path",
+          "garden-gate"
+        ],
+        [
+          "garden-path",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plot-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-tile-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-tile-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plot-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-tile-number-line"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-counting-on"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plaque-equivalent-sums",
+          "bed-plot-number-line"
+        ],
+        [
+          "bed-plaque-equivalent-sums",
+          "bed-tile-number-line"
+        ],
+        [
+          "bed-plot-relationship",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-number-line",
+          "bed-tile-number-line"
+        ]
+      ],
+      "smallTargets": [
+        {
+          "id": "garden-gate",
+          "box": {
+            "x": 89.41999816894531,
+            "y": 310.4049987792969,
+            "width": 101.60000610351562,
+            "height": 54.449981689453125
+          }
+        },
+        {
+          "id": "bed-plaque-making-ten",
+          "box": {
+            "x": 169.03125,
+            "y": 379.34375,
+            "width": 97.3125,
+            "height": 49.8125
+          }
+        },
+        {
+          "id": "bed-plaque-counting-on",
+          "box": {
+            "x": 466.578125,
+            "y": 444.625,
+            "width": 117.28125,
+            "height": 49.8125
+          }
+        },
+        {
+          "id": "bed-plaque-number-line",
+          "box": {
+            "x": 449.578125,
+            "y": 701.0625,
+            "width": 151.8125,
+            "height": 49.8125
+          }
+        }
+      ],
+      "pass": false
+    },
+    {
+      "tag": "834x1168-portrait",
+      "overlaps": [
+        [
+          "garden-path",
+          "garden-gate"
+        ],
+        [
+          "garden-path",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plot-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-tile-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-tile-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plot-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-tile-number-line"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-counting-on"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plot-relationship",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-number-line",
+          "bed-tile-number-line"
+        ]
+      ],
+      "smallTargets": [
+        {
+          "id": "garden-gate",
+          "box": {
+            "x": 115.73201751708984,
+            "y": 410.0888366699219,
+            "width": 101.59593963623047,
+            "height": 54.447845458984375
+          }
+        },
+        {
+          "id": "bed-plaque-making-ten",
+          "box": {
+            "x": 195.53125,
+            "y": 479.015625,
+            "width": 97.3125,
+            "height": 49.8125
+          }
+        },
+        {
+          "id": "bed-plaque-counting-on",
+          "box": {
+            "x": 530.484375,
+            "y": 590.53125,
+            "width": 117.28125,
+            "height": 49.8125
+          }
+        },
+        {
+          "id": "bed-plaque-number-line",
+          "box": {
+            "x": 513.484375,
+            "y": 1064.46875,
+            "width": 151.8125,
+            "height": 49.8125
+          }
+        }
+      ],
+      "pass": false
+    },
+    {
+      "tag": "834x834-landscape",
+      "overlaps": [
+        [
+          "garden-path",
+          "garden-gate"
+        ],
+        [
+          "garden-path",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plot-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-tile-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-tile-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plot-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-tile-number-line"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-counting-on"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plot-relationship",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-number-line",
+          "bed-tile-number-line"
+        ]
+      ],
+      "smallTargets": [
+        {
+          "id": "garden-gate",
+          "box": {
+            "x": 115.73201751708984,
+            "y": 333.1348876953125,
+            "width": 101.59593963623047,
+            "height": 54.44781494140625
+          }
+        },
+        {
+          "id": "bed-plaque-making-ten",
+          "box": {
+            "x": 195.53125,
+            "y": 402.0625,
+            "width": 97.3125,
+            "height": 49.8125
+          }
+        },
+        {
+          "id": "bed-plaque-counting-on",
+          "box": {
+            "x": 530.484375,
+            "y": 478.15625,
+            "width": 117.28125,
+            "height": 49.8125
+          }
+        },
+        {
+          "id": "bed-plaque-number-line",
+          "box": {
+            "x": 513.484375,
+            "y": 792.859375,
+            "width": 151.8125,
+            "height": 49.8125
+          }
+        }
+      ],
+      "pass": false
+    },
+    {
+      "tag": "1024x1434-portrait",
+      "overlaps": [
+        [
+          "garden-path",
+          "garden-gate"
+        ],
+        [
+          "garden-path",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plot-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-tile-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-tile-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plot-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-tile-number-line"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-counting-on"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plot-relationship",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-number-line",
+          "bed-tile-number-line"
+        ]
+      ],
+      "smallTargets": [
+        {
+          "id": "bed-plaque-making-ten",
+          "box": {
+            "x": 246.34375,
+            "y": 496.515625,
+            "width": 107.734375,
+            "height": 52.4375
+          }
+        },
+        {
+          "id": "bed-plaque-counting-on",
+          "box": {
+            "x": 664.078125,
+            "y": 646.265625,
+            "width": 119.34375,
+            "height": 52.4375
+          }
+        },
+        {
+          "id": "bed-plaque-number-line",
+          "box": {
+            "x": 639.078125,
+            "y": 1282.75,
+            "width": 170.203125,
+            "height": 52.4375
+          }
+        }
+      ],
+      "pass": false
+    },
+    {
+      "tag": "1024x1024-landscape",
+      "overlaps": [
+        [
+          "garden-path",
+          "garden-gate"
+        ],
+        [
+          "garden-path",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plot-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-tile-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-tile-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plot-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-tile-number-line"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-counting-on"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plot-relationship",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-number-line",
+          "bed-tile-number-line"
+        ]
+      ],
+      "smallTargets": [
+        {
+          "id": "bed-plaque-making-ten",
+          "box": {
+            "x": 131.296875,
+            "y": 732.5,
+            "width": 107.734375,
+            "height": 52.4375
+          }
+        },
+        {
+          "id": "bed-plaque-counting-on",
+          "box": {
+            "x": 298.625,
+            "y": 478.84375,
+            "width": 119.34375,
+            "height": 52.4375
+          }
+        },
+        {
+          "id": "bed-plaque-number-line",
+          "box": {
+            "x": 619.3125,
+            "y": 919.390625,
+            "width": 170.203125,
+            "height": 52.4375
+          }
+        }
+      ],
+      "pass": false
+    },
+    {
+      "tag": "1180x1652-portrait",
+      "overlaps": [
+        [
+          "garden-path",
+          "garden-gate"
+        ],
+        [
+          "garden-path",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plot-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-tile-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-tile-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plot-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-tile-number-line"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-counting-on"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plot-relationship",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-number-line",
+          "bed-tile-number-line"
+        ]
+      ],
+      "smallTargets": [
+        {
+          "id": "bed-plaque-making-ten",
+          "box": {
+            "x": 287.46875,
+            "y": 553.234375,
+            "width": 114.421875,
+            "height": 55.375
+          }
+        },
+        {
+          "id": "bed-plaque-counting-on",
+          "box": {
+            "x": 770.515625,
+            "y": 728.109375,
+            "width": 129.71875,
+            "height": 55.375
+          }
+        },
+        {
+          "id": "bed-plaque-number-line",
+          "box": {
+            "x": 744.515625,
+            "y": 1471.328125,
+            "width": 182,
+            "height": 55.375
+          }
+        }
+      ],
+      "pass": false
+    },
+    {
+      "tag": "1180x1180-landscape",
+      "overlaps": [
+        [
+          "garden-path",
+          "garden-gate"
+        ],
+        [
+          "garden-path",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plot-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-tile-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-tile-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plot-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-tile-number-line"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-counting-on"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plot-relationship",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-number-line",
+          "bed-tile-number-line"
+        ]
+      ],
+      "smallTargets": [
+        {
+          "id": "bed-plaque-making-ten",
+          "box": {
+            "x": 153.328125,
+            "y": 832.59375,
+            "width": 114.421875,
+            "height": 55.375
+          }
+        },
+        {
+          "id": "bed-plaque-counting-on",
+          "box": {
+            "x": 346.9375,
+            "y": 534.484375,
+            "width": 129.71875,
+            "height": 55.375
+          }
+        },
+        {
+          "id": "bed-plaque-number-line",
+          "box": {
+            "x": 721.6875,
+            "y": 1052.25,
+            "width": 182,
+            "height": 55.375
+          }
+        }
+      ],
+      "pass": false
+    },
+    {
+      "tag": "1440x2016-portrait",
+      "overlaps": [
+        [
+          "garden-path",
+          "garden-gate"
+        ],
+        [
+          "garden-path",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plot-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-tile-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-tile-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plot-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-tile-number-line"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-counting-on"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plot-relationship",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-number-line",
+          "bed-tile-number-line"
+        ]
+      ],
+      "smallTargets": [
+        {
+          "id": "bed-plaque-making-ten",
+          "box": {
+            "x": 360.046875,
+            "y": 638.609375,
+            "width": 114.421875,
+            "height": 55.375
+          }
+        },
+        {
+          "id": "bed-plaque-counting-on",
+          "box": {
+            "x": 957.71875,
+            "y": 855.40625,
+            "width": 129.71875,
+            "height": 55.375
+          }
+        },
+        {
+          "id": "bed-plaque-number-line",
+          "box": {
+            "x": 931.71875,
+            "y": 1776.84375,
+            "width": 182,
+            "height": 55.375
+          }
+        }
+      ],
+      "pass": false
+    },
+    {
+      "tag": "1440x1440-landscape",
+      "overlaps": [
+        [
+          "garden-path",
+          "garden-gate"
+        ],
+        [
+          "garden-path",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-tile-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-making-ten"
+        ],
+        [
+          "garden-path",
+          "bed-plot-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-tile-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-counting-on"
+        ],
+        [
+          "garden-path",
+          "bed-plot-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-tile-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-decomposing"
+        ],
+        [
+          "garden-path",
+          "bed-plot-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-equivalent-sums"
+        ],
+        [
+          "garden-path",
+          "bed-plot-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-tile-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plaque-relationship"
+        ],
+        [
+          "garden-path",
+          "bed-plot-number-line"
+        ],
+        [
+          "garden-path",
+          "bed-tile-number-line"
+        ],
+        [
+          "garden-gate",
+          "bed-plot-making-ten"
+        ],
+        [
+          "garden-gate",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-making-ten",
+          "bed-tile-making-ten"
+        ],
+        [
+          "bed-plot-counting-on",
+          "bed-tile-counting-on"
+        ],
+        [
+          "bed-plot-decomposing",
+          "bed-tile-decomposing"
+        ],
+        [
+          "bed-plot-equivalent-sums",
+          "bed-tile-equivalent-sums"
+        ],
+        [
+          "bed-plot-relationship",
+          "bed-tile-relationship"
+        ],
+        [
+          "bed-plot-number-line",
+          "bed-tile-number-line"
+        ]
+      ],
+      "smallTargets": [
+        {
+          "id": "bed-plaque-making-ten",
+          "box": {
+            "x": 194.9375,
+            "y": 988.59375,
+            "width": 114.421875,
+            "height": 55.375
+          }
+        },
+        {
+          "id": "bed-plaque-counting-on",
+          "box": {
+            "x": 434.828125,
+            "y": 616.375,
+            "width": 129.71875,
+            "height": 55.375
+          }
+        },
+        {
+          "id": "bed-plaque-number-line",
+          "box": {
+            "x": 904.1875,
+            "y": 1262.859375,
+            "width": 182,
+            "height": 55.375
+          }
+        }
+      ],
+      "pass": false
+    }
+  ],
+  "pass": false
+}

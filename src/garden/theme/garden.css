@@ -325,22 +325,6 @@
   display: none;
 }
 
-.garden-root .owl {
-  transition: transform 260ms var(--ease-io);
-  will-change: transform;
-}
-
-.garden-root.calm .owl {
-  transition-duration: 280ms;
-}
-
-.garden-root .owl svg {
-  width: 100%;
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 3px 0 rgba(43, 42, 58, 0.12));
-}
-
 /* ---------- LESSON grid ---------- */
 .garden-root .lmain {
   flex: 1;
@@ -1269,7 +1253,9 @@
   width: var(--owl, 64px);
   z-index: 3;
   pointer-events: none;
-  transition: transform 280ms var(--g-ease-out);
+  transition-property: transform;
+  transition-duration: 280ms;
+  transition-timing-function: var(--g-ease-out);
   will-change: transform;
 }
 

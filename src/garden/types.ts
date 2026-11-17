@@ -47,6 +47,24 @@ export const GARDEN_MAP_SURFACE = {
   bee: "#FFE38A",
 } as const
 
+/** Bed plant + decor illustration shades (ported SVG; mint/lavender/peach family only). */
+export const GARDEN_PLANT_SHADES = {
+  leafDark: "#5FAE6A",
+  leafMid: "#6E9F79",
+  leaf: "#7BC47F",
+  leafSoft: "#A8D5A2",
+  leafSprout: "#B9E3C3",
+  sproutPod: "#C9E7C6",
+  wood: "#B08A55",
+  brown: "#B98A5E",
+  brownDeep: "#8C6544",
+  mound: "#D9C2A2",
+  timber: "#E3C79B",
+  stone: "#EFE6D8",
+  berry: "#F6A5B8",
+  pollen: "#FFD66E",
+} as const
+
 /** Derived accents (palette-only); see PR Tradeoffs. */
 export const GARDEN_ACCENT = {
   /** Peach line on map paths (slightly deeper than fill peach for contrast). */
@@ -62,6 +80,7 @@ export const GARDEN_ALLOWED_HEX = new Set(
     ...Object.values(GARDEN_ACCENT),
     ...Object.values(GARDEN_DEMO),
     ...Object.values(GARDEN_MAP_SURFACE),
+    ...Object.values(GARDEN_PLANT_SHADES),
     "#FFFFFF",
     "#ffffff",
     "#fff",

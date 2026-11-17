@@ -121,14 +121,9 @@ function percentDiff(imgA, imgB, diffPng, maskRects) {
     applyMasksToPng(imgAc, maskRects)
     applyMasksToPng(imgBc, maskRects)
   }
-  const mismatched = pixelmatch(
-    imgAc.data,
-    imgBc.data,
-    diffPng.data,
-    width,
-    height,
-    { threshold: PIXELMATCH_THRESHOLD },
-  )
+  const mismatched = pixelmatch(imgAc.data, imgBc.data, diffPng.data, width, height, {
+    threshold: PIXELMATCH_THRESHOLD,
+  })
   const total = width * height
   return { percent: (mismatched / total) * 100, mismatchedPixels: mismatched, total }
 }
@@ -153,9 +148,7 @@ function sideBySide(baseline, build, diff) {
 }
 
 async function captureForConfig(engine, configTag, isMap) {
-  const config = isMap
-    ? MAP_SNAPSHOTS.find((m) => m.tag === configTag)
-    : configByTag(configTag)
+  const config = isMap ? MAP_SNAPSHOTS.find((m) => m.tag === configTag) : configByTag(configTag)
   if (!config) return { captures: new Map(), maskRects: [] }
 
   const browser = await engine.launcher.launch()
@@ -174,6 +167,7 @@ async function captureForConfig(engine, configTag, isMap) {
     if (rects.length) maskRects = rects
   }
 
+  let scenarioError = null
   try {
     if (isMap) {
       await runMapSnapshots(page, config, shot, BASE)
@@ -181,14 +175,13 @@ async function captureForConfig(engine, configTag, isMap) {
       await runMainScenario(page, config, shot, BASE)
     }
   } catch (err) {
-    captures.set("__error__", Buffer.from(String(err)))
-    throw err
+    scenarioError = String(err)
   } finally {
     await context.close()
     await browser.close()
   }
 
-  return { captures, maskRects }
+  return { captures, maskRects, error: scenarioError }
 }
 
 async function loadManifest(baselineRoot) {
@@ -307,15 +300,24 @@ async function main() {
         continue
       }
 
-      const buildPath = path.join(ARTIFACTS, `build-${baselineName.replace(/\.png$/, "")}-${engine.name}.png`)
+      const buildPath = path.join(
+        ARTIFACTS,
+        `build-${baselineName.replace(/\.png$/, "")}-${engine.name}.png`,
+      )
       await writeFile(buildPath, shotBuffer)
 
       const imgA = await loadPng(baselinePath)
       const imgB = PNG.sync.read(shotBuffer)
       const diff = new PNG({ width: imgA.width, height: imgA.height })
       const { percent, mismatchedDimensions } = percentDiff(imgA, imgB, diff, maskRects)
-      const diffPath = path.join(ARTIFACTS, `diff-${baselineName.replace(/\.png$/, "")}-${engine.name}.png`)
-      const sidePath = path.join(ARTIFACTS, `side-${baselineName.replace(/\.png$/, "")}-${engine.name}.png`)
+      const diffPath = path.join(
+        ARTIFACTS,
+        `diff-${baselineName.replace(/\.png$/, "")}-${engine.name}.png`,
+      )
+      const sidePath = path.join(
+        ARTIFACTS,
+        `side-${baselineName.replace(/\.png$/, "")}-${engine.name}.png`,
+      )
 
       if (!mismatchedDimensions) {
         await writeFile(diffPath, PNG.sync.write(diff))

@@ -30,13 +30,35 @@ async function main() {
 
   const owl = page.locator('[data-testid="pip-owl-map"]').first()
   if (await owl.count()) {
-    const tr = await owl.evaluate((el) => getComputedStyle(el).transition)
-    const ms = await parseTransitionMs(tr)
+    const style = await owl.evaluate((el) => {
+      const s = getComputedStyle(el)
+      return {
+        transition: s.transition,
+        transitionProperty: s.transitionProperty,
+        transitionDuration: s.transitionDuration,
+      }
+    })
+    const ms = await parseTransitionMs(style.transitionDuration)
     if (ms > MAX_MS) {
-      violations.push({ selector: "pip-owl-map", transition: tr, ms, note: "PR16 baseline 400–480ms" })
+      violations.push({
+        selector: "pip-owl-map",
+        transition: style.transition,
+        ms,
+        note: "walk budget",
+      })
     }
-    if (tr && !/transform|opacity/i.test(tr) && tr !== "none") {
-      violations.push({ selector: "pip-owl-map", transition: tr, note: "non transform/opacity" })
+    const props = style.transitionProperty
+    if (
+      props &&
+      props !== "none" &&
+      !/^(transform|opacity)(,\s*(transform|opacity))*$/i.test(props.replace(/\s/g, ""))
+    ) {
+      violations.push({
+        selector: "pip-owl-map",
+        transition: style.transition,
+        transitionProperty: props,
+        note: "non transform/opacity",
+      })
     }
   }
 
@@ -45,7 +67,11 @@ async function main() {
   if (await stageSvg.count()) {
     const tr = await stageSvg.evaluate((el) => getComputedStyle(el).transition)
     if (tr && tr !== "none" && !/0s|0ms/.test(tr)) {
-      violations.push({ selector: "#stage svg", transition: tr, note: "keyboard should not animate" })
+      violations.push({
+        selector: "#stage svg",
+        transition: tr,
+        note: "keyboard should not animate",
+      })
     }
   }
 

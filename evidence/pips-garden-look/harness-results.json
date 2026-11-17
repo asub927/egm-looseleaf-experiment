@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-17T05:24:10.821Z",
+  "at": "2026-11-17T05:25:38.952Z",
   "previewUrl": "http://127.0.0.1:4173",
   "threshold": 0.1,
   "maxPercent": 1,
@@ -49,7 +49,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -64,7 +64,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -79,7 +79,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -94,7 +94,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -109,7 +109,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -124,7 +124,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -139,7 +139,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -154,7 +154,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -169,7 +169,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -184,7 +184,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -199,7 +199,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -214,7 +214,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -229,7 +229,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -244,7 +244,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -259,7 +259,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -274,7 +274,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -289,7 +289,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -304,7 +304,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -319,7 +319,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -334,7 +334,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -349,7 +349,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -364,7 +364,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -379,7 +379,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -394,7 +394,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -409,7 +409,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -424,7 +424,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -439,7 +439,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -454,7 +454,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -469,7 +469,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -484,7 +484,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -499,7 +499,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -514,7 +514,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: Failed to read the 'localStorage' property from 'Window': Access is denied for this document.\n    at UtilityScript.evaluate (<anonymous>:372:16)\n    at UtilityScri",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -544,7 +544,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -559,7 +559,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -574,7 +574,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -589,7 +589,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -604,7 +604,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -619,7 +619,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -634,7 +634,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -649,7 +649,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -664,7 +664,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -679,7 +679,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -694,7 +694,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -709,7 +709,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -724,7 +724,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -739,7 +739,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -754,7 +754,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -769,7 +769,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -784,7 +784,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -799,7 +799,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -814,7 +814,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -829,7 +829,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -844,7 +844,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -859,7 +859,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -874,7 +874,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -889,7 +889,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -904,7 +904,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -919,7 +919,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -934,7 +934,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -949,7 +949,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -964,7 +964,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -979,7 +979,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -994,7 +994,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",
@@ -1009,7 +1009,7 @@
       "configTag": "desk-1280x800-mouse",
       "percent": null,
       "pass": false,
-      "detail": "scenario failed: Error: page.evaluate: SecurityError: The operation is insecure.",
+      "detail": "scenario failed: TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"chip-13\"]').first()\n",
       "masks": [
         "butterflies",
         "bee",

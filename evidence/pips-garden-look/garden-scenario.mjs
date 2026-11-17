@@ -233,39 +233,47 @@ async function ensureLock(page, bed) {
   }
 }
 
+const PROBLEM2_ID = {
+  "making-ten": "9+4",
+  "counting-on": "12+2",
+  decomposing: "14-6",
+  "equivalent-sums": "9+7",
+  relationship: "15-9",
+  "number-line": "9+5",
+}
+
 async function finishProblemTwo(page, bed, touch) {
   await tap(page, '[data-testid="next"]', touch)
-  await waitMs(page, 300, false)
+  await page.waitForSelector('[data-testid="start-try"]', { timeout: 12000 })
   await tap(page, '[data-testid="start-try"]', touch)
-  await page.locator('[data-testid^="chip-"]').nth(1).click()
-  await page.waitForSelector("#stage", { state: "visible" })
-  const pid = `${bed}:${bed === "making-ten" ? "9+4" : bed === "counting-on" ? "12+2" : bed === "decomposing" ? "14-6" : bed === "equivalent-sums" ? "9+7" : bed === "relationship" ? "15-9" : "9+5"}`
+  const pid = `${bed}:${PROBLEM2_ID[bed]}`
   const ans = ANS[pid]
   if (ans) await tap(page, `[data-testid="chip-${ans}"]`, touch)
+  await page.waitForSelector("#stage", { state: "visible" })
   await page.waitForTimeout(250)
-  if (bed === "counting-on") {
-    for (let i = 0; i < 4; i++) {
+  if (bed === "equivalent-sums") {
+    for (let i = 0; i < 8; i++) {
       if (await page.locator('[data-testid="lock"]').isEnabled()) break
-      if (await page.locator("#step-plus").isEnabled()) await page.locator("#step-plus").click()
-    }
-  } else if (bed === "equivalent-sums") {
-    for (let i = 0; i < 6; i++) {
-      if (await page.locator('[data-testid="lock"]').isEnabled()) break
-      const sel = i === 2 ? "#step-minus" : "#step-plus"
+      const sel = i % 3 === 2 ? "#step-minus" : "#step-plus"
       if (await page.locator(sel).isEnabled()) await page.locator(sel).click()
     }
-  } else if (bed === "number-line") {
-    await runDragPlan(page, {
-      moves: [{ from: '[data-testid="flag"]', to: '[data-testid="tick-14"]' }],
-    })
-  } else if (bed === "relationship") {
-    await runDragPlan(page, {
-      from: '[data-testid="tile-6"]',
-      to: '[data-testid="slot"]',
-      repeats: 1,
-    })
   } else {
-    await runDragPlan(page, RIGHT_DRAG[bed])
+    const p2Plan = {
+      "making-ten": {
+        moves: [{ from: '[data-testid="band-bottom"]', to: '[data-testid="band-top"]' }],
+      },
+      "counting-on": {
+        moves: [{ from: '[data-testid="engine"]', to: '[data-testid="car-14"]' }],
+      },
+      decomposing: { moves: [{ from: '[data-testid="cut"]', to: '[data-testid="dot-8"]' }] },
+      relationship: {
+        moves: [{ from: '[data-testid="tile-6"]', to: '[data-testid="slot"]' }],
+      },
+      "number-line": {
+        moves: [{ from: '[data-testid="flag"]', to: '[data-testid="tick-14"]' }],
+      },
+    }
+    await runDragPlan(page, p2Plan[bed])
     await ensureLock(page, bed)
   }
   if (await page.locator('[data-testid="lock"]').isEnabled()) {

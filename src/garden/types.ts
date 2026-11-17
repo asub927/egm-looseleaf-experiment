@@ -28,6 +28,25 @@ export const GARDEN_DEMO = {
   sandWash: "#F3E8D4",
 } as const
 
+/** Map scenery (layout-map / garden.css); palette-adjacent tints only. */
+export const GARDEN_MAP_SURFACE = {
+  pathTan: "#D9C9A8",
+  pathCream: "#F3E6C8",
+  pathEdge: "#E9DAB9",
+  skyTop: "#BFDFF5",
+  skyMid: "#DDEFFF",
+  hillPasture: "#E8F4D8",
+  hillGrass: "#D8EBC4",
+  plotInset: "#F6EEDD",
+  plaqueBorder: "#E3CFAE",
+  plaqueBottom: "#D4B98F",
+  stake: "#C9A36B",
+  treeA: "#BFE6C9",
+  treeB: "#B2DDBE",
+  sunRing: "#F3D98A",
+  bee: "#FFE38A",
+} as const
+
 /** Derived accents (palette-only); see PR Tradeoffs. */
 export const GARDEN_ACCENT = {
   /** Peach line on map paths (slightly deeper than fill peach for contrast). */
@@ -42,6 +61,7 @@ export const GARDEN_ALLOWED_HEX = new Set(
     ...Object.values(GARDEN_PALETTE),
     ...Object.values(GARDEN_ACCENT),
     ...Object.values(GARDEN_DEMO),
+    ...Object.values(GARDEN_MAP_SURFACE),
     "#FFFFFF",
     "#ffffff",
     "#fff",

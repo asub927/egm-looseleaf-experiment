@@ -986,7 +986,6 @@
   z-index: 0;
   overflow: hidden;
   display: block;
-  --plot: var(--plot, 96px);
 }
 
 .garden-root .scenery,

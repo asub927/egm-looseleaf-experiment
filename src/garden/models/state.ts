@@ -1,7 +1,7 @@
 export type BeadState = { moved: number }
 export type TrainState = { at: number }
 export type CutState = { position: number; phase: "toTen" | "rest" }
-export type SeesawState = { movesAcross: number }
+export type SeesawState = { crossed: number[]; steps: number }
 export type FactState = { tile: number | null }
 export type HopState = { land: number }
 

@@ -1,4 +1,5 @@
 import type { PictureRow, WrongBubble } from "../types"
+import { GARDEN_INK, GARDEN_PALETTE } from "../types"
 import { ReadAloudButton } from "./ReadAloudButton"
 
 function ObservationDots({ rows }: { rows: PictureRow[] }) {
@@ -11,7 +12,7 @@ function ObservationDots({ rows }: { rows: PictureRow[] }) {
         const y = 19 + ri * 30
         return (
           <g key={r.label}>
-            <text x={4} y={y + 5} fontSize={14} fontWeight={800} fill="#2B2A3A">
+            <text x={4} y={y + 5} fontSize={14} fontWeight={800} fill={GARDEN_INK}>
               {r.label}
             </text>
             {Array.from({ length: r.of }).map((_, i) =>
@@ -21,8 +22,8 @@ function ObservationDots({ rows }: { rows: PictureRow[] }) {
                   cx={86 + i * 20}
                   cy={y}
                   r={8}
-                  fill={r.fill ?? "#FFB59E"}
-                  stroke="#2B2A3A"
+                  fill={r.fill ?? GARDEN_PALETTE.peach}
+                  stroke={GARDEN_INK}
                   strokeWidth={1.8}
                 />
               ) : (
@@ -32,7 +33,7 @@ function ObservationDots({ rows }: { rows: PictureRow[] }) {
                   cy={y}
                   r={8}
                   fill="none"
-                  stroke="#2B2A3A"
+                  stroke={GARDEN_INK}
                   strokeWidth={1.5}
                   strokeDasharray="3 3"
                   opacity={0.45}

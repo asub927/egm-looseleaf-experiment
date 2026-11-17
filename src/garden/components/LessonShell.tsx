@@ -161,7 +161,7 @@ export function LessonShell({
             style={{
               padding: "4px 10px",
               borderRadius: 8,
-              background: state.bar === s ? "#D9CCFF" : "#fff",
+              background: state.bar === s ? "var(--g-lavender)" : "var(--g-cream)",
             }}
           >
             {s.charAt(0).toUpperCase() + s.slice(1)}
@@ -234,6 +234,8 @@ export function LessonShell({
           <MotionStage
             id="stage"
             data-cue={showCue ? "1" : undefined}
+            data-keyboard={ctx.via === "keyboard" ? "1" : "0"}
+            data-via={ctx.via ?? "none"}
             className={flowOut ? "flow-out" : undefined}
             aria-label={stageLabel(bedId, problem)}
             tabIndex={0}

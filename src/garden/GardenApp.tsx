@@ -31,6 +31,12 @@ export default function GardenApp() {
     saveGardenProgress(progress)
   }, [progress])
 
+  React.useEffect(() => {
+    if (screen === "map" && progress.sessionBedsFinished >= 3 && !progress.restedThisSession) {
+      setScreen("rest")
+    }
+  }, [screen, progress.sessionBedsFinished, progress.restedThisSession])
+
   const persist = React.useCallback((patch: Partial<GardenProgress>) => {
     setProgress((prev) => ({ ...prev, ...patch }))
   }, [])

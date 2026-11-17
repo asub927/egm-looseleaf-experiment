@@ -1,3 +1,4 @@
+import { GARDEN_PALETTE } from "../types"
 import { PipOwl } from "./PipOwl"
 import { ReadAloudButton } from "./ReadAloudButton"
 
@@ -24,7 +25,7 @@ export function RestScreen({
         justifyContent: "center",
         padding: 24,
         textAlign: "center",
-        background: "linear-gradient(180deg, #DDEFFF, #F6F1E4)",
+        background: `linear-gradient(180deg, ${GARDEN_PALETTE.sky}, ${GARDEN_PALETTE.paper})`,
       }}
     >
       <div id="rest-pip" data-testid="rest-pip">

@@ -14,7 +14,7 @@ export function useSvgDrag<TContext>(
   svgRef: React.RefObject<SVGSVGElement | null>,
   live: boolean,
   handlers: {
-    start: (pt: SvgPoint) => TContext | false | null
+    start: (pt: SvgPoint, target: HTMLElement | SVGElement) => TContext | false | null
     move?: (pt: SvgPoint, ctx: TContext) => void
     end: (pt: SvgPoint, ctx: TContext, moved: boolean, cancel: boolean) => void
   },
@@ -48,7 +48,7 @@ export function useSvgDrag<TContext>(
       const onDown = (e: Event) => {
         if (!(e instanceof PointerEvent)) return
         if (!live) return
-        const ctx = handlersRef.current.start(toSvg(e.clientX, e.clientY))
+        const ctx = handlersRef.current.start(toSvg(e.clientX, e.clientY), target)
         if (ctx === false || ctx == null) return
         e.preventDefault()
         e.stopPropagation()

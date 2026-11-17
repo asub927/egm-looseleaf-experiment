@@ -13,6 +13,27 @@ export const GARDEN_PALETTE = {
   paper: "#F6F1E4",
 } as const
 
+/** Derived accents (palette-only); see PR Tradeoffs. */
+export const GARDEN_ACCENT = {
+  /** Peach line on map paths (slightly deeper than fill peach for contrast). */
+  pathWood: "#E8C4B8",
+  /** Moss leaf highlight (mint family, legible on cream). */
+  leaf: "#9BD4B5",
+} as const
+
+export const GARDEN_ALLOWED_HEX = new Set(
+  [
+    GARDEN_INK,
+    ...Object.values(GARDEN_PALETTE),
+    ...Object.values(GARDEN_ACCENT),
+    "#FFFFFF",
+    "#ffffff",
+    "#fff",
+  ].map((h) => h.toLowerCase()),
+)
+
+export const SEESAW_CROSS_MAX = 3
+
 export type BedId =
   "making-ten" | "counting-on" | "decomposing" | "equivalent-sums" | "relationship" | "number-line"
 

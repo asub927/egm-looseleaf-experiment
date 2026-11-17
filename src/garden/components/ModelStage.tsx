@@ -10,11 +10,13 @@ import {
   type FactState,
   type HopState,
 } from "../models/engine"
+import { GARDEN_INK, GARDEN_PALETTE, SEESAW_CROSS_MAX } from "../types"
 import type { ProblemSpec } from "../models/problems"
 import { bedById } from "../beds/registry"
 import { useSvgDrag, type SvgPoint } from "../hooks/use-drag-kit"
 
-const INK = "#2B2A3A"
+const INK = GARDEN_INK
+const P = GARDEN_PALETTE
 
 type AddProblem = Extract<ProblemSpec, { kind: "add" }>
 type SubProblem = Extract<ProblemSpec, { kind: "sub" }>
@@ -31,8 +33,8 @@ function nearestBy(lo: number, hi: number, dist: (n: number) => number): number 
   return best
 }
 
-function translate(p: SvgPoint): React.CSSProperties {
-  return { transform: `translate(${p.x}px, ${p.y}px)` }
+function svgT(p: SvgPoint): string {
+  return `translate(${p.x} ${p.y})`
 }
 
 function pieceClass(live: boolean, still: boolean): string | undefined {
@@ -219,7 +221,7 @@ function BeadRack({
         width="384"
         height="204"
         rx="20"
-        fill="#FFF1B8"
+        fill={P.butter}
         stroke={INK}
         strokeWidth="2"
       />
@@ -230,7 +232,7 @@ function BeadRack({
           x2="376"
           y1={row ? 150 : 70}
           y2={row ? 150 : 70}
-          stroke="#B9A6F2"
+          stroke={P.lavender}
           strokeWidth="6"
           strokeLinecap="round"
         />
@@ -248,7 +250,7 @@ function BeadRack({
           cy={70}
           r="16"
           fill="none"
-          stroke={showCue && i >= problem.a ? "#7C6BFF" : "transparent"}
+          stroke={showCue && i >= problem.a ? P.lavender : "transparent"}
           strokeWidth="2"
           strokeDasharray="4 4"
         />
@@ -259,21 +261,25 @@ function BeadRack({
           cx={beadX(i)}
           cy={70}
           r="12"
-          fill="#FF9FB0"
+          fill={P.rose}
           stroke={INK}
           opacity={carry?.from === "top" && i === top - 1 ? 0.3 : 1}
         />
       ))}
       {Array.from({ length: bottom }).map((_, i) => (
-        <circle
-          key={`b-${i}`}
-          cx={beadX(i)}
-          cy={150}
-          r="12"
-          fill="#FFF8EC"
-          stroke={INK}
-          opacity={carry?.from === "bottom" && i === bottom - 1 ? 0.3 : 1}
-        />
+        <g key={`b-${i}`}>
+          <circle
+            cx={beadX(i)}
+            cy={150}
+            r="12"
+            fill={P.cream}
+            stroke={INK}
+            opacity={carry?.from === "bottom" && i === bottom - 1 ? 0.3 : 1}
+          />
+          {live && i === bottom - 1 && (
+            <circle cx={beadX(i)} cy={150} r="28" fill="transparent" pointerEvents="all" />
+          )}
+        </g>
       ))}
       <g>
         <rect
@@ -281,7 +287,7 @@ function BeadRack({
           x="20"
           y="120"
           width="360"
-          height="56"
+          height="80"
           fill="transparent"
           className={live ? "grab" : undefined}
           data-testid="band-bottom"
@@ -289,9 +295,9 @@ function BeadRack({
         <rect
           ref={topRef}
           x="20"
-          y="44"
+          y="32"
           width="360"
-          height="56"
+          height="80"
           fill="transparent"
           className={live ? "grab" : undefined}
           data-testid="band-top"
@@ -302,7 +308,7 @@ function BeadRack({
           cx={carry.pt.x}
           cy={carry.pt.y}
           r="12"
-          fill={carry.from === "bottom" ? "#FFF8EC" : "#FF9FB0"}
+          fill={carry.from === "bottom" ? P.cream : P.rose}
           stroke={INK}
           opacity={0.9}
           pointerEvents="none"
@@ -408,7 +414,7 @@ function TrainModel({
                 width={56}
                 height={56}
                 rx="12"
-                fill={n > problem.a && n <= at ? "#CDE8FF" : n <= problem.a ? "#D9CCFF" : "#fff"}
+                fill={n > problem.a && n <= at ? P.sky : n <= problem.a ? P.lavender : P.cream}
                 stroke={INK}
                 strokeWidth="2"
               />
@@ -419,21 +425,19 @@ function TrainModel({
             </g>
           )
         })}
-        <circle
+        <g
           className={still ? undefined : "motion-move"}
           data-testid="lead-dot"
-          style={translate(track(at))}
-          r="8"
-          fill="#FFD1E3"
-          stroke={INK}
-          strokeWidth="2"
+          transform={svgT(track(at))}
           pointerEvents="none"
-        />
+        >
+          <circle r="8" fill={P.rose} stroke={INK} strokeWidth="2" />
+        </g>
         <g
           ref={engineRef}
           data-testid="engine"
           className={pieceClass(live, still)}
-          style={translate(dragPt ?? enginePos(state.at))}
+          transform={svgT(dragPt ?? enginePos(state.at))}
         >
           <rect
             x={-44}
@@ -441,7 +445,7 @@ function TrainModel({
             width={88}
             height={56}
             rx="16"
-            fill="#FFD1E3"
+            fill={P.rose}
             stroke={INK}
             strokeWidth="3"
           />
@@ -484,10 +488,10 @@ function CutModel({
       setDragX(null)
       if (cancel || !moved) return
       const q = nearestCut(pt.x)
-      const next: CutState =
-        state.phase === "toTen" && q <= 10
-          ? { position: 10, phase: "rest" }
-          : { position: q, phase: state.phase }
+      const next: CutState = {
+        position: q,
+        phase: state.phase === "toTen" && q === 10 ? "rest" : state.phase,
+      }
       if (next.position !== state.position || next.phase !== state.phase) onChange(next, "drag")
     },
   })
@@ -508,7 +512,7 @@ function CutModel({
           cx={cutDotX(i)}
           cy={60}
           r="14"
-          fill={i >= position ? "none" : i < 10 ? "#FFB59E" : "#B8A6FF"}
+          fill={i >= position ? "none" : i < 10 ? P.peach : P.lavender}
           stroke={INK}
           strokeWidth="2"
           opacity={i >= position ? 0.35 : 1}
@@ -516,11 +520,13 @@ function CutModel({
           style={{ cursor: live ? "pointer" : "default" }}
           onClick={() => {
             if (!live) return
+            const pos = i + 1
             if (state.phase === "toTen") {
-              if (i + 1 >= 10 && i + 1 <= n) onChange({ position: 10, phase: "rest" }, "tap")
-              else if (i + 1 > 10) onChange({ position: i + 1, phase: "toTen" }, "tap")
-            } else if (i + 1 < 10) {
-              onChange({ position: i + 1, phase: "rest" }, "tap")
+              if (pos >= 10 && pos <= n) {
+                onChange({ position: pos, phase: pos === 10 ? "rest" : "toTen" }, "tap")
+              }
+            } else if (pos < 10) {
+              onChange({ position: pos, phase: "rest" }, "tap")
             }
           }}
         />
@@ -529,10 +535,10 @@ function CutModel({
         ref={cutRef}
         data-testid="cut"
         className={pieceClass(live, still)}
-        style={translate({ x: dragX ?? cutX(state.position), y: 0 })}
+        transform={svgT({ x: dragX ?? cutX(state.position), y: 0 })}
       >
         <line x1={0} x2={0} y1={20} y2={100} stroke={INK} strokeWidth="4" strokeDasharray="4 8" />
-        <circle cx={0} cy={132} r={22} fill="#FFD1E3" stroke={INK} strokeWidth="2" />
+        <circle cx={0} cy={132} r={22} fill={P.rose} stroke={INK} strokeWidth="2" />
         <path d="M-8 132 l-8 -7 v14 z M8 132 l8 -7 v14 z" fill={INK} />
         <rect x={-12} y={14} width={24} height={92} fill="transparent" />
         <circle cx={0} cy={132} r={38} fill="transparent" />
@@ -550,7 +556,17 @@ const appleSlot = (side: -1 | 1, k: number): SvgPoint => ({
   y: -30 - Math.floor(k / 4) * 32,
 })
 
-type AppleCarry = { dir: 1 | -1 }
+type AppleCarry = { index: number; back: boolean }
+
+function seesawApplePos(problem: AddProblem, crossed: number[], j: number): SvgPoint {
+  if (crossed.includes(j)) {
+    const r = crossed.indexOf(j)
+    return appleSlot(1, problem.b + r)
+  }
+  let rank = 0
+  for (let q = 0; q < j; q++) if (!crossed.includes(q)) rank++
+  return appleSlot(-1, rank)
+}
 
 function SeesawModel({
   problem,
@@ -570,32 +586,48 @@ function SeesawModel({
   const svgRef = React.useRef<SVGSVGElement>(null)
   const appleRefs = React.useRef<(SVGGElement | null)[]>([])
   const [carry, setCarry] = React.useState<(AppleCarry & { pt: SvgPoint }) | null>(null)
-  const need = Math.abs(problem.a - problem.b) / 2
-  const left = problem.a - state.movesAcross
-  const right = problem.b + state.movesAcross
+  const left = problem.a - state.crossed.length
+  const right = problem.b + state.crossed.length
   const tilt = clamp((right - left) * 3, -8, 8)
-  const carried = carry ? (carry.dir > 0 ? left - 1 : left) : -1
 
   const { bindTarget, isDragging } = useSvgDrag<AppleCarry>(svgRef, live, {
-    start: (pt) => {
-      if (pt.x < SEESAW_PIVOT.x) return state.movesAcross < need ? { dir: 1 } : false
-      return state.movesAcross > 0 ? { dir: -1 } : false
+    start: (_pt, target) => {
+      const j = appleRefs.current.findIndex((node) => node === target)
+      if (j < 0) return false
+      const back = state.crossed.includes(j)
+      if (!back && state.crossed.length >= SEESAW_CROSS_MAX) return false
+      return { index: j, back }
     },
     move: (pt, ctx) => setCarry({ ...ctx, pt }),
     end: (pt, ctx, moved, cancel) => {
       setCarry(null)
       if (cancel) return
-      const crossed = ctx.dir > 0 ? pt.x > SEESAW_PIVOT.x : pt.x < SEESAW_PIVOT.x
-      if (moved && !crossed) return
-      const next = clamp(state.movesAcross + ctx.dir, 0, need)
-      if (next !== state.movesAcross) onChange({ movesAcross: next }, moved ? "drag" : "tap")
+      const crossedBeam = ctx.back ? pt.x < SEESAW_PIVOT.x : pt.x > SEESAW_PIVOT.x
+      if (!moved || !crossedBeam) return
+      let next = state.crossed
+      if (ctx.back) {
+        next = state.crossed.filter((k) => k !== ctx.index)
+      } else if (!state.crossed.includes(ctx.index)) {
+        next = [...state.crossed, ctx.index]
+      }
+      if (next !== state.crossed) {
+        onChange({ crossed: next, steps: state.steps + 1 }, moved ? "drag" : "tap")
+      }
     },
   })
 
   React.useEffect(() => {
     const offs = appleRefs.current.slice(0, problem.a).map((el) => bindTarget(el))
     return () => offs.forEach((off) => off())
-  }, [bindTarget, problem.a])
+  }, [bindTarget, problem.a, state.crossed.length])
+
+  const cueApple =
+    showCue && state.crossed.length < SEESAW_CROSS_MAX
+      ? (Array.from({ length: problem.a })
+          .map((_, j) => j)
+          .reverse()
+          .find((j) => !state.crossed.includes(j)) ?? null)
+      : null
 
   return (
     <svg
@@ -615,7 +647,7 @@ function SeesawModel({
           width="360"
           height="16"
           rx="8"
-          fill="#FFF1B8"
+          fill={P.butter}
           stroke={INK}
           strokeWidth="2"
         />
@@ -633,7 +665,7 @@ function SeesawModel({
               cx={p.x}
               cy={p.y}
               r="16"
-              fill="#9CCBF5"
+              fill={P.sky}
               stroke={INK}
               data-testid={`apple-r-${i}`}
             />
@@ -647,20 +679,20 @@ function SeesawModel({
             }}
             data-testid={`apple-l-${j}`}
             className={pieceClass(live, still)}
-            style={translate(j < left ? appleSlot(-1, j) : appleSlot(1, problem.b + j - left))}
-            opacity={j === carried ? 0.3 : 1}
+            transform={svgT(seesawApplePos(problem, state.crossed, j))}
+            opacity={carry?.index === j ? 0.3 : 1}
           >
-            <circle r="16" fill="#FFB59E" stroke={INK} strokeWidth="2" />
-            <circle r="20" fill="transparent" />
+            <circle r="16" fill={P.peach} stroke={INK} strokeWidth="2" />
+            <circle r="28" fill="transparent" />
           </g>
         ))}
-        {showCue && state.movesAcross < need && (
+        {cueApple !== null && (
           <circle
-            cx={appleSlot(1, right).x}
-            cy={appleSlot(1, right).y}
+            cx={seesawApplePos(problem, state.crossed, cueApple).x}
+            cy={seesawApplePos(problem, state.crossed, cueApple).y}
             r="20"
             fill="none"
-            stroke="#7C6BFF"
+            stroke={P.lavender}
             strokeWidth="2"
             strokeDasharray="4 4"
           />
@@ -671,7 +703,7 @@ function SeesawModel({
           cx={carry.pt.x}
           cy={carry.pt.y}
           r="16"
-          fill="#FFB59E"
+          fill={P.peach}
           stroke={INK}
           strokeWidth="2"
           opacity={0.9}
@@ -679,7 +711,7 @@ function SeesawModel({
         />
       )}
       <text x="200" y="210" textAnchor="middle" fontSize="14">
-        Move {need} apple{need === 1 ? "" : "s"} across to level the seesaw
+        Move apples across until the seesaw is level
       </text>
     </svg>
   )
@@ -756,11 +788,11 @@ function FactHouseModel({
         className={isDragging ? "drag" : undefined}
         style={{ maxWidth: narrow ? 400 : 520 }}
       >
-        <path d="M120 80 L200 40 L280 80 Z" fill="#FFD1E3" stroke={INK} strokeWidth="2" />
+        <path d="M120 80 L200 40 L280 80 Z" fill={P.rose} stroke={INK} strokeWidth="2" />
         <text x="200" y="68" textAnchor="middle" fontSize="28" fontWeight="900">
           {problem.whole}
         </text>
-        <circle cx="150" cy="140" r="36" fill="#CDE8FF" stroke={INK} strokeWidth="2" />
+        <circle cx="150" cy="140" r="36" fill={P.sky} stroke={INK} strokeWidth="2" />
         <text x="150" y="150" textAnchor="middle" fontSize="24" fontWeight="900">
           {problem.part}
         </text>
@@ -768,7 +800,7 @@ function FactHouseModel({
           cx={FACT_SLOT.x}
           cy={FACT_SLOT.y}
           r="36"
-          fill="#fff"
+          fill={P.cream}
           stroke={INK}
           strokeWidth="2"
           strokeDasharray="6 5"
@@ -791,7 +823,8 @@ function FactHouseModel({
           width="368"
           height="76"
           rx="20"
-          fill="rgba(255,255,255,.7)"
+          fill={P.cream}
+          fillOpacity={0.7}
           stroke={INK}
           strokeOpacity={0.18}
           strokeWidth="2"
@@ -805,7 +838,7 @@ function FactHouseModel({
             data-testid={`tile-${v}`}
             aria-label={`Tile ${v}`}
             className={pieceClass(live, still)}
-            style={translate(dragTile?.v === v ? dragTile.pt : home(i))}
+            transform={svgT(dragTile?.v === v ? dragTile.pt : home(i))}
           >
             <rect
               x={-32}
@@ -813,7 +846,7 @@ function FactHouseModel({
               width={64}
               height={64}
               rx="16"
-              fill="#FFF1B8"
+              fill={P.butter}
               stroke={INK}
               strokeWidth="2"
             />
@@ -942,7 +975,7 @@ function HopLineModel({
           <path
             d={`M ${x1} ${HOP_Y} Q ${(x1 + x2) / 2} ${HOP_Y - 2 * arcH} ${x2} ${HOP_Y}`}
             fill="none"
-            stroke="#FF8FA8"
+            stroke={P.rose}
             strokeWidth="4"
             pointerEvents="none"
           />
@@ -951,25 +984,24 @@ function HopLineModel({
           ref={flagRef}
           data-testid="flag"
           className={pieceClass(live, still)}
-          style={translate({ x: dragX ?? hopX(state.land), y: HOP_Y })}
+          transform={svgT({ x: dragX ?? hopX(state.land), y: HOP_Y })}
         >
           <line x1="0" y1="-80" x2="0" y2="0" stroke={INK} strokeWidth="3" />
-          <path d="M2 -80 L40 -68 L2 -56 Z" fill="#FFD1E3" stroke={INK} strokeWidth="2" />
-          <circle cx={0} cy={91} r={24} fill="#FFD1E3" stroke={INK} strokeWidth="2" />
+          <path d="M2 -80 L40 -68 L2 -56 Z" fill={P.rose} stroke={INK} strokeWidth="2" />
+          <circle cx={0} cy={91} r={24} fill={P.rose} stroke={INK} strokeWidth="2" />
           <path d="M-8 91 l-8 -7 v14 z M8 91 l8 -7 v14 z" fill={INK} />
-          <rect x={-12} y={-84} width={54} height={34} fill="transparent" />
-          <rect x={-12} y={-84} width={24} height={84} fill="transparent" />
-          <circle cx={0} cy={91} r={45} fill="transparent" />
+          <rect x={-28} y={-100} width={90} height={50} fill="transparent" />
+          <rect x={-14} y={-84} width={28} height={190} fill="transparent" />
+          <circle cx={0} cy={91} r={64} fill="transparent" data-testid="flag-hit" />
         </g>
-        <circle
+        <g
           className={still ? undefined : "motion-move"}
           data-testid="lead-dot"
-          style={translate(lead)}
-          r="8"
-          fill="#FFD1E3"
-          stroke={INK}
+          transform={svgT(lead)}
           pointerEvents="none"
-        />
+        >
+          <circle r="8" fill={P.rose} stroke={INK} />
+        </g>
       </svg>
     </div>
   )

@@ -1,4 +1,5 @@
 import type { BedId, PictureRow, WrongBubble } from "../types"
+import { GARDEN_PALETTE, SEESAW_CROSS_MAX } from "../types"
 import { answerForProblem, type ProblemSpec } from "./problems"
 
 import type {
@@ -30,7 +31,7 @@ export function initialModelState(bedId: BedId, p: ProblemSpec): ModelState {
     case "decomposing":
       return { position: p.kind === "sub" ? p.n : 0, phase: "toTen" }
     case "equivalent-sums":
-      return { movesAcross: 0 }
+      return { crossed: [], steps: 0 }
     case "relationship":
       return { tile: null }
     case "number-line":
@@ -58,7 +59,9 @@ export function modelReady(bedId: BedId, p: ProblemSpec, s: ModelState): boolean
     }
     case "equivalent-sums": {
       const st = s as SeesawState
-      return st.movesAcross > 0
+      if (p.kind !== "add") return false
+      const [left, right] = seesawSides(p, st.crossed)
+      return st.steps >= 2 && left === right
     }
     case "relationship": {
       const st = s as FactState
@@ -94,8 +97,7 @@ export function modelCorrect(bedId: BedId, p: ProblemSpec, s: ModelState): boole
     case "equivalent-sums": {
       const st = s as SeesawState
       if (p.kind !== "add") return false
-      const left = p.a - st.movesAcross
-      const right = p.b + st.movesAcross
+      const [left, right] = seesawSides(p, st.crossed)
       return left === right
     }
     case "relationship": {
@@ -143,7 +145,7 @@ export function stepModel(
       const range = st.phase === "toTen" ? ([10, p.n] as const) : ([1, 10] as const)
       const next = clamp(st.position - delta, range[0], range[1])
       if (next === st.position) return null
-      if (st.phase === "toTen" && next <= 10) {
+      if (st.phase === "toTen" && next === 10) {
         return { position: 10, phase: "rest" }
       }
       return { position: next, phase: st.phase === "toTen" ? "toTen" : "rest" }
@@ -151,9 +153,17 @@ export function stepModel(
     case "equivalent-sums": {
       const st = s as SeesawState
       if (p.kind !== "add") return null
-      const need = Math.abs(p.a - p.b) / 2
-      const next = Math.max(0, Math.min(need, st.movesAcross + delta))
-      return next === st.movesAcross ? null : { movesAcross: next }
+      if (delta > 0) {
+        if (st.crossed.length >= SEESAW_CROSS_MAX) return null
+        for (let j = p.a - 1; j >= 0; j--) {
+          if (!st.crossed.includes(j)) {
+            return { crossed: [...st.crossed, j], steps: st.steps + 1 }
+          }
+        }
+        return null
+      }
+      if (st.crossed.length === 0) return null
+      return { crossed: st.crossed.slice(0, -1), steps: st.steps + 1 }
     }
     case "relationship": {
       const st = s as FactState
@@ -180,6 +190,29 @@ export function stepModel(
 
 function clamp(v: number, a: number, b: number): number {
   return Math.max(a, Math.min(b, v))
+}
+
+function seesawSides(p: Extract<ProblemSpec, { kind: "add" }>, crossed: number[]) {
+  const m = crossed.length
+  return [p.a - m, p.b + m] as const
+}
+
+export function seesawNextCrossed(
+  p: Extract<ProblemSpec, { kind: "add" }>,
+  st: SeesawState,
+  dir: 1 | -1,
+): SeesawState | null {
+  if (dir > 0) {
+    if (st.crossed.length >= SEESAW_CROSS_MAX) return null
+    for (let j = p.a - 1; j >= 0; j--) {
+      if (!st.crossed.includes(j)) {
+        return { crossed: [...st.crossed, j], steps: st.steps + 1 }
+      }
+    }
+    return null
+  }
+  if (st.crossed.length === 0) return null
+  return { crossed: st.crossed.slice(0, -1), steps: st.steps + 1 }
 }
 
 export function wrongBubble(bedId: BedId, p: ProblemSpec, s: ModelState): WrongBubble {
@@ -237,8 +270,7 @@ function observationCopy(
     case "equivalent-sums": {
       const st = s as SeesawState
       if (p.kind !== "add") return { title: "", body: "" }
-      const left = p.a - st.movesAcross
-      const right = p.b + st.movesAcross
+      const [left, right] = seesawSides(p, st.crossed)
       return {
         title: `The left side has ${left}. The right side has ${right}.`,
         body: left > right ? "The left side is still down." : "Now the right side is down.",
@@ -277,8 +309,8 @@ function observationPicture(bedId: BedId, p: ProblemSpec, s: ModelState): Pictur
       if (p.kind !== "add") return []
       const top = p.a + st.moved
       return [
-        { label: "Top", n: top, of: 10, fill: "#FF9FB0" },
-        { label: "Ten", n: 10, of: 10, fill: "#B8A6FF" },
+        { label: "Top", n: top, of: 10, fill: GARDEN_PALETTE.rose },
+        { label: "Ten", n: 10, of: 10, fill: GARDEN_PALETTE.lavender },
       ]
     }
     case "counting-on": {
@@ -287,8 +319,8 @@ function observationPicture(bedId: BedId, p: ProblemSpec, s: ModelState): Pictur
       const c = st.at - p.a
       const m = Math.max(c, p.b)
       return [
-        { label: "Counted", n: c, of: m, fill: "#9CCBF5" },
-        { label: "Add", n: p.b, of: m, fill: "#B8A6FF" },
+        { label: "Counted", n: c, of: m, fill: GARDEN_PALETTE.sky },
+        { label: "Add", n: p.b, of: m, fill: GARDEN_PALETTE.lavender },
       ]
     }
     case "decomposing": {
@@ -297,19 +329,18 @@ function observationPicture(bedId: BedId, p: ProblemSpec, s: ModelState): Pictur
       const taken = p.n - st.position
       const m = Math.max(taken, p.take)
       return [
-        { label: "Away", n: taken, of: m, fill: "#FFB59E" },
-        { label: "Need", n: p.take, of: m, fill: "#B8A6FF" },
+        { label: "Away", n: taken, of: m, fill: GARDEN_PALETTE.peach },
+        { label: "Need", n: p.take, of: m, fill: GARDEN_PALETTE.lavender },
       ]
     }
     case "equivalent-sums": {
       const st = s as SeesawState
       if (p.kind !== "add") return []
-      const left = p.a - st.movesAcross
-      const right = p.b + st.movesAcross
+      const [left, right] = seesawSides(p, st.crossed)
       const m = Math.max(left, right)
       return [
-        { label: "Left", n: left, of: m, fill: "#FFB59E" },
-        { label: "Right", n: right, of: m, fill: "#9CCBF5" },
+        { label: "Left", n: left, of: m, fill: GARDEN_PALETTE.peach },
+        { label: "Right", n: right, of: m, fill: GARDEN_PALETTE.sky },
       ]
     }
     case "relationship": {
@@ -318,8 +349,8 @@ function observationPicture(bedId: BedId, p: ProblemSpec, s: ModelState): Pictur
       const sum = p.part + st.tile
       const m = Math.max(sum, p.whole)
       return [
-        { label: `${p.part} + ${st.tile}`, n: sum, of: m, fill: "#FFB59E" },
-        { label: "Roof", n: p.whole, of: m, fill: "#B8A6FF" },
+        { label: `${p.part} + ${st.tile}`, n: sum, of: m, fill: GARDEN_PALETTE.peach },
+        { label: "Roof", n: p.whole, of: m, fill: GARDEN_PALETTE.lavender },
       ]
     }
     case "number-line": {
@@ -328,8 +359,8 @@ function observationPicture(bedId: BedId, p: ProblemSpec, s: ModelState): Pictur
       const hops = Math.abs(st.land - p.a)
       const m = Math.max(hops, p.b)
       return [
-        { label: "Hops", n: hops, of: m, fill: "#B8A6FF" },
-        { label: "Pip hops", n: p.b, of: m, fill: "#FFB59E" },
+        { label: "Hops", n: hops, of: m, fill: GARDEN_PALETTE.lavender },
+        { label: "Pip hops", n: p.b, of: m, fill: GARDEN_PALETTE.peach },
       ]
     }
     default: {

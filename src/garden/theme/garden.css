@@ -34,7 +34,7 @@
   justify-content: center;
   border-radius: 999px;
   border: 2px solid var(--g-lavender);
-  background: #fff;
+  background: var(--g-cream);
   color: var(--g-ink);
   font-weight: 800;
   font-size: 1rem;
@@ -74,7 +74,7 @@
 }
 
 .garden-root .flowcount {
-  background: #fff;
+  background: var(--g-cream);
   border-radius: 18px;
   padding: 8px 16px;
   min-height: 56px;
@@ -121,12 +121,20 @@
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
-  transform-origin: 50% 50%;
-  transition: transform 280ms ease-out;
 }
 
-.garden-root .flow-out svg {
-  transform: scale(0.9);
+.garden-root .flow-out {
+  transition: opacity 260ms ease;
+}
+
+.garden-root .flow-out #stage {
+  transition: opacity 260ms ease;
+}
+
+.garden-root #stage[data-keyboard="1"] svg,
+.garden-root #stage[data-keyboard="1"] .motion-move {
+  transition: none !important;
+  transform: none !important;
 }
 
 .garden-root .motion-move {
@@ -160,6 +168,33 @@
 
 .garden-root.nomove .motion-move {
   transition: none !important;
+}
+
+.garden-root .garden-map-narrow .garden-canvas {
+  -webkit-overflow-scrolling: touch;
+}
+
+.garden-root .garden-beds-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 10px;
+  padding: 10px 8px 20px;
+  align-content: start;
+}
+
+.garden-root .garden-beds-grid .garden-owl-row {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  padding: 4px 0 6px;
+  pointer-events: none;
+}
+
+.garden-root .garden-beds-grid .bed {
+  position: static;
+  transform: none;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .garden-root .sr-only {

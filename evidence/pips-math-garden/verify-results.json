@@ -1,352 +1,772 @@
 {
   "checks": [
     {
-      "name": "phone-390x844: ready",
+      "name": "phone-390x844 chromium: ready",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "phone-390x844: gate visible",
+      "name": "phone-390x844 chromium: gate visible",
       "ok": true,
       "detail": "72x88"
     },
     {
-      "name": "phone-390x844: 56px [data-testid=\"calm-mode\"]",
+      "name": "phone-390x844 chromium: 56px [data-testid=\"calm-mode\"]",
       "ok": true,
       "detail": "93.8125x56"
     },
     {
-      "name": "phone-390x844: 56px [data-testid=\"done-today\"]",
+      "name": "phone-390x844 chromium: 56px [data-testid=\"done-today\"]",
       "ok": true,
       "detail": "123.140625x56"
     },
     {
-      "name": "phone-390x844: open making-ten",
+      "name": "phone-390x844 chromium: open making-ten",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "phone-390x844: no answer in aria before lock making-ten",
+      "name": "phone-390x844 chromium: no answer in aria before lock making-ten",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "phone-390x844: lock 56px making-ten",
+      "name": "phone-390x844 chromium: lock 56px making-ten",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "phone-390x844: open counting-on",
+      "name": "phone-390x844 chromium: open counting-on",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "phone-390x844: no answer in aria before lock counting-on",
+      "name": "phone-390x844 chromium: no answer in aria before lock counting-on",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "phone-390x844: lock 56px counting-on",
+      "name": "phone-390x844 chromium: lock 56px counting-on",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "phone-390x844: open decomposing",
+      "name": "phone-390x844 chromium: open decomposing",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "phone-390x844: no answer in aria before lock decomposing",
+      "name": "phone-390x844 chromium: no answer in aria before lock decomposing",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "phone-390x844: lock 56px decomposing",
+      "name": "phone-390x844 chromium: lock 56px decomposing",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "phone-390x844: open equivalent-sums",
+      "name": "phone-390x844 chromium: open equivalent-sums",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "phone-390x844: no answer in aria before lock equivalent-sums",
+      "name": "phone-390x844 chromium: no answer in aria before lock equivalent-sums",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "phone-390x844: lock 56px equivalent-sums",
+      "name": "phone-390x844 chromium: lock 56px equivalent-sums",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "phone-390x844: open relationship",
+      "name": "phone-390x844 chromium: open relationship",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "phone-390x844: no answer in aria before lock relationship",
+      "name": "phone-390x844 chromium: no answer in aria before lock relationship",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "phone-390x844: lock 56px relationship",
+      "name": "phone-390x844 chromium: fact tentative before lock",
+      "ok": true,
+      "detail": "Does 8 + ? make 13?"
+    },
+    {
+      "name": "phone-390x844 chromium: lock 56px relationship",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "phone-390x844: open number-line",
+      "name": "phone-390x844 chromium: open number-line",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "phone-390x844: no answer in aria before lock number-line",
+      "name": "phone-390x844 chromium: no answer in aria before lock number-line",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "phone-390x844: lock 56px number-line",
+      "name": "phone-390x844 chromium: lock 56px number-line",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "phone-390x844: webkit",
-      "ok": false,
-      "detail": "Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Please install them with the following command:      ║\n║                                                      ║\n║     sudo npx playwright install-deps                 ║\n║                                                      ║\n║ Alternatively, use apt:                              ║\n║     sudo apt-get install libxslt1.1\\                 ║\n║         libevent-2.1-7t64\\                           ║\n║         libgstreamer-plugins-base1.0-0\\              ║\n║         libgstreamer-gl1.0-0\\                        ║\n║         libgstreamer-plugins-bad1.0-0\\               ║\n║         libavif16\\                                   ║\n║         libharfbuzz-icu0\\                            ║\n║         libwayland-server0\\                          ║\n║         libmanette-0.2-0\\                            ║\n║         libhyphen0                                   ║\n║                                                      ║\n║ <3 Playwright Team                                   ║\n╚══════════════════════════════════════════════════════╝"
-    },
-    {
-      "name": "ipad-1180x820: ready",
+      "name": "phone-390x844 chromium: making-ten drag",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-1180x820: gate visible",
+      "name": "phone-390x844 chromium: making-ten drag lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: video making-ten",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-making-ten.webm"
+    },
+    {
+      "name": "phone-390x844 chromium: video counting-on",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-counting-on.webm"
+    },
+    {
+      "name": "phone-390x844 chromium: video decomposing",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-decomposing.webm"
+    },
+    {
+      "name": "phone-390x844 chromium: video equivalent-sums",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-equivalent-sums.webm"
+    },
+    {
+      "name": "phone-390x844 chromium: video relationship",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-relationship.webm"
+    },
+    {
+      "name": "phone-390x844 chromium: video number-line",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-number-line.webm"
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: progress survives reload",
+      "ok": true,
+      "detail": "0 of 6 -> 0 of 6"
+    },
+    {
+      "name": "phone-390x844 webkit: ready",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: gate visible",
       "ok": true,
       "detail": "72x88"
     },
     {
-      "name": "ipad-1180x820: 56px [data-testid=\"calm-mode\"]",
+      "name": "phone-390x844 webkit: 56px [data-testid=\"calm-mode\"]",
       "ok": true,
       "detail": "93.8125x56"
     },
     {
-      "name": "ipad-1180x820: 56px [data-testid=\"done-today\"]",
+      "name": "phone-390x844 webkit: 56px [data-testid=\"done-today\"]",
       "ok": true,
       "detail": "123.140625x56"
     },
     {
-      "name": "ipad-1180x820: open making-ten",
+      "name": "phone-390x844 webkit: open making-ten",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-1180x820: no answer in aria before lock making-ten",
+      "name": "phone-390x844 webkit: no answer in aria before lock making-ten",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "ipad-1180x820: lock 56px making-ten",
+      "name": "phone-390x844 webkit: lock 56px making-ten",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-1180x820: open counting-on",
+      "name": "phone-390x844 webkit: open counting-on",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-1180x820: no answer in aria before lock counting-on",
+      "name": "phone-390x844 webkit: no answer in aria before lock counting-on",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "ipad-1180x820: lock 56px counting-on",
+      "name": "phone-390x844 webkit: lock 56px counting-on",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-1180x820: open decomposing",
+      "name": "phone-390x844 webkit: open decomposing",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-1180x820: no answer in aria before lock decomposing",
+      "name": "phone-390x844 webkit: no answer in aria before lock decomposing",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "ipad-1180x820: lock 56px decomposing",
+      "name": "phone-390x844 webkit: lock 56px decomposing",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-1180x820: open equivalent-sums",
+      "name": "phone-390x844 webkit: open equivalent-sums",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-1180x820: no answer in aria before lock equivalent-sums",
+      "name": "phone-390x844 webkit: no answer in aria before lock equivalent-sums",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "ipad-1180x820: lock 56px equivalent-sums",
+      "name": "phone-390x844 webkit: lock 56px equivalent-sums",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-1180x820: open relationship",
+      "name": "phone-390x844 webkit: open relationship",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-1180x820: no answer in aria before lock relationship",
+      "name": "phone-390x844 webkit: no answer in aria before lock relationship",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "ipad-1180x820: lock 56px relationship",
+      "name": "phone-390x844 webkit: fact tentative before lock",
+      "ok": true,
+      "detail": "Does 8 + ? make 13?"
+    },
+    {
+      "name": "phone-390x844 webkit: lock 56px relationship",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-1180x820: open number-line",
+      "name": "phone-390x844 webkit: open number-line",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-1180x820: no answer in aria before lock number-line",
+      "name": "phone-390x844 webkit: no answer in aria before lock number-line",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "ipad-1180x820: lock 56px number-line",
+      "name": "phone-390x844 webkit: lock 56px number-line",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-1180x820: webkit",
-      "ok": false,
-      "detail": "Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Please install them with the following command:      ║\n║                                                      ║\n║     sudo npx playwright install-deps                 ║\n║                                                      ║\n║ Alternatively, use apt:                              ║\n║     sudo apt-get install libxslt1.1\\                 ║\n║         libevent-2.1-7t64\\                           ║\n║         libgstreamer-plugins-base1.0-0\\              ║\n║         libgstreamer-gl1.0-0\\                        ║\n║         libgstreamer-plugins-bad1.0-0\\               ║\n║         libavif16\\                                   ║\n║         libharfbuzz-icu0\\                            ║\n║         libwayland-server0\\                          ║\n║         libmanette-0.2-0\\                            ║\n║         libhyphen0                                   ║\n║                                                      ║\n║ <3 Playwright Team                                   ║\n╚══════════════════════════════════════════════════════╝"
-    },
-    {
-      "name": "ipad-744x1133: ready",
+      "name": "ipad-1180x820 chromium: ready",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-744x1133: gate visible",
+      "name": "ipad-1180x820 chromium: gate visible",
       "ok": true,
       "detail": "72x88"
     },
     {
-      "name": "ipad-744x1133: 56px [data-testid=\"calm-mode\"]",
+      "name": "ipad-1180x820 chromium: 56px [data-testid=\"calm-mode\"]",
       "ok": true,
       "detail": "93.8125x56"
     },
     {
-      "name": "ipad-744x1133: 56px [data-testid=\"done-today\"]",
+      "name": "ipad-1180x820 chromium: 56px [data-testid=\"done-today\"]",
       "ok": true,
       "detail": "123.140625x56"
     },
     {
-      "name": "ipad-744x1133: open making-ten",
+      "name": "ipad-1180x820 chromium: open making-ten",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-744x1133: no answer in aria before lock making-ten",
+      "name": "ipad-1180x820 chromium: no answer in aria before lock making-ten",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "ipad-744x1133: lock 56px making-ten",
+      "name": "ipad-1180x820 chromium: lock 56px making-ten",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-744x1133: open counting-on",
+      "name": "ipad-1180x820 chromium: open counting-on",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-744x1133: no answer in aria before lock counting-on",
+      "name": "ipad-1180x820 chromium: no answer in aria before lock counting-on",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "ipad-744x1133: lock 56px counting-on",
+      "name": "ipad-1180x820 chromium: lock 56px counting-on",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-744x1133: open decomposing",
+      "name": "ipad-1180x820 chromium: open decomposing",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-744x1133: no answer in aria before lock decomposing",
+      "name": "ipad-1180x820 chromium: no answer in aria before lock decomposing",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "ipad-744x1133: lock 56px decomposing",
+      "name": "ipad-1180x820 chromium: lock 56px decomposing",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-744x1133: open equivalent-sums",
+      "name": "ipad-1180x820 chromium: open equivalent-sums",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-744x1133: no answer in aria before lock equivalent-sums",
+      "name": "ipad-1180x820 chromium: no answer in aria before lock equivalent-sums",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "ipad-744x1133: lock 56px equivalent-sums",
+      "name": "ipad-1180x820 chromium: lock 56px equivalent-sums",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-744x1133: open relationship",
+      "name": "ipad-1180x820 chromium: open relationship",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-744x1133: no answer in aria before lock relationship",
+      "name": "ipad-1180x820 chromium: no answer in aria before lock relationship",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "ipad-744x1133: lock 56px relationship",
+      "name": "ipad-1180x820 chromium: fact tentative before lock",
+      "ok": true,
+      "detail": "Does 8 + ? make 13?"
+    },
+    {
+      "name": "ipad-1180x820 chromium: lock 56px relationship",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-744x1133: open number-line",
+      "name": "ipad-1180x820 chromium: open number-line",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-744x1133: no answer in aria before lock number-line",
+      "name": "ipad-1180x820 chromium: no answer in aria before lock number-line",
       "ok": true,
       "detail": "Try the model."
     },
     {
-      "name": "ipad-744x1133: lock 56px number-line",
+      "name": "ipad-1180x820 chromium: lock 56px number-line",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "ipad-744x1133: webkit",
-      "ok": false,
-      "detail": "Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Please install them with the following command:      ║\n║                                                      ║\n║     sudo npx playwright install-deps                 ║\n║                                                      ║\n║ Alternatively, use apt:                              ║\n║     sudo apt-get install libxslt1.1\\                 ║\n║         libevent-2.1-7t64\\                           ║\n║         libgstreamer-plugins-base1.0-0\\              ║\n║         libgstreamer-gl1.0-0\\                        ║\n║         libgstreamer-plugins-bad1.0-0\\               ║\n║         libavif16\\                                   ║\n║         libharfbuzz-icu0\\                            ║\n║         libwayland-server0\\                          ║\n║         libmanette-0.2-0\\                            ║\n║         libhyphen0                                   ║\n║                                                      ║\n║ <3 Playwright Team                                   ║\n╚══════════════════════════════════════════════════════╝"
+      "name": "ipad-1180x820 webkit: ready",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: gate visible",
+      "ok": true,
+      "detail": "72x88"
+    },
+    {
+      "name": "ipad-1180x820 webkit: 56px [data-testid=\"calm-mode\"]",
+      "ok": true,
+      "detail": "93.8125x56"
+    },
+    {
+      "name": "ipad-1180x820 webkit: 56px [data-testid=\"done-today\"]",
+      "ok": true,
+      "detail": "123.140625x56"
+    },
+    {
+      "name": "ipad-1180x820 webkit: open making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: no answer in aria before lock making-ten",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-1180x820 webkit: lock 56px making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: open counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: no answer in aria before lock counting-on",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-1180x820 webkit: lock 56px counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: open decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: no answer in aria before lock decomposing",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-1180x820 webkit: lock 56px decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: open equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: no answer in aria before lock equivalent-sums",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-1180x820 webkit: lock 56px equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: open relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: no answer in aria before lock relationship",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-1180x820 webkit: fact tentative before lock",
+      "ok": true,
+      "detail": "Does 8 + ? make 13?"
+    },
+    {
+      "name": "ipad-1180x820 webkit: lock 56px relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: open number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: no answer in aria before lock number-line",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-1180x820 webkit: lock 56px number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: ready",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: gate visible",
+      "ok": true,
+      "detail": "72x88"
+    },
+    {
+      "name": "ipad-744x1133 chromium: 56px [data-testid=\"calm-mode\"]",
+      "ok": true,
+      "detail": "93.8125x56"
+    },
+    {
+      "name": "ipad-744x1133 chromium: 56px [data-testid=\"done-today\"]",
+      "ok": true,
+      "detail": "123.140625x56"
+    },
+    {
+      "name": "ipad-744x1133 chromium: open making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: no answer in aria before lock making-ten",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-744x1133 chromium: lock 56px making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: open counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: no answer in aria before lock counting-on",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-744x1133 chromium: lock 56px counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: open decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: no answer in aria before lock decomposing",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-744x1133 chromium: lock 56px decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: open equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: no answer in aria before lock equivalent-sums",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-744x1133 chromium: lock 56px equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: open relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: no answer in aria before lock relationship",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-744x1133 chromium: fact tentative before lock",
+      "ok": true,
+      "detail": "Does 8 + ? make 13?"
+    },
+    {
+      "name": "ipad-744x1133 chromium: lock 56px relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: open number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: no answer in aria before lock number-line",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-744x1133 chromium: lock 56px number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: ready",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: gate visible",
+      "ok": true,
+      "detail": "72x88"
+    },
+    {
+      "name": "ipad-744x1133 webkit: 56px [data-testid=\"calm-mode\"]",
+      "ok": true,
+      "detail": "93.8125x56"
+    },
+    {
+      "name": "ipad-744x1133 webkit: 56px [data-testid=\"done-today\"]",
+      "ok": true,
+      "detail": "123.140625x56"
+    },
+    {
+      "name": "ipad-744x1133 webkit: open making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: no answer in aria before lock making-ten",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-744x1133 webkit: lock 56px making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: open counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: no answer in aria before lock counting-on",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-744x1133 webkit: lock 56px counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: open decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: no answer in aria before lock decomposing",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-744x1133 webkit: lock 56px decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: open equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: no answer in aria before lock equivalent-sums",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-744x1133 webkit: lock 56px equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: open relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: no answer in aria before lock relationship",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-744x1133 webkit: fact tentative before lock",
+      "ok": true,
+      "detail": "Does 8 + ? make 13?"
+    },
+    {
+      "name": "ipad-744x1133 webkit: lock 56px relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: open number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: no answer in aria before lock number-line",
+      "ok": true,
+      "detail": "Try the model."
+    },
+    {
+      "name": "ipad-744x1133 webkit: lock 56px number-line",
+      "ok": true,
+      "detail": ""
     }
   ],
-  "pass": 66,
-  "fail": 3,
-  "at": "2026-11-17T02:03:21.900Z"
+  "pass": 153,
+  "fail": 0,
+  "at": "2026-11-17T02:34:42.155Z"
 }

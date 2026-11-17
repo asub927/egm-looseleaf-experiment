@@ -60,6 +60,31 @@ Colors are not arbitrary decorations; they serve as **direct mathematical visual
 | **Natural Birch**     | `#fdfbf7` $\rightarrow$ `#ece5d8` | Warm, clean workbench surface       | Workbench card & perimeter         |
 | **Carved Recess**     | `#e4dcce` + inset shadow          | Milled negative space / snap basin  | Target insets & router pockets     |
 
+### 3.1 Application-Wide Zen Garden Desk Theme Integration (`zen`)
+
+To harmonize the handcrafted dyed-wood manipulatives with the wider Elephant-Goldfish curriculum desk system, the Zen Garden dry landscape aesthetic is elevated to a primary application-wide theme (`[data-theme="zen"]`).
+
+#### Design Tokens & Surface Hierarchy
+
+```css
+[data-theme="zen"],
+:root[data-theme="zen"] {
+  --ll-desk: #f4ede4; /* Karesansui dry garden sand canvas */
+  --ll-desk-deep: #e5dacb; /* Deep raked wave contour shadow */
+  --ll-paper: #fffdfa; /* Handcrafted Japanese washi paper */
+  --ll-card: #f9f5ee; /* Smooth unbleached kozo index card */
+  --ll-paper-shade: #ede3d4; /* Soft sand crease shadow */
+}
+```
+
+#### Harmonization with Grimm's Stained Pigments
+
+The muted, fine-grain sand background (`#f4ede4`) provides the ideal neutral optical ground for Grimm's jewel-toned dyed wood blocks:
+
+- **Strawberry Coral** (`#ee5253`) and **Sage Mint** (`#10ac84`) achieve high chromatic clarity without visual competition.
+- **Natural Birch & Hinoki Cedar** workbench edges blend seamlessly into the surrounding dry garden sand.
+- **Student Profile Persistence**: Codified in `src/lib/storage/profile.ts` under `StudentTheme = "honey" | "sky" | "cork" | "meadow" | "studio" | "zen"`, enabling persistent student desk preference across all Grade 2 curriculum wireframes (`NC2OA3Wireframe`, `NC2OA4Wireframe`, `NC2GWireframe`).
+
 ---
 
 ## 4. The 4 Curriculum Stations

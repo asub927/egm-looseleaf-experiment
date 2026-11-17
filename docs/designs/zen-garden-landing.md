@@ -107,7 +107,54 @@ The visual hierarchy bridges natural organic tranquility with vibrant mathematic
 
 ---
 
-## 4. The 4 Tobi-ishi Stepping Stone Learning Path
+## 4. Application-Wide Zen Garden Theme Architecture (`data-theme="zen"`)
+
+The Zen Garden of Learning is not confined to the landing sanctuary; it serves as a primary, persistent application-wide desk theme bridging the landing page and all three North Carolina Grade 2 mathematics wireframes (`NC2OA3Wireframe`, `NC2OA4Wireframe`, `NC2GWireframe`).
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                          APPLICATION-WIDE THEME INTEGRATION                                 │
+├─────────────────────────────────────────────────────────────────────────────────────────────┤
+│  [ Zen Garden Landing Sanctuary ] ──(Tobi-ishi Portal)──> [ Grade 2 Curriculum Desks ]      │
+│  • Karesansui Raked Sand Canvas                          • NC.2.OA.2 Pebble Ten-Frame       │
+│  • Hinoki Cedar Workbench & River Stones                 • NC.2.OA.3 Twin Pines Parity Mat  │
+│  • Washi Paper Stationery Overlays                       • NC.2.OA.4 Bamboo Lattice Array   │
+│  • Unified [data-theme="zen"] CSS Variables              • NC.2.G.3 Moon Gate Geometry Pan  │
+└─────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Looseleaf Desk Theme Codification
+
+The profile storage engine (`src/lib/storage/profile.ts`) codifies `zen` as a first-class member of `StudentTheme`:
+
+```typescript
+export type StudentTheme = "honey" | "sky" | "cork" | "meadow" | "studio" | "zen"
+```
+
+### Visual Ground Truth: Karesansui Sand & Washi Paper Tokens
+
+In `src/index.css`, the `[data-theme="zen"]` theme overrides the Looseleaf CSS custom properties to establish a calm, contemplative surface:
+
+```css
+[data-theme="zen"],
+:root[data-theme="zen"] {
+  --ll-desk: #f4ede4; /* Fine-grain Karesansui dry garden sand */
+  --ll-desk-deep: #e5dacb; /* Deep raked ripple groove & Samon contour shadow */
+  --ll-paper: #fffdfa; /* Handcrafted fibrous Japanese washi paper */
+  --ll-card: #f9f5ee; /* Warm unbleached kozo index card surface */
+  --ll-paper-shade: #ede3d4; /* Soft raked sand crease shadow */
+}
+```
+
+### Pedagogical & Ergonomic Benefits
+
+1. **Visual Continuity Across Modes**: When a student traverses a Tobi-ishi stepping stone from the Zen Garden landing sanctuary into a curriculum desk (such as the Array Board, Pairing Mat, or Geometry Pan), the desk surface maintains serene textural harmony without sudden chromatic shifts.
+2. **Glare Reduction for Budget Classroom Displays**: Budget Chromebook TN/IPS screens often suffer from harsh blue-light wash and glare under fluorescent classroom lighting. The warm sand tone (`#f4ede4`) and washi paper surface (`#fffdfa`) reduce ocular fatigue, fostering extended contemplative focus.
+3. **Curriculum Theme Picker Integration**: Each Grade 2 curriculum wireframe header includes a dedicated Zen Garden theme button (`[ ⛩️ Zen ]`) alongside traditional classroom themes (`[ 🍯 Honey ]`, `[ ☁️ Sky ]`, `[ 🪵 Cork ]`, `[ 🌿 Meadow ]`, `[ 🎨 Studio ]`). Selecting `zen` persists to local client storage via `setThemePreference("zen")`.
+
+---
+
+## 5. The 4 Tobi-ishi Stepping Stone Learning Path
 
 Students traverse the Zen Garden across four organic river stones (Tobi-ishi / 飛び石). Each stone embodies a core standard of North Carolina Grade 2 Mathematics, expressed through physical wood manipulatives:
 
@@ -164,7 +211,7 @@ flowchart LR
 
 ---
 
-## 5. Hero Manipulative: Dovetail Joinery Interactive Engine
+## 6. Hero Manipulative: Dovetail Joinery Interactive Engine
 
 The hero element of the landing page is the interactive **`DovetailZenToy.tsx`** component mounted on a warm cedar workbench in the center of the garden.
 
@@ -221,7 +268,7 @@ The hero element of the landing page is the interactive **`DovetailZenToy.tsx`**
 
 ---
 
-## 6. Procedural Acoustic Architecture
+## 7. Procedural Acoustic Architecture
 
 In accordance with Elephant-Goldfish COPPA and offline reliability requirements, the audio system uses **zero external audio files (`.mp3`, `.wav`)**. All sounds are generated procedurally on demand via the browser Web Audio API through `src/lib/audio/wood-thock-synth.ts` and `src/lib/audio/garden-chimes.ts`.
 
@@ -272,7 +319,7 @@ export function playWoodThock(ctx: AudioContext, pitchMultiplier: number = 1.0):
 
 ---
 
-## 7. Classroom Hardware Envelope (< 120 MB RAM / 60 FPS)
+## 8. Classroom Hardware Envelope (< 120 MB RAM / 60 FPS)
 
 Classroom Chromebooks have severe computational limits. The Zen Garden landing page enforces the following performance constraints:
 
@@ -298,7 +345,7 @@ Classroom Chromebooks have severe computational limits. The Zen Garden landing p
 
 ---
 
-## 8. COPPA Compliance & Absolute Privacy Guarantee
+## 9. COPPA Compliance & Absolute Privacy Guarantee
 
 Elephant-Goldfish operates under strict educational privacy laws:
 
@@ -309,7 +356,7 @@ Elephant-Goldfish operates under strict educational privacy laws:
 
 ---
 
-## 9. Implementation Architecture & File Partitioning
+## 10. Implementation Architecture & File Partitioning
 
 To avoid git merge collisions and maintain clean separation of concerns, the implementation is partitioned across four specialized files:
 
@@ -378,7 +425,7 @@ export type ActiveStandard = "landing" | "arrays" | "parity" | "geometry"
 
 ---
 
-## 10. Universal Verification Matrix
+## 11. Universal Verification Matrix
 
 All deliverables must satisfy the five inviolable repository verification gates before completion:
 

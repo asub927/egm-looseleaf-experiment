@@ -447,6 +447,18 @@ export function NC2OA4Wireframe({
             >
               🎨 Studio
             </button>
+            <button
+              type="button"
+              title="Zen Garden Desk"
+              onClick={() => onSetTheme?.("zen")}
+              className={`px-1.5 py-0.5 rounded font-bold transition-all text-[11px] cursor-pointer ${
+                theme === "zen"
+                  ? "bg-stone-300 text-stone-900 shadow-2xs border border-[#bc6c25]"
+                  : "text-stone-600 hover:text-stone-900"
+              }`}
+            >
+              ⛩️ Zen
+            </button>
           </div>
         </div>
 

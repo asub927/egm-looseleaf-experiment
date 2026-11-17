@@ -14,7 +14,7 @@
 export const PROFILE_STORAGE_KEY = "egm_student_profile" as const
 
 export type AvatarType = "fox" | "rocket" | "star"
-export type StudentTheme = "honey" | "sky" | "cork" | "meadow" | "studio"
+export type StudentTheme = "honey" | "sky" | "cork" | "meadow" | "studio" | "zen"
 
 export interface StudentProfile {
   schemaVersion: 1
@@ -64,7 +64,7 @@ function sanitizeProfile(raw: unknown): StudentProfile {
   const candidate = raw as Partial<StudentProfile>
 
   const validAvatars: readonly AvatarType[] = ["fox", "rocket", "star"]
-  const validThemes: readonly StudentTheme[] = ["honey", "sky", "cork", "meadow", "studio"]
+  const validThemes: readonly StudentTheme[] = ["honey", "sky", "cork", "meadow", "studio", "zen"]
 
   const avatar: AvatarType =
     typeof candidate.avatar === "string" &&

@@ -151,8 +151,24 @@ test("Storage Profile: setThemePreference updates theme", () => {
   profile = setThemePreference("meadow")
   assert.equal(profile.theme, "meadow")
 
+  profile = setThemePreference("zen")
+  assert.equal(profile.theme, "zen")
+
   const reloaded = loadStudentProfile()
-  assert.equal(reloaded.theme, "meadow")
+  assert.equal(reloaded.theme, "zen")
+})
+
+test("Storage Profile: setThemePreference('zen') sets profile.theme to 'zen'", () => {
+  const mockStorage = new MockLocalStorage()
+  // @ts-expect-error Mocking window.localStorage
+  globalThis.window = { localStorage: mockStorage }
+
+  resetProfile()
+  const profile = setThemePreference("zen")
+  assert.equal(profile.theme, "zen")
+
+  const reloaded = loadStudentProfile()
+  assert.equal(reloaded.theme, "zen")
 })
 
 test("Storage Profile: resetProfile restores initial state", () => {

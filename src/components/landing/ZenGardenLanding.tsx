@@ -357,7 +357,7 @@ export function ZenGardenLanding({
           {/* Theme Selector Pill */}
           {onSetTheme && (
             <div className="hidden md:flex items-center gap-1 bg-white/85 backdrop-blur-md border border-stone-300/60 p-1 rounded-full shadow-xs text-xs">
-              {(["honey", "sky", "cork"] as const).map((t) => (
+              {(["zen", "honey", "sky", "cork"] as const).map((t) => (
                 <button
                   key={t}
                   type="button"

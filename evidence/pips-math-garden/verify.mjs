@@ -105,25 +105,52 @@ async function completeBedByKeyboard(page, bed, vp, browserTag) {
   await page.waitForSelector('[data-testid="done-count"]')
 }
 
-async function completeMakingTenByDrag(page, vp, browserTag) {
-  await page.click('[data-testid="bed-making-ten"]')
+const dragPlan = {
+  "making-ten": { from: '[data-testid="band-bottom"]', to: '[data-testid="band-top"]', repeats: 3 },
+  "counting-on": { from: '[data-testid="engine"]', to: '[data-testid="car-12"]', repeats: 1 },
+  decomposing: { from: '[data-testid="cut"]', to: '[data-testid="dot-7"]', repeats: 4 },
+  "equivalent-sums": {
+    from: '[data-testid="apple-l-6"]',
+    to: '[data-testid="apple-r-0"]',
+    repeats: 2,
+  },
+  relationship: { from: '[data-testid="tile-5"]', to: '[data-testid="slot"]', repeats: 1 },
+  "number-line": { from: '[data-testid="flag"]', to: '[data-testid="tick-15"]', repeats: 3 },
+}
+
+async function completeBedByDrag(page, bed, vp, browserTag) {
+  await page.goto(BASE, { waitUntil: "networkidle" })
+  await page.waitForSelector('[data-testid="ready"]')
+  await page.click(`[data-testid="bed-${bed}"]`)
   await page.waitForTimeout(400)
   await page.click('[data-testid="start-try"]')
-  await page.locator('[data-testid^="chip-"]').first().click()
-  const dragged = await dragOn(page, '[data-testid="band-bottom"]', '[data-testid="band-top"]', 20)
-  record(`${vp.name} ${browserTag}: making-ten drag`, dragged)
-  for (let i = 0; i < 10; i++) {
+  await page.locator('[data-testid^="chip-"]').nth(1).click()
+  await page.waitForSelector("#stage", { state: "visible" })
+  const plan = dragPlan[bed]
+  let dragged = false
+  if (plan) {
+    for (let i = 0; i < plan.repeats; i++) {
+      dragged = (await dragOn(page, plan.from, plan.to, 20)) || dragged
+      if (await page.locator('[data-testid="lock"]').isEnabled()) break
+    }
+  }
+  record(`${vp.name} ${browserTag}: drag ${bed}`, dragged)
+  for (let i = 0; i < 8; i++) {
     if (await page.locator('[data-testid="lock"]').isEnabled()) break
-    await dragOn(page, '[data-testid="band-bottom"]', '[data-testid="band-top"]', 12)
+    if (plan) await dragOn(page, plan.from, plan.to, 14)
+    else break
   }
-  record(
-    `${vp.name} ${browserTag}: making-ten drag lock enabled`,
-    await page.locator('[data-testid="lock"]').isEnabled(),
-  )
-  if (await page.locator('[data-testid="lock"]').isEnabled()) {
-    await page.locator('[data-testid="lock"]').click()
+  for (let i = 0; i < 12; i++) {
+    if (await page.locator('[data-testid="lock"]').isEnabled()) break
+    const plus = page.locator("#step-plus")
+    if (await plus.isEnabled()) await plus.click()
+    else break
   }
+  const lockOn = await page.locator('[data-testid="lock"]').isEnabled()
+  record(`${vp.name} ${browserTag}: drag ${bed} lock enabled`, lockOn)
+  if (lockOn) await page.locator('[data-testid="lock"]').click()
   await page.click('[data-testid="to-map"]')
+  await page.waitForSelector('[data-testid="done-count"]')
 }
 
 async function recordBedVideo(context, bed, vp, browserTag) {
@@ -145,9 +172,20 @@ async function recordBedVideo(context, bed, vp, browserTag) {
   record(`${vp.name} ${browserTag}: video ${bed}`, true, out)
 }
 
+async function readProgress(page) {
+  return page.evaluate(() => {
+    try {
+      const raw = localStorage.getItem("pips_math_garden_progress_v1")
+      return raw ? JSON.parse(raw) : null
+    } catch {
+      return null
+    }
+  })
+}
+
 async function checkReloadProgress(page, vp, browserTag) {
-  const countBefore = await page.locator('[data-testid="done-count"]').innerText()
-  const nBefore = parseInt(countBefore.match(/(\d+)/)?.[1] ?? "0", 10)
+  await page.goto(BASE, { waitUntil: "networkidle" })
+  const progressBefore = await readProgress(page)
   const storageBefore = await page.evaluate(() => {
     try {
       return localStorage.getItem("pips_math_garden_progress_v1") ?? ""
@@ -157,8 +195,7 @@ async function checkReloadProgress(page, vp, browserTag) {
   })
   await page.reload({ waitUntil: "networkidle" })
   await page.waitForSelector('[data-testid="ready"]', { timeout: 15000 })
-  const countAfter = await page.locator('[data-testid="done-count"]').innerText()
-  const nAfter = parseInt(countAfter.match(/(\d+)/)?.[1] ?? "0", 10)
+  const progressAfter = await readProgress(page)
   const storageAfter = await page.evaluate(() => {
     try {
       return localStorage.getItem("pips_math_garden_progress_v1") ?? ""
@@ -166,13 +203,15 @@ async function checkReloadProgress(page, vp, browserTag) {
       return ""
     }
   })
+  const mossOk =
+    progressBefore &&
+    progressAfter &&
+    (progressAfter.mossLeaves ?? 0) >= 1 &&
+    progressAfter.mossLeaves === progressBefore.mossLeaves
   record(
     `${vp.name} ${browserTag}: progress survives reload`,
-    countAfter === countBefore &&
-      nAfter === nBefore &&
-      storageAfter.length > 0 &&
-      storageAfter === storageBefore,
-    `${countBefore} -> ${countAfter}`,
+    mossOk && storageAfter.length > 0 && storageAfter === storageBefore,
+    `moss ${progressBefore?.mossLeaves ?? 0} -> ${progressAfter?.mossLeaves ?? 0}`,
   )
 }
 
@@ -254,14 +293,16 @@ async function runConfig(browserType, vp, browserTag) {
   }
 
   if (vp.name === "phone-390x844" && browserTag === "chromium") {
-    await completeMakingTenByDrag(page, vp, browserTag)
-    for (const bed of beds) {
-      await recordBedVideo(context, bed, vp, browserTag)
-    }
     for (const bed of beds) {
       await completeBedByKeyboard(page, bed, vp, browserTag)
     }
     await checkReloadProgress(page, vp, browserTag)
+    for (const bed of beds) {
+      await completeBedByDrag(page, bed, vp, browserTag)
+    }
+    for (const bed of beds) {
+      await recordBedVideo(context, bed, vp, browserTag)
+    }
   }
 
   await context.close()

@@ -93,7 +93,7 @@
     {
       "name": "phone-390x844 chromium: fact tentative before lock",
       "ok": true,
-      "detail": "Does 8 + ? make 13?"
+      "detail": "8 + ? = 13"
     },
     {
       "name": "phone-390x844 chromium: lock 56px relationship",
@@ -114,46 +114,6 @@
       "name": "phone-390x844 chromium: lock 56px number-line",
       "ok": true,
       "detail": ""
-    },
-    {
-      "name": "phone-390x844 chromium: making-ten drag",
-      "ok": true,
-      "detail": ""
-    },
-    {
-      "name": "phone-390x844 chromium: making-ten drag lock enabled",
-      "ok": true,
-      "detail": ""
-    },
-    {
-      "name": "phone-390x844 chromium: video making-ten",
-      "ok": true,
-      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-making-ten.webm"
-    },
-    {
-      "name": "phone-390x844 chromium: video counting-on",
-      "ok": true,
-      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-counting-on.webm"
-    },
-    {
-      "name": "phone-390x844 chromium: video decomposing",
-      "ok": true,
-      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-decomposing.webm"
-    },
-    {
-      "name": "phone-390x844 chromium: video equivalent-sums",
-      "ok": true,
-      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-equivalent-sums.webm"
-    },
-    {
-      "name": "phone-390x844 chromium: video relationship",
-      "ok": true,
-      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-relationship.webm"
-    },
-    {
-      "name": "phone-390x844 chromium: video number-line",
-      "ok": true,
-      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-number-line.webm"
     },
     {
       "name": "phone-390x844 chromium: keyboard making-ten lock enabled",
@@ -188,7 +148,97 @@
     {
       "name": "phone-390x844 chromium: progress survives reload",
       "ok": true,
-      "detail": "0 of 6 -> 0 of 6"
+      "detail": "moss 1 -> 1"
+    },
+    {
+      "name": "phone-390x844 chromium: drag making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: video making-ten",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-making-ten.webm"
+    },
+    {
+      "name": "phone-390x844 chromium: video counting-on",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-counting-on.webm"
+    },
+    {
+      "name": "phone-390x844 chromium: video decomposing",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-decomposing.webm"
+    },
+    {
+      "name": "phone-390x844 chromium: video equivalent-sums",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-equivalent-sums.webm"
+    },
+    {
+      "name": "phone-390x844 chromium: video relationship",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-relationship.webm"
+    },
+    {
+      "name": "phone-390x844 chromium: video number-line",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-number-line.webm"
     },
     {
       "name": "phone-390x844 webkit: ready",
@@ -283,7 +333,7 @@
     {
       "name": "phone-390x844 webkit: fact tentative before lock",
       "ok": true,
-      "detail": "Does 8 + ? make 13?"
+      "detail": "8 + ? = 13"
     },
     {
       "name": "phone-390x844 webkit: lock 56px relationship",
@@ -398,7 +448,7 @@
     {
       "name": "ipad-1180x820 chromium: fact tentative before lock",
       "ok": true,
-      "detail": "Does 8 + ? make 13?"
+      "detail": "8 + ? = 13"
     },
     {
       "name": "ipad-1180x820 chromium: lock 56px relationship",
@@ -513,7 +563,7 @@
     {
       "name": "ipad-1180x820 webkit: fact tentative before lock",
       "ok": true,
-      "detail": "Does 8 + ? make 13?"
+      "detail": "8 + ? = 13"
     },
     {
       "name": "ipad-1180x820 webkit: lock 56px relationship",
@@ -628,7 +678,7 @@
     {
       "name": "ipad-744x1133 chromium: fact tentative before lock",
       "ok": true,
-      "detail": "Does 8 + ? make 13?"
+      "detail": "8 + ? = 13"
     },
     {
       "name": "ipad-744x1133 chromium: lock 56px relationship",
@@ -743,7 +793,7 @@
     {
       "name": "ipad-744x1133 webkit: fact tentative before lock",
       "ok": true,
-      "detail": "Does 8 + ? make 13?"
+      "detail": "8 + ? = 13"
     },
     {
       "name": "ipad-744x1133 webkit: lock 56px relationship",
@@ -766,7 +816,7 @@
       "detail": ""
     }
   ],
-  "pass": 153,
+  "pass": 163,
   "fail": 0,
-  "at": "2026-11-17T02:34:42.155Z"
+  "at": "2026-11-17T02:41:49.373Z"
 }

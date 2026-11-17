@@ -323,6 +323,10 @@ export async function runMainScenario(page, config, shot, baseUrl) {
     await advanceWorksheet(page, touch)
     await shot(`${prefix}-4sheet`, await page.screenshot({ fullPage: true }))
 
+    if (await page.locator("#reset").isEnabled().catch(() => false)) {
+      await page.locator("#reset").click()
+      await page.waitForTimeout(200)
+    }
     await runDragPlan(page, RIGHT_DRAG[bed])
     await ensureLock(page, bed)
     await tap(page, '[data-testid="lock"]', touch)

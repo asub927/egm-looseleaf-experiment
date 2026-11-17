@@ -8,6 +8,8 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+evidence/pips-math-garden/page@*.webm
+garden-ref/
 dist
 dist-ssr
 *.local

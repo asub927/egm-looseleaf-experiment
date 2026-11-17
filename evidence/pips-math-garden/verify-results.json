@@ -1,0 +1,1637 @@
+{
+  "checks": [
+    {
+      "name": "static palette scan",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: ready",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: rest after 3 beds",
+      "ok": false,
+      "detail": "TimeoutError: page.waitForSelector: Timeout 20000ms exceeded.\nCall log:\n  - waiting for locator('[data-testid=\"win\"]') t"
+    },
+    {
+      "name": "phone-390x844 chromium: 56px [data-testid=\"calm-mode\"]",
+      "ok": true,
+      "detail": "93.8125x56"
+    },
+    {
+      "name": "phone-390x844 chromium: 56px [data-testid=\"done-today\"]",
+      "ok": true,
+      "detail": "123.140625x56"
+    },
+    {
+      "name": "phone-390x844 chromium: no answer in aria before lock making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: no answer in aria before lock counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: no answer in aria before lock decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: no answer in aria before lock equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: no answer in aria before lock relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: no answer in aria before lock number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: decompose no snap-to-10 on drag",
+      "ok": true,
+      "detail": "11 left · cut down to ten"
+    },
+    {
+      "name": "phone-390x844 chromium: hit area 56px [data-testid=\"band-bottom\"]",
+      "ok": true,
+      "detail": "322x72"
+    },
+    {
+      "name": "phone-390x844 chromium: drag making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag making-ten via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "phone-390x844 chromium: drag making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag counting-on via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "phone-390x844 chromium: drag counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag decomposing via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "phone-390x844 chromium: drag decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag equivalent-sums via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "phone-390x844 chromium: drag equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag relationship via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "phone-390x844 chromium: drag relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: drag number-line via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "phone-390x844 chromium: drag number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: tap making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: tap counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: tap decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: tap equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: tap relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: tap number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard making-ten no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard counting-on no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard decomposing no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard equivalent-sums no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard relationship no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: keyboard number-line no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "phone-390x844 chromium: progress survives reload",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 chromium: video making-ten",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-making-ten.webm"
+    },
+    {
+      "name": "phone-390x844 chromium: video counting-on",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-counting-on.webm"
+    },
+    {
+      "name": "phone-390x844 chromium: video decomposing",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-decomposing.webm"
+    },
+    {
+      "name": "phone-390x844 chromium: video equivalent-sums",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-equivalent-sums.webm"
+    },
+    {
+      "name": "phone-390x844 chromium: video relationship",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-relationship.webm"
+    },
+    {
+      "name": "phone-390x844 chromium: video number-line",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-chromium-number-line.webm"
+    },
+    {
+      "name": "phone-390x844 webkit: ready",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: 56px [data-testid=\"calm-mode\"]",
+      "ok": true,
+      "detail": "93.8125x56"
+    },
+    {
+      "name": "phone-390x844 webkit: 56px [data-testid=\"done-today\"]",
+      "ok": true,
+      "detail": "123.140625x56"
+    },
+    {
+      "name": "phone-390x844 webkit: no answer in aria before lock making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: no answer in aria before lock counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: no answer in aria before lock decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: no answer in aria before lock equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: no answer in aria before lock relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: no answer in aria before lock number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: decompose no snap-to-10 on drag",
+      "ok": true,
+      "detail": "11 left · cut down to ten"
+    },
+    {
+      "name": "phone-390x844 webkit: hit area 56px [data-testid=\"band-bottom\"]",
+      "ok": true,
+      "detail": "322x72"
+    },
+    {
+      "name": "phone-390x844 webkit: drag making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: drag making-ten via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "phone-390x844 webkit: drag making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: drag counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: drag counting-on via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "phone-390x844 webkit: drag counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: drag decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: drag decomposing via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "phone-390x844 webkit: drag decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: drag equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: drag equivalent-sums via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "phone-390x844 webkit: drag equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: drag relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: drag relationship via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "phone-390x844 webkit: drag relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: drag number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: drag number-line via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "phone-390x844 webkit: drag number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: tap making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: tap counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: tap decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: tap equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: tap relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: tap number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: keyboard making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: keyboard making-ten no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "phone-390x844 webkit: keyboard counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: keyboard counting-on no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "phone-390x844 webkit: keyboard decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: keyboard decomposing no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "phone-390x844 webkit: keyboard equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: keyboard equivalent-sums no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "phone-390x844 webkit: keyboard relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: keyboard relationship no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "phone-390x844 webkit: keyboard number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: keyboard number-line no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "phone-390x844 webkit: progress survives reload",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "phone-390x844 webkit: video making-ten",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-webkit-making-ten.webm"
+    },
+    {
+      "name": "phone-390x844 webkit: video counting-on",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-webkit-counting-on.webm"
+    },
+    {
+      "name": "phone-390x844 webkit: video decomposing",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-webkit-decomposing.webm"
+    },
+    {
+      "name": "phone-390x844 webkit: video equivalent-sums",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-webkit-equivalent-sums.webm"
+    },
+    {
+      "name": "phone-390x844 webkit: video relationship",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-webkit-relationship.webm"
+    },
+    {
+      "name": "phone-390x844 webkit: video number-line",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-phone-390x844-webkit-number-line.webm"
+    },
+    {
+      "name": "ipad-1180x820 chromium: ready",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: 56px [data-testid=\"calm-mode\"]",
+      "ok": true,
+      "detail": "93.8125x56"
+    },
+    {
+      "name": "ipad-1180x820 chromium: 56px [data-testid=\"done-today\"]",
+      "ok": true,
+      "detail": "123.140625x56"
+    },
+    {
+      "name": "ipad-1180x820 chromium: no answer in aria before lock making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: no answer in aria before lock counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: no answer in aria before lock decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: no answer in aria before lock equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: no answer in aria before lock relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: no answer in aria before lock number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: decompose no snap-to-10 on drag",
+      "ok": true,
+      "detail": "11 left · cut down to ten"
+    },
+    {
+      "name": "ipad-1180x820 chromium: hit area 56px [data-testid=\"band-bottom\"]",
+      "ok": true,
+      "detail": "576x128"
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag making-ten via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag counting-on via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag decomposing via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag equivalent-sums via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag relationship via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag number-line via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-1180x820 chromium: drag number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: tap making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: tap counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: tap decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: tap equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: tap relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: tap number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: keyboard making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: keyboard making-ten no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-1180x820 chromium: keyboard counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: keyboard counting-on no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-1180x820 chromium: keyboard decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: keyboard decomposing no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-1180x820 chromium: keyboard equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: keyboard equivalent-sums no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-1180x820 chromium: keyboard relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: keyboard relationship no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-1180x820 chromium: keyboard number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: keyboard number-line no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-1180x820 chromium: progress survives reload",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 chromium: video making-ten",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-1180x820-chromium-making-ten.webm"
+    },
+    {
+      "name": "ipad-1180x820 chromium: video counting-on",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-1180x820-chromium-counting-on.webm"
+    },
+    {
+      "name": "ipad-1180x820 chromium: video decomposing",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-1180x820-chromium-decomposing.webm"
+    },
+    {
+      "name": "ipad-1180x820 chromium: video equivalent-sums",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-1180x820-chromium-equivalent-sums.webm"
+    },
+    {
+      "name": "ipad-1180x820 chromium: video relationship",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-1180x820-chromium-relationship.webm"
+    },
+    {
+      "name": "ipad-1180x820 chromium: video number-line",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-1180x820-chromium-number-line.webm"
+    },
+    {
+      "name": "ipad-1180x820 webkit: ready",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: 56px [data-testid=\"calm-mode\"]",
+      "ok": true,
+      "detail": "93.8125x56"
+    },
+    {
+      "name": "ipad-1180x820 webkit: 56px [data-testid=\"done-today\"]",
+      "ok": true,
+      "detail": "123.140625x56"
+    },
+    {
+      "name": "ipad-1180x820 webkit: no answer in aria before lock making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: no answer in aria before lock counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: no answer in aria before lock decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: no answer in aria before lock equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: no answer in aria before lock relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: no answer in aria before lock number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: decompose no snap-to-10 on drag",
+      "ok": true,
+      "detail": "11 left · cut down to ten"
+    },
+    {
+      "name": "ipad-1180x820 webkit: hit area 56px [data-testid=\"band-bottom\"]",
+      "ok": true,
+      "detail": "576x128"
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag making-ten via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag counting-on via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag decomposing via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag equivalent-sums via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag relationship via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag number-line via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-1180x820 webkit: drag number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: tap making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: tap counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: tap decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: tap equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: tap relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: tap number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: keyboard making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: keyboard making-ten no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-1180x820 webkit: keyboard counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: keyboard counting-on no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-1180x820 webkit: keyboard decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: keyboard decomposing no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-1180x820 webkit: keyboard equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: keyboard equivalent-sums no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-1180x820 webkit: keyboard relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: keyboard relationship no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-1180x820 webkit: keyboard number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: keyboard number-line no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-1180x820 webkit: progress survives reload",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-1180x820 webkit: video making-ten",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-1180x820-webkit-making-ten.webm"
+    },
+    {
+      "name": "ipad-1180x820 webkit: video counting-on",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-1180x820-webkit-counting-on.webm"
+    },
+    {
+      "name": "ipad-1180x820 webkit: video decomposing",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-1180x820-webkit-decomposing.webm"
+    },
+    {
+      "name": "ipad-1180x820 webkit: video equivalent-sums",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-1180x820-webkit-equivalent-sums.webm"
+    },
+    {
+      "name": "ipad-1180x820 webkit: video relationship",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-1180x820-webkit-relationship.webm"
+    },
+    {
+      "name": "ipad-1180x820 webkit: video number-line",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-1180x820-webkit-number-line.webm"
+    },
+    {
+      "name": "ipad-744x1133 chromium: ready",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: 56px [data-testid=\"calm-mode\"]",
+      "ok": true,
+      "detail": "93.8125x56"
+    },
+    {
+      "name": "ipad-744x1133 chromium: 56px [data-testid=\"done-today\"]",
+      "ok": true,
+      "detail": "123.140625x56"
+    },
+    {
+      "name": "ipad-744x1133 chromium: no answer in aria before lock making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: no answer in aria before lock counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: no answer in aria before lock decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: no answer in aria before lock equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: no answer in aria before lock relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: no answer in aria before lock number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: decompose no snap-to-10 on drag",
+      "ok": true,
+      "detail": "11 left · cut down to ten"
+    },
+    {
+      "name": "ipad-744x1133 chromium: hit area 56px [data-testid=\"band-bottom\"]",
+      "ok": true,
+      "detail": "576x128"
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag making-ten via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag counting-on via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag decomposing via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag equivalent-sums via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag relationship via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag number-line via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-744x1133 chromium: drag number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: tap making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: tap counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: tap decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: tap equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: tap relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: tap number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: keyboard making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: keyboard making-ten no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-744x1133 chromium: keyboard counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: keyboard counting-on no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-744x1133 chromium: keyboard decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: keyboard decomposing no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-744x1133 chromium: keyboard equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: keyboard equivalent-sums no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-744x1133 chromium: keyboard relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: keyboard relationship no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-744x1133 chromium: keyboard number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: keyboard number-line no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-744x1133 chromium: progress survives reload",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 chromium: video making-ten",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-744x1133-chromium-making-ten.webm"
+    },
+    {
+      "name": "ipad-744x1133 chromium: video counting-on",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-744x1133-chromium-counting-on.webm"
+    },
+    {
+      "name": "ipad-744x1133 chromium: video decomposing",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-744x1133-chromium-decomposing.webm"
+    },
+    {
+      "name": "ipad-744x1133 chromium: video equivalent-sums",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-744x1133-chromium-equivalent-sums.webm"
+    },
+    {
+      "name": "ipad-744x1133 chromium: video relationship",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-744x1133-chromium-relationship.webm"
+    },
+    {
+      "name": "ipad-744x1133 chromium: video number-line",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-744x1133-chromium-number-line.webm"
+    },
+    {
+      "name": "ipad-744x1133 webkit: ready",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: 56px [data-testid=\"calm-mode\"]",
+      "ok": true,
+      "detail": "93.8125x56"
+    },
+    {
+      "name": "ipad-744x1133 webkit: 56px [data-testid=\"done-today\"]",
+      "ok": true,
+      "detail": "123.140625x56"
+    },
+    {
+      "name": "ipad-744x1133 webkit: no answer in aria before lock making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: no answer in aria before lock counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: no answer in aria before lock decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: no answer in aria before lock equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: no answer in aria before lock relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: no answer in aria before lock number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: decompose no snap-to-10 on drag",
+      "ok": true,
+      "detail": "11 left · cut down to ten"
+    },
+    {
+      "name": "ipad-744x1133 webkit: hit area 56px [data-testid=\"band-bottom\"]",
+      "ok": true,
+      "detail": "576x128"
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag making-ten",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag making-ten via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag counting-on",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag counting-on via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag decomposing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag decomposing via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag equivalent-sums",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag equivalent-sums via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag relationship",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag relationship via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag number-line",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag number-line via",
+      "ok": true,
+      "detail": "via=drag"
+    },
+    {
+      "name": "ipad-744x1133 webkit: drag number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: tap making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: tap counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: tap decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: tap equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: tap relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: tap number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: keyboard making-ten lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: keyboard making-ten no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-744x1133 webkit: keyboard counting-on lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: keyboard counting-on no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-744x1133 webkit: keyboard decomposing lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: keyboard decomposing no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-744x1133 webkit: keyboard equivalent-sums lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: keyboard equivalent-sums no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-744x1133 webkit: keyboard relationship lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: keyboard relationship no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-744x1133 webkit: keyboard number-line lock enabled",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: keyboard number-line no svg transform transition",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "ipad-744x1133 webkit: progress survives reload",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "ipad-744x1133 webkit: video making-ten",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-744x1133-webkit-making-ten.webm"
+    },
+    {
+      "name": "ipad-744x1133 webkit: video counting-on",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-744x1133-webkit-counting-on.webm"
+    },
+    {
+      "name": "ipad-744x1133 webkit: video decomposing",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-744x1133-webkit-decomposing.webm"
+    },
+    {
+      "name": "ipad-744x1133 webkit: video equivalent-sums",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-744x1133-webkit-equivalent-sums.webm"
+    },
+    {
+      "name": "ipad-744x1133 webkit: video relationship",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-744x1133-webkit-relationship.webm"
+    },
+    {
+      "name": "ipad-744x1133 webkit: video number-line",
+      "ok": true,
+      "detail": "/agent/repos/egm-looseleaf-experiment/evidence/pips-math-garden/video-ipad-744x1133-webkit-number-line.webm"
+    }
+  ],
+  "pass": 325,
+  "fail": 1,
+  "at": "2026-11-17T04:05:21.710Z"
+}

@@ -42,7 +42,8 @@ html:has(.garden-root) body {
   color: var(--ink);
   font-family: ui-rounded, "SF Pro Rounded", "Nunito", "Segoe UI", system-ui, sans-serif;
   line-height: normal;
-  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   overflow: hidden;
@@ -99,11 +100,10 @@ html:has(.garden-root) body {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 8px;
 }
 
 .garden-root .flowcount {
-  background: var(--g-cream);
+  background: #fff;
   border-radius: 18px;
   padding: 8px 16px;
   min-height: 56px;
@@ -150,6 +150,10 @@ html:has(.garden-root) body {
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
+}
+
+.garden-root #stage svg text {
+  font-family: ui-rounded, "SF Pro Rounded", "Nunito", "Segoe UI", system-ui, sans-serif;
 }
 
 .garden-root #stage svg.flow-out,
@@ -307,6 +311,30 @@ html:has(.garden-root) body {
   border-radius: 18px;
   padding: 4px 12px 4px 6px;
   min-height: 56px;
+  position: relative;
+}
+
+.garden-root .plus {
+  position: absolute;
+  right: -6px;
+  top: -10px;
+  background: var(--mint);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 900;
+  padding: 2px 8px;
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 220ms var(--ease-out),
+    transform 220ms var(--ease-out);
+  pointer-events: none;
+}
+
+.garden-root .plus.on {
+  opacity: 1;
+  transform: none;
 }
 
 .garden-root .pet {
@@ -677,6 +705,10 @@ html:has(.garden-root) body {
   align-items: flex-start;
 }
 
+.garden-root .card > div {
+  flex: 1;
+}
+
 .garden-root .worksheet {
   background: #fff;
   border-radius: 20px;
@@ -907,10 +939,11 @@ html:has(.garden-root) body {
 }
 
 @media (max-width: 1100px) {
-  .garden-root .wide-only {
+  .garden-root [data-testid="to-map"] .wide-only,
+  .garden-root .calmbtn .wide-only {
     display: none;
   }
-  .garden-root .narrow-only {
+  .garden-root [data-testid="to-map"] .narrow-only {
     display: inline;
   }
 }
@@ -982,7 +1015,8 @@ html:has(.garden-root) body {
   .garden-root #stage svg.flow-out {
     transform: none !important;
   }
-  .garden-root .bubble {
+  .garden-root .bubble,
+  .garden-root .plus {
     transform: none !important;
   }
   .garden-root .breathe {

@@ -19,6 +19,8 @@ export const GARDEN_DEMO = {
   soil: "#E8D9C4",
   leaf: "#7BC47F",
   ear: "#B8A6FF",
+  /** Wrong-bubble dot fills (garden-map-demo counting-on pic). */
+  countedDot: "#9CCBF5",
   feet: "#E8A24A",
   bloomPetal: "#F4A6C1",
   restSkyTop: "#C9D6F0",

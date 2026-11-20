@@ -4,7 +4,7 @@ import { useGardenMapLayout } from "../hooks/use-garden-map-layout"
 import { BED_HINT, BLOOM_ART, SEED_ART } from "../map/bed-art"
 import type { GardenLayoutRefs } from "../map/layout-map"
 import type { BedId } from "../types"
-import { MossPet, mossStage } from "./MossPet"
+import { MossPetWrap } from "./MossPet"
 import { PipOwlMap } from "./PipOwl"
 import { ReadAloudButton } from "./ReadAloudButton"
 
@@ -99,10 +99,7 @@ export function GardenMap({
         <span className="count" data-testid="done-count">
           {n} of 6
         </span>
-        <div className="pet-wrap" data-testid="pet">
-          <MossPet leaves={mossLeaves} />
-          <span className="pet-label">Moss · {mossStage(mossLeaves)}</span>
-        </div>
+        <MossPetWrap leaves={mossLeaves} testId="pet" />
         <span className="sp" />
         <div className="map-actions">
           <button

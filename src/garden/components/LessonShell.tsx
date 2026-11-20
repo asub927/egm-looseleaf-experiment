@@ -26,7 +26,7 @@ import { problemKey } from "../progress/storage"
 import { watchStepsForBed } from "../models/watch-steps"
 import type { BedId, GardenScreen } from "../types"
 import { ModelStage } from "./ModelStage"
-import { MossPet, mossStage } from "./MossPet"
+import { MossPetWrap } from "./MossPet"
 import { PeachBubble } from "./PeachBubble"
 import { ReadAloudButton } from "./ReadAloudButton"
 
@@ -61,6 +61,7 @@ export function LessonShell({
   const [flowReveal, setFlowReveal] = React.useState(false)
   const [wsStep, setWsStep] = React.useState(0)
   const [wsWatchIndex, setWsWatchIndex] = React.useState(0)
+  const [plusOn, setPlusOn] = React.useState(false)
 
   React.useEffect(() => {
     const p = problems[initialProblemIndex]
@@ -127,6 +128,10 @@ export function LessonShell({
     })
     if (ok) {
       onMossGrow(fresh)
+      if (fresh) {
+        setPlusOn(true)
+        window.setTimeout(() => setPlusOn(false), 1800)
+      }
       setLine(eqLine(problem))
       setSub(
         ctx.guess === ans
@@ -170,10 +175,10 @@ export function LessonShell({
           <span className="wide-only">Problem </span>
           {ctx.problemIndex + 1} of {problems.length}
         </span>
-        <div className="pet-wrap" data-testid="pet-wrap">
-          <MossPet leaves={mossLeaves} />
-          <span className="pet-label">Moss · {mossStage(mossLeaves)}</span>
-        </div>
+        <MossPetWrap
+          leaves={mossLeaves}
+          plusOn={plusOn || (state.phase === "solved" && !ctx.wasAlreadySolved)}
+        />
         <button
           type="button"
           className="ghostbtn calmbtn"
@@ -332,7 +337,11 @@ export function LessonShell({
         </section>
         <section className="panel" id="panel" data-testid="panel">
           {ctx.bubble && (state.phase === "wrongBubble" || state.phase.startsWith("hint")) && (
-            <PeachBubble guess={ctx.guess} bubble={ctx.bubble} />
+            <PeachBubble
+              guess={ctx.guess}
+              bubble={ctx.bubble}
+              settle={reducedMotion || onWorksheet}
+            />
           )}
           {onWorksheet && watchStep ? (
             <div className="worksheet rung" data-testid="worksheet">
@@ -390,17 +399,22 @@ export function LessonShell({
           {state.phase === "solved" && (
             <div className="card win" data-testid="win">
               <div className="top">
-                <span className="chip" data-testid="strategy-win">
-                  Strategy · {bed.ncdpiName}
-                </span>
-                <ReadExample getText={() => exampleLine(bedId, problem)} testId="read-example" />
+                <ReadExample
+                  getText={() => `Strategy: ${bed.ncdpiName}. ${exampleLine(bedId, problem)}`}
+                  testId="read-win"
+                />
+                <div>
+                  <span className="chip" data-testid="strategy-win">
+                    Strategy · {bed.ncdpiName}
+                  </span>
+                  <div data-testid="example">{exampleLine(bedId, problem)}</div>
+                </div>
               </div>
-              <p className="petnote" data-testid="pet-note">
+              <div className="petnote" data-testid="pet-note">
                 {ctx.wasAlreadySolved
                   ? "You solved this one before. Moss keeps its leaves."
                   : "Moss grew a new leaf."}
-              </p>
-              <p data-testid="example">{exampleLine(bedId, problem)}</p>
+              </div>
             </div>
           )}
         </section>

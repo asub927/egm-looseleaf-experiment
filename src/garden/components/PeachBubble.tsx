@@ -80,9 +80,21 @@ function ObservationDots({ rows }: { rows: PictureRow[] }) {
   )
 }
 
-export function PeachBubble({ guess, bubble }: { guess: number | null; bubble: WrongBubble }) {
-  const [on, setOn] = React.useState(false)
+export function PeachBubble({
+  guess,
+  bubble,
+  settle,
+}: {
+  guess: number | null
+  bubble: WrongBubble
+  settle?: boolean
+}) {
+  const [on, setOn] = React.useState(settle === true)
   React.useEffect(() => {
+    if (settle) {
+      setOn(true)
+      return
+    }
     let inner = 0
     const outer = requestAnimationFrame(() => {
       inner = requestAnimationFrame(() => setOn(true))
@@ -91,16 +103,16 @@ export function PeachBubble({ guess, bubble }: { guess: number | null; bubble: W
       cancelAnimationFrame(outer)
       cancelAnimationFrame(inner)
     }
-  }, [])
+  }, [settle])
 
   return (
     <div className={`bubble${on ? " on" : ""}`} data-testid="bubble" role="status">
       <SproutFace />
       <div className="msg">
         {guess !== null && (
-          <span className="guess-tag" data-testid="guess-tag">
+          <div className="guess-tag" data-testid="guess-tag">
             Your guess was {guess}.
-          </span>
+          </div>
         )}
         <strong>{bubble.title}</strong>
         <div>{bubble.body}</div>

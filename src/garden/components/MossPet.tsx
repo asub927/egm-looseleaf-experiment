@@ -17,6 +17,26 @@ export function mossStage(leaves: number): string {
 }
 
 /** Moss SVG ported from garden-map-demo `drawPet`. */
+export function MossPetWrap({
+  leaves,
+  plusOn,
+  testId = "pet-wrap",
+}: {
+  leaves: number
+  plusOn?: boolean
+  testId?: string
+}) {
+  return (
+    <div className="pet-wrap" data-testid={testId}>
+      <MossPet leaves={leaves} />
+      <span className="pet-label">Moss · {mossStage(leaves)}</span>
+      <span className={`plus${plusOn ? " on" : ""}`} aria-hidden="true">
+        +1 leaf
+      </span>
+    </div>
+  )
+}
+
 export function MossPet({ leaves }: { leaves: number }) {
   const stage = mossStage(leaves)
   const n = leaves

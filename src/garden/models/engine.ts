@@ -1,5 +1,5 @@
 import type { BedId, PictureRow, WrongBubble } from "../types"
-import { GARDEN_PALETTE, SEESAW_CROSS_MAX } from "../types"
+import { GARDEN_DEMO, GARDEN_PALETTE, SEESAW_CROSS_MAX } from "../types"
 import { answerForProblem, type ProblemSpec } from "./problems"
 
 import type {
@@ -319,8 +319,8 @@ function observationPicture(bedId: BedId, p: ProblemSpec, s: ModelState): Pictur
       const c = st.at - p.a
       const m = Math.max(c, p.b)
       return [
-        { label: "Counted", n: c, of: m, fill: GARDEN_PALETTE.sky },
-        { label: "Add", n: p.b, of: m, fill: GARDEN_PALETTE.lavender },
+        { label: "Counted", n: c, of: m, fill: GARDEN_DEMO.countedDot },
+        { label: "Add", n: p.b, of: m, fill: GARDEN_DEMO.ear },
       ]
     }
     case "decomposing": {

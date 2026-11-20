@@ -1,0 +1,589 @@
+{
+  "at": "2026-11-20T05:15:13.955Z",
+  "previewUrl": "http://127.0.0.1:4173",
+  "threshold": 0.1,
+  "maxPercent": 1,
+  "onlyMap": false,
+  "onlyShell": true,
+  "manifestCount": 32,
+  "masks": [
+    "butterflies",
+    "bee",
+    "clouds",
+    "text-caret"
+  ],
+  "maskNote": "Element bounding boxes masked before pixelmatch when DOM nodes exist.",
+  "exampleNav": [
+    {
+      "screenId": "01-map",
+      "steps": "goto /, wait [data-testid=ready]"
+    },
+    {
+      "screenId": "b1-making-ten-1story",
+      "steps": "click [data-testid=bed-making-ten], wait [data-testid=strategy-chip]"
+    },
+    {
+      "screenId": "b1-making-ten-2drag",
+      "steps": "start-try → chip-12 → WRONG_DRAG making-ten"
+    },
+    {
+      "screenId": "b1-making-ten-3wrong",
+      "steps": "Lock it in (wrong) → peach bubble"
+    },
+    {
+      "screenId": "b1-making-ten-4sheet",
+      "steps": "Lock ×2 → ws-next through worksheet"
+    },
+    {
+      "screenId": "b1-making-ten-5win",
+      "steps": "RIGHT_DRAG → Lock → [data-testid=win]"
+    }
+  ],
+  "unmappedScreenIds": [
+    "zz-error"
+  ],
+  "missingBaselinesNote": "b6-number-line-5win absent from committed baseline/shots (demo verify gap). Map rows include seeded 03-map-all-done (capture-map-baselines.mjs).",
+  "rows": [
+    {
+      "baseline": "desk-1280x800-mouse-06-rest.png",
+      "engine": "chromium",
+      "screenId": "06-rest",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "capture missing for screen",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b2-counting-on-1story.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-1story",
+      "configTag": "desk-1280x800-mouse",
+      "percent": 0.33818359375,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-desk-1280x800-mouse-b2-counting-on-1story-chromium.png",
+      "diff": "artifacts/diff/diff-desk-1280x800-mouse-b2-counting-on-1story-chromium.png",
+      "side": "artifacts/diff/side-desk-1280x800-mouse-b2-counting-on-1story-chromium.png",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ],
+      "masksApplied": true
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b2-counting-on-4sheet.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-4sheet",
+      "configTag": "desk-1280x800-mouse",
+      "percent": 2.0290039062500003,
+      "pass": false,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-desk-1280x800-mouse-b2-counting-on-4sheet-chromium.png",
+      "diff": "artifacts/diff/diff-desk-1280x800-mouse-b2-counting-on-4sheet-chromium.png",
+      "side": "artifacts/diff/side-desk-1280x800-mouse-b2-counting-on-4sheet-chromium.png",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ],
+      "masksApplied": true
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b2-counting-on-5win.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-5win",
+      "configTag": "desk-1280x800-mouse",
+      "percent": 1.8876953124999998,
+      "pass": false,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-desk-1280x800-mouse-b2-counting-on-5win-chromium.png",
+      "diff": "artifacts/diff/diff-desk-1280x800-mouse-b2-counting-on-5win-chromium.png",
+      "side": "artifacts/diff/side-desk-1280x800-mouse-b2-counting-on-5win-chromium.png",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ],
+      "masksApplied": true
+    },
+    {
+      "baseline": "ipad-1024x768-touch-06-rest.png",
+      "engine": "chromium",
+      "screenId": "06-rest",
+      "configTag": "ipad-1024x768-touch",
+      "percent": null,
+      "pass": false,
+      "detail": "capture missing for screen",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "ipad-1024x768-touch-b2-counting-on-1story.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-1story",
+      "configTag": "ipad-1024x768-touch",
+      "percent": 0.79345703125,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-1024x768-touch-b2-counting-on-1story-chromium.png",
+      "diff": "artifacts/diff/diff-ipad-1024x768-touch-b2-counting-on-1story-chromium.png",
+      "side": "artifacts/diff/side-ipad-1024x768-touch-b2-counting-on-1story-chromium.png",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ],
+      "masksApplied": true
+    },
+    {
+      "baseline": "ipad-1024x768-touch-b2-counting-on-4sheet.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-4sheet",
+      "configTag": "ipad-1024x768-touch",
+      "percent": 3.0539194742838545,
+      "pass": false,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-1024x768-touch-b2-counting-on-4sheet-chromium.png",
+      "diff": "artifacts/diff/diff-ipad-1024x768-touch-b2-counting-on-4sheet-chromium.png",
+      "side": "artifacts/diff/side-ipad-1024x768-touch-b2-counting-on-4sheet-chromium.png",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ],
+      "masksApplied": true
+    },
+    {
+      "baseline": "ipad-1024x768-touch-b2-counting-on-5win.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-5win",
+      "configTag": "ipad-1024x768-touch",
+      "percent": 1.91497802734375,
+      "pass": false,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-1024x768-touch-b2-counting-on-5win-chromium.png",
+      "diff": "artifacts/diff/diff-ipad-1024x768-touch-b2-counting-on-5win-chromium.png",
+      "side": "artifacts/diff/side-ipad-1024x768-touch-b2-counting-on-5win-chromium.png",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ],
+      "masksApplied": true
+    },
+    {
+      "baseline": "ipad-768x1024-touch-06-rest.png",
+      "engine": "chromium",
+      "screenId": "06-rest",
+      "configTag": "ipad-768x1024-touch",
+      "percent": null,
+      "pass": false,
+      "detail": "capture missing for screen",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "ipad-768x1024-touch-b2-counting-on-1story.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-1story",
+      "configTag": "ipad-768x1024-touch",
+      "percent": 0.852203369140625,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-768x1024-touch-b2-counting-on-1story-chromium.png",
+      "diff": "artifacts/diff/diff-ipad-768x1024-touch-b2-counting-on-1story-chromium.png",
+      "side": "artifacts/diff/side-ipad-768x1024-touch-b2-counting-on-1story-chromium.png",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ],
+      "masksApplied": true
+    },
+    {
+      "baseline": "ipad-768x1024-touch-b2-counting-on-4sheet.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-4sheet",
+      "configTag": "ipad-768x1024-touch",
+      "percent": 1.3202667236328125,
+      "pass": false,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-768x1024-touch-b2-counting-on-4sheet-chromium.png",
+      "diff": "artifacts/diff/diff-ipad-768x1024-touch-b2-counting-on-4sheet-chromium.png",
+      "side": "artifacts/diff/side-ipad-768x1024-touch-b2-counting-on-4sheet-chromium.png",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ],
+      "masksApplied": true
+    },
+    {
+      "baseline": "ipad-768x1024-touch-b2-counting-on-5win.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-5win",
+      "configTag": "ipad-768x1024-touch",
+      "percent": 5.057398478190104,
+      "pass": false,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-ipad-768x1024-touch-b2-counting-on-5win-chromium.png",
+      "diff": "artifacts/diff/diff-ipad-768x1024-touch-b2-counting-on-5win-chromium.png",
+      "side": "artifacts/diff/side-ipad-768x1024-touch-b2-counting-on-5win-chromium.png",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ],
+      "masksApplied": true
+    },
+    {
+      "baseline": "phone-390x844-touch-06-rest.png",
+      "engine": "chromium",
+      "screenId": "06-rest",
+      "configTag": "phone-390x844-touch",
+      "percent": null,
+      "pass": false,
+      "detail": "capture missing for screen",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "phone-390x844-touch-b2-counting-on-1story.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-1story",
+      "configTag": "phone-390x844-touch",
+      "percent": 25.789585611860495,
+      "pass": false,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-phone-390x844-touch-b2-counting-on-1story-chromium.png",
+      "diff": "artifacts/diff/diff-phone-390x844-touch-b2-counting-on-1story-chromium.png",
+      "side": "artifacts/diff/side-phone-390x844-touch-b2-counting-on-1story-chromium.png",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ],
+      "masksApplied": true
+    },
+    {
+      "baseline": "phone-390x844-touch-b2-counting-on-4sheet.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-4sheet",
+      "configTag": "phone-390x844-touch",
+      "percent": 34.193401385344515,
+      "pass": false,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-phone-390x844-touch-b2-counting-on-4sheet-chromium.png",
+      "diff": "artifacts/diff/diff-phone-390x844-touch-b2-counting-on-4sheet-chromium.png",
+      "side": "artifacts/diff/side-phone-390x844-touch-b2-counting-on-4sheet-chromium.png",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ],
+      "masksApplied": true
+    },
+    {
+      "baseline": "phone-390x844-touch-b2-counting-on-5win.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-5win",
+      "configTag": "phone-390x844-touch",
+      "percent": 21.80094786729858,
+      "pass": false,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-phone-390x844-touch-b2-counting-on-5win-chromium.png",
+      "diff": "artifacts/diff/diff-phone-390x844-touch-b2-counting-on-5win-chromium.png",
+      "side": "artifacts/diff/side-phone-390x844-touch-b2-counting-on-5win-chromium.png",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ],
+      "masksApplied": true
+    },
+    {
+      "baseline": "rm-1280x800-mouse-06-rest.png",
+      "engine": "chromium",
+      "screenId": "06-rest",
+      "configTag": "rm-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "capture missing for screen",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "rm-1280x800-mouse-b2-counting-on-1story.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-1story",
+      "configTag": "rm-1280x800-mouse",
+      "percent": 0.42451171875000004,
+      "pass": true,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-rm-1280x800-mouse-b2-counting-on-1story-chromium.png",
+      "diff": "artifacts/diff/diff-rm-1280x800-mouse-b2-counting-on-1story-chromium.png",
+      "side": "artifacts/diff/side-rm-1280x800-mouse-b2-counting-on-1story-chromium.png",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ],
+      "masksApplied": true
+    },
+    {
+      "baseline": "rm-1280x800-mouse-b2-counting-on-4sheet.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-4sheet",
+      "configTag": "rm-1280x800-mouse",
+      "percent": 1.7697265625,
+      "pass": false,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-rm-1280x800-mouse-b2-counting-on-4sheet-chromium.png",
+      "diff": "artifacts/diff/diff-rm-1280x800-mouse-b2-counting-on-4sheet-chromium.png",
+      "side": "artifacts/diff/side-rm-1280x800-mouse-b2-counting-on-4sheet-chromium.png",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ],
+      "masksApplied": true
+    },
+    {
+      "baseline": "rm-1280x800-mouse-b2-counting-on-5win.png",
+      "engine": "chromium",
+      "screenId": "b2-counting-on-5win",
+      "configTag": "rm-1280x800-mouse",
+      "percent": 1.8873046875000001,
+      "pass": false,
+      "mismatchedDimensions": false,
+      "build": "artifacts/diff/build-rm-1280x800-mouse-b2-counting-on-5win-chromium.png",
+      "diff": "artifacts/diff/diff-rm-1280x800-mouse-b2-counting-on-5win-chromium.png",
+      "side": "artifacts/diff/side-rm-1280x800-mouse-b2-counting-on-5win-chromium.png",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ],
+      "masksApplied": true
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b2-counting-on-1story.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-1story",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Please install them with the following command:      ║\n║",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b2-counting-on-4sheet.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-4sheet",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Please install them with the following command:      ║\n║",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "desk-1280x800-mouse-b2-counting-on-5win.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-5win",
+      "configTag": "desk-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Please install them with the following command:      ║\n║",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "ipad-1024x768-touch-b2-counting-on-1story.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-1story",
+      "configTag": "ipad-1024x768-touch",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Please install them with the following command:      ║\n║",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "ipad-1024x768-touch-b2-counting-on-4sheet.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-4sheet",
+      "configTag": "ipad-1024x768-touch",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Please install them with the following command:      ║\n║",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "ipad-1024x768-touch-b2-counting-on-5win.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-5win",
+      "configTag": "ipad-1024x768-touch",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Please install them with the following command:      ║\n║",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "ipad-768x1024-touch-b2-counting-on-1story.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-1story",
+      "configTag": "ipad-768x1024-touch",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Please install them with the following command:      ║\n║",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "ipad-768x1024-touch-b2-counting-on-4sheet.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-4sheet",
+      "configTag": "ipad-768x1024-touch",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Please install them with the following command:      ║\n║",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "ipad-768x1024-touch-b2-counting-on-5win.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-5win",
+      "configTag": "ipad-768x1024-touch",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Please install them with the following command:      ║\n║",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "rm-1280x800-mouse-b2-counting-on-1story.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-1story",
+      "configTag": "rm-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Please install them with the following command:      ║\n║",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "rm-1280x800-mouse-b2-counting-on-4sheet.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-4sheet",
+      "configTag": "rm-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Please install them with the following command:      ║\n║",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    },
+    {
+      "baseline": "rm-1280x800-mouse-b2-counting-on-5win.png",
+      "engine": "webkit",
+      "screenId": "b2-counting-on-5win",
+      "configTag": "rm-1280x800-mouse",
+      "percent": null,
+      "pass": false,
+      "detail": "scenario failed: Error: browserType.launch: \n╔══════════════════════════════════════════════════════╗\n║ Host system is missing dependencies to run browsers. ║\n║ Please install them with the following command:      ║\n║",
+      "masks": [
+        "butterflies",
+        "bee",
+        "clouds",
+        "text-caret"
+      ]
+    }
+  ],
+  "pass": false
+}

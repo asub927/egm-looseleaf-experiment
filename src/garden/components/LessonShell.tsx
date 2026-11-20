@@ -5,15 +5,28 @@ import {
   initialModelState,
   modelCorrect,
   modelReady,
+  modelFlowCounters,
+  modelPills,
   stepModel,
   wrongBubble,
 } from "../models/engine"
+import {
+  eqLine,
+  exampleLine,
+  guessQuestion,
+  hint1Line,
+  hint2Line,
+  promptLine,
+  stepperLabels,
+  storyLine,
+  tryLine,
+} from "../models/copy"
 import { answerForProblem, guessChips, problemsForBed } from "../models/problems"
 import { problemKey } from "../progress/storage"
 import { watchStepsForBed } from "../models/watch-steps"
 import type { BedId, GardenScreen } from "../types"
 import { ModelStage } from "./ModelStage"
-import { MossPet } from "./MossPet"
+import { MossPetWrap } from "./MossPet"
 import { PeachBubble } from "./PeachBubble"
 import { ReadAloudButton } from "./ReadAloudButton"
 
@@ -48,6 +61,7 @@ export function LessonShell({
   const [flowReveal, setFlowReveal] = React.useState(false)
   const [wsStep, setWsStep] = React.useState(0)
   const [wsWatchIndex, setWsWatchIndex] = React.useState(0)
+  const [plusOn, setPlusOn] = React.useState(false)
 
   React.useEffect(() => {
     const p = problems[initialProblemIndex]
@@ -82,14 +96,24 @@ export function LessonShell({
     state.phase === "hint2" ||
     state.phase === "hint3"
 
-  const showCue = state.phase === "hint2" || state.phase === "hint3"
+  const inCheck =
+    state.bar === "check" ||
+    state.phase === "wrongBubble" ||
+    state.phase === "hint1" ||
+    state.phase === "hint2" ||
+    state.phase === "hint3"
+  const showCue = inCheck && ctx.hintRung >= 2 && state.phase !== "solved"
   const watchSteps = watchStepsForBed(bedId, problem)
-  const watchStep = state.phase === "hint3" ? (watchSteps?.[wsWatchIndex] ?? null) : null
+  const onWorksheet = inCheck && ctx.hintRung >= 3 && !!watchSteps
+  const watchStep = onWorksheet ? (watchSteps?.[wsWatchIndex] ?? null) : null
   const watchState = watchStep?.state ?? null
   const watchReveal = watchStep?.beat === "reveal" || watchStep?.revealCounters === true
   const flowOut = !reducedMotion && (watchStep?.beat === "zoom" || watchStep?.beat === "reveal")
   const interactive = live && watchState === null
   const revealCounters = state.phase === "solved" || flowReveal || watchReveal
+
+  const curBar = BAR_STEPS.indexOf(state.bar)
+  const [stepMinus, stepPlus] = stepperLabels(bedId)
 
   function lockIn() {
     if (!ctx || !canLockIn(state)) return
@@ -104,6 +128,10 @@ export function LessonShell({
     })
     if (ok) {
       onMossGrow(fresh)
+      if (fresh) {
+        setPlusOn(true)
+        window.setTimeout(() => setPlusOn(false), 1800)
+      }
       setLine(eqLine(problem))
       setSub(
         ctx.guess === ans
@@ -117,86 +145,106 @@ export function LessonShell({
   }
 
   const hintText =
-    state.phase === "hint1"
-      ? hint1(bedId, problem)
-      : state.phase === "hint2"
-        ? hint2(bedId)
-        : state.phase === "hint3"
-          ? (watchStep?.text ?? WORKSHEET_STEPS[wsStep])
-          : ""
+    !inCheck || ctx.hintRung >= 3
+      ? ""
+      : ctx.hintRung === 1
+        ? hint1Line(bedId, problem)
+        : hint2Line(bedId)
 
   return (
-    <section
-      className="lesson"
-      style={{ minHeight: "100dvh", display: "flex", flexDirection: "column" }}
-    >
-      <header
-        style={{
-          padding: "12px 16px",
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 8,
-          alignItems: "center",
-        }}
-      >
-        <button type="button" className="garden-tap" data-testid="to-map" onClick={onLeave}>
-          Map
+    <>
+      <h2 className="sr-only" id="lesson-h" tabIndex={-1}>
+        Lesson
+      </h2>
+      <div className="bar">
+        <button
+          type="button"
+          className="ghostbtn"
+          data-testid="to-map"
+          aria-label="Back to the garden map"
+          onClick={onLeave}
+        >
+          ‹ <span className="wide-only">Garden map</span>
+          <span className="narrow-only">Map</span>
         </button>
-        <span data-testid="strategy-chip">Strategy · {bed.ncdpiName}</span>
-        <span data-testid="round-chip">
-          Problem {ctx.problemIndex + 1} of {problems.length}
+        <span className="chip" data-testid="strategy-chip">
+          Strategy · {bed.ncdpiName}
         </span>
-        <MossPet leaves={mossLeaves} />
-        <span aria-pressed={calmMode}>Calm</span>
-      </header>
-      <ol
-        id="lbar"
-        style={{ display: "flex", gap: 8, listStyle: "none", padding: "0 16px", margin: 0 }}
-      >
-        {BAR_STEPS.map((s, j) => (
-          <li
-            key={s}
-            aria-current={state.bar === s ? "step" : undefined}
-            className={BAR_STEPS.indexOf(state.bar) > j ? "past" : state.bar === s ? "cur" : ""}
-            style={{
-              padding: "4px 10px",
-              borderRadius: 8,
-              background: state.bar === s ? "var(--g-lavender)" : "var(--g-cream)",
-            }}
-          >
-            {s.charAt(0).toUpperCase() + s.slice(1)}
-          </li>
-        ))}
-      </ol>
-      <div style={{ padding: 16, flex: 1, display: "flex", flexDirection: "column", gap: 16 }}>
-        <div>
-          <ReadAloudButton getText={() => `${line}. ${sub}`} testId="read-line" />
-          <p id="line" data-testid="instruction-line">
-            {line}
-          </p>
-          <p id="sub">{sub}</p>
-        </div>
-        {state.phase === "story" && (
+        <span className="sp" />
+        <span className="count" id="round-chip" data-testid="round-chip">
+          <span className="wide-only">Problem </span>
+          {ctx.problemIndex + 1} of {problems.length}
+        </span>
+        <MossPetWrap
+          leaves={mossLeaves}
+          plusOn={plusOn || (state.phase === "solved" && !ctx.wasAlreadySolved)}
+        />
+        <button
+          type="button"
+          className="ghostbtn calmbtn"
+          data-testid="calm"
+          aria-pressed={calmMode}
+        >
+          Calm<span className="wide-only"> mode</span>
+        </button>
+      </div>
+      <div className="lmain" id="lmain">
+        <ol className="lbar" id="lbar" data-testid="lesson-bar" aria-label="Lesson steps">
+          {BAR_STEPS.map((s, j) => (
+            <li
+              key={s}
+              data-step={s}
+              aria-current={state.bar === s ? "step" : undefined}
+              className={curBar > j ? "past" : state.bar === s ? "cur" : ""}
+            >
+              {s.charAt(0).toUpperCase() + s.slice(1)}
+            </li>
+          ))}
+        </ol>
+        <section className="talk">
+          <div className="linerow">
+            <ReadAloudButton
+              className="read"
+              getText={() => `${line}. ${sub}`}
+              testId="read-line"
+              label="Read instruction aloud"
+            />
+            <div className="line" id="line" data-testid="instruction-line">
+              {line}
+            </div>
+          </div>
+          <div className="sub" id="sub" data-testid="sub">
+            {sub}
+          </div>
           <button
             type="button"
-            className="garden-tap primary"
+            className={`trybtn${state.phase !== "story" ? " hide" : ""}`}
+            id="start-try"
             data-testid="start-try"
-            onClick={() => dispatch({ type: "START_PREDICT" })}
+            onClick={() => {
+              dispatch({ type: "START_PREDICT" })
+              setLine(guessQuestion(bedId))
+              setSub("Tap a guess. There is no wrong guess.")
+            }}
           >
-            Start try
+            Let&apos;s try
           </button>
-        )}
-        {state.phase === "predict" && (
-          <div id="chips" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <div
+            className={`chips${state.phase !== "predict" ? " hide" : ""}`}
+            id="chips"
+            role="group"
+            aria-label="Pick a guess"
+          >
             {guessChips(ans).map((v) => (
               <button
                 key={v}
                 type="button"
-                className="garden-tap"
+                className={ctx.guess === v ? "pick" : ""}
                 data-testid={`chip-${v}`}
                 onClick={() => {
                   dispatch({ type: "SET_GUESS", guess: v })
                   dispatch({ type: "ENTER_MODEL" })
+                  setLine(tryLine(bedId, problem))
                   setSub(`Your guess: ${v}. Drag, tap, or use the buttons.`)
                 }}
               >
@@ -204,169 +252,232 @@ export function LessonShell({
               </button>
             ))}
           </div>
-        )}
-        <MotionPanel data-testid="stagecard">
+          <LessonCounter
+            bedId={bedId}
+            problem={problem}
+            modelState={watchState ?? ctx.modelState}
+            phase={state.phase}
+            solved={state.phase === "solved"}
+            revealCounters={revealCounters}
+            pacing={bed.pacing}
+          />
+        </section>
+        <section className="stagewrap">
+          <div className="stagecard" id="stagecard" data-testid="stagecard">
+            <div
+              id="stage"
+              data-testid="stage"
+              data-cue={showCue ? "1" : undefined}
+              data-keyboard={ctx.via === "keyboard" ? "1" : "0"}
+              data-via={ctx.via ?? "none"}
+              aria-label={stageLabel(bedId, problem)}
+              tabIndex={0}
+              role="group"
+              onKeyDown={(e: React.KeyboardEvent) => {
+                if (!interactive) return
+                if (e.key === "Enter") {
+                  e.preventDefault()
+                  lockIn()
+                  return
+                }
+                const d =
+                  e.key === "ArrowRight" || e.key === "ArrowUp"
+                    ? 1
+                    : e.key === "ArrowLeft" || e.key === "ArrowDown"
+                      ? -1
+                      : 0
+                if (!d) return
+                e.preventDefault()
+                const n = stepModel(bedId, problem, ctx.modelState, d)
+                if (n) dispatch({ type: "SET_MODEL_STATE", modelState: n, via: "keyboard" })
+              }}
+            >
+              <ModelStage
+                bedId={bedId}
+                problem={problem}
+                modelState={ctx.modelState}
+                watchState={watchState}
+                snapMotion={ctx.via === "keyboard"}
+                equationsRevealed={state.phase === "solved"}
+                live={live}
+                showCue={showCue}
+                revealTotal={revealCounters}
+                reducedMotion={reducedMotion}
+                flowOut={flowOut}
+                onChange={(n, via) => dispatch({ type: "SET_MODEL_STATE", modelState: n, via })}
+              />
+            </div>
+          </div>
+          <div className="stepper" id="stepper">
+            <button
+              type="button"
+              id="step-minus"
+              data-testid="step-minus"
+              disabled={!interactive || !stepModel(bedId, problem, ctx.modelState, -1)}
+              onClick={() => {
+                const n = stepModel(bedId, problem, ctx.modelState, -1)
+                if (n) dispatch({ type: "SET_MODEL_STATE", modelState: n, via: "tap" })
+              }}
+            >
+              {stepMinus}
+            </button>
+            <button
+              type="button"
+              id="step-plus"
+              data-testid="step-plus"
+              disabled={!interactive || !stepModel(bedId, problem, ctx.modelState, 1)}
+              onClick={() => {
+                const n = stepModel(bedId, problem, ctx.modelState, 1)
+                if (n) dispatch({ type: "SET_MODEL_STATE", modelState: n, via: "tap" })
+              }}
+            >
+              {stepPlus}
+            </button>
+          </div>
+        </section>
+        <section className="panel" id="panel" data-testid="panel">
           {ctx.bubble && (state.phase === "wrongBubble" || state.phase.startsWith("hint")) && (
-            <PeachBubble guess={ctx.guess} bubble={ctx.bubble} />
+            <PeachBubble
+              guess={ctx.guess}
+              bubble={ctx.bubble}
+              settle={reducedMotion || onWorksheet}
+            />
           )}
-          {hintText && (
-            <div className="hintcard rung" data-testid={`hint-${ctx.hintRung}`}>
-              {hintText}
-              {state.phase === "hint3" && watchStep?.beat !== "reset" && (
+          {onWorksheet && watchStep ? (
+            <div className="worksheet rung" data-testid="worksheet">
+              <div className="wshead">
+                STEP {wsWatchIndex + 1} OF {watchSteps.length}
+              </div>
+              <div className="wsrow">
+                <ReadAloudButton
+                  className="read"
+                  getText={() => watchStep.text}
+                  testId="read-ws"
+                  label="Read worksheet step aloud"
+                />
+                <div className="step" data-testid="ws-step">
+                  {watchStep.text}
+                </div>
+              </div>
+              {watchStep.beat !== "reset" && (
                 <button
                   type="button"
-                  className="garden-tap wsnext"
+                  className="wsnext"
                   data-testid="ws-next"
                   onClick={() => {
-                    if (watchSteps) {
-                      setWsWatchIndex((k) => Math.min(k + 1, watchSteps.length - 1))
-                      return
-                    }
-                    if (wsStep < WORKSHEET_STEPS.length - 1) setWsStep((k) => k + 1)
-                    else setFlowReveal(true)
+                    setWsWatchIndex((k) => {
+                      const next = Math.min(k + 1, watchSteps.length - 1)
+                      if (watchSteps[next]?.beat === "reset") setFlowReveal(false)
+                      return next
+                    })
                   }}
                 >
                   Next
                 </button>
               )}
             </div>
+          ) : (
+            hintText && (
+              <div className="card hintcard rung" data-testid={`hint-${ctx.hintRung}`}>
+                <div>{hintText}</div>
+                {state.phase === "hint3" && (
+                  <button
+                    type="button"
+                    className="wsnext"
+                    data-testid="ws-next"
+                    onClick={() => {
+                      if (wsStep < WORKSHEET_STEPS.length - 1) setWsStep((k) => k + 1)
+                      else setFlowReveal(true)
+                    }}
+                  >
+                    Next
+                  </button>
+                )}
+              </div>
+            )
           )}
-          <MotionStage
-            id="stage"
-            data-cue={showCue ? "1" : undefined}
-            data-keyboard={ctx.via === "keyboard" ? "1" : "0"}
-            data-via={ctx.via ?? "none"}
-            className={flowOut ? "flow-out" : undefined}
-            aria-label={stageLabel(bedId, problem)}
-            tabIndex={0}
-            onKeyDown={(e: React.KeyboardEvent) => {
-              if (!interactive) return
-              if (e.key === "Enter") {
-                e.preventDefault()
-                lockIn()
-                return
-              }
-              const d =
-                e.key === "ArrowRight" || e.key === "ArrowUp"
-                  ? 1
-                  : e.key === "ArrowLeft" || e.key === "ArrowDown"
-                    ? -1
-                    : 0
-              if (!d) return
-              e.preventDefault()
-              const n = stepModel(bedId, problem, ctx.modelState, d)
-              if (n) dispatch({ type: "SET_MODEL_STATE", modelState: n, via: "keyboard" })
-            }}
-          >
-            <ModelStage
-              bedId={bedId}
-              problem={problem}
-              modelState={ctx.modelState}
-              watchState={watchState}
-              snapMotion={ctx.via === "keyboard"}
-              equationsRevealed={state.phase === "solved"}
-              live={live}
-              showCue={showCue}
-              revealTotal={revealCounters}
-              reducedMotion={reducedMotion}
-              onChange={(n, via) => dispatch({ type: "SET_MODEL_STATE", modelState: n, via })}
-            />
-          </MotionStage>
-        </MotionPanel>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-          <button
-            type="button"
-            id="lock"
-            className="garden-tap primary"
-            data-testid="lock"
-            disabled={!interactive || !modelReady(bedId, problem, ctx.modelState)}
-            onClick={lockIn}
-          >
-            Lock it in
-          </button>
-          <button
-            type="button"
-            id="reset"
-            className="garden-tap"
-            disabled={!live}
-            onClick={() =>
-              dispatch({
-                type: "RESET_MODEL",
-                modelState: initialModelState(bedId, problem),
-              })
-            }
-          >
-            Start over
-          </button>
-          <button
-            type="button"
-            id="help"
-            className="garden-tap"
-            disabled={!live}
-            onClick={() => {
-              dispatch({ type: "HELP" })
-              setWsWatchIndex(0)
-            }}
-          >
-            Help me
-          </button>
-          <button
-            type="button"
-            id="step-minus"
-            className="garden-tap"
-            disabled={!interactive || !stepModel(bedId, problem, ctx.modelState, -1)}
-            onClick={() => {
-              const n = stepModel(bedId, problem, ctx.modelState, -1)
-              if (n) dispatch({ type: "SET_MODEL_STATE", modelState: n, via: "tap" })
-            }}
-          >
-            Step back
-          </button>
-          <button
-            type="button"
-            id="step-plus"
-            className="garden-tap"
-            disabled={!interactive || !stepModel(bedId, problem, ctx.modelState, 1)}
-            onClick={() => {
-              const n = stepModel(bedId, problem, ctx.modelState, 1)
-              if (n) dispatch({ type: "SET_MODEL_STATE", modelState: n, via: "tap" })
-            }}
-          >
-            Step forward
-          </button>
           {state.phase === "solved" && (
-            <button
-              type="button"
-              id="next"
-              className="garden-tap"
-              data-testid="next"
-              onClick={() => {
-                if (ctx.problemIndex === 0) {
-                  dispatch({
-                    type: "NEXT_PROBLEM",
-                    modelState: initialModelState(bedId, problems[1]),
-                  })
-                  setLine(storyLine(bedId, problems[1]))
-                  setSub(promptLine(problems[1]))
-                  resetWorksheet()
-                } else onFinishBed()
-              }}
-            >
-              {ctx.problemIndex === 0 ? "Next problem ›" : "Back to the garden ›"}
-            </button>
+            <div className="card win" data-testid="win">
+              <div className="top">
+                <ReadExample
+                  getText={() => `Strategy: ${bed.ncdpiName}. ${exampleLine(bedId, problem)}`}
+                  testId="read-win"
+                />
+                <div>
+                  <span className="chip" data-testid="strategy-win">
+                    Strategy · {bed.ncdpiName}
+                  </span>
+                  <div data-testid="example">{exampleLine(bedId, problem)}</div>
+                </div>
+              </div>
+              <div className="petnote" data-testid="pet-note">
+                {ctx.wasAlreadySolved
+                  ? "You solved this one before. Moss keeps its leaves."
+                  : "Moss grew a new leaf."}
+              </div>
+            </div>
           )}
-        </div>
-        {state.phase === "solved" && (
-          <div data-testid="win">
-            <span data-testid="strategy-win">Strategy · {bed.ncdpiName}</span>
-            <p data-testid="example">{exampleLine(bedId, problem)}</p>
-            <p data-testid="pet-note">
-              {ctx.wasAlreadySolved
-                ? "You solved this one before. Moss keeps its leaves."
-                : "Moss grew a new leaf."}
-            </p>
-          </div>
-        )}
+        </section>
+      </div>
+      <div className="foot">
+        <button
+          type="button"
+          className="lock"
+          id="lock"
+          data-testid="lock"
+          disabled={!interactive || !modelReady(bedId, problem, ctx.modelState)}
+          onClick={lockIn}
+        >
+          Lock it in
+        </button>
+        <button
+          type="button"
+          className="ghostbtn"
+          id="reset"
+          data-testid="reset"
+          disabled={!live}
+          onClick={() =>
+            dispatch({
+              type: "RESET_MODEL",
+              modelState: initialModelState(bedId, problem),
+            })
+          }
+        >
+          Start over
+        </button>
+        <button
+          type="button"
+          className="ghostbtn"
+          id="help"
+          data-testid="help"
+          disabled={!live}
+          onClick={() => {
+            dispatch({ type: "HELP" })
+            setWsWatchIndex(0)
+          }}
+        >
+          Help me
+        </button>
+        <span className="sp" />
+        <button
+          type="button"
+          className={`next${state.phase !== "solved" ? " hide" : ""}`}
+          id="next"
+          data-testid="next"
+          onClick={() => {
+            if (ctx.problemIndex === 0) {
+              dispatch({
+                type: "NEXT_PROBLEM",
+                modelState: initialModelState(bedId, problems[1]),
+              })
+              setLine(storyLine(bedId, problems[1]))
+              setSub(promptLine(problems[1]))
+              resetWorksheet()
+            } else onFinishBed()
+          }}
+        >
+          {ctx.problemIndex === 0 ? "Next problem ›" : "Back to the garden ›"}
+        </button>
       </div>
       <div
         className="sr-only"
@@ -375,67 +486,90 @@ export function LessonShell({
         id="aria"
         data-testid="aria-live"
       >
-        {/* Never announce numeric answers before lock-in */}
         {state.phase === "solved" ? eqLine(problem) : live ? "Try the model." : line}
       </div>
-    </section>
+    </>
   )
 }
 
-function MotionPanel(props: React.HTMLAttributes<HTMLDivElement>) {
-  return <div {...props} className={`motion-fade ${props.className ?? ""}`} />
-}
-function MotionStage({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+function LessonCounter({
+  bedId,
+  problem,
+  modelState,
+  phase,
+  solved,
+  revealCounters,
+  pacing,
+}: {
+  bedId: BedId
+  problem: ReturnType<typeof problemsForBed>[0]
+  modelState: import("../models/state").ModelState
+  phase: string
+  solved: boolean
+  revealCounters: boolean
+  pacing: boolean
+}) {
+  if (phase === "story" || phase === "predict") {
+    return <div className="counter" id="counter" data-testid="counter" />
+  }
+  const flow = pacing ? modelFlowCounters(bedId, problem, modelState, revealCounters) : null
+  if (flow) {
+    return (
+      <div className="counter" id="counter" data-testid="counter">
+        <div className="flowcounts" data-testid="flow-counts">
+          {flow.map((row, i) => (
+            <div
+              key={row.label}
+              className={`flowcount ${i ? "total" : "step"}${i && revealCounters ? " revealed" : ""}`}
+              data-testid={`pill-${i}`}
+            >
+              <span className="flowlabel">{row.label}</span>
+              <span
+                className={`flownum${row.value === "—" ? " pending" : ""}`}
+                data-testid={i ? "flow-total" : "flow-step"}
+              >
+                {row.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+  const pills = modelPills(bedId, problem, modelState, solved)
   return (
-    <div
-      {...props}
-      className={`motion-fade ${className ?? ""}`}
-      style={{ outline: "none", ...props.style }}
+    <div className="counter" id="counter" data-testid="counter">
+      {pills.map((text, i) => (
+        <span
+          key={text}
+          className={`pill ${solved ? "ok" : i ? "p2" : "p1"}`}
+          data-testid={`pill-${i}`}
+        >
+          {text}
+        </span>
+      ))}
+    </div>
+  )
+}
+
+function ReadExample({ getText, testId }: { getText: () => string; testId: string }) {
+  return (
+    <ReadAloudButton
+      className="read"
+      getText={getText}
+      testId={testId}
+      label="Read example aloud"
     />
   )
 }
 
-function storyLine(_bedId: BedId, p: ReturnType<typeof problemsForBed>[0]): string {
-  if (p.kind === "add") return `${p.a} and ${p.b}. How many in all?`
-  if (p.kind === "sub") return `${p.n} seeds. The bunny eats ${p.take}. How many are left?`
-  return `${p.whole} carrots. ${p.part} are in the basket. How many in the ground?`
-}
-
-function promptLine(p: ReturnType<typeof problemsForBed>[0]): string {
-  if (p.kind === "add") return `${p.a} + ${p.b} = ?`
-  if (p.kind === "sub") return `${p.n} − ${p.take} = ?`
-  return `${p.whole} − ${p.part} = ?`
-}
-
-function eqLine(p: ReturnType<typeof problemsForBed>[0]): string {
-  const a = answerForProblem(p)
-  if (p.kind === "add") return `${p.a} + ${p.b} = ${a}`
-  if (p.kind === "sub") return `${p.n} − ${p.take} = ${a}`
-  return `${p.whole} − ${p.part} = ${a}`
-}
-
-function stageLabel(bedId: BedId, _p: ReturnType<typeof problemsForBed>[0]): string {
+function stageLabel(bedId: BedId, p: ReturnType<typeof problemsForBed>[0]): string {
+  if (bedId === "counting-on" && p.kind === "add") {
+    return `Number train. Cars 1 to 20. The engine starts at car ${p.a}.`
+  }
   return `${bedById(bedId).ncdpiName} model. No answer spoken until you lock it in.`
 }
 
-function hint1(bedId: BedId, p: ReturnType<typeof problemsForBed>[0]): string {
-  if (bedId === "making-ten") return "Is the top wire a full ten yet? How many more beads fit?"
-  if (bedId === "counting-on" && p.kind === "add")
-    return `How many cars did the engine count on? Is that ${p.b}?`
-  return "What do you see on the model?"
-}
-
-function hint2(_bedId: BedId): string {
-  return "Look at the dashed cues on the model."
-}
-
 const WORKSHEET_STEPS = ["Walk through the steps.", "Your turn. Lock it in."]
-
-function exampleLine(_bedId: BedId, p: ReturnType<typeof problemsForBed>[0]): string {
-  const a = answerForProblem(p)
-  if (p.kind === "add") return `I worked it out. My answer is ${a}.`
-  if (p.kind === "sub") return `I took away and got ${a}.`
-  return `I used facts that belong. The answer is ${a}.`
-}
 
 export type { GardenScreen }

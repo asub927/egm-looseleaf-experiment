@@ -1,13 +1,46 @@
+import * as React from "react"
 import type { PictureRow, WrongBubble } from "../types"
-import { GARDEN_INK, GARDEN_PALETTE } from "../types"
+import { GARDEN_DEMO, GARDEN_INK, GARDEN_PALETTE } from "../types"
 import { ReadAloudButton } from "./ReadAloudButton"
+
+function SproutFace() {
+  const INK = GARDEN_INK
+  const LEAFC = GARDEN_DEMO.leaf
+  const SOIL = GARDEN_DEMO.soil
+  return (
+    <svg className="face" viewBox="0 0 34 34" aria-hidden="true">
+      <path d="M17 30 V16" stroke={INK} strokeWidth="2.5" strokeLinecap="round" />
+      <ellipse
+        cx="11"
+        cy="14"
+        rx="7"
+        ry="4"
+        fill={LEAFC}
+        stroke={INK}
+        strokeWidth="1.8"
+        transform="rotate(-25 11 14)"
+      />
+      <ellipse
+        cx="23"
+        cy="12"
+        rx="7"
+        ry="4"
+        fill={LEAFC}
+        stroke={INK}
+        strokeWidth="1.8"
+        transform="rotate(25 23 12)"
+      />
+      <ellipse cx="17" cy="30" rx="10" ry="3" fill={SOIL} />
+    </svg>
+  )
+}
 
 function ObservationDots({ rows }: { rows: PictureRow[] }) {
   const max = Math.max(1, ...rows.map((r) => r.of))
   const w = 84 + max * 20
   const h = rows.length * 30 + 8
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} aria-hidden="true" width="100%" style={{ maxWidth: 280 }}>
+    <svg viewBox={`0 0 ${w} ${h}`} aria-hidden="true" width="100%">
       {rows.map((r, ri) => {
         const y = 19 + ri * 30
         return (
@@ -47,20 +80,52 @@ function ObservationDots({ rows }: { rows: PictureRow[] }) {
   )
 }
 
-export function PeachBubble({ guess, bubble }: { guess: number | null; bubble: WrongBubble }) {
+export function PeachBubble({
+  guess,
+  bubble,
+  settle,
+}: {
+  guess: number | null
+  bubble: WrongBubble
+  settle?: boolean
+}) {
+  const [on, setOn] = React.useState(settle === true)
+  React.useEffect(() => {
+    if (settle) {
+      setOn(true)
+      return
+    }
+    let inner = 0
+    const outer = requestAnimationFrame(() => {
+      inner = requestAnimationFrame(() => setOn(true))
+    })
+    return () => {
+      cancelAnimationFrame(outer)
+      cancelAnimationFrame(inner)
+    }
+  }, [settle])
+
   return (
-    <div className="peach-bubble motion-fade" data-testid="bubble" role="status">
-      {guess !== null && (
-        <div data-testid="guess-tag" style={{ fontWeight: 700, marginBottom: 8 }}>
-          Your guess was {guess}.
+    <div className={`bubble${on ? " on" : ""}`} data-testid="bubble" role="status">
+      <SproutFace />
+      <div className="msg">
+        {guess !== null && (
+          <div className="guess-tag" data-testid="guess-tag">
+            Your guess was {guess}.
+          </div>
+        )}
+        <strong>{bubble.title}</strong>
+        <div>{bubble.body}</div>
+        <div className="diag-art" data-testid="diag-art">
+          <ObservationDots rows={bubble.pictureRows} />
         </div>
-      )}
-      <strong>{bubble.title}</strong>
-      <p style={{ margin: "8px 0" }}>{bubble.body}</p>
-      <ReadAloudButton getText={() => `${bubble.title} ${bubble.body}`} testId="read-bubble" />
-      <div data-testid="diag-art">
-        <ObservationDots rows={bubble.pictureRows} />
       </div>
+      <ReadAloudButton
+        className="read"
+        getText={() => `${bubble.title} ${bubble.body}`}
+        testId="read-bubble"
+        label="Read bubble aloud"
+      />
     </div>
   )
 }

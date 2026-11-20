@@ -1,5 +1,5 @@
 import type { BedId, PictureRow, WrongBubble } from "../types"
-import { GARDEN_PALETTE, SEESAW_CROSS_MAX } from "../types"
+import { GARDEN_DEMO, GARDEN_PALETTE, SEESAW_CROSS_MAX } from "../types"
 import { answerForProblem, type ProblemSpec } from "./problems"
 
 import type {
@@ -319,8 +319,8 @@ function observationPicture(bedId: BedId, p: ProblemSpec, s: ModelState): Pictur
       const c = st.at - p.a
       const m = Math.max(c, p.b)
       return [
-        { label: "Counted", n: c, of: m, fill: GARDEN_PALETTE.sky },
-        { label: "Add", n: p.b, of: m, fill: GARDEN_PALETTE.lavender },
+        { label: "Counted", n: c, of: m, fill: GARDEN_DEMO.countedDot },
+        { label: "Add", n: p.b, of: m, fill: GARDEN_DEMO.ear },
       ]
     }
     case "decomposing": {
@@ -362,6 +362,74 @@ function observationPicture(bedId: BedId, p: ProblemSpec, s: ModelState): Pictur
         { label: "Hops", n: hops, of: m, fill: GARDEN_PALETTE.lavender },
         { label: "Pip hops", n: p.b, of: m, fill: GARDEN_PALETTE.peach },
       ]
+    }
+    default: {
+      const _exhaustive: never = bedId
+      return _exhaustive
+    }
+  }
+}
+
+export type CounterRow = { label: string; value: string }
+
+export function modelFlowCounters(
+  bedId: BedId,
+  p: ProblemSpec,
+  s: ModelState,
+  reveal: boolean,
+): CounterRow[] | null {
+  switch (bedId) {
+    case "counting-on": {
+      const st = s as TrainState
+      if (p.kind !== "add") return null
+      return [
+        { label: "Step", value: String(Math.max(0, st.at - p.a)) },
+        { label: "Total", value: reveal ? String(st.at) : "—" },
+      ]
+    }
+    case "number-line": {
+      const st = s as HopState
+      if (p.kind !== "add") return null
+      return [
+        { label: "Hop", value: String(Math.max(0, st.land - p.a)) },
+        { label: "Land", value: reveal ? String(st.land) : "—" },
+      ]
+    }
+    default:
+      return null
+  }
+}
+
+export function modelPills(bedId: BedId, p: ProblemSpec, s: ModelState, solved: boolean): string[] {
+  switch (bedId) {
+    case "making-ten": {
+      const st = s as BeadState
+      if (p.kind !== "add") return []
+      return [`Top ${p.a + st.moved}`, `Bottom ${p.b - st.moved}`]
+    }
+    case "counting-on": {
+      const st = s as TrainState
+      if (p.kind !== "add") return []
+      return [`${p.a} in my head`, `Counted on ${st.at - p.a}`]
+    }
+    case "decomposing": {
+      const st = s as CutState
+      if (p.kind !== "sub") return []
+      const out = [`${p.n - Math.max(st.position, 10)} to get down to ten`]
+      if (st.phase === "rest") out.push(`${10 - st.position} more`)
+      return out
+    }
+    case "equivalent-sums":
+      return solved ? ["Balanced"] : ["Match the sides"]
+    case "relationship": {
+      const st = s as FactState
+      if (p.kind !== "fact") return []
+      return st.tile === null ? ["Pick a tile"] : [`Tile ${st.tile}`]
+    }
+    case "number-line": {
+      const st = s as HopState
+      if (p.kind !== "add") return []
+      return [`Start ${p.a}`, `Landed on ${st.land}`]
     }
     default: {
       const _exhaustive: never = bedId

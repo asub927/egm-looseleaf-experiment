@@ -117,7 +117,7 @@ export function lessonReducer(state: LessonState, action: LessonAction): LessonS
       const hintRung = Math.min(3, state.context.hintRung + 1) as 1 | 2 | 3
       const phase: LessonPhase = hintRung === 1 ? "hint1" : hintRung === 2 ? "hint2" : "hint3"
       return {
-        phase: action.bubble ? "wrongBubble" : phase,
+        phase: action.bubble && hintRung < 3 ? "wrongBubble" : phase,
         bar: "check",
         context: {
           ...state.context,

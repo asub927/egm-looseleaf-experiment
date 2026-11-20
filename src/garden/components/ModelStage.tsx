@@ -10,7 +10,7 @@ import {
   type FactState,
   type HopState,
 } from "../models/engine"
-import { GARDEN_INK, GARDEN_PALETTE, SEESAW_CROSS_MAX } from "../types"
+import { GARDEN_DEMO, GARDEN_INK, GARDEN_PALETTE, SEESAW_CROSS_MAX } from "../types"
 import type { ProblemSpec } from "../models/problems"
 import { bedById } from "../beds/registry"
 import { useSvgDrag, type SvgPoint } from "../hooks/use-drag-kit"
@@ -53,6 +53,7 @@ export function ModelStage({
   equationsRevealed = false,
   watchState = null,
   snapMotion = false,
+  flowOut = false,
 }: {
   bedId: BedId
   problem: ProblemSpec
@@ -65,9 +66,13 @@ export function ModelStage({
   equationsRevealed?: boolean
   watchState?: ModelState | null
   snapMotion?: boolean
+  flowOut?: boolean
 }) {
   const bed = bedById(bedId)
-  const narrow = typeof window !== "undefined" && window.innerWidth <= 600
+  const narrow =
+    typeof window !== "undefined" &&
+    window.innerWidth <= 600 &&
+    window.innerHeight > window.innerWidth
   const shown = watchState ?? modelState
   const interactive = live && watchState === null
   const still = reducedMotion || snapMotion
@@ -95,6 +100,8 @@ export function ModelStage({
           revealTotal={revealTotal}
           narrow={narrow}
           still={still}
+          showCue={showCue}
+          flowOut={flowOut}
           onChange={onChange}
         />
       )
@@ -318,49 +325,53 @@ function BeadRack({
   )
 }
 
-const TRAIN_FIRST = 5
+const TRAIN_FIRST = 1
 const TRAIN_LAST = 20
+const TRAIN_COLS = ["#FFF1B8", "#C9F2DD", "#CDE8FF", "#FFD6C9", "#FFD1E3"]
 
 function TrainModel({
   problem,
   state,
   live,
-  pacing,
-  revealTotal,
   narrow,
   still,
+  showCue,
+  flowOut,
   onChange,
 }: {
   problem: AddProblem
   state: TrainState
   live: boolean
-  pacing: boolean
-  revealTotal: boolean
+  pacing?: boolean
+  revealTotal?: boolean
   narrow: boolean
   still: boolean
+  showCue: boolean
+  flowOut: boolean
   onChange: OnChange
 }) {
   const svgRef = React.useRef<SVGSVGElement>(null)
   const engineRef = React.useRef<SVGGElement>(null)
   const [dragPt, setDragPt] = React.useState<SvgPoint | null>(null)
-  const cols = narrow ? 5 : 10
-  const pitch = narrow ? 76 : 62
-  const car = (n: number): SvgPoint => {
-    const i = n - TRAIN_FIRST
-    return { x: 48 + (i % cols) * pitch, y: 44 + Math.floor(i / cols) * 140 }
-  }
-  const track = (n: number): SvgPoint => ({ x: car(n).x, y: car(n).y + 38 })
+  const perRow = narrow ? 5 : 10
+  const car = (n: number): SvgPoint => ({
+    x: narrow ? 70 + ((n - 1) % 5) * 100 : 100 + ((n - 1) % 10) * 84,
+    y: narrow ? 92 + Math.floor((n - 1) / 5) * 172 : n <= 10 ? 112 : 318,
+  })
+  const leadPos = (n: number): SvgPoint => ({ x: car(n).x, y: car(n).y + 38 })
   const enginePos = (n: number): SvgPoint => ({ x: car(n).x, y: car(n).y + 78 })
-  const nearestCar = (pt: SvgPoint) =>
-    Math.max(
-      problem.a,
-      nearestBy(TRAIN_FIRST, TRAIN_LAST, (n) => {
-        const t = track(n)
-        return Math.hypot(t.x - pt.x, t.y - pt.y)
-      }),
-    )
-  const at = dragPt ? nearestCar(dragPt) : state.at
-  const counted = state.at - problem.a
+  const nearestEngine = (pt: SvgPoint) =>
+    nearestBy(problem.a, TRAIN_LAST, (n) => {
+      const e = enginePos(n)
+      return Math.hypot(e.x - pt.x, e.y - pt.y)
+    })
+  const paintAt = dragPt ? nearestEngine(dragPt) : state.at
+
+  const carFill = (n: number, at: number) => {
+    if (n <= problem.a) return "#D9CCFF"
+    if (n <= at) return TRAIN_COLS[(n - problem.a) % TRAIN_COLS.length] ?? P.cream
+    return "#fff"
+  }
 
   const { bindTarget, isDragging } = useSvgDrag<true>(svgRef, live, {
     start: () => true,
@@ -368,40 +379,53 @@ function TrainModel({
     end: (pt, _ctx, moved, cancel) => {
       setDragPt(null)
       if (cancel || !moved) return
-      const n = nearestCar(pt)
+      const n = nearestEngine(pt)
       if (n !== state.at) onChange({ at: n }, "drag")
     },
   })
 
   React.useEffect(() => bindTarget(engineRef.current), [bindTarget])
 
+  const enginePt = dragPt ?? enginePos(state.at)
+  const leadAt = dragPt ? paintAt : state.at
+
   return (
-    <div>
-      {pacing && (
-        <div className="flowcounts" data-testid="flow-counts">
-          <FlowCount label="Step" value={String(counted)} testId="flow-step" />
-          <FlowCount
-            label="Total"
-            value={revealTotal ? String(state.at) : "—"}
-            testId="flow-total"
-            pending={!revealTotal}
+    <svg
+      ref={svgRef}
+      viewBox={narrow ? "0 0 540 740" : "0 0 960 480"}
+      preserveAspectRatio="xMidYMid meet"
+      width="100%"
+      data-model="counting-on"
+      className={
+        [flowOut ? "flow-out" : undefined, isDragging ? "drag" : undefined]
+          .filter(Boolean)
+          .join(" ") || undefined
+      }
+      aria-hidden="true"
+    >
+      {Array.from({ length: TRAIN_LAST / perRow }).map((_, rr) => {
+        const yy = car(rr * perRow + 1).y
+        return (
+          <rect
+            key={`rail-${rr}`}
+            x={narrow ? 20 : 50}
+            y={yy + 38}
+            width={narrow ? 500 : 860}
+            height={9}
+            rx={4}
+            fill={GARDEN_DEMO.trackRail}
           />
-        </div>
-      )}
-      <svg
-        ref={svgRef}
-        viewBox={narrow ? "0 0 400 584" : "0 0 654 304"}
-        width="100%"
-        className={isDragging ? "drag" : undefined}
-        style={{ maxWidth: 720 }}
-      >
-        {Array.from({ length: TRAIN_LAST - TRAIN_FIRST + 1 }).map((_, i) => {
-          const n = i + TRAIN_FIRST
-          const c = car(n)
-          const tappable = live && n >= problem.a
-          return (
+        )
+      })}
+      {Array.from({ length: TRAIN_LAST - TRAIN_FIRST + 1 }).map((_, i) => {
+        const n = i + TRAIN_FIRST
+        const c = car(n)
+        const tappable = live && n >= problem.a
+        const showBadge = n > problem.a && n <= paintAt
+        const ringOn = showCue && n > problem.a && n <= problem.a + problem.b
+        return (
+          <React.Fragment key={n}>
             <g
-              key={n}
               data-testid={`car-${n}`}
               style={{ cursor: tappable ? "pointer" : "default" }}
               onClick={() => {
@@ -409,51 +433,96 @@ function TrainModel({
               }}
             >
               <rect
-                x={c.x - 28}
-                y={c.y - 28}
-                width={56}
-                height={56}
-                rx="12"
-                fill={n > problem.a && n <= at ? P.sky : n <= problem.a ? P.lavender : P.cream}
+                x={c.x - 36}
+                y={c.y - 30}
+                width={72}
+                height={60}
+                rx="14"
+                fill={carFill(n, paintAt)}
                 stroke={INK}
-                strokeWidth="2"
+                strokeWidth="2.5"
               />
-              <text x={c.x} y={c.y + 7} textAnchor="middle" fontSize="20" fontWeight="900">
+              <text
+                x={c.x}
+                y={c.y + 11}
+                textAnchor="middle"
+                fontSize="30"
+                fontWeight="900"
+                fill={INK}
+              >
                 {n}
               </text>
-              <rect x={c.x - pitch / 2} y={c.y - 36} width={pitch} height={72} fill="transparent" />
+              <circle cx={c.x - 18} cy={c.y + 34} r="7" fill={INK} />
+              <circle cx={c.x + 18} cy={c.y + 34} r="7" fill={INK} />
+              <rect x={c.x - 42} y={c.y - 52} width={84} height={100} fill="transparent" />
             </g>
-          )
-        })}
-        <g
-          className={still ? undefined : "motion-move"}
-          data-testid="lead-dot"
-          transform={svgT(track(at))}
-          pointerEvents="none"
-        >
-          <circle r="8" fill={P.rose} stroke={INK} strokeWidth="2" />
-        </g>
-        <g
-          ref={engineRef}
-          data-testid="engine"
-          className={pieceClass(live, still)}
-          transform={svgT(dragPt ?? enginePos(state.at))}
-        >
-          <rect
-            x={-44}
-            y={-28}
-            width={88}
-            height={56}
-            rx="16"
-            fill={P.rose}
-            stroke={INK}
-            strokeWidth="3"
-          />
-          <path d="M-12 0 l-12 -10 v20 z M12 0 l12 -10 v20 z" fill={INK} />
-          <rect x={-48} y={-36} width={96} height={72} fill="transparent" />
-        </g>
-      </svg>
-    </div>
+            {showBadge && (
+              <g className="motion-fade" style={{ opacity: 1 }}>
+                <circle cx={c.x} cy={c.y - 56} r="19" fill="#FFF1B8" stroke={INK} strokeWidth="2" />
+                <text
+                  x={c.x}
+                  y={c.y - 49}
+                  textAnchor="middle"
+                  fontSize="20"
+                  fontWeight="900"
+                  fill={INK}
+                >
+                  {n - problem.a}
+                </text>
+              </g>
+            )}
+            <circle
+              cx={c.x}
+              cy={c.y}
+              r="48"
+              className={ringOn ? "ring on" : "ring"}
+              pointerEvents="none"
+            />
+          </React.Fragment>
+        )
+      })}
+      <g
+        className={[still ? undefined : "motion-move", isDragging ? "drag" : undefined]
+          .filter(Boolean)
+          .join(" ")}
+        data-testid="lead-dot"
+        transform={svgT(leadPos(leadAt))}
+        opacity={leadAt > problem.a ? 1 : 0.5}
+        pointerEvents="none"
+      >
+        <circle r="11" fill={P.rose} stroke={INK} strokeWidth="3" />
+        <circle r="4.5" fill={INK} />
+      </g>
+      <g
+        ref={engineRef}
+        data-testid="engine"
+        className={pieceClass(live, still)}
+        transform={svgT(enginePt)}
+      >
+        <rect
+          x={-48}
+          y={-28}
+          width={96}
+          height={56}
+          rx="18"
+          fill={P.rose}
+          stroke={INK}
+          strokeWidth="3"
+        />
+        <rect
+          x={-34}
+          y={-50}
+          width={18}
+          height={24}
+          rx="5"
+          fill={P.rose}
+          stroke={INK}
+          strokeWidth="3"
+        />
+        <path d="M-14 0 l-12 -10 v20 z M14 0 l12 -10 v20 z" fill={INK} />
+        <circle cx={0} cy={0} r="66" fill="transparent" />
+      </g>
+    </svg>
   )
 }
 
@@ -874,16 +943,14 @@ function HopLineModel({
   problem,
   state,
   live,
-  pacing,
-  revealTotal,
   still,
   onChange,
 }: {
   problem: AddProblem
   state: HopState
   live: boolean
-  pacing: boolean
-  revealTotal: boolean
+  pacing?: boolean
+  revealTotal?: boolean
   still: boolean
   onChange: OnChange
 }) {
@@ -892,7 +959,6 @@ function HopLineModel({
   const [dragX, setDragX] = React.useState<number | null>(null)
   const nearestTick = (x: number) => nearestBy(5, 20, (n) => Math.abs(hopX(n) - x))
   const land = dragX === null ? state.land : nearestTick(dragX)
-  const hops = state.land - problem.a
   const x1 = hopX(problem.a)
   const x2 = hopX(land)
   const arcH = Math.min(70, 16 + Math.abs(x2 - x1) * 0.3)
@@ -914,17 +980,6 @@ function HopLineModel({
 
   return (
     <div>
-      {pacing && (
-        <div className="flowcounts" data-testid="flow-counts">
-          <FlowCount label="Hop" value={String(Math.max(0, hops))} testId="flow-step" />
-          <FlowCount
-            label="Land"
-            value={revealTotal ? String(state.land) : "—"}
-            testId="flow-total"
-            pending={!revealTotal}
-          />
-        </div>
-      )}
       <svg
         ref={svgRef}
         viewBox="0 0 570 240"
@@ -1003,30 +1058,6 @@ function HopLineModel({
           <circle r="8" fill={P.rose} stroke={INK} />
         </g>
       </svg>
-    </div>
-  )
-}
-
-function FlowCount({
-  label,
-  value,
-  testId,
-  pending,
-}: {
-  label: string
-  value: string
-  testId: string
-  pending?: boolean
-}) {
-  return (
-    <div
-      className={`flowcount ${label === "Total" || label === "Land" ? "total" : "step"}${pending ? "" : " revealed"}`}
-      data-testid={`pill-${label === "Hop" || label === "Step" ? 0 : 1}`}
-    >
-      <span className="flowlabel">{label}</span>
-      <span className={`flownum${pending ? " pending" : ""}`} data-testid={testId}>
-        {value}
-      </span>
     </div>
   )
 }

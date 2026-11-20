@@ -13,12 +13,68 @@ export const GARDEN_PALETTE = {
   paper: "#F6F1E4",
 } as const
 
+/** Demo-aligned accents (garden-map-demo). */
+export const GARDEN_DEMO = {
+  cream: "#FFF8F0",
+  soil: "#E8D9C4",
+  leaf: "#7BC47F",
+  ear: "#B8A6FF",
+  /** Wrong-bubble dot fills (garden-map-demo counting-on pic). */
+  countedDot: "#9CCBF5",
+  feet: "#E8A24A",
+  bloomPetal: "#F4A6C1",
+  restSkyTop: "#C9D6F0",
+  restSkyBottom: "#E4DFF5",
+  restHill: "#D7E8B8",
+  skyWash: "#EAF6FF",
+  sandWash: "#F3E8D4",
+  /** Train track tie (models.js). */
+  trackRail: "#B9A6F2",
+} as const
+
+/** Map scenery (layout-map / garden.css); palette-adjacent tints only. */
+export const GARDEN_MAP_SURFACE = {
+  pathTan: "#D9C9A8",
+  pathCream: "#F3E6C8",
+  pathEdge: "#E9DAB9",
+  skyTop: "#BFDFF5",
+  skyMid: "#DDEFFF",
+  hillPasture: "#E8F4D8",
+  hillGrass: "#D8EBC4",
+  plotInset: "#F6EEDD",
+  plaqueBorder: "#E3CFAE",
+  plaqueBottom: "#D4B98F",
+  stake: "#C9A36B",
+  treeA: "#BFE6C9",
+  treeB: "#B2DDBE",
+  sunRing: "#F3D98A",
+  bee: "#FFE38A",
+} as const
+
+/** Bed plant + decor illustration shades (ported SVG; mint/lavender/peach family only). */
+export const GARDEN_PLANT_SHADES = {
+  leafDark: "#5FAE6A",
+  leafMid: "#6E9F79",
+  leaf: "#7BC47F",
+  leafSoft: "#A8D5A2",
+  leafSprout: "#B9E3C3",
+  sproutPod: "#C9E7C6",
+  wood: "#B08A55",
+  brown: "#B98A5E",
+  brownDeep: "#8C6544",
+  mound: "#D9C2A2",
+  timber: "#E3C79B",
+  stone: "#EFE6D8",
+  berry: "#F6A5B8",
+  pollen: "#FFD66E",
+} as const
+
 /** Derived accents (palette-only); see PR Tradeoffs. */
 export const GARDEN_ACCENT = {
   /** Peach line on map paths (slightly deeper than fill peach for contrast). */
   pathWood: "#E8C4B8",
-  /** Moss leaf highlight (mint family, legible on cream). */
-  leaf: "#9BD4B5",
+  /** Moss leaf (demo drawPet). */
+  leaf: GARDEN_DEMO.leaf,
 } as const
 
 export const GARDEN_ALLOWED_HEX = new Set(
@@ -26,6 +82,9 @@ export const GARDEN_ALLOWED_HEX = new Set(
     GARDEN_INK,
     ...Object.values(GARDEN_PALETTE),
     ...Object.values(GARDEN_ACCENT),
+    ...Object.values(GARDEN_DEMO),
+    ...Object.values(GARDEN_MAP_SURFACE),
+    ...Object.values(GARDEN_PLANT_SHADES),
     "#FFFFFF",
     "#ffffff",
     "#fff",

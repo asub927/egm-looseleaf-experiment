@@ -1,0 +1,192 @@
+{
+  "at": "2026-11-17T05:44:59.978Z",
+  "minTarget": 56,
+  "widths": [
+    360,
+    414,
+    600,
+    744,
+    834,
+    1024,
+    1180,
+    1440
+  ],
+  "results": [
+    {
+      "tag": "360x800-portrait",
+      "overlaps": [],
+      "smallTargets": [],
+      "pass": true
+    },
+    {
+      "tag": "640x360-landscape",
+      "overlaps": [
+        [
+          "bed-making-ten",
+          "bed-decomposing"
+        ],
+        [
+          "bed-making-ten",
+          "bed-relationship"
+        ],
+        [
+          "bed-counting-on",
+          "bed-equivalent-sums"
+        ],
+        [
+          "bed-counting-on",
+          "bed-number-line"
+        ],
+        [
+          "bed-decomposing",
+          "bed-relationship"
+        ],
+        [
+          "bed-decomposing",
+          "pip-owl-map"
+        ],
+        [
+          "bed-equivalent-sums",
+          "bed-number-line"
+        ],
+        [
+          "bed-relationship",
+          "pip-owl-map"
+        ]
+      ],
+      "smallTargets": [],
+      "pass": false
+    },
+    {
+      "tag": "414x800-portrait",
+      "overlaps": [],
+      "smallTargets": [],
+      "pass": true
+    },
+    {
+      "tag": "640x414-landscape",
+      "overlaps": [
+        [
+          "bed-making-ten",
+          "bed-decomposing"
+        ],
+        [
+          "bed-making-ten",
+          "bed-relationship"
+        ],
+        [
+          "bed-counting-on",
+          "bed-equivalent-sums"
+        ],
+        [
+          "bed-counting-on",
+          "bed-number-line"
+        ],
+        [
+          "bed-decomposing",
+          "bed-relationship"
+        ],
+        [
+          "bed-decomposing",
+          "pip-owl-map"
+        ],
+        [
+          "bed-equivalent-sums",
+          "bed-number-line"
+        ],
+        [
+          "bed-relationship",
+          "pip-owl-map"
+        ]
+      ],
+      "smallTargets": [],
+      "pass": false
+    },
+    {
+      "tag": "600x840-portrait",
+      "overlaps": [],
+      "smallTargets": [],
+      "pass": true
+    },
+    {
+      "tag": "640x600-landscape",
+      "overlaps": [
+        [
+          "bed-making-ten",
+          "bed-decomposing"
+        ],
+        [
+          "bed-decomposing",
+          "bed-relationship"
+        ],
+        [
+          "bed-equivalent-sums",
+          "bed-number-line"
+        ]
+      ],
+      "smallTargets": [],
+      "pass": false
+    },
+    {
+      "tag": "744x1042-portrait",
+      "overlaps": [],
+      "smallTargets": [],
+      "pass": true
+    },
+    {
+      "tag": "744x744-landscape",
+      "overlaps": [],
+      "smallTargets": [],
+      "pass": true
+    },
+    {
+      "tag": "834x1168-portrait",
+      "overlaps": [],
+      "smallTargets": [],
+      "pass": true
+    },
+    {
+      "tag": "834x834-landscape",
+      "overlaps": [],
+      "smallTargets": [],
+      "pass": true
+    },
+    {
+      "tag": "1024x1434-portrait",
+      "overlaps": [],
+      "smallTargets": [],
+      "pass": true
+    },
+    {
+      "tag": "1024x1024-landscape",
+      "overlaps": [],
+      "smallTargets": [],
+      "pass": true
+    },
+    {
+      "tag": "1180x1652-portrait",
+      "overlaps": [],
+      "smallTargets": [],
+      "pass": true
+    },
+    {
+      "tag": "1180x1180-landscape",
+      "overlaps": [],
+      "smallTargets": [],
+      "pass": true
+    },
+    {
+      "tag": "1440x2016-portrait",
+      "overlaps": [],
+      "smallTargets": [],
+      "pass": true
+    },
+    {
+      "tag": "1440x1440-landscape",
+      "overlaps": [],
+      "smallTargets": [],
+      "pass": true
+    }
+  ],
+  "pass": false
+}

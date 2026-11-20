@@ -1,0 +1,7 @@
+{
+  "at": "2026-11-17T12:16:34.809Z",
+  "maxMs": 300,
+  "violations": [],
+  "reviewAnimationsVerdict": "PASS (partial audit — full review-animations skill blocked: missing ~/garden-design/skills/)",
+  "pass": true
+}

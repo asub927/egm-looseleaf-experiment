@@ -1,4 +1,12 @@
-import { GARDEN_ACCENT, GARDEN_INK, GARDEN_PALETTE } from "../types"
+import { GARDEN_DEMO, GARDEN_INK, GARDEN_PALETTE } from "../types"
+
+const INK = GARDEN_INK
+const SOIL = GARDEN_DEMO.soil
+const LEAFC = GARDEN_DEMO.leaf
+const MINT = GARDEN_PALETTE.mint
+const ROSE = GARDEN_PALETTE.rose
+const BUTTER = GARDEN_PALETTE.butter
+const BLOOM = GARDEN_DEMO.bloomPetal
 
 export function mossStage(leaves: number): string {
   if (leaves <= 0) return "seed"
@@ -8,66 +16,98 @@ export function mossStage(leaves: number): string {
   return "bloom"
 }
 
+/** Moss SVG ported from garden-map-demo `drawPet`. */
+export function MossPetWrap({
+  leaves,
+  plusOn,
+  testId = "pet-wrap",
+}: {
+  leaves: number
+  plusOn?: boolean
+  testId?: string
+}) {
+  return (
+    <div className="pet-wrap" data-testid={testId}>
+      <MossPet leaves={leaves} />
+      <span className="pet-label">Moss · {mossStage(leaves)}</span>
+      <span className={`plus${plusOn ? " on" : ""}`} aria-hidden="true">
+        +1 leaf
+      </span>
+    </div>
+  )
+}
+
 export function MossPet({ leaves }: { leaves: number }) {
   const stage = mossStage(leaves)
-  const lv = Math.min(leaves, 10)
+  const n = leaves
+  const top = Math.max(8, 34 - Math.min(n, 12) * 2.2)
+  const lv = Math.min(n, 10)
+  const leafYs: { x: number; y: number; sd: number }[] = []
+  for (let j = 0; j < lv; j++) {
+    let y = 36 - j * ((36 - (top + 5)) / Math.max(lv - 1, 1))
+    if (lv === 1) y = Math.max(top + 6, 30)
+    const sd = j % 2 ? 1 : -1
+    const x = 32 + sd * 8
+    leafYs.push({ x, y, sd })
+  }
+
   return (
     <svg
       className="pet"
       viewBox="0 0 64 64"
-      width={48}
-      height={48}
-      aria-label={`Moss the plant pet: ${stage}, ${leaves} ${leaves === 1 ? "leaf" : "leaves"}`}
+      aria-label={`Moss the plant pet: ${stage}, ${n} ${n === 1 ? "leaf" : "leaves"}`}
       data-testid="pet"
-      data-leaves={leaves}
+      data-leaves={n}
     >
-      <ellipse
-        cx="32"
-        cy="56"
-        rx="22"
-        ry="6"
-        fill={GARDEN_PALETTE.paper}
-        stroke={GARDEN_INK}
-        strokeWidth="2"
-      />
-      {lv > 0 &&
-        Array.from({ length: lv }).map((_, j) => {
-          const y = 36 - j * 3
-          const sd = j % 2 ? 1 : -1
-          const x = 32 + sd * 8
-          return (
-            <ellipse
-              key={j}
-              cx={x}
-              cy={y}
-              rx={7.5}
-              ry={3.6}
-              fill={GARDEN_ACCENT.leaf}
-              stroke={GARDEN_INK}
-              strokeWidth={1.5}
-              transform={`rotate(${sd * -28} ${x} ${y})`}
-            />
-          )
-        })}
-      <ellipse
-        cx="32"
-        cy="49"
-        rx="13"
-        ry="10"
-        fill={GARDEN_PALETTE.mint}
-        stroke={GARDEN_INK}
-        strokeWidth="2"
-      />
-      {stage === "bloom" && (
-        <circle
-          cx="32"
-          cy="28"
-          r="5"
-          fill={GARDEN_PALETTE.rose}
-          stroke={GARDEN_INK}
-          strokeWidth="1.2"
+      <ellipse cx="32" cy="56" rx="22" ry="6" fill={SOIL} stroke={INK} strokeWidth="2" />
+      {n > 0 && (
+        <path
+          d={`M32 46 C30 40 34 ${top + 8} 32 ${top}`}
+          fill="none"
+          stroke={INK}
+          strokeWidth="2.5"
+          strokeLinecap="round"
         />
       )}
+      {leafYs.map(({ x, y, sd }, j) => (
+        <ellipse
+          key={j}
+          cx={x}
+          cy={y}
+          rx="7.5"
+          ry="3.6"
+          fill={LEAFC}
+          stroke={INK}
+          strokeWidth="1.5"
+          transform={`rotate(${sd * -28} ${x} ${y})`}
+        />
+      ))}
+      {stage === "bud" && (
+        <ellipse cx="32" cy={top - 3} rx="5" ry="6.5" fill={ROSE} stroke={INK} strokeWidth="1.8" />
+      )}
+      {stage === "bloom" && (
+        <>
+          {Array.from({ length: 5 }).map((_, a) => {
+            const an = (a * 72 * Math.PI) / 180
+            const cx = 32 + Math.cos(an) * 6
+            const cy = top - 4 + Math.sin(an) * 6
+            return (
+              <circle key={a} cx={cx} cy={cy} r="4.5" fill={BLOOM} stroke={INK} strokeWidth="1.2" />
+            )
+          })}
+          <circle cx="32" cy={top - 4} r="3" fill={BUTTER} stroke={INK} strokeWidth="1.2" />
+        </>
+      )}
+      <ellipse cx="32" cy="49" rx="13" ry="10" fill={MINT} stroke={INK} strokeWidth="2" />
+      <circle cx="27.5" cy="48" r="1.7" fill={INK} />
+      <circle cx="36.5" cy="48" r="1.7" fill={INK} />
+      <path
+        d="M29.5 52 q2.5 2 5 0"
+        fill="none"
+        stroke={INK}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   )
 }

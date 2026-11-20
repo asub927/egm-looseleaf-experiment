@@ -1,6 +1,6 @@
 import * as React from "react"
 import GardenApp from "@/garden/GardenApp"
-import { ZenGardenLanding } from "@/components/landing/ZenGardenLanding"
+import { WoodenToyStudio } from "@/components/studio/WoodenToyStudio"
 import { useDeskViewTransition } from "@/lib/dom/view-transitions"
 import { loadStudentProfile, setThemePreference, type StudentTheme } from "@/lib/storage/profile"
 import { cn } from "@/lib/utils"
@@ -34,7 +34,7 @@ export default function App() {
     [startDeskTransition],
   )
 
-  const [theme, setTheme] = React.useState<DeskTheme>(() => {
+  const [theme] = React.useState<DeskTheme>(() => {
     try {
       const storedTheme = localStorage.getItem("egm_desk_theme") as DeskTheme | null
       if (storedTheme) return storedTheme
@@ -106,15 +106,7 @@ export default function App() {
       {activeBoard === "garden" ? (
         <GardenApp />
       ) : (
-        <ZenGardenLanding
-          onSelectGarden={() => switchToBoard("garden")}
-          onSelectStandard={() => {
-            const cedar = document.querySelector(".cedar-workbench")
-            cedar?.scrollIntoView({ behavior: "smooth", block: "center" })
-          }}
-          theme={theme}
-          onSetTheme={setTheme}
-        />
+        <WoodenToyStudio onSelectGarden={() => switchToBoard("garden")} />
       )}
     </div>
   )

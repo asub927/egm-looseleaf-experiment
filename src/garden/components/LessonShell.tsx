@@ -8,6 +8,17 @@ import {
   stepModel,
   wrongBubble,
 } from "../models/engine"
+import {
+  eqLine,
+  exampleLine,
+  guessQuestion,
+  hint1Line,
+  hint2Line,
+  promptLine,
+  stepperLabels,
+  storyLine,
+  tryLine,
+} from "../models/copy"
 import { answerForProblem, guessChips, problemsForBed } from "../models/problems"
 import { problemKey } from "../progress/storage"
 import { watchStepsForBed } from "../models/watch-steps"
@@ -92,6 +103,7 @@ export function LessonShell({
   const revealCounters = state.phase === "solved" || flowReveal || watchReveal
 
   const curBar = BAR_STEPS.indexOf(state.bar)
+  const [stepMinus, stepPlus] = stepperLabels(bedId)
 
   function lockIn() {
     if (!ctx || !canLockIn(state)) return
@@ -120,9 +132,9 @@ export function LessonShell({
 
   const hintText =
     state.phase === "hint1"
-      ? hint1(bedId, problem)
+      ? hint1Line(bedId, problem)
       : state.phase === "hint2"
-        ? hint2(bedId)
+        ? hint2Line(bedId)
         : state.phase === "hint3"
           ? (watchStep?.text ?? WORKSHEET_STEPS[wsStep])
           : ""
@@ -197,7 +209,11 @@ export function LessonShell({
             className={`trybtn${state.phase !== "story" ? " hide" : ""}`}
             id="start-try"
             data-testid="start-try"
-            onClick={() => dispatch({ type: "START_PREDICT" })}
+            onClick={() => {
+              dispatch({ type: "START_PREDICT" })
+              setLine(guessQuestion(bedId))
+              setSub("Tap a guess. There is no wrong guess.")
+            }}
           >
             Let&apos;s try
           </button>
@@ -216,6 +232,7 @@ export function LessonShell({
                 onClick={() => {
                   dispatch({ type: "SET_GUESS", guess: v })
                   dispatch({ type: "ENTER_MODEL" })
+                  setLine(tryLine(bedId, problem))
                   setSub(`Your guess: ${v}. Drag, tap, or use the buttons.`)
                 }}
               >
@@ -282,7 +299,7 @@ export function LessonShell({
                 if (n) dispatch({ type: "SET_MODEL_STATE", modelState: n, via: "tap" })
               }}
             >
-              Back
+              {stepMinus}
             </button>
             <button
               type="button"
@@ -294,7 +311,7 @@ export function LessonShell({
                 if (n) dispatch({ type: "SET_MODEL_STATE", modelState: n, via: "tap" })
               }}
             >
-              Forward
+              {stepPlus}
             </button>
           </div>
         </section>
@@ -426,47 +443,13 @@ function ReadExample({ getText, testId }: { getText: () => string; testId: strin
   )
 }
 
-function storyLine(_bedId: BedId, p: ReturnType<typeof problemsForBed>[0]): string {
-  if (p.kind === "add") return `${p.a} and ${p.b}. How many in all?`
-  if (p.kind === "sub") return `${p.n} seeds. The bunny eats ${p.take}. How many are left?`
-  return `${p.whole} carrots. ${p.part} are in the basket. How many in the ground?`
-}
-
-function promptLine(p: ReturnType<typeof problemsForBed>[0]): string {
-  if (p.kind === "add") return `${p.a} + ${p.b} = ?`
-  if (p.kind === "sub") return `${p.n} − ${p.take} = ?`
-  return `${p.whole} − ${p.part} = ?`
-}
-
-function eqLine(p: ReturnType<typeof problemsForBed>[0]): string {
-  const a = answerForProblem(p)
-  if (p.kind === "add") return `${p.a} + ${p.b} = ${a}`
-  if (p.kind === "sub") return `${p.n} − ${p.take} = ${a}`
-  return `${p.whole} − ${p.part} = ${a}`
-}
-
-function stageLabel(bedId: BedId, _p: ReturnType<typeof problemsForBed>[0]): string {
+function stageLabel(bedId: BedId, p: ReturnType<typeof problemsForBed>[0]): string {
+  if (bedId === "counting-on" && p.kind === "add") {
+    return `Number train. Cars 1 to 20. The engine starts at car ${p.a}.`
+  }
   return `${bedById(bedId).ncdpiName} model. No answer spoken until you lock it in.`
 }
 
-function hint1(bedId: BedId, p: ReturnType<typeof problemsForBed>[0]): string {
-  if (bedId === "making-ten") return "Is the top wire a full ten yet? How many more beads fit?"
-  if (bedId === "counting-on" && p.kind === "add")
-    return `How many cars did the engine count on? Is that ${p.b}?`
-  return "What do you see on the model?"
-}
-
-function hint2(_bedId: BedId): string {
-  return "Look at the dashed cues on the model."
-}
-
 const WORKSHEET_STEPS = ["Walk through the steps.", "Your turn. Lock it in."]
-
-function exampleLine(_bedId: BedId, p: ReturnType<typeof problemsForBed>[0]): string {
-  const a = answerForProblem(p)
-  if (p.kind === "add") return `I worked it out. My answer is ${a}.`
-  if (p.kind === "sub") return `I took away and got ${a}.`
-  return `I used facts that belong. The answer is ${a}.`
-}
 
 export type { GardenScreen }

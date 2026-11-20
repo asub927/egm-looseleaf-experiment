@@ -250,6 +250,24 @@ async function setAllBedsDone(page, owlBedIndex = 0) {
   )
 }
 
+async function seedRestScreen(page) {
+  await page.evaluate((key) => {
+    localStorage.setItem(
+      key,
+      JSON.stringify({
+        schemaVersion: 1,
+        solvedBedIds: ["making-ten", "counting-on", "decomposing"],
+        solvedProblemKeys: [],
+        mossLeaves: 6,
+        sessionBedsFinished: 3,
+        restedThisSession: false,
+        calmMode: false,
+        owlBedIndex: 0,
+      }),
+    )
+  }, PROGRESS_KEY)
+}
+
 async function setThreeBedsDone(page, owlBedIndex = 0) {
   await page.evaluate(
     ([key, owl]) => {
@@ -373,6 +391,52 @@ async function finishProblemTwo(page, bed, touch) {
   await waitMs(page, 400, false)
 }
 
+/** Counting-on shell rows + seeded rest (harness --only=shell). */
+export async function runShellScenario(page, config, shot, baseUrl) {
+  const { touch, rm } = config
+  const bed = "counting-on"
+  const prefix = "b2-counting-on"
+  await page.goto(baseUrl, { waitUntil: "networkidle" })
+  await resetProgress(page)
+  await page.reload({ waitUntil: "networkidle" })
+  await page.waitForSelector('[data-testid="ready"]', { timeout: 15000 })
+  await waitMs(page, 300, rm)
+
+  await openBed(page, bed, touch, rm)
+  await shot(`${prefix}-1story`, await page.screenshot({ fullPage: true }))
+
+  await tap(page, '[data-testid="start-try"]', touch)
+  await tap(page, `[data-testid="chip-${GUESS_WRONG[bed]}"]`, touch)
+  await page.waitForTimeout(300)
+  await runDragPlan(page, WRONG_DRAG[bed], touch)
+  await tap(page, '[data-testid="lock"]', touch)
+  await waitMs(page, 300, rm)
+  await tap(page, '[data-testid="lock"]', touch)
+  await waitMs(page, 250, rm)
+  await tap(page, '[data-testid="lock"]', touch)
+  await waitMs(page, 250, rm)
+  await advanceWorksheet(page, touch)
+  await shot(`${prefix}-4sheet`, await page.screenshot({ fullPage: true }))
+
+  if (await page.locator("#reset").isEnabled().catch(() => false)) {
+    await page.locator("#reset").click()
+    await page.waitForTimeout(200)
+  }
+  await runDragPlan(page, RIGHT_DRAG[bed], touch)
+  await ensureLock(page, bed)
+  await tap(page, '[data-testid="lock"]', touch)
+  await waitMs(page, 350, rm)
+  await page.waitForSelector('[data-testid="win"]', { timeout: 15000 })
+  await shot(`${prefix}-5win`, await page.screenshot({ fullPage: true }))
+
+  await seedRestScreen(page)
+  await page.reload({ waitUntil: "networkidle" })
+  await page.waitForSelector('[data-testid="ready"]', { timeout: 15000 })
+  await page.waitForSelector('[data-testid="rest-pip"]', { timeout: 15000 })
+  await waitMs(page, rm ? 150 : 400, rm)
+  await shot("06-rest", await page.screenshot({ fullPage: true }))
+}
+
 /**
  * Run the full lesson walkthrough and invoke shot(id, buffer) for each captured PNG.
  */
@@ -444,6 +508,16 @@ const MAP_SCREEN_IDS = new Set(["01-map", "02-map-3done", "03-map-all-done", "fr
 
 export function isMapScreenId(screenId) {
   return MAP_SCREEN_IDS.has(screenId)
+}
+
+/** Shell parity rows (counting-on vehicle + rest). */
+const SHELL_SCREEN_SUFFIX = new Set(["1story", "4sheet", "5win"])
+
+export function isShellScreenId(screenId) {
+  if (screenId === "06-rest") return true
+  if (!screenId.startsWith("b2-counting-on-")) return false
+  const suffix = screenId.slice("b2-counting-on-".length)
+  return SHELL_SCREEN_SUFFIX.has(suffix)
 }
 
 /** Map baselines only (no lesson walkthrough). */

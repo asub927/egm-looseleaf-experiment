@@ -10,9 +10,11 @@ import {
   MAP_SNAPSHOTS,
   parseBaselineFilename,
   isMapScreenId,
+  isShellScreenId,
   runMainScenario,
   runMapOnlyForConfig,
   runMapSnapshots,
+  runShellScenario,
 } from "./garden-scenario.mjs"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -160,7 +162,7 @@ function sideBySide(baseline, build, diff) {
   return out
 }
 
-async function captureForConfig(engine, configTag, isMap, onlyMap) {
+async function captureForConfig(engine, configTag, isMap, onlyMap, onlyShell) {
   const config = isMap ? MAP_SNAPSHOTS.find((m) => m.tag === configTag) : configByTag(configTag)
   if (!config) return { captures: new Map(), maskRects: [] }
 
@@ -186,6 +188,8 @@ async function captureForConfig(engine, configTag, isMap, onlyMap) {
       await runMapSnapshots(page, config, shot, BASE)
     } else if (onlyMap) {
       await runMapOnlyForConfig(page, config, shot, BASE)
+    } else if (onlyShell) {
+      await runShellScenario(page, config, shot, BASE)
     } else {
       await runMainScenario(page, config, shot, BASE)
     }
@@ -235,8 +239,16 @@ function harnessOnlyMap() {
   )
 }
 
+function harnessOnlyShell() {
+  return (
+    process.argv.some((a) => a === "--only=shell" || a.startsWith("--only=shell,")) ||
+    process.env.HARNESS_ONLY === "shell"
+  )
+}
+
 async function main() {
   const onlyMap = harnessOnlyMap()
+  const onlyShell = harnessOnlyShell()
   const baselineRoot = await resolveBaselineRepo()
   if (!baselineRoot) {
     const msg =
@@ -257,6 +269,8 @@ async function main() {
   }
   if (onlyMap) {
     manifest = manifest.filter((row) => isMapScreenId(row.screenId))
+  } else if (onlyShell) {
+    manifest = manifest.filter((row) => isShellScreenId(row.screenId))
   }
 
   const onlyConfig = process.env.HARNESS_CONFIG
@@ -265,7 +279,12 @@ async function main() {
   for (const row of manifest) {
     if (onlyConfig && row.configTag !== onlyConfig) continue
     if (row.subdir === "shots-map") mapTagsNeeded.add(row.configTag)
-    else if (!onlyMap || isMapScreenId(row.screenId)) configTagsNeeded.add(row.configTag)
+    else if (
+      (!onlyMap && !onlyShell) ||
+      (onlyMap && isMapScreenId(row.screenId)) ||
+      (onlyShell && isShellScreenId(row.screenId))
+    )
+      configTagsNeeded.add(row.configTag)
   }
 
   const captureCache = new Map()
@@ -277,7 +296,7 @@ async function main() {
       const key = `${engine.name}:main:${tag}`
       if (!captureCache.has(key)) {
         try {
-          captureCache.set(key, await captureForConfig(engine, tag, false, onlyMap))
+          captureCache.set(key, await captureForConfig(engine, tag, false, onlyMap, onlyShell))
         } catch (e) {
           captureCache.set(key, { captures: new Map(), maskRects: [], error: String(e) })
         }
@@ -287,7 +306,7 @@ async function main() {
       const key = `${engine.name}:map:${tag}`
       if (!captureCache.has(key)) {
         try {
-          captureCache.set(key, await captureForConfig(engine, tag, true, onlyMap))
+          captureCache.set(key, await captureForConfig(engine, tag, true, onlyMap, onlyShell))
         } catch (e) {
           captureCache.set(key, { captures: new Map(), maskRects: [], error: String(e) })
         }
@@ -386,6 +405,7 @@ async function main() {
     threshold: PIXELMATCH_THRESHOLD,
     maxPercent: MAX_PERCENT,
     onlyMap,
+    onlyShell,
     manifestCount: manifest.length,
     masks: MASK_IDS,
     maskNote:

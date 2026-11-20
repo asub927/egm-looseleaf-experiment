@@ -318,8 +318,9 @@ function BeadRack({
   )
 }
 
-const TRAIN_FIRST = 5
+const TRAIN_FIRST = 1
 const TRAIN_LAST = 20
+const TRAIN_COLS = ["#FFF1B8", "#C9F2DD", "#CDE8FF", "#FFD6C9", "#FFD1E3"]
 
 function TrainModel({
   problem,
@@ -343,12 +344,11 @@ function TrainModel({
   const svgRef = React.useRef<SVGSVGElement>(null)
   const engineRef = React.useRef<SVGGElement>(null)
   const [dragPt, setDragPt] = React.useState<SvgPoint | null>(null)
-  const cols = narrow ? 5 : 10
-  const pitch = narrow ? 76 : 62
-  const car = (n: number): SvgPoint => {
-    const i = n - TRAIN_FIRST
-    return { x: 48 + (i % cols) * pitch, y: 44 + Math.floor(i / cols) * 140 }
-  }
+  const perRow = narrow ? 5 : 10
+  const car = (n: number): SvgPoint => ({
+    x: narrow ? 70 + ((n - 1) % 5) * 100 : 100 + ((n - 1) % 10) * 84,
+    y: narrow ? 92 + Math.floor((n - 1) / 5) * 172 : n <= 10 ? 112 : 318,
+  })
   const track = (n: number): SvgPoint => ({ x: car(n).x, y: car(n).y + 38 })
   const enginePos = (n: number): SvgPoint => ({ x: car(n).x, y: car(n).y + 78 })
   const nearestCar = (pt: SvgPoint) =>
@@ -390,15 +390,33 @@ function TrainModel({
       )}
       <svg
         ref={svgRef}
-        viewBox={narrow ? "0 0 400 584" : "0 0 654 304"}
+        viewBox={narrow ? "0 0 540 740" : "0 0 960 480"}
         width="100%"
         className={isDragging ? "drag" : undefined}
-        style={{ maxWidth: 720 }}
+        style={{ maxWidth: 960 }}
       >
+        {Array.from({ length: TRAIN_LAST / perRow }).map((_, rr) => {
+          const yy = car(rr * perRow + 1).y
+          return (
+            <rect
+              key={`rail-${rr}`}
+              x={narrow ? 20 : 50}
+              y={yy + 38}
+              width={narrow ? 500 : 860}
+              height={9}
+              rx={4}
+              fill="#B9A6F2"
+            />
+          )
+        })}
         {Array.from({ length: TRAIN_LAST - TRAIN_FIRST + 1 }).map((_, i) => {
           const n = i + TRAIN_FIRST
           const c = car(n)
           const tappable = live && n >= problem.a
+          const fill =
+            n > problem.a && n <= at
+              ? "#9CCBF5"
+              : (TRAIN_COLS[(n - 1) % TRAIN_COLS.length] ?? P.cream)
           return (
             <g
               key={n}
@@ -409,19 +427,26 @@ function TrainModel({
               }}
             >
               <rect
-                x={c.x - 28}
-                y={c.y - 28}
-                width={56}
-                height={56}
-                rx="12"
-                fill={n > problem.a && n <= at ? P.sky : n <= problem.a ? P.lavender : P.cream}
+                x={c.x - 36}
+                y={c.y - 30}
+                width={72}
+                height={60}
+                rx="14"
+                fill={fill}
                 stroke={INK}
-                strokeWidth="2"
+                strokeWidth="2.5"
               />
-              <text x={c.x} y={c.y + 7} textAnchor="middle" fontSize="20" fontWeight="900">
+              <text
+                x={c.x}
+                y={c.y + 11}
+                textAnchor="middle"
+                fontSize="30"
+                fontWeight="900"
+                fill={INK}
+              >
                 {n}
               </text>
-              <rect x={c.x - pitch / 2} y={c.y - 36} width={pitch} height={72} fill="transparent" />
+              <rect x={c.x - 42} y={c.y - 36} width={84} height={72} fill="transparent" />
             </g>
           )
         })}

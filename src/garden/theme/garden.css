@@ -1,4 +1,5 @@
 /* Pip's Math Garden — poteto-garden theme */
+html:has(.garden-root),
 html:has(.garden-root) body {
   font-family: ui-rounded, "SF Pro Rounded", "Nunito", "Segoe UI", system-ui, sans-serif;
   line-height: normal;
@@ -832,6 +833,17 @@ html:has(.garden-root) body {
   }
   .garden-root .narrow-only {
     display: inline;
+  }
+}
+
+@media (max-width: 520px) {
+  .garden-root #lesson .bar .chip {
+    order: 10;
+    flex-basis: 100%;
+    text-align: center;
+  }
+  .garden-root #lesson .bar {
+    gap: 8px;
   }
 }
 

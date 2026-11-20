@@ -429,6 +429,8 @@ export async function runShellScenario(page, config, shot, baseUrl) {
   await page.waitForSelector('[data-testid="win"]', { timeout: 15000 })
   await shot(`${prefix}-5win`, await page.screenshot({ fullPage: true }))
 
+  if (process.env.HARNESS_SKIP_REST === "1") return
+
   await seedRestScreen(page)
   await page.reload({ waitUntil: "networkidle" })
   await page.waitForSelector('[data-testid="ready"]', { timeout: 15000 })

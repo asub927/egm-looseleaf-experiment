@@ -59,6 +59,9 @@ run_engine() {
     node "$SCRIPT_DIR/capture-map-baselines.mjs" "$eng" "$root/shots" "$root/shots-map" "fresh,3done"
   else
     node "$SCRIPT_DIR/capture-map-baselines.mjs" "$eng" "$root/shots" "$root/shots-map"
+    if [[ "$MAP_ONLY" -eq 0 ]]; then
+      GARDEN_DEMO_DIR="$DEMO" node "$SCRIPT_DIR/capture-shell-baselines.mjs" "$eng" "$root/shots"
+    fi
   fi
   echo "Engine $eng: $(find "$root" -name '*.png' | wc -l) PNGs"
 }

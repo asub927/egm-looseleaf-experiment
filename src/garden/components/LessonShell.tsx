@@ -5,6 +5,8 @@ import {
   initialModelState,
   modelCorrect,
   modelReady,
+  modelFlowCounters,
+  modelPills,
   stepModel,
   wrongBubble,
 } from "../models/engine"
@@ -240,7 +242,15 @@ export function LessonShell({
               </button>
             ))}
           </div>
-          <div className="counter" id="counter" data-testid="counter" />
+          <LessonCounter
+            bedId={bedId}
+            problem={problem}
+            modelState={watchState ?? ctx.modelState}
+            phase={state.phase}
+            solved={state.phase === "solved"}
+            revealCounters={revealCounters}
+            pacing={bed.pacing}
+          />
         </section>
         <section className="stagewrap">
           <div className="stagecard" id="stagecard" data-testid="stagecard">
@@ -319,27 +329,54 @@ export function LessonShell({
           {ctx.bubble && (state.phase === "wrongBubble" || state.phase.startsWith("hint")) && (
             <PeachBubble guess={ctx.guess} bubble={ctx.bubble} />
           )}
-          {hintText && (
-            <div className="card hintcard rung" data-testid={`hint-${ctx.hintRung}`}>
-              <div>{hintText}</div>
-              {state.phase === "hint3" && watchStep?.beat !== "reset" && (
+          {state.phase === "hint3" && watchSteps && watchStep ? (
+            <div className="worksheet rung" data-testid="worksheet">
+              <div className="wshead">
+                STEP {wsWatchIndex + 1} OF {watchSteps.length}
+              </div>
+              <div className="wsrow">
+                <ReadAloudButton
+                  className="read"
+                  getText={() => watchStep.text}
+                  testId="read-ws"
+                  label="Read worksheet step aloud"
+                />
+                <div className="step" data-testid="ws-step">
+                  {watchStep.text}
+                </div>
+              </div>
+              {watchStep.beat !== "reset" && (
                 <button
                   type="button"
                   className="wsnext"
                   data-testid="ws-next"
                   onClick={() => {
-                    if (watchSteps) {
-                      setWsWatchIndex((k) => Math.min(k + 1, watchSteps.length - 1))
-                      return
-                    }
-                    if (wsStep < WORKSHEET_STEPS.length - 1) setWsStep((k) => k + 1)
-                    else setFlowReveal(true)
+                    setWsWatchIndex((k) => Math.min(k + 1, watchSteps.length - 1))
                   }}
                 >
                   Next
                 </button>
               )}
             </div>
+          ) : (
+            hintText && (
+              <div className="card hintcard rung" data-testid={`hint-${ctx.hintRung}`}>
+                <div>{hintText}</div>
+                {state.phase === "hint3" && watchStep?.beat !== "reset" && (
+                  <button
+                    type="button"
+                    className="wsnext"
+                    data-testid="ws-next"
+                    onClick={() => {
+                      if (wsStep < WORKSHEET_STEPS.length - 1) setWsStep((k) => k + 1)
+                      else setFlowReveal(true)
+                    }}
+                  >
+                    Next
+                  </button>
+                )}
+              </div>
+            )
           )}
           {state.phase === "solved" && (
             <div className="card win" data-testid="win">
@@ -429,6 +466,66 @@ export function LessonShell({
         {state.phase === "solved" ? eqLine(problem) : live ? "Try the model." : line}
       </div>
     </>
+  )
+}
+
+function LessonCounter({
+  bedId,
+  problem,
+  modelState,
+  phase,
+  solved,
+  revealCounters,
+  pacing,
+}: {
+  bedId: BedId
+  problem: ReturnType<typeof problemsForBed>[0]
+  modelState: import("../models/state").ModelState
+  phase: string
+  solved: boolean
+  revealCounters: boolean
+  pacing: boolean
+}) {
+  if (phase === "story" || phase === "predict") {
+    return <div className="counter" id="counter" data-testid="counter" />
+  }
+  const flow = pacing ? modelFlowCounters(bedId, problem, modelState, revealCounters) : null
+  if (flow) {
+    return (
+      <div className="counter" id="counter" data-testid="counter">
+        <div className="flowcounts" data-testid="flow-counts">
+          {flow.map((row, i) => (
+            <div
+              key={row.label}
+              className={`flowcount ${i ? "total" : "step"}${i && revealCounters ? " revealed" : ""}`}
+              data-testid={`pill-${i}`}
+            >
+              <span className="flowlabel">{row.label}</span>
+              <span
+                className={`flownum${row.value === "—" ? " pending" : ""}`}
+                data-testid={i ? "flow-total" : "flow-step"}
+              >
+                {row.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+  const pills = modelPills(bedId, problem, modelState, solved)
+  return (
+    <div className="counter" id="counter" data-testid="counter">
+      {pills.map((text, i) => (
+        <span
+          key={text}
+          className={`pill ${solved ? "ok" : i ? "p2" : "p1"}`}
+          data-testid={`pill-${i}`}
+        >
+          {text}
+        </span>
+      ))}
+    </div>
   )
 }
 

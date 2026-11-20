@@ -1,8 +1,10 @@
 /* Pip's Math Garden — poteto-garden theme */
 html:has(.garden-root),
 html:has(.garden-root) body {
-  font-family: ui-rounded, "SF Pro Rounded", "Nunito", "Segoe UI", system-ui, sans-serif;
+  font-family: ui-rounded, "SF Pro Rounded", "Nunito", "Segoe UI", system-ui, sans-serif !important;
   line-height: normal;
+  font-size: initial;
+  text-wrap: initial;
 }
 
 .garden-root {
@@ -482,6 +484,26 @@ html:has(.garden-root) body {
   flex-wrap: wrap;
 }
 
+.garden-root .pill {
+  border-radius: 16px;
+  padding: 10px 14px;
+  font-weight: 800;
+  font-size: clamp(15px, 1.6vw, 19px);
+  background: #fff;
+}
+
+.garden-root .pill.p1 {
+  background: var(--peach);
+}
+
+.garden-root .pill.p2 {
+  background: var(--sky);
+}
+
+.garden-root .pill.ok {
+  background: var(--mint);
+}
+
 .garden-root .stagewrap {
   grid-area: stage;
   min-height: 0;
@@ -504,6 +526,20 @@ html:has(.garden-root) body {
   padding: 8px;
   overflow: hidden;
   transition: opacity 200ms var(--ease-out);
+}
+
+.garden-root .ring {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 3;
+  stroke-dasharray: 6 6;
+  opacity: 0;
+  transition: opacity 200ms var(--ease-out);
+  pointer-events: none;
+}
+
+.garden-root .ring.on {
+  opacity: 0.75;
 }
 
 .garden-root #stage {
@@ -630,6 +666,40 @@ html:has(.garden-root) body {
   display: flex;
   gap: 10px;
   align-items: flex-start;
+}
+
+.garden-root .worksheet {
+  background: #fff;
+  border-radius: 20px;
+  padding: 12px 14px;
+  border: 2px solid rgba(43, 42, 58, 0.14);
+}
+
+.garden-root .worksheet .wshead {
+  font-size: 13px;
+  font-weight: 900;
+  opacity: 0.65;
+  margin-bottom: 6px;
+  letter-spacing: 0.3px;
+}
+
+.garden-root .worksheet .wsrow {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.garden-root .worksheet .step {
+  flex: 1;
+  font-size: clamp(18px, 1.9vw, 23px);
+  font-weight: 900;
+  min-height: 2.3em;
+  line-height: 1.25;
+}
+
+.garden-root .worksheet .wsnext {
+  margin-top: 8px;
+  background: var(--lav);
 }
 
 .garden-root .hintcard {

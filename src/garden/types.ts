@@ -26,6 +26,8 @@ export const GARDEN_DEMO = {
   restHill: "#D7E8B8",
   skyWash: "#EAF6FF",
   sandWash: "#F3E8D4",
+  /** Train track tie (models.js). */
+  trackRail: "#B9A6F2",
 } as const
 
 /** Map scenery (layout-map / garden.css); palette-adjacent tints only. */

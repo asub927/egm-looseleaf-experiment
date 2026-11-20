@@ -369,3 +369,71 @@ function observationPicture(bedId: BedId, p: ProblemSpec, s: ModelState): Pictur
     }
   }
 }
+
+export type CounterRow = { label: string; value: string }
+
+export function modelFlowCounters(
+  bedId: BedId,
+  p: ProblemSpec,
+  s: ModelState,
+  reveal: boolean,
+): CounterRow[] | null {
+  switch (bedId) {
+    case "counting-on": {
+      const st = s as TrainState
+      if (p.kind !== "add") return null
+      return [
+        { label: "Step", value: String(Math.max(0, st.at - p.a)) },
+        { label: "Total", value: reveal ? String(st.at) : "—" },
+      ]
+    }
+    case "number-line": {
+      const st = s as HopState
+      if (p.kind !== "add") return null
+      return [
+        { label: "Hop", value: String(Math.max(0, st.land - p.a)) },
+        { label: "Land", value: reveal ? String(st.land) : "—" },
+      ]
+    }
+    default:
+      return null
+  }
+}
+
+export function modelPills(bedId: BedId, p: ProblemSpec, s: ModelState, solved: boolean): string[] {
+  switch (bedId) {
+    case "making-ten": {
+      const st = s as BeadState
+      if (p.kind !== "add") return []
+      return [`Top ${p.a + st.moved}`, `Bottom ${p.b - st.moved}`]
+    }
+    case "counting-on": {
+      const st = s as TrainState
+      if (p.kind !== "add") return []
+      return [`${p.a} in my head`, `Counted on ${st.at - p.a}`]
+    }
+    case "decomposing": {
+      const st = s as CutState
+      if (p.kind !== "sub") return []
+      const out = [`${p.n - Math.max(st.position, 10)} to get down to ten`]
+      if (st.phase === "rest") out.push(`${10 - st.position} more`)
+      return out
+    }
+    case "equivalent-sums":
+      return solved ? ["Balanced"] : ["Match the sides"]
+    case "relationship": {
+      const st = s as FactState
+      if (p.kind !== "fact") return []
+      return st.tile === null ? ["Pick a tile"] : [`Tile ${st.tile}`]
+    }
+    case "number-line": {
+      const st = s as HopState
+      if (p.kind !== "add") return []
+      return [`Start ${p.a}`, `Landed on ${st.land}`]
+    }
+    default: {
+      const _exhaustive: never = bedId
+      return _exhaustive
+    }
+  }
+}

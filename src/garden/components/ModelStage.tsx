@@ -53,6 +53,7 @@ export function ModelStage({
   equationsRevealed = false,
   watchState = null,
   snapMotion = false,
+  flowOut = false,
 }: {
   bedId: BedId
   problem: ProblemSpec
@@ -65,6 +66,7 @@ export function ModelStage({
   equationsRevealed?: boolean
   watchState?: ModelState | null
   snapMotion?: boolean
+  flowOut?: boolean
 }) {
   const bed = bedById(bedId)
   const narrow =
@@ -99,6 +101,7 @@ export function ModelStage({
           narrow={narrow}
           still={still}
           showCue={showCue}
+          flowOut={flowOut}
           onChange={onChange}
         />
       )
@@ -333,6 +336,7 @@ function TrainModel({
   narrow,
   still,
   showCue,
+  flowOut,
   onChange,
 }: {
   problem: AddProblem
@@ -343,6 +347,7 @@ function TrainModel({
   narrow: boolean
   still: boolean
   showCue: boolean
+  flowOut: boolean
   onChange: OnChange
 }) {
   const svgRef = React.useRef<SVGSVGElement>(null)
@@ -385,142 +390,139 @@ function TrainModel({
   const leadAt = dragPt ? paintAt : state.at
 
   return (
-    <div>
-      <svg
-        ref={svgRef}
-        viewBox={narrow ? "0 0 540 740" : "0 0 960 480"}
-        width="100%"
-        className={isDragging ? "drag" : undefined}
-        style={{ maxWidth: 960 }}
-      >
-        {Array.from({ length: TRAIN_LAST / perRow }).map((_, rr) => {
-          const yy = car(rr * perRow + 1).y
-          return (
-            <rect
-              key={`rail-${rr}`}
-              x={narrow ? 20 : 50}
-              y={yy + 38}
-              width={narrow ? 500 : 860}
-              height={9}
-              rx={4}
-              fill={GARDEN_DEMO.trackRail}
-            />
-          )
-        })}
-        {Array.from({ length: TRAIN_LAST - TRAIN_FIRST + 1 }).map((_, i) => {
-          const n = i + TRAIN_FIRST
-          const c = car(n)
-          const tappable = live && n >= problem.a
-          const showBadge = n > problem.a && n <= paintAt
-          const ringOn = showCue && n > problem.a && n <= problem.a + problem.b
-          return (
-            <React.Fragment key={n}>
-              <g
-                data-testid={`car-${n}`}
-                style={{ cursor: tappable ? "pointer" : "default" }}
-                onClick={() => {
-                  if (tappable && n !== state.at) onChange({ at: n }, "tap")
-                }}
+    <svg
+      ref={svgRef}
+      viewBox={narrow ? "0 0 540 740" : "0 0 960 480"}
+      preserveAspectRatio="xMidYMid meet"
+      width="100%"
+      data-model="counting-on"
+      className={
+        [flowOut ? "flow-out" : undefined, isDragging ? "drag" : undefined]
+          .filter(Boolean)
+          .join(" ") || undefined
+      }
+      aria-hidden="true"
+    >
+      {Array.from({ length: TRAIN_LAST / perRow }).map((_, rr) => {
+        const yy = car(rr * perRow + 1).y
+        return (
+          <rect
+            key={`rail-${rr}`}
+            x={narrow ? 20 : 50}
+            y={yy + 38}
+            width={narrow ? 500 : 860}
+            height={9}
+            rx={4}
+            fill={GARDEN_DEMO.trackRail}
+          />
+        )
+      })}
+      {Array.from({ length: TRAIN_LAST - TRAIN_FIRST + 1 }).map((_, i) => {
+        const n = i + TRAIN_FIRST
+        const c = car(n)
+        const tappable = live && n >= problem.a
+        const showBadge = n > problem.a && n <= paintAt
+        const ringOn = showCue && n > problem.a && n <= problem.a + problem.b
+        return (
+          <React.Fragment key={n}>
+            <g
+              data-testid={`car-${n}`}
+              style={{ cursor: tappable ? "pointer" : "default" }}
+              onClick={() => {
+                if (tappable && n !== state.at) onChange({ at: n }, "tap")
+              }}
+            >
+              <rect
+                x={c.x - 36}
+                y={c.y - 30}
+                width={72}
+                height={60}
+                rx="14"
+                fill={carFill(n, paintAt)}
+                stroke={INK}
+                strokeWidth="2.5"
+              />
+              <text
+                x={c.x}
+                y={c.y + 11}
+                textAnchor="middle"
+                fontSize="30"
+                fontWeight="900"
+                fill={INK}
               >
-                <rect
-                  x={c.x - 36}
-                  y={c.y - 30}
-                  width={72}
-                  height={60}
-                  rx="14"
-                  fill={carFill(n, paintAt)}
-                  stroke={INK}
-                  strokeWidth="2.5"
-                />
+                {n}
+              </text>
+              <circle cx={c.x - 18} cy={c.y + 34} r="7" fill={INK} />
+              <circle cx={c.x + 18} cy={c.y + 34} r="7" fill={INK} />
+              <rect x={c.x - 42} y={c.y - 52} width={84} height={100} fill="transparent" />
+            </g>
+            {showBadge && (
+              <g className="motion-fade" style={{ opacity: 1 }}>
+                <circle cx={c.x} cy={c.y - 56} r="19" fill="#FFF1B8" stroke={INK} strokeWidth="2" />
                 <text
                   x={c.x}
-                  y={c.y + 11}
+                  y={c.y - 49}
                   textAnchor="middle"
-                  fontSize="30"
+                  fontSize="20"
                   fontWeight="900"
                   fill={INK}
                 >
-                  {n}
+                  {n - problem.a}
                 </text>
-                <circle cx={c.x - 18} cy={c.y + 34} r="7" fill={INK} />
-                <circle cx={c.x + 18} cy={c.y + 34} r="7" fill={INK} />
-                <rect x={c.x - 42} y={c.y - 52} width={84} height={100} fill="transparent" />
               </g>
-              {showBadge && (
-                <g className="motion-fade" style={{ opacity: 1 }}>
-                  <circle
-                    cx={c.x}
-                    cy={c.y - 56}
-                    r="19"
-                    fill="#FFF1B8"
-                    stroke={INK}
-                    strokeWidth="2"
-                  />
-                  <text
-                    x={c.x}
-                    y={c.y - 49}
-                    textAnchor="middle"
-                    fontSize="20"
-                    fontWeight="900"
-                    fill={INK}
-                  >
-                    {n - problem.a}
-                  </text>
-                </g>
-              )}
-              <circle
-                cx={c.x}
-                cy={c.y}
-                r="48"
-                className={ringOn ? "ring on" : "ring"}
-                pointerEvents="none"
-              />
-            </React.Fragment>
-          )
-        })}
-        <g
-          className={[still ? undefined : "motion-move", isDragging ? "drag" : undefined]
-            .filter(Boolean)
-            .join(" ")}
-          data-testid="lead-dot"
-          transform={svgT(leadPos(leadAt))}
-          opacity={leadAt > problem.a ? 1 : 0.5}
-          pointerEvents="none"
-        >
-          <circle r="11" fill={P.rose} stroke={INK} strokeWidth="3" />
-          <circle r="4.5" fill={INK} />
-        </g>
-        <g
-          ref={engineRef}
-          data-testid="engine"
-          className={pieceClass(live, still)}
-          transform={svgT(enginePt)}
-        >
-          <rect
-            x={-48}
-            y={-28}
-            width={96}
-            height={56}
-            rx="18"
-            fill={P.rose}
-            stroke={INK}
-            strokeWidth="3"
-          />
-          <rect
-            x={-34}
-            y={-50}
-            width={18}
-            height={24}
-            rx="5"
-            fill={P.rose}
-            stroke={INK}
-            strokeWidth="3"
-          />
-          <path d="M-14 0 l-12 -10 v20 z M14 0 l12 -10 v20 z" fill={INK} />
-          <circle cx={0} cy={0} r="66" fill="transparent" />
-        </g>
-      </svg>
-    </div>
+            )}
+            <circle
+              cx={c.x}
+              cy={c.y}
+              r="48"
+              className={ringOn ? "ring on" : "ring"}
+              pointerEvents="none"
+            />
+          </React.Fragment>
+        )
+      })}
+      <g
+        className={[still ? undefined : "motion-move", isDragging ? "drag" : undefined]
+          .filter(Boolean)
+          .join(" ")}
+        data-testid="lead-dot"
+        transform={svgT(leadPos(leadAt))}
+        opacity={leadAt > problem.a ? 1 : 0.5}
+        pointerEvents="none"
+      >
+        <circle r="11" fill={P.rose} stroke={INK} strokeWidth="3" />
+        <circle r="4.5" fill={INK} />
+      </g>
+      <g
+        ref={engineRef}
+        data-testid="engine"
+        className={pieceClass(live, still)}
+        transform={svgT(enginePt)}
+      >
+        <rect
+          x={-48}
+          y={-28}
+          width={96}
+          height={56}
+          rx="18"
+          fill={P.rose}
+          stroke={INK}
+          strokeWidth="3"
+        />
+        <rect
+          x={-34}
+          y={-50}
+          width={18}
+          height={24}
+          rx="5"
+          fill={P.rose}
+          stroke={INK}
+          strokeWidth="3"
+        />
+        <path d="M-14 0 l-12 -10 v20 z M14 0 l12 -10 v20 z" fill={INK} />
+        <circle cx={0} cy={0} r="66" fill="transparent" />
+      </g>
+    </svg>
   )
 }
 

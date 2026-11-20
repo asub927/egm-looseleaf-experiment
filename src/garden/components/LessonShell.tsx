@@ -95,9 +95,16 @@ export function LessonShell({
     state.phase === "hint2" ||
     state.phase === "hint3"
 
-  const showCue = state.phase === "hint2" || state.phase === "hint3"
+  const inCheck =
+    state.bar === "check" ||
+    state.phase === "wrongBubble" ||
+    state.phase === "hint1" ||
+    state.phase === "hint2" ||
+    state.phase === "hint3"
+  const showCue = inCheck && ctx.hintRung >= 2 && state.phase !== "solved"
   const watchSteps = watchStepsForBed(bedId, problem)
-  const watchStep = state.phase === "hint3" ? (watchSteps?.[wsWatchIndex] ?? null) : null
+  const onWorksheet = inCheck && ctx.hintRung >= 3 && !!watchSteps
+  const watchStep = onWorksheet ? (watchSteps?.[wsWatchIndex] ?? null) : null
   const watchState = watchStep?.state ?? null
   const watchReveal = watchStep?.beat === "reveal" || watchStep?.revealCounters === true
   const flowOut = !reducedMotion && (watchStep?.beat === "zoom" || watchStep?.beat === "reveal")
@@ -133,13 +140,11 @@ export function LessonShell({
   }
 
   const hintText =
-    state.phase === "hint1"
-      ? hint1Line(bedId, problem)
-      : state.phase === "hint2"
-        ? hint2Line(bedId)
-        : state.phase === "hint3"
-          ? (watchStep?.text ?? WORKSHEET_STEPS[wsStep])
-          : ""
+    !inCheck || ctx.hintRung >= 3
+      ? ""
+      : ctx.hintRung === 1
+        ? hint1Line(bedId, problem)
+        : hint2Line(bedId)
 
   return (
     <>
@@ -260,7 +265,6 @@ export function LessonShell({
               data-cue={showCue ? "1" : undefined}
               data-keyboard={ctx.via === "keyboard" ? "1" : "0"}
               data-via={ctx.via ?? "none"}
-              className={flowOut ? "flow-out" : undefined}
               aria-label={stageLabel(bedId, problem)}
               tabIndex={0}
               role="group"
@@ -294,6 +298,7 @@ export function LessonShell({
                 showCue={showCue}
                 revealTotal={revealCounters}
                 reducedMotion={reducedMotion}
+                flowOut={flowOut}
                 onChange={(n, via) => dispatch({ type: "SET_MODEL_STATE", modelState: n, via })}
               />
             </div>
@@ -329,7 +334,7 @@ export function LessonShell({
           {ctx.bubble && (state.phase === "wrongBubble" || state.phase.startsWith("hint")) && (
             <PeachBubble guess={ctx.guess} bubble={ctx.bubble} />
           )}
-          {state.phase === "hint3" && watchSteps && watchStep ? (
+          {onWorksheet && watchStep ? (
             <div className="worksheet rung" data-testid="worksheet">
               <div className="wshead">
                 STEP {wsWatchIndex + 1} OF {watchSteps.length}
@@ -351,7 +356,11 @@ export function LessonShell({
                   className="wsnext"
                   data-testid="ws-next"
                   onClick={() => {
-                    setWsWatchIndex((k) => Math.min(k + 1, watchSteps.length - 1))
+                    setWsWatchIndex((k) => {
+                      const next = Math.min(k + 1, watchSteps.length - 1)
+                      if (watchSteps[next]?.beat === "reset") setFlowReveal(false)
+                      return next
+                    })
                   }}
                 >
                   Next
@@ -362,7 +371,7 @@ export function LessonShell({
             hintText && (
               <div className="card hintcard rung" data-testid={`hint-${ctx.hintRung}`}>
                 <div>{hintText}</div>
-                {state.phase === "hint3" && watchStep?.beat !== "reset" && (
+                {state.phase === "hint3" && (
                   <button
                     type="button"
                     className="wsnext"

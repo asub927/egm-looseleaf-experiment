@@ -360,6 +360,15 @@ html:has(.garden-root) body {
   display: none;
 }
 
+.garden-root #lesson button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.garden-root #lesson button:disabled:active {
+  transform: none;
+}
+
 /* ---------- LESSON grid ---------- */
 .garden-root .lmain {
   flex: 1;
